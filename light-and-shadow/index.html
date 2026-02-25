@@ -1,0 +1,1556 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Grindare Studio — Mobile RPG Development</title>
+
+  <meta name="description" content="Grindare Studio is an indie game development studio creating Light & Shadow, a mobile idle RPG with deep progression systems, guild wars, and fair competitive gameplay.">
+
+  <meta property="og:title" content="Grindare Studio — Mobile RPG Development">
+  <meta property="og:description" content="Indie game studio creating Light & Shadow, a mobile idle RPG with guild systems, competitive play, and non-pay-to-win philosophy.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://grindarestudio.com/">
+  <meta property="og:image" content="https://grindarestudio.com/assets/game_logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Grindare Studio — Mobile RPG Development">
+  <meta name="twitter:description" content="Indie game studio creating Light & Shadow, a mobile idle RPG.">
+  <meta name="twitter:image" content="https://grindarestudio.com/assets/game_logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0a0c10;
+      --bg-card: rgba(16, 18, 26, 0.85);
+      --bg-card-hover: rgba(22, 25, 35, 0.9);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.14);
+      --text: rgba(255, 255, 255, 0.92);
+      --text-muted: rgba(255, 255, 255, 0.65);
+      --text-subtle: rgba(255, 255, 255, 0.45);
+      --accent-warm: #ffd778;
+      --accent-warm-dim: rgba(255, 215, 120, 0.15);
+      --accent-cool: #8cc3ff;
+      --accent-cool-dim: rgba(140, 195, 255, 0.12);
+      --accent-green: #6dd58c;
+      --accent-green-dim: rgba(109, 213, 140, 0.15);
+      --radius: 16px;
+      --radius-sm: 12px;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+      --max-width: 1100px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.5)),
+        url('./assets/background_new.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .container { max-width: var(--max-width); margin: 0 auto; padding: 0 20px; }
+    section { padding: 80px 0; }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 12px 20px;
+      background: rgba(10, 12, 16, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 17px;
+    }
+
+    .nav-logo img {
+      height: 40px;
+      width: auto;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    /* Hero */
+    .hero {
+      padding-top: 140px;
+      padding-bottom: 80px;
+      text-align: center;
+    }
+
+    .hero-logo {
+      width: 280px;
+      height: auto;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--accent-warm-dim);
+      border: 1px solid rgba(255, 215, 120, 0.25);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-warm);
+      margin-bottom: 20px;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--accent-warm);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--accent-warm);
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent-warm), var(--accent-cool));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 26px;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(255, 215, 120, 0.2), rgba(255, 215, 120, 0.1));
+      border: 1px solid rgba(255, 215, 120, 0.35);
+      color: var(--text);
+    }
+
+    .btn-primary:hover {
+      background: rgba(255, 215, 120, 0.25);
+      border-color: rgba(255, 215, 120, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--border-hover);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .card h2 { font-size: 24px; font-weight: 700; }
+
+    .card-tag {
+      padding: 6px 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Section headers */
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .section-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-cool);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    /* Vision Grid - Guild Systems */
+    .vision-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .vision-card {
+      padding: 28px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .vision-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .vision-icon {
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-warm-dim);
+      border: 1px solid rgba(255, 215, 120, 0.25);
+      border-radius: 14px;
+      font-size: 24px;
+      margin-bottom: 18px;
+    }
+
+    .vision-card.cool .vision-icon {
+      background: var(--accent-cool-dim);
+      border-color: rgba(140, 195, 255, 0.25);
+    }
+
+    .vision-card.green .vision-icon {
+      background: var(--accent-green-dim);
+      border-color: rgba(109, 213, 140, 0.25);
+    }
+
+    .vision-card h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .vision-card p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .vision-card ul {
+      margin-top: 12px;
+      padding-left: 18px;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    /* Philosophy Banner */
+    .philosophy-banner {
+      background: linear-gradient(135deg, var(--accent-green-dim), rgba(109, 213, 140, 0.05));
+      border: 1px solid rgba(109, 213, 140, 0.25);
+      border-radius: var(--radius);
+      padding: 40px;
+      text-align: center;
+      margin-top: 32px;
+    }
+
+    .philosophy-banner h3 {
+      font-size: 24px;
+      color: var(--accent-green);
+      margin-bottom: 16px;
+    }
+
+    .philosophy-banner p {
+      color: var(--text-muted);
+      font-size: 16px;
+      line-height: 1.7;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .philosophy-points {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .philosophy-point {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .philosophy-point .check {
+      width: 24px;
+      height: 24px;
+      background: rgba(109, 213, 140, 0.2);
+      border: 1px solid rgba(109, 213, 140, 0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-green);
+      font-size: 14px;
+    }
+
+    /* About section */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .founder-card {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .founder-avatar {
+      width: 100%;
+      max-width: 280px;
+      height: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin: 0 auto;
+    }
+
+    .founder-info h3 {
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+
+    .founder-role {
+      color: var(--accent-warm);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .founder-bio {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .skill-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+    }
+
+    .mission-card p {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .mission-card p:last-child { margin-bottom: 0; }
+
+    /* Project section */
+    .project-header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .project-logo {
+      width: 120px;
+      height: auto;
+      border-radius: var(--radius-sm);
+    }
+
+    .project-info h2 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .project-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .project-tag {
+      padding: 6px 12px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .project-desc {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .tech-item {
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      text-align: center;
+    }
+
+    .tech-item strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .tech-item span {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Video section */
+    .video-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .video-wrap {
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.3);
+      max-width: 350px;
+    }
+
+    .video-wrap iframe {
+      width: 100%;
+      aspect-ratio: 9/16;
+      display: block;
+      border: 0;
+    }
+
+    .video-info h3 {
+      font-size: 20px;
+      margin-bottom: 14px;
+    }
+
+    .video-info p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+
+    .feature-list { list-style: none; }
+
+    .feature-list li {
+      position: relative;
+      padding-left: 22px;
+      margin-bottom: 10px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .feature-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 7px;
+      width: 8px;
+      height: 8px;
+      background: var(--accent-warm);
+      border-radius: 50%;
+      opacity: 0.7;
+    }
+
+    /* Screenshots */
+    .screenshots-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .screenshot {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.2);
+      cursor: zoom-in;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .screenshot:hover {
+      transform: scale(1.02);
+      border-color: var(--border-hover);
+    }
+
+    .screenshot img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .screenshot figcaption {
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* Roadmap */
+    .roadmap-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .roadmap-phase {
+      padding: 26px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .phase-number {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-warm-dim);
+      border: 1px solid rgba(255, 215, 120, 0.3);
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--accent-warm);
+    }
+
+    .phase-title { font-weight: 700; font-size: 15px; }
+    .phase-period { font-size: 12px; color: var(--text-muted); }
+
+    .phase-list { list-style: none; }
+
+    .phase-list li {
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .phase-list li:last-child { border-bottom: none; }
+
+    /* Funding section */
+    .funding-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .funding-need {
+      display: flex;
+      gap: 16px;
+      padding: 18px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    .need-icon {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-cool-dim);
+      border: 1px solid rgba(140, 195, 255, 0.25);
+      border-radius: 12px;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .need-content h4 { font-size: 15px; margin-bottom: 4px; }
+
+    .need-content p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .funding-summary {
+      padding: 26px;
+      background: linear-gradient(135deg, var(--accent-warm-dim), transparent);
+      border: 1px solid rgba(255, 215, 120, 0.2);
+      border-radius: var(--radius);
+    }
+
+    .funding-summary h3 {
+      font-size: 18px;
+      margin-bottom: 14px;
+      color: var(--accent-warm);
+    }
+
+    .funding-summary p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+
+    /* Contact */
+    .contact-card {
+      text-align: center;
+      padding: 44px;
+    }
+
+    .contact-card h2 {
+      font-size: 26px;
+      margin-bottom: 14px;
+    }
+
+    .contact-card p {
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .contact-email {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 28px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 17px;
+      color: var(--accent-cool);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .contact-email:hover {
+      background: rgba(140, 195, 255, 0.1);
+      border-color: rgba(140, 195, 255, 0.3);
+    }
+
+    /* Footer */
+    footer {
+      padding: 40px 20px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      background:
+        linear-gradient(180deg, rgba(10, 12, 16, 0.95), rgba(10, 12, 16, 0.85)),
+        url('./assets/footer_texture.jpg');
+      background-size: auto, 300px;
+    }
+
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 1000;
+    }
+
+    .modal.active { display: flex; }
+
+    .modal-content {
+      max-width: 1200px;
+      max-height: 90vh;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-close {
+      padding: 8px 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .modal-body {
+      padding: 16px;
+      overflow: auto;
+      text-align: center;
+      max-height: calc(90vh - 60px);
+    }
+
+    .modal-body img {
+      max-width: 100%;
+      max-height: 75vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .about-grid,
+      .funding-grid,
+      .vision-grid { grid-template-columns: 1fr; }
+
+      .video-grid {
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+
+      .video-wrap {
+        max-width: 300px;
+      }
+
+      .roadmap-grid { grid-template-columns: 1fr; }
+      .screenshots-grid { grid-template-columns: repeat(2, 1fr); }
+      .tech-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      section { padding: 60px 0; }
+      .hero { padding-top: 110px; padding-bottom: 50px; }
+      .hero-logo { width: 200px; }
+      .screenshots-grid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .tech-grid { grid-template-columns: 1fr; }
+      .hero-cta { flex-direction: column; align-items: center; }
+      .philosophy-points { flex-direction: column; gap: 16px; }
+      .project-header { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-layer"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-inner">
+      <a href="../" class="nav-logo">
+        <img src="./assets/grindare_logo.png" alt="Grindare Studio">
+        Grindare Studio
+      </a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#project">Project</a></li>
+        <li><a href="#vision">Vision</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+        <li><a href="#funding">Funding</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <img src="./assets/game_logo.png" alt="Light & Shadow" class="hero-logo" style="display: block; margin: 0 auto 24px;">
+      <div class="hero-badge" style="display: inline-flex; margin: 0 auto 20px;">Pre-Alpha Development</div>
+      <h1>Grind Smart, <span>Play Your Way</span></h1>
+      <p class="hero-sub">
+        Light & Shadow is a mobile RPG designed for both dedicated grinders and casual players. Daily limits ensure no one falls behind, while deep progression through equipment, levels, and guilds keeps everyone engaged. Fair play, real progress.
+      </p>
+      <div class="hero-cta">
+        <a href="#vision" class="btn btn-primary">Our Vision</a>
+        <a href="#project" class="btn btn-secondary">View Project</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">About Us</p>
+        <h2 class="section-title">Solo Developer, Big Vision</h2>
+        <p class="section-desc">
+          Building the mobile RPG I've always wanted to play — one where dedication and strategy matter more than wallet size.
+        </p>
+      </div>
+
+      <div class="about-grid">
+        <div class="card founder-card">
+          <img src="./assets/founder_avatar.jpg" alt="Patryk Majecki" class="founder-avatar">
+          <div class="founder-info">
+            <h3>Patryk Majecki</h3>
+            <p class="founder-role">Founder & Solo Developer</p>
+            <p class="founder-bio">
+              I'm a passionate game developer building Light & Shadow <strong>entirely in my spare time</strong> while working a full-time job. Every line of code, every system, every placeholder graphic — it's all me. I believe in this project enough to dedicate every free hour to it.
+            </p>
+            <p class="founder-bio" style="margin-top: 12px;">
+              <strong>What I've built alone:</strong> Complete game architecture, PlayFab backend integration, all core gameplay systems, UI/UX design, and a fully playable prototype. The foundation is solid — now it needs professional polish.
+            </p>
+          </div>
+          <div class="skills-grid">
+            <div class="skill-item"><span>💻</span> Game Programming</div>
+            <div class="skill-item"><span>🎮</span> Game Design</div>
+            <div class="skill-item"><span>📱</span> Mobile (Godot 4.5)</div>
+            <div class="skill-item"><span>☁️</span> Backend (PlayFab)</div>
+          </div>
+        </div>
+
+        <div class="card mission-card">
+          <h3 style="font-size: 20px; margin-bottom: 16px;">Why I'm Building This</h3>
+          <p>
+            I've played mobile RPGs that punish you for having a life outside the game, and others that let whales dominate. I wanted something in between — <strong>a game that respects your time and rewards skill, not spending</strong>.
+          </p>
+          <p>
+            Light & Shadow is built for <strong>both dedicated grinders and casual players</strong>. Daily energy limits keep things fair, while deep progression systems reward those who engage more. No one gets left behind, and no one needs to spend money to compete.
+          </p>
+          <p style="margin-top: 16px; padding: 14px; background: rgba(255, 215, 120, 0.1); border: 1px solid rgba(255, 215, 120, 0.25); border-radius: 10px;">
+            <strong style="color: var(--accent-warm);">My Goal:</strong> Transition to full-time development and build a small team of specialists (artists, animators, sound designers, QA) to transform this working prototype into a polished, market-ready game.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Project -->
+  <section id="project">
+    <div class="container">
+      <div class="card">
+        <div class="project-header">
+          <img src="./assets/game_logo.png" alt="Light & Shadow" class="project-logo">
+          <div class="project-info">
+            <h2>Light & Shadow</h2>
+            <div class="project-meta">
+              <span class="project-tag">Android & iOS</span>
+              <span class="project-tag">Idle RPG</span>
+              <span class="project-tag">Pre-Alpha</span>
+              <span class="project-tag">Free-to-Play</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="project-desc">
+          Light & Shadow combines satisfying grind loops with smart daily limits. Farm equipment, level your character, complete quests, and climb the rankings. Join a guild for exclusive content and social play. Perfect for dedicated grinders who want depth and casual players who want progress without pressure.
+        </p>
+
+        <div class="tech-grid">
+          <div class="tech-item">
+            <strong>Godot 4.5</strong>
+            <span>Game Engine</span>
+          </div>
+          <div class="tech-item">
+            <strong>PlayFab</strong>
+            <span>Backend & Live-Ops</span>
+          </div>
+          <div class="tech-item">
+            <strong>1080×2400</strong>
+            <span>Mobile Portrait</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Video & Features -->
+  <section style="padding-top: 0;">
+    <div class="container">
+      <div class="card">
+        <div class="video-grid">
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/o2w9xzIB1YU" allowfullscreen title="Light & Shadow Gameplay"></iframe>
+          </div>
+          <div class="video-info">
+            <h3>Current Build Preview</h3>
+            <p>
+              This video shows the working prototype with core systems in place: PvE hunts, PvP arena, equipment progression, and social features.
+            </p>
+            <ul class="feature-list">
+              <li>Deep equipment & leveling system</li>
+              <li>Bounty board & daily quests</li>
+              <li>Dungeon exploration</li>
+              <li>PvP Arena with rankings</li>
+              <li>Citadel building</li>
+              <li>Guild system & social features</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vision - Game Systems -->
+  <section id="vision">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Our Vision</p>
+        <h2 class="section-title">Progress at Your Own Pace</h2>
+        <p class="section-desc">
+          Whether you grind for hours or play 15 minutes a day — you'll always make meaningful progress. Daily energy limits keep the playing field level, while deep equipment and leveling systems reward dedication.
+        </p>
+      </div>
+
+      <div class="vision-grid">
+        <div class="vision-card">
+          <div class="vision-icon">🗡️</div>
+          <h3>Equipment System</h3>
+          <p>
+            Your gear defines your power. Farm, craft, and upgrade equipment to build your perfect loadout. Every piece matters.
+          </p>
+          <ul>
+            <li>Diverse item rarities</li>
+            <li>Class-specific gear</li>
+            <li>Upgrade & enhancement</li>
+            <li>Set bonuses & synergies</li>
+          </ul>
+        </div>
+
+        <div class="vision-card cool">
+          <div class="vision-icon">📈</div>
+          <h3>Character Progression</h3>
+          <p>
+            Level up, unlock skills, and grow stronger over time. Meaningful progression that rewards consistent play.
+          </p>
+          <ul>
+            <li>Experience & leveling</li>
+            <li>Skill trees & abilities</li>
+            <li>Stat allocation</li>
+            <li>Class mastery</li>
+          </ul>
+        </div>
+
+        <div class="vision-card">
+          <div class="vision-icon">⚡</div>
+          <h3>Fair Daily Limits</h3>
+          <p>
+            Energy system that keeps everyone on equal footing. Grind efficiently, never feel forced to play 24/7.
+          </p>
+          <ul>
+            <li>Daily energy regeneration</li>
+            <li>Catch-up mechanics</li>
+            <li>No one falls behind</li>
+            <li>Respect for your time</li>
+          </ul>
+        </div>
+
+        <div class="vision-card cool">
+          <div class="vision-icon">🎯</div>
+          <h3>Satisfying Grind</h3>
+          <p>
+            Easy to understand, rewarding to master. Multiple activities to farm with clear goals and visible progress.
+          </p>
+          <ul>
+            <li>Bounty board missions</li>
+            <li>Dungeon runs</li>
+            <li>Daily quests</li>
+            <li>Expeditions & hunts</li>
+          </ul>
+        </div>
+
+        <div class="vision-card">
+          <div class="vision-icon">⚔️</div>
+          <h3>Guild Wars</h3>
+          <p>
+            Join forces with other players. Guilds offer exclusive content, bonuses, and large-scale PvP battles.
+          </p>
+          <ul>
+            <li>Guild progression & perks</li>
+            <li>Territory wars</li>
+            <li>Guild dungeons</li>
+            <li>Shared rewards</li>
+          </ul>
+        </div>
+
+        <div class="vision-card cool">
+          <div class="vision-icon">🏆</div>
+          <h3>Competitive PvP</h3>
+          <p>
+            Test your build against others. Seasonal rankings, rewards, and recognition for top players.
+          </p>
+          <ul>
+            <li>Arena matchmaking</li>
+            <li>Seasonal rankings</li>
+            <li>Exclusive rewards</li>
+            <li>Skill-based combat</li>
+          </ul>
+        </div>
+
+        <div class="vision-card">
+          <div class="vision-icon">🛒</div>
+          <h3>Fair Monetization</h3>
+          <p>
+            Cosmetics and convenience only. No pay-to-win, no forced purchases. Free players can compete equally.
+          </p>
+          <ul>
+            <li>Cosmetic skins & effects</li>
+            <li>Battle Pass (free track included)</li>
+            <li>No power for money</li>
+            <li>Transparent pricing</li>
+          </ul>
+        </div>
+
+        <div class="vision-card cool">
+          <div class="vision-icon">🏰</div>
+          <h3>Your Citadel</h3>
+          <p>
+            Build and upgrade your personal base. Unlock new features, boost production, and show off your progress.
+          </p>
+          <ul>
+            <li>Building upgrades</li>
+            <li>Resource production</li>
+            <li>Unlockable features</li>
+            <li>Visual progression</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Fair Play Philosophy -->
+      <div class="philosophy-banner">
+        <h3>🎮 Built for Everyone</h3>
+        <p>
+          Whether you're a hardcore grinder or a casual player with 15 minutes a day — Light & Shadow respects your time. Daily limits keep things fair, meaningful progression keeps things fun, and no one needs to spend money to compete.
+        </p>
+        <div class="philosophy-points">
+          <div class="philosophy-point">
+            <span class="check">✓</span>
+            No pay-to-win
+          </div>
+          <div class="philosophy-point">
+            <span class="check">✓</span>
+            Fair daily limits
+          </div>
+          <div class="philosophy-point">
+            <span class="check">✓</span>
+            Grinder & casual friendly
+          </div>
+          <div class="philosophy-point">
+            <span class="check">✓</span>
+            Gear & skill matter most
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screenshots -->
+  <section style="padding-top: 0;">
+    <div class="container">
+      <div class="card">
+        <div class="card-header">
+          <h2>Screenshots</h2>
+          <span class="card-tag">Click to enlarge</span>
+        </div>
+        <div class="screenshots-grid" id="screenshots">
+          <figure class="screenshot" data-src="./assets/new_screen01.png">
+            <img src="./assets/new_screen01.png" alt="Server Selection">
+            <figcaption>Server Selection</figcaption>
+          </figure>
+          <figure class="screenshot" data-src="./assets/new_screen02.png">
+            <img src="./assets/new_screen02.png" alt="Login">
+            <figcaption>Login & Registration</figcaption>
+          </figure>
+          <figure class="screenshot" data-src="./assets/new_screen03.png">
+            <img src="./assets/new_screen03.png" alt="Character Profile">
+            <figcaption>Character & Equipment</figcaption>
+          </figure>
+          <figure class="screenshot" data-src="./assets/new_screen04.png">
+            <img src="./assets/new_screen04.png" alt="Item Details">
+            <figcaption>Legendary Item Details</figcaption>
+          </figure>
+          <figure class="screenshot" data-src="./assets/new_screen05.png">
+            <img src="./assets/new_screen05.png" alt="Character Stats">
+            <figcaption>Character Statistics</figcaption>
+          </figure>
+          <figure class="screenshot" data-src="./assets/new_screen06.png">
+            <img src="./assets/new_screen06.png" alt="Main Menu">
+            <figcaption>Main Menu</figcaption>
+          </figure>
+          <figure class="screenshot" data-src="./assets/new_screen07.png">
+            <img src="./assets/new_screen07.png" alt="PvP Arena">
+            <figcaption>PvP Arena</figcaption>
+          </figure>
+          <figure class="screenshot" data-src="./assets/new_screen08.png">
+            <img src="./assets/new_screen08.png" alt="Live Combat">
+            <figcaption>Real-Time PvP Combat</figcaption>
+          </figure>
+          <figure class="screenshot" data-src="./assets/new_screen09.png">
+            <img src="./assets/new_screen09.png" alt="Daily Rewards">
+            <figcaption>Daily Login Rewards</figcaption>
+          </figure>
+          <figure class="screenshot" data-src="./assets/new_screen10.png">
+            <img src="./assets/new_screen10.png" alt="Bounty Board">
+            <figcaption>Bounty Board Missions</figcaption>
+          </figure>
+          <figure class="screenshot" data-src="./assets/new_screen11.png">
+            <img src="./assets/new_screen11.png" alt="Citadel">
+            <figcaption>Your Citadel</figcaption>
+          </figure>
+          <figure class="screenshot" data-src="./assets/new_screen12.png">
+            <img src="./assets/new_screen12.png" alt="Dungeon">
+            <figcaption>Dungeon Exploration</figcaption>
+          </figure>
+          <figure class="screenshot" data-src="./assets/new_screen13.png">
+            <img src="./assets/new_screen13.png" alt="Shop">
+            <figcaption>In-Game Shop</figcaption>
+          </figure>
+          <figure class="screenshot" data-src="./assets/new_screen14.png">
+            <img src="./assets/new_screen14.png" alt="Daily Quests">
+            <figcaption>Daily Quests</figcaption>
+          </figure>
+          <figure class="screenshot" data-src="./assets/new_screen15.png">
+            <img src="./assets/new_screen15.png" alt="Rankings">
+            <figcaption>Global Rankings</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Roadmap -->
+  <section id="roadmap">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Development Plan</p>
+        <h2 class="section-title">6-Month Roadmap to Beta</h2>
+        <p class="section-desc">
+          A focused development plan to bring Light & Shadow from prototype to closed beta.
+        </p>
+      </div>
+
+      <div class="roadmap-grid">
+        <div class="roadmap-phase">
+          <div class="phase-header">
+            <span class="phase-number">1</span>
+            <div>
+              <p class="phase-title">Art & Audio</p>
+              <p class="phase-period">Months 1–2</p>
+            </div>
+          </div>
+          <ul class="phase-list">
+            <li>Professional character art</li>
+            <li>Environment & UI graphics</li>
+            <li>Character animations</li>
+            <li>Combat & UI animations</li>
+            <li>Sound effects & music</li>
+            <li>Bug fixes & optimization</li>
+          </ul>
+        </div>
+
+        <div class="roadmap-phase">
+          <div class="phase-header">
+            <span class="phase-number">2</span>
+            <div>
+              <p class="phase-title">Core Systems</p>
+              <p class="phase-period">Months 3–4</p>
+            </div>
+          </div>
+          <ul class="phase-list">
+            <li>Full guild system</li>
+            <li>Guild progression & perks</li>
+            <li>Premium shop implementation</li>
+            <li>In-game shop expansion</li>
+            <li>Account personalization</li>
+            <li>Social features & chat</li>
+          </ul>
+        </div>
+
+        <div class="roadmap-phase">
+          <div class="phase-header">
+            <span class="phase-number">3</span>
+            <div>
+              <p class="phase-title">Endgame & Launch</p>
+              <p class="phase-period">Months 5–6</p>
+            </div>
+          </div>
+          <ul class="phase-list">
+            <li>Guild Wars system</li>
+            <li>New dungeon content</li>
+            <li>Seasonal systems</li>
+            <li>Battle Pass implementation</li>
+            <li>Balance & QA testing</li>
+            <li>Closed beta launch</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- What's Coming Section -->
+      <div class="card" style="margin-top: 24px; padding: 28px;">
+        <h3 style="font-size: 18px; margin-bottom: 16px; text-align: center;">What We're Building</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+          <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 10px; border: 1px solid var(--border);">
+            <strong style="color: var(--accent-warm);">🎨 Visuals</strong>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 6px 0 0;">Professional art, animations, VFX</p>
+          </div>
+          <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 10px; border: 1px solid var(--border);">
+            <strong style="color: var(--accent-warm);">🔊 Audio</strong>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 6px 0 0;">Music, SFX, ambient sounds</p>
+          </div>
+          <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 10px; border: 1px solid var(--border);">
+            <strong style="color: var(--accent-warm);">⚔️ Guilds</strong>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 6px 0 0;">Full system, wars, dungeons</p>
+          </div>
+          <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 10px; border: 1px solid var(--border);">
+            <strong style="color: var(--accent-warm);">🛒 Shops</strong>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 6px 0 0;">Premium & in-game stores</p>
+          </div>
+          <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 10px; border: 1px solid var(--border);">
+            <strong style="color: var(--accent-warm);">🎨 Personalization</strong>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 6px 0 0;">Skins, titles, profiles</p>
+          </div>
+          <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 10px; border: 1px solid var(--border);">
+            <strong style="color: var(--accent-warm);">🏆 Seasons</strong>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 6px 0 0;">Battle Pass, ranked seasons</p>
+          </div>
+          <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 10px; border: 1px solid var(--border);">
+            <strong style="color: var(--accent-warm);">🗺️ Content</strong>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 6px 0 0;">New dungeons, bosses, events</p>
+          </div>
+          <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 10px; border: 1px solid var(--border);">
+            <strong style="color: var(--accent-warm);">✨ Innovation</strong>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 6px 0 0;">Unique systems & features</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Funding -->
+  <section id="funding">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Funding Request</p>
+        <h2 class="section-title">From Spare Time to Full Time</h2>
+        <p class="section-desc">
+          I've built a working prototype alone, in my spare time. With funding, I can go full-time and hire the specialists needed to make this game market-ready.
+        </p>
+      </div>
+
+      <!-- Current Situation -->
+      <div class="card" style="margin-bottom: 24px; border-color: rgba(140, 195, 255, 0.25); background: linear-gradient(135deg, rgba(140, 195, 255, 0.08), transparent);">
+        <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--accent-cool);">📍 Current Situation</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+          <div>
+            <p style="color: var(--text-muted); font-size: 14px; line-height: 1.7; margin: 0;">
+              <strong style="color: var(--text);">Development:</strong> Evenings and weekends only, while working full-time job<br>
+              <strong style="color: var(--text);">Team size:</strong> Just me — solo developer<br>
+              <strong style="color: var(--text);">Time invested:</strong> 12+ months of dedicated spare time
+            </p>
+          </div>
+          <div>
+            <p style="color: var(--text-muted); font-size: 14px; line-height: 1.7; margin: 0;">
+              <strong style="color: var(--text);">What exists:</strong> Fully playable prototype with core systems<br>
+              <strong style="color: var(--text);">What's missing:</strong> Professional art, animation, sound, QA<br>
+              <strong style="color: var(--text);">Bottleneck:</strong> Time and specialized skills I don't have
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="funding-grid">
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 22px;">What Funding Enables</h3>
+
+          <div class="funding-need" style="border-color: rgba(255, 215, 120, 0.25); background: rgba(255, 215, 120, 0.08);">
+            <div class="need-icon" style="background: rgba(255, 215, 120, 0.2); border-color: rgba(255, 215, 120, 0.3);">👨‍💻</div>
+            <div class="need-content">
+              <h4>Full-Time Development</h4>
+              <p>Transition from spare-time hobby to full-time focus. 5x more development hours per week.</p>
+            </div>
+          </div>
+
+          <div class="funding-need" style="margin-top: 14px;">
+            <div class="need-icon">🎨</div>
+            <div class="need-content">
+              <h4>Professional Artists</h4>
+              <p>Hire character artists, environment artists, and UI designers to replace placeholder graphics.</p>
+            </div>
+          </div>
+
+          <div class="funding-need" style="margin-top: 14px;">
+            <div class="need-icon">✨</div>
+            <div class="need-content">
+              <h4>Animators</h4>
+              <p>Character animations, combat effects, spell VFX, and polished UI transitions.</p>
+            </div>
+          </div>
+
+          <div class="funding-need" style="margin-top: 14px;">
+            <div class="need-icon">🔊</div>
+            <div class="need-content">
+              <h4>Sound Design & Music</h4>
+              <p>Original soundtrack, sound effects, ambient audio, and UI feedback sounds.</p>
+            </div>
+          </div>
+
+          <div class="funding-need" style="margin-top: 14px;">
+            <div class="need-icon">🧪</div>
+            <div class="need-content">
+              <h4>QA & Testing</h4>
+              <p>Professional testing for bugs, balance, performance, and cross-device compatibility.</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="funding-summary">
+            <h3>Why Fund This Project?</h3>
+            <p>
+              <strong>✓ Proven dedication:</strong> 12+ months of solo development in spare time shows commitment, not just an idea on paper.
+            </p>
+            <p>
+              <strong>✓ Working prototype:</strong> Core gameplay loop is complete and playable — this isn't a concept, it's a real game that needs polish.
+            </p>
+            <p>
+              <strong>✓ Clear use of funds:</strong> Not vague "development costs" — specific needs: full-time transition + professional specialists.
+            </p>
+            <p>
+              <strong>✓ Realistic scope:</strong> Mobile RPG with proven market demand, built on solid technical foundation (Godot 4.5 + PlayFab).
+            </p>
+            <p style="margin-bottom: 0;">
+              <strong>✓ Fair monetization:</strong> Non-pay-to-win design that's sustainable long-term without exploiting players.
+            </p>
+          </div>
+
+          <div class="card" style="margin-top: 20px;">
+            <h4 style="margin-bottom: 12px; font-size: 15px;">What I've Already Built (Alone)</h4>
+            <ul class="feature-list">
+              <li>Complete game architecture & codebase</li>
+              <li>PlayFab backend integration</li>
+              <li>PvE system (hunts, dungeons, expeditions)</li>
+              <li>PvP Arena with ranking system</li>
+              <li>Equipment & progression systems</li>
+              <li>Daily quests, rewards, energy system</li>
+              <li>Citadel building system</li>
+              <li>Chat & social foundations</li>
+              <li>Shop & economy framework</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Funding Impact -->
+      <div class="card" style="margin-top: 24px; text-align: center; padding: 28px; border-color: rgba(109, 213, 140, 0.25); background: linear-gradient(135deg, rgba(109, 213, 140, 0.08), transparent);">
+        <h3 style="font-size: 20px; margin-bottom: 12px; color: var(--accent-green);">Expected Outcome</h3>
+        <p style="color: var(--text-muted); font-size: 15px; max-width: 700px; margin: 0 auto;">
+          With 6 months of funded full-time development plus a small team of specialists, Light & Shadow will be ready for <strong>closed beta</strong> with professional-quality visuals, audio, and complete core systems including guilds and guild wars.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container">
+      <div class="card contact-card">
+        <h2>Get in Touch</h2>
+        <p>Interested in our project or potential collaboration? We'd love to hear from you.</p>
+        <a href="mailto:contact@grindarestudio.com" class="contact-email">
+          <span>📧</span>
+          contact@grindarestudio.com
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>© <span id="year"></span> Grindare Studio. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span id="modal-title"></span>
+        <button class="modal-close" id="modal-close">Close</button>
+      </div>
+      <div class="modal-body">
+        <img id="modal-img" src="" alt="">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modal-img');
+    const modalTitle = document.getElementById('modal-title');
+    const modalClose = document.getElementById('modal-close');
+
+    document.getElementById('screenshots').addEventListener('click', (e) => {
+      const fig = e.target.closest('.screenshot');
+      if (!fig) return;
+      modalImg.src = fig.dataset.src;
+      modalTitle.textContent = fig.querySelector('figcaption').textContent;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+
+    modalClose.addEventListener('click', () => {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+</body>
+</html>
