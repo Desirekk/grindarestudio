@@ -1194,39 +1194,51 @@
     <div class="container">
       <div class="section-header">
         <p class="section-label">What We Do</p>
-        <h2 class="section-title">Two Core Services, One Studio</h2>
-        <p class="section-desc">Whether you need a stunning website for your business or a mobile game built from scratch — we've got you covered.</p>
+        <h2 class="section-title">Three Core Services, One Studio</h2>
+        <p class="section-desc">Websites, mobile apps, or games — whatever digital product you need, we've got you covered.</p>
       </div>
 
-      <div class="services-grid">
+      <div class="services-grid" style="grid-template-columns: repeat(3, 1fr);">
         <div class="service-card web">
           <div class="service-icon">🌐</div>
           <h3>Website Development</h3>
-          <p>Premium websites for trade businesses — roofers, builders, electricians, plumbers. Custom design, mobile responsive, SEO optimized, built to generate leads.</p>
+          <p>Premium websites for businesses — custom design, mobile responsive, SEO optimized, built to generate leads.</p>
           <ul class="service-features">
             <li>Custom responsive design</li>
             <li>Mobile-first approach</li>
-            <li>Contact forms & WhatsApp integration</li>
+            <li>Contact forms & WhatsApp</li>
             <li>Google Maps & local SEO</li>
             <li>Fast loading & optimized</li>
-            <li>Free hosting setup</li>
           </ul>
-          <a href="#pricing" class="btn btn-secondary">View Web Packages →</a>
+          <a href="#pricing" class="btn btn-secondary">View Packages →</a>
+        </div>
+
+        <div class="service-card" style="--card-accent: linear-gradient(135deg, #3b82f6, #2563eb);">
+          <div class="service-icon" style="--icon-bg: rgba(59, 130, 246, 0.12);">📱</div>
+          <h3>Mobile App Development</h3>
+          <p>Cross-platform apps for iOS & Android. From business tools to customer apps — we build functional mobile solutions.</p>
+          <ul class="service-features">
+            <li>iOS & Android (cross-platform)</li>
+            <li>User authentication & security</li>
+            <li>Push notifications</li>
+            <li>Backend & database</li>
+            <li>App Store submission</li>
+          </ul>
+          <a href="#pricing" class="btn btn-secondary">View Packages →</a>
         </div>
 
         <div class="service-card game">
           <div class="service-icon">🎮</div>
           <h3>Game Development</h3>
-          <p>Mobile games built in Godot 4.5 with PlayFab backend. From concept to launch — game design, programming, art direction, and live-ops support.</p>
+          <p>Mobile games built in Godot 4.5 with PlayFab backend. From concept to launch — full game development.</p>
           <ul class="service-features">
             <li>Godot 4.5 development</li>
             <li>PlayFab backend integration</li>
             <li>Game design & balancing</li>
             <li>UI/UX design</li>
-            <li>Art direction & asset management</li>
             <li>Post-launch support</li>
           </ul>
-          <a href="#pricing" class="btn btn-secondary">View Game Packages →</a>
+          <a href="#pricing" class="btn btn-secondary">View Packages →</a>
         </div>
       </div>
     </div>
@@ -1242,8 +1254,9 @@
       </div>
 
       <div class="pricing-tabs">
-        <button class="pricing-tab active" data-tab="web">Website Packages</button>
-        <button class="pricing-tab" data-tab="game">Game Development</button>
+        <button class="pricing-tab active" data-tab="web">Websites</button>
+        <button class="pricing-tab" data-tab="app">Mobile Apps</button>
+        <button class="pricing-tab" data-tab="game">Games</button>
         <button class="pricing-tab" data-tab="addons">Add-ons</button>
       </div>
 
@@ -1305,6 +1318,67 @@
               <li>Priority response</li>
             </ul>
             <a href="services.html#premium" class="btn btn-outline">Learn More</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- App Pricing -->
+      <div class="pricing-panel" id="panel-app">
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-name">App Design</div>
+              <div class="pricing-desc">Planning & prototyping</div>
+              <div class="pricing-price">£799 <span>starting</span></div>
+            </div>
+            <ul class="pricing-features">
+              <li>App concept & wireframes</li>
+              <li>User flow mapping</li>
+              <li>UI/UX design mockups</li>
+              <li>Clickable prototype</li>
+              <li>Technical specifications</li>
+              <li>Feature prioritization</li>
+              <li>2 revision rounds</li>
+            </ul>
+            <a href="services.html#app-design" class="btn btn-outline">Learn More</a>
+          </div>
+
+          <div class="pricing-card featured">
+            <div class="pricing-header">
+              <div class="pricing-name">MVP App</div>
+              <div class="pricing-desc">Functional prototype</div>
+              <div class="pricing-price">£3,999 <span>starting</span></div>
+            </div>
+            <ul class="pricing-features">
+              <li>Cross-platform (iOS & Android)</li>
+              <li>Core features development</li>
+              <li>User authentication</li>
+              <li>Basic backend/database</li>
+              <li>Push notifications</li>
+              <li>Test builds for review</li>
+              <li>Source code ownership</li>
+              <li>1 month support</li>
+            </ul>
+            <a href="services.html#mvp-app" class="btn btn-primary">Learn More</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-name">Full App</div>
+              <div class="pricing-desc">Complete solution</div>
+              <div class="pricing-price">Custom</div>
+            </div>
+            <ul class="pricing-features">
+              <li>Everything in MVP</li>
+              <li>Full feature development</li>
+              <li>Advanced integrations</li>
+              <li>Admin dashboard</li>
+              <li>App Store submission</li>
+              <li>Play Store submission</li>
+              <li>Launch support</li>
+              <li>Ongoing maintenance</li>
+            </ul>
+            <a href="services.html#full-app" class="btn btn-outline">Learn More</a>
           </div>
         </div>
       </div>
@@ -1426,6 +1500,40 @@
             </ul>
             <a href="services.html#branding" class="btn btn-outline">Learn More</a>
           </div>
+
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-name">Domain & Hosting</div>
+              <div class="pricing-desc">Complete setup</div>
+              <div class="pricing-price">£99 <span>one-time</span></div>
+            </div>
+            <ul class="pricing-features">
+              <li>Domain registration (1 year)</li>
+              <li>Professional email setup</li>
+              <li>SSL certificate</li>
+              <li>DNS configuration</li>
+              <li>Hosting setup & deployment</li>
+              <li>Domain renewal reminders</li>
+            </ul>
+            <a href="services.html#domain-hosting" class="btn btn-outline">Learn More</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-name">Source Files</div>
+              <div class="pricing-desc">Full ownership</div>
+              <div class="pricing-price">£149 <span>one-time</span></div>
+            </div>
+            <ul class="pricing-features">
+              <li>Complete source code</li>
+              <li>All original design files</li>
+              <li>Documentation & setup guide</li>
+              <li>Host on your own server</li>
+              <li>Full commercial rights</li>
+              <li>No ongoing fees</li>
+            </ul>
+            <a href="services.html#source-files" class="btn btn-outline">Learn More</a>
+          </div>
         </div>
       </div>
     </div>
@@ -1480,8 +1588,8 @@
       <div class="process-grid">
         <div class="process-step">
           <div class="process-number">1</div>
-          <h4>Discovery Call</h4>
-          <p>Free 30-minute call to understand your needs, goals, and vision. We'll recommend the best solution.</p>
+          <h4>Send Your Brief</h4>
+          <p>Message us via email or WhatsApp with your project idea. The more details, the better — we'll get back within 24h.</p>
         </div>
         <div class="process-step">
           <div class="process-number">2</div>
@@ -1577,14 +1685,14 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <img src="images/grindare_logo.png" alt="Grindare Studio">
-          <p>Professional game development and web design agency. Building digital experiences that matter.</p>
+          <p>Professional game, app, and web development agency. Building digital experiences that matter.</p>
         </div>
         <div class="footer-links">
           <h4>Services</h4>
           <a href="#pricing">Website Development</a>
+          <a href="#pricing">Mobile App Development</a>
           <a href="#pricing">Game Development</a>
-          <a href="#pricing">SEO & Marketing</a>
-          <a href="#pricing">Branding</a>
+          <a href="#pricing">Add-ons & Support</a>
         </div>
         <div class="footer-links">
           <h4>Projects</h4>
