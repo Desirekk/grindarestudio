@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services & Pricing | Grindare Studio</title>
+
+  <meta name="description" content="Detailed pricing and services from Grindare Studio. Website packages from £499, game development from £4,999, SEO, branding and more. UK-based agency.">
+  <meta property="og:title" content="Services & Pricing | Grindare Studio">
+  <meta property="og:description" content="Detailed pricing and services. Website packages, game development, SEO, branding. View what's included in each package.">
+  <meta property="og:image" content="https://grindarestudio.com/images/grindare_logo.png">
+  <meta property="og:url" content="https://grindarestudio.com/services.html">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <meta name="keywords" content="website pricing UK, game development cost, web design packages, business website price, mobile game development, SEO services, branding services">
+  <meta name="author" content="Grindare Studio">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://grindarestudio.com/services.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #09090b;
+      --bg-darker: #050506;
+      --bg-card: rgba(18, 18, 22, 0.95);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(255, 255, 255, 0.12);
+      --text: rgba(255, 255, 255, 0.95);
+      --text-muted: rgba(255, 255, 255, 0.6);
+      --gold: #f5b942;
+      --gold-dim: rgba(245, 185, 66, 0.12);
+      --purple: #a855f7;
+      --purple-dim: rgba(168, 85, 247, 0.12);
+      --blue: #3b82f6;
+      --green: #22c55e;
+      --gradient-gold: linear-gradient(135deg, #f5b942, #f59e0b);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --radius-lg: 24px;
+      --max-width: 900px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .bg-gradient {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 50% 30% at 70% 10%, rgba(168, 85, 247, 0.06), transparent),
+        radial-gradient(ellipse 40% 30% at 20% 90%, rgba(245, 185, 66, 0.04), transparent),
+        var(--bg-dark);
+    }
+
+    .container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 16px 24px;
+      background: rgba(9, 9, 11, 0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .nav-logo img { height: 40px; width: auto; }
+
+    .nav-back {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+
+    .nav-back:hover { color: var(--gold); }
+
+    /* Hero */
+    .page-hero {
+      padding: 140px 0 80px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .page-hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .page-hero p {
+      color: var(--text-muted);
+      font-size: 17px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Service Sections */
+    .service-section {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .service-section:last-of-type {
+      border-bottom: none;
+    }
+
+    .service-header {
+      margin-bottom: 48px;
+    }
+
+    .service-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--gold-dim);
+      border: 1px solid rgba(245, 185, 66, 0.2);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .service-badge.web {
+      background: var(--purple-dim);
+      border-color: rgba(168, 85, 247, 0.2);
+      color: var(--purple);
+    }
+
+    .service-badge.addon {
+      background: rgba(59, 130, 246, 0.12);
+      border-color: rgba(59, 130, 246, 0.2);
+      color: var(--blue);
+    }
+
+    .service-header h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .service-price {
+      font-size: 24px;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .service-header > p {
+      color: var(--text-muted);
+      font-size: 16px;
+      max-width: 700px;
+    }
+
+    /* Content Blocks */
+    .content-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .content-block h3 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .content-block h3 span {
+      font-size: 24px;
+    }
+
+    .feature-list {
+      list-style: none;
+    }
+
+    .feature-list li {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .feature-list li:last-child {
+      border-bottom: none;
+    }
+
+    .feature-list li::before {
+      content: '✓';
+      color: var(--green);
+      font-weight: bold;
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    .feature-list .feature-title {
+      font-weight: 600;
+      color: var(--text);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .feature-list .feature-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* Process Steps */
+    .process-steps {
+      counter-reset: step;
+    }
+
+    .process-step {
+      display: flex;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .process-step:last-child {
+      border-bottom: none;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: var(--gold-dim);
+      border: 1px solid rgba(245, 185, 66, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .step-content p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* Timeline */
+    .timeline-info {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .timeline-item {
+      flex: 1;
+      min-width: 150px;
+      padding: 20px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      text-align: center;
+    }
+
+    .timeline-item strong {
+      display: block;
+      font-size: 20px;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .timeline-item span {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* CTA Box */
+    .cta-box {
+      background: linear-gradient(135deg, rgba(245, 185, 66, 0.1), rgba(168, 85, 247, 0.05));
+      border: 1px solid rgba(245, 185, 66, 0.2);
+      border-radius: var(--radius);
+      padding: 40px;
+      text-align: center;
+      margin-top: 48px;
+    }
+
+    .cta-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .cta-box p {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--gradient-gold);
+      color: #000;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(245, 185, 66, 0.3);
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
+      color: white;
+    }
+
+    .btn-whatsapp:hover {
+      background: #128C7E;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Contact Info */
+    .contact-info {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .contact-item a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    .contact-item a:hover {
+      text-decoration: underline;
+    }
+
+    /* TOC */
+    .toc {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin: 40px 0;
+    }
+
+    .toc h3 {
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: var(--text-muted);
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .toc a {
+      display: block;
+      padding: 14px 16px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .toc a:hover {
+      border-color: var(--gold);
+      background: var(--gold-dim);
+    }
+
+    .toc a span {
+      display: block;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Footer */
+    footer {
+      padding: 40px 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    footer a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .toc-grid { grid-template-columns: 1fr; }
+      .timeline-info { flex-direction: column; }
+      .cta-buttons { flex-direction: column; align-items: center; }
+      .btn { width: 100%; max-width: 280px; }
+      .contact-info { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-gradient"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="images/grindare_logo.png" alt="Grindare Studio">
+      </a>
+      <a href="/" class="nav-back">← Back to Home</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="page-hero">
+    <div class="container">
+      <h1>Services & Pricing</h1>
+      <p>Detailed breakdown of what's included in each package. Transparent pricing, no hidden fees.</p>
+    </div>
+  </section>
+
+  <!-- Table of Contents -->
+  <div class="container">
+    <div class="toc">
+      <h3>Jump to Package:</h3>
+      <div class="toc-grid">
+        <a href="#starter">Starter Website <span>£499</span></a>
+        <a href="#business">Business Website <span>£899</span></a>
+        <a href="#premium">Premium Website <span>£1,499</span></a>
+        <a href="#game-design">Game Design <span>£999+</span></a>
+        <a href="#mvp">MVP Development <span>£4,999+</span></a>
+        <a href="#full-game">Full Development <span>Custom</span></a>
+        <a href="#care">Monthly Care <span>£79/mo</span></a>
+        <a href="#seo">SEO Boost <span>£149/mo</span></a>
+        <a href="#branding">Logo & Branding <span>£299</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WEBSITE PACKAGES ==================== -->
+
+  <!-- Starter -->
+  <section class="service-section" id="starter">
+    <div class="container">
+      <div class="service-header">
+        <div class="service-badge web">Website Package</div>
+        <h2>Starter Website</h2>
+        <div class="service-price">£499 <span style="font-size: 14px; color: var(--text-muted); font-weight: 400;">one-time payment</span></div>
+        <p>Perfect for small businesses and tradespeople who need a professional online presence. Single-page website with all essential features to get you found online and generate enquiries.</p>
+      </div>
+
+      <div class="content-block">
+        <h3><span>📦</span> What's Included</h3>
+        <ul class="feature-list">
+          <li>
+            <div>
+              <span class="feature-title">Single Page Website</span>
+              <span class="feature-desc">One beautifully designed page with all your key information: about, services, gallery, testimonials, and contact.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Mobile Responsive Design</span>
+              <span class="feature-desc">Your website will look perfect on all devices - phones, tablets, and desktops. Over 60% of visitors browse on mobile.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Contact Form</span>
+              <span class="feature-desc">Professional contact form that sends enquiries directly to your email. Includes spam protection.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">WhatsApp Button</span>
+              <span class="feature-desc">Floating WhatsApp button so customers can message you instantly with one tap.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Google Maps Integration</span>
+              <span class="feature-desc">Interactive map showing your service area or business location.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Basic SEO Setup</span>
+              <span class="feature-desc">Meta titles, descriptions, and proper heading structure so Google can find you.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Fast Hosting Setup</span>
+              <span class="feature-desc">We'll set up free, fast hosting on GitHub Pages or Netlify. No monthly hosting fees.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">1 Month Free Support</span>
+              <span class="feature-desc">Any tweaks or small changes you need in the first month are included.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="content-block">
+        <h3><span>🔄</span> The Process</h3>
+        <div class="process-steps">
+          <div class="process-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Discovery Call (30 min)</h4>
+              <p>We discuss your business, goals, and what you want from your website. You share any images, content ideas, or examples you like.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>Design & Build (3-5 days)</h4>
+              <p>We create your website. You receive a preview link to review and request any changes.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>Revisions (up to 2 rounds)</h4>
+              <p>We make your requested changes. Most clients are happy after 1 round of revisions.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>Launch</h4>
+              <p>We connect your domain, go live, and hand over everything. You own 100% of the code.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-info">
+          <div class="timeline-item">
+            <strong>5-7 days</strong>
+            <span>Typical delivery time</span>
+          </div>
+          <div class="timeline-item">
+            <strong>2 rounds</strong>
+            <span>Revisions included</span>
+          </div>
+          <div class="timeline-item">
+            <strong>£0/month</strong>
+            <span>Hosting fees</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-box">
+        <h3>Ready to Get Started?</h3>
+        <p>Let's discuss your project. Free consultation, no obligations.</p>
+        <div class="cta-buttons">
+          <a href="https://wa.me/447392305505?text=Hi,%20I'm%20interested%20in%20the%20Starter%20Website%20package%20(£499)" class="btn btn-whatsapp" target="_blank">WhatsApp Us</a>
+          <a href="mailto:patrykmajecki30@gmail.com?subject=Starter%20Website%20Enquiry" class="btn btn-secondary">Send Email</a>
+        </div>
+        <div class="contact-info">
+          <div class="contact-item">📱 <a href="tel:+447392305505">+44 7392 305505</a></div>
+          <div class="contact-item">📧 <a href="mailto:patrykmajecki30@gmail.com">patrykmajecki30@gmail.com</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Business -->
+  <section class="service-section" id="business">
+    <div class="container">
+      <div class="service-header">
+        <div class="service-badge web">Website Package • Most Popular</div>
+        <h2>Business Website</h2>
+        <div class="service-price">£899 <span style="font-size: 14px; color: var(--text-muted); font-weight: 400;">one-time payment</span></div>
+        <p>For growing businesses that need a complete online presence. Multi-page website with premium design, full SEO optimization, and everything needed to convert visitors into customers.</p>
+      </div>
+
+      <div class="content-block">
+        <h3><span>📦</span> What's Included</h3>
+        <ul class="feature-list">
+          <li>
+            <div>
+              <span class="feature-title">Up to 5 Custom Pages</span>
+              <span class="feature-desc">Home, About, Services, Gallery/Portfolio, Contact - or any structure that fits your business.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Premium Custom Design</span>
+              <span class="feature-desc">Unique design tailored to your brand. No templates - everything built from scratch for you.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Advanced Contact Forms</span>
+              <span class="feature-desc">Multiple form types: quote requests, booking forms, service selection. All sent to your email.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">WhatsApp Live Chat</span>
+              <span class="feature-desc">Floating WhatsApp button with custom message. Instant connection with potential customers.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Full SEO Optimization</span>
+              <span class="feature-desc">Complete SEO setup: meta tags, schema markup, sitemap, robots.txt, optimized images, fast loading.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Google Analytics Setup</span>
+              <span class="feature-desc">Track your visitors, see where they come from, and understand what's working.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Image Gallery / Portfolio</span>
+              <span class="feature-desc">Showcase your work with a beautiful lightbox gallery. Perfect for before/after shots or project photos.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Testimonials Section</span>
+              <span class="feature-desc">Display customer reviews prominently to build trust with new visitors.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Google Maps Integration</span>
+              <span class="feature-desc">Interactive map with your location or service areas clearly marked.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Fast Hosting Setup</span>
+              <span class="feature-desc">Free hosting on fast CDN. No monthly fees, no slow loading times.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">3 Months Free Support</span>
+              <span class="feature-desc">Content updates, tweaks, and bug fixes included for 3 months after launch.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="content-block">
+        <h3><span>🔄</span> The Process</h3>
+        <div class="process-steps">
+          <div class="process-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Discovery Call (45 min)</h4>
+              <p>Deep dive into your business, target customers, competitors, and goals. We'll plan the site structure together.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>Design Concept (3-4 days)</h4>
+              <p>We create the homepage design for your approval. This sets the style for all other pages.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>Full Build (5-7 days)</h4>
+              <p>We build all pages, add content, optimize images, and set up all functionality.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>Revisions (up to 3 rounds)</h4>
+              <p>We refine until you're 100% happy. Most clients need 1-2 rounds.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+              <h4>Testing & Launch</h4>
+              <p>Full testing on all devices, SEO checks, speed optimization, then we go live.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-info">
+          <div class="timeline-item">
+            <strong>10-14 days</strong>
+            <span>Typical delivery time</span>
+          </div>
+          <div class="timeline-item">
+            <strong>3 rounds</strong>
+            <span>Revisions included</span>
+          </div>
+          <div class="timeline-item">
+            <strong>3 months</strong>
+            <span>Free support</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-box">
+        <h3>Ready to Get Started?</h3>
+        <p>Let's discuss your project. Free consultation, no obligations.</p>
+        <div class="cta-buttons">
+          <a href="https://wa.me/447392305505?text=Hi,%20I'm%20interested%20in%20the%20Business%20Website%20package%20(£899)" class="btn btn-whatsapp" target="_blank">WhatsApp Us</a>
+          <a href="mailto:patrykmajecki30@gmail.com?subject=Business%20Website%20Enquiry" class="btn btn-secondary">Send Email</a>
+        </div>
+        <div class="contact-info">
+          <div class="contact-item">📱 <a href="tel:+447392305505">+44 7392 305505</a></div>
+          <div class="contact-item">📧 <a href="mailto:patrykmajecki30@gmail.com">patrykmajecki30@gmail.com</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Premium -->
+  <section class="service-section" id="premium">
+    <div class="container">
+      <div class="service-header">
+        <div class="service-badge web">Website Package</div>
+        <h2>Premium Website</h2>
+        <div class="service-price">£1,499 <span style="font-size: 14px; color: var(--text-muted); font-weight: 400;">one-time payment</span></div>
+        <p>The complete digital solution for businesses that want the best. Unlimited pages, bespoke design, advanced features, and 6 months of dedicated support. Your competitive edge online.</p>
+      </div>
+
+      <div class="content-block">
+        <h3><span>📦</span> What's Included</h3>
+        <ul class="feature-list">
+          <li>
+            <div>
+              <span class="feature-title">Unlimited Pages</span>
+              <span class="feature-desc">As many pages as your business needs. Service pages, location pages, team bios - no limits.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Bespoke Design & Branding</span>
+              <span class="feature-desc">Completely unique design. If you need a logo or brand refresh, we'll create that too (worth £299).</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Advanced Animations</span>
+              <span class="feature-desc">Smooth scroll animations, hover effects, and micro-interactions that make your site feel premium.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Blog / News Section</span>
+              <span class="feature-desc">Easily add blog posts or news updates. Great for SEO and keeping customers informed.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Full SEO + Local SEO</span>
+              <span class="feature-desc">Complete SEO setup plus local business optimization. Google Business Profile setup included.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Speed Optimization</span>
+              <span class="feature-desc">Advanced performance tuning. Your site will score 90+ on Google PageSpeed.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Social Media Integration</span>
+              <span class="feature-desc">Instagram feed, Facebook reviews, social sharing buttons - all connected.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Advanced Contact Forms</span>
+              <span class="feature-desc">Multi-step forms, file uploads, service calculators - whatever you need.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">6 Months Free Support</span>
+              <span class="feature-desc">Half a year of content updates, tweaks, and priority support included.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Priority Response</span>
+              <span class="feature-desc">Your requests jump to the front of the queue. Same-day responses guaranteed.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="content-block">
+        <h3><span>🔄</span> The Process</h3>
+        <div class="process-steps">
+          <div class="process-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Strategy Session (1 hour)</h4>
+              <p>In-depth discussion about your business, market position, competitors, and goals. We plan the complete site architecture.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>Branding & Design (5-7 days)</h4>
+              <p>Logo refinement/creation if needed, then homepage design concept for approval.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>Full Development (10-14 days)</h4>
+              <p>Complete build with all pages, features, animations, and integrations.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>Revisions (unlimited reasonable changes)</h4>
+              <p>We refine until perfect. No strict limits - we work until you're thrilled.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+              <h4>Testing, SEO & Launch</h4>
+              <p>Thorough testing, SEO audit, speed checks, then live deployment with all tracking set up.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-info">
+          <div class="timeline-item">
+            <strong>3-4 weeks</strong>
+            <span>Typical delivery time</span>
+          </div>
+          <div class="timeline-item">
+            <strong>Unlimited</strong>
+            <span>Reasonable revisions</span>
+          </div>
+          <div class="timeline-item">
+            <strong>6 months</strong>
+            <span>Priority support</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-box">
+        <h3>Ready to Get Started?</h3>
+        <p>Let's discuss your project. Free consultation, no obligations.</p>
+        <div class="cta-buttons">
+          <a href="https://wa.me/447392305505?text=Hi,%20I'm%20interested%20in%20the%20Premium%20Website%20package%20(£1,499)" class="btn btn-whatsapp" target="_blank">WhatsApp Us</a>
+          <a href="mailto:patrykmajecki30@gmail.com?subject=Premium%20Website%20Enquiry" class="btn btn-secondary">Send Email</a>
+        </div>
+        <div class="contact-info">
+          <div class="contact-item">📱 <a href="tel:+447392305505">+44 7392 305505</a></div>
+          <div class="contact-item">📧 <a href="mailto:patrykmajecki30@gmail.com">patrykmajecki30@gmail.com</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== GAME PACKAGES ==================== -->
+
+  <!-- Game Design -->
+  <section class="service-section" id="game-design">
+    <div class="container">
+      <div class="service-header">
+        <div class="service-badge">Game Development</div>
+        <h2>Game Design Package</h2>
+        <div class="service-price">From £999 <span style="font-size: 14px; color: var(--text-muted); font-weight: 400;">project-based</span></div>
+        <p>Turn your game idea into a solid plan. We create comprehensive game design documentation that you can use to build the game yourself or hand to any development team.</p>
+      </div>
+
+      <div class="content-block">
+        <h3><span>📦</span> What's Included</h3>
+        <ul class="feature-list">
+          <li>
+            <div>
+              <span class="feature-title">Game Concept Document</span>
+              <span class="feature-desc">Core concept, target audience, unique selling points, and market positioning clearly defined.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Core Gameplay Loop Design</span>
+              <span class="feature-desc">Detailed breakdown of what players do moment-to-moment. The foundation of an engaging game.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Progression Systems</span>
+              <span class="feature-desc">How players level up, unlock content, and feel a sense of achievement over time.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Monetization Strategy</span>
+              <span class="feature-desc">Fair, player-friendly monetization design. What to sell, how to price, battle pass structure if needed.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Technical Requirements Doc</span>
+              <span class="feature-desc">Platform requirements, backend needs, third-party services, and technical considerations.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Art Style Guide</span>
+              <span class="feature-desc">Visual direction with reference images, color palettes, and style recommendations.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Feature Prioritization</span>
+              <span class="feature-desc">MVP features vs nice-to-haves. What to build first for fastest path to playable game.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">2 Revision Rounds</span>
+              <span class="feature-desc">We refine the documents based on your feedback until you're satisfied.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="cta-box">
+        <h3>Have a Game Idea?</h3>
+        <p>Let's turn it into a professional game design document.</p>
+        <div class="cta-buttons">
+          <a href="https://wa.me/447392305505?text=Hi,%20I'm%20interested%20in%20the%20Game%20Design%20package" class="btn btn-whatsapp" target="_blank">WhatsApp Us</a>
+          <a href="mailto:patrykmajecki30@gmail.com?subject=Game%20Design%20Enquiry" class="btn btn-secondary">Send Email</a>
+        </div>
+        <div class="contact-info">
+          <div class="contact-item">📱 <a href="tel:+447392305505">+44 7392 305505</a></div>
+          <div class="contact-item">📧 <a href="mailto:patrykmajecki30@gmail.com">patrykmajecki30@gmail.com</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MVP -->
+  <section class="service-section" id="mvp">
+    <div class="container">
+      <div class="service-header">
+        <div class="service-badge">Game Development • Most Popular</div>
+        <h2>MVP Development</h2>
+        <div class="service-price">From £4,999 <span style="font-size: 14px; color: var(--text-muted); font-weight: 400;">project-based</span></div>
+        <p>A playable prototype of your game. Core mechanics working, basic UI, backend connected. Perfect for testing your concept, getting feedback, or seeking investment.</p>
+      </div>
+
+      <div class="content-block">
+        <h3><span>📦</span> What's Included</h3>
+        <ul class="feature-list">
+          <li>
+            <div>
+              <span class="feature-title">Godot 4.5 Development</span>
+              <span class="feature-desc">Built in Godot 4.5 - modern, open-source engine. You own the code, no licensing fees.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Core Gameplay Systems</span>
+              <span class="feature-desc">The main mechanics that make your game fun. Combat, progression, or whatever your game needs.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Basic UI Implementation</span>
+              <span class="feature-desc">Functional UI for all core features. Clean and usable, ready for art replacement later.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Placeholder Art Integration</span>
+              <span class="feature-desc">We integrate free/placeholder assets so the game is visually playable. Easy to swap for final art.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">PlayFab Backend Setup</span>
+              <span class="feature-desc">Player accounts, cloud saves, leaderboards - the backend foundation for a live game.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Android Test Build</span>
+              <span class="feature-desc">APK ready to install and test on Android devices. Real mobile testing.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Source Code Ownership</span>
+              <span class="feature-desc">You own 100% of the code. Take it to any developer to continue work.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">1 Month Support</span>
+              <span class="feature-desc">Bug fixes and minor tweaks for one month after delivery.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="timeline-info" style="margin-top: 0; margin-bottom: 24px;">
+        <div class="timeline-item">
+          <strong>6-10 weeks</strong>
+          <span>Typical timeline</span>
+        </div>
+        <div class="timeline-item">
+          <strong>Weekly</strong>
+          <span>Progress updates</span>
+        </div>
+        <div class="timeline-item">
+          <strong>100%</strong>
+          <span>Code ownership</span>
+        </div>
+      </div>
+
+      <div class="cta-box">
+        <h3>Ready to Build Your Game?</h3>
+        <p>Let's discuss your game concept and create a playable prototype.</p>
+        <div class="cta-buttons">
+          <a href="https://wa.me/447392305505?text=Hi,%20I'm%20interested%20in%20MVP%20Game%20Development" class="btn btn-whatsapp" target="_blank">WhatsApp Us</a>
+          <a href="mailto:patrykmajecki30@gmail.com?subject=MVP%20Game%20Development%20Enquiry" class="btn btn-secondary">Send Email</a>
+        </div>
+        <div class="contact-info">
+          <div class="contact-item">📱 <a href="tel:+447392305505">+44 7392 305505</a></div>
+          <div class="contact-item">📧 <a href="mailto:patrykmajecki30@gmail.com">patrykmajecki30@gmail.com</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Full Game -->
+  <section class="service-section" id="full-game">
+    <div class="container">
+      <div class="service-header">
+        <div class="service-badge">Game Development</div>
+        <h2>Full Game Development</h2>
+        <div class="service-price">Custom Pricing</div>
+        <p>Complete game development from concept to App Store. We handle everything: design, development, art direction, sound, backend, store submission, and post-launch support.</p>
+      </div>
+
+      <div class="content-block">
+        <h3><span>📦</span> What's Included</h3>
+        <ul class="feature-list">
+          <li>
+            <div>
+              <span class="feature-title">Everything in MVP Package</span>
+              <span class="feature-desc">Core development, PlayFab backend, UI systems - all the foundation work.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Full Game Development</span>
+              <span class="feature-desc">All features, all systems, polished and ready for public release.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Art Direction & Management</span>
+              <span class="feature-desc">We coordinate with artists (or use AI-assisted art) to create cohesive visuals.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Sound & Music Integration</span>
+              <span class="feature-desc">Sound effects, ambient audio, and music - sourced, licensed, and integrated.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Complete Backend Systems</span>
+              <span class="feature-desc">Guilds, chat, leaderboards, live events, push notifications - full live-ops ready.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Store Submission</span>
+              <span class="feature-desc">We handle Google Play and App Store submissions. Screenshots, descriptions, everything.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Launch Support</span>
+              <span class="feature-desc">We're with you during launch. Bug fixes, server monitoring, quick responses.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Post-Launch Updates</span>
+              <span class="feature-desc">Ongoing development support available. New features, events, balance updates.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="cta-box">
+        <h3>Let's Build Something Amazing</h3>
+        <p>Full game development is a partnership. Let's talk about your vision.</p>
+        <div class="cta-buttons">
+          <a href="https://wa.me/447392305505?text=Hi,%20I'm%20interested%20in%20Full%20Game%20Development" class="btn btn-whatsapp" target="_blank">WhatsApp Us</a>
+          <a href="mailto:patrykmajecki30@gmail.com?subject=Full%20Game%20Development%20Enquiry" class="btn btn-secondary">Send Email</a>
+        </div>
+        <div class="contact-info">
+          <div class="contact-item">📱 <a href="tel:+447392305505">+44 7392 305505</a></div>
+          <div class="contact-item">📧 <a href="mailto:patrykmajecki30@gmail.com">patrykmajecki30@gmail.com</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ADD-ONS ==================== -->
+
+  <!-- Monthly Care -->
+  <section class="service-section" id="care">
+    <div class="container">
+      <div class="service-header">
+        <div class="service-badge addon">Add-on Service</div>
+        <h2>Monthly Care Plan</h2>
+        <div class="service-price">£79 <span style="font-size: 14px; color: var(--text-muted); font-weight: 400;">per month</span></div>
+        <p>Keep your website running perfectly. Regular updates, security monitoring, and priority support so you can focus on your business.</p>
+      </div>
+
+      <div class="content-block">
+        <h3><span>📦</span> What's Included</h3>
+        <ul class="feature-list">
+          <li>
+            <div>
+              <span class="feature-title">Content Updates (2 per month)</span>
+              <span class="feature-desc">Change text, swap images, add new projects to gallery - up to 2 updates monthly.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Security Monitoring</span>
+              <span class="feature-desc">We keep an eye on your site's security and fix any vulnerabilities.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Uptime Monitoring</span>
+              <span class="feature-desc">24/7 monitoring. If your site goes down, we know immediately and fix it.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Monthly Backups</span>
+              <span class="feature-desc">Full site backups stored safely. If anything goes wrong, we can restore.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Performance Reports</span>
+              <span class="feature-desc">Monthly email with visitor stats, performance metrics, and recommendations.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Priority Support</span>
+              <span class="feature-desc">Jump the queue. Your requests are handled first, typically same-day.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Bug Fixes Included</span>
+              <span class="feature-desc">If something breaks, we fix it at no extra cost.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="cta-box">
+        <h3>Keep Your Site in Top Shape</h3>
+        <p>Peace of mind for less than £3 a day.</p>
+        <div class="cta-buttons">
+          <a href="https://wa.me/447392305505?text=Hi,%20I'm%20interested%20in%20the%20Monthly%20Care%20Plan" class="btn btn-whatsapp" target="_blank">WhatsApp Us</a>
+          <a href="mailto:patrykmajecki30@gmail.com?subject=Monthly%20Care%20Plan%20Enquiry" class="btn btn-secondary">Send Email</a>
+        </div>
+        <div class="contact-info">
+          <div class="contact-item">📱 <a href="tel:+447392305505">+44 7392 305505</a></div>
+          <div class="contact-item">📧 <a href="mailto:patrykmajecki30@gmail.com">patrykmajecki30@gmail.com</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEO -->
+  <section class="service-section" id="seo">
+    <div class="container">
+      <div class="service-header">
+        <div class="service-badge addon">Add-on Service</div>
+        <h2>SEO Boost</h2>
+        <div class="service-price">£149 <span style="font-size: 14px; color: var(--text-muted); font-weight: 400;">per month</span></div>
+        <p>Get found on Google. Ongoing SEO work to improve your rankings, drive more traffic, and generate more leads from search.</p>
+      </div>
+
+      <div class="content-block">
+        <h3><span>📦</span> What's Included</h3>
+        <ul class="feature-list">
+          <li>
+            <div>
+              <span class="feature-title">Keyword Research</span>
+              <span class="feature-desc">We find the search terms your customers use and optimize your site for them.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">On-Page Optimization</span>
+              <span class="feature-desc">Ongoing tweaks to titles, descriptions, headings, and content for better rankings.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Google Business Profile</span>
+              <span class="feature-desc">Full setup and optimization of your Google Business listing. Crucial for local search.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Local Citations</span>
+              <span class="feature-desc">We list your business on relevant directories to boost local SEO signals.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Monthly SEO Reports</span>
+              <span class="feature-desc">Clear reports showing ranking changes, traffic growth, and what we're working on.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Competitor Analysis</span>
+              <span class="feature-desc">We monitor what competitors are doing and find opportunities to outrank them.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Content Recommendations</span>
+              <span class="feature-desc">Suggestions for new pages or blog posts that could rank well and drive traffic.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="cta-box">
+        <h3>Ready to Rank Higher?</h3>
+        <p>SEO takes time but delivers lasting results. Let's start.</p>
+        <div class="cta-buttons">
+          <a href="https://wa.me/447392305505?text=Hi,%20I'm%20interested%20in%20the%20SEO%20Boost%20service" class="btn btn-whatsapp" target="_blank">WhatsApp Us</a>
+          <a href="mailto:patrykmajecki30@gmail.com?subject=SEO%20Boost%20Enquiry" class="btn btn-secondary">Send Email</a>
+        </div>
+        <div class="contact-info">
+          <div class="contact-item">📱 <a href="tel:+447392305505">+44 7392 305505</a></div>
+          <div class="contact-item">📧 <a href="mailto:patrykmajecki30@gmail.com">patrykmajecki30@gmail.com</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Branding -->
+  <section class="service-section" id="branding">
+    <div class="container">
+      <div class="service-header">
+        <div class="service-badge addon">Add-on Service</div>
+        <h2>Logo & Branding</h2>
+        <div class="service-price">£299 <span style="font-size: 14px; color: var(--text-muted); font-weight: 400;">one-time</span></div>
+        <p>A professional visual identity for your business. Custom logo, brand colors, and typography that make you look established and trustworthy.</p>
+      </div>
+
+      <div class="content-block">
+        <h3><span>📦</span> What's Included</h3>
+        <ul class="feature-list">
+          <li>
+            <div>
+              <span class="feature-title">Custom Logo Design</span>
+              <span class="feature-desc">Unique logo designed specifically for your business. Not a template, not AI-only - professionally crafted.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">3 Initial Concepts</span>
+              <span class="feature-desc">We present 3 different directions. You pick your favorite to develop further.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Unlimited Revisions</span>
+              <span class="feature-desc">We refine your chosen concept until you're completely happy. No revision limits.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Brand Color Palette</span>
+              <span class="feature-desc">Primary and secondary colors that work together. Hex codes for digital, CMYK for print.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Typography Selection</span>
+              <span class="feature-desc">Recommended fonts for headings and body text that complement your logo.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">All File Formats</span>
+              <span class="feature-desc">PNG, SVG, PDF - everything you need for web, print, signage, and social media.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span class="feature-title">Brand Guidelines PDF</span>
+              <span class="feature-desc">Document showing how to use your logo correctly. Colors, spacing, do's and don'ts.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="cta-box">
+        <h3>Ready for a Professional Look?</h3>
+        <p>A great logo pays for itself in customer trust.</p>
+        <div class="cta-buttons">
+          <a href="https://wa.me/447392305505?text=Hi,%20I'm%20interested%20in%20Logo%20%26%20Branding" class="btn btn-whatsapp" target="_blank">WhatsApp Us</a>
+          <a href="mailto:patrykmajecki30@gmail.com?subject=Logo%20and%20Branding%20Enquiry" class="btn btn-secondary">Send Email</a>
+        </div>
+        <div class="contact-info">
+          <div class="contact-item">📱 <a href="tel:+447392305505">+44 7392 305505</a></div>
+          <div class="contact-item">📧 <a href="mailto:patrykmajecki30@gmail.com">patrykmajecki30@gmail.com</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 <a href="/">Grindare Studio</a>. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
