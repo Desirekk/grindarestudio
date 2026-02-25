@@ -810,7 +810,10 @@
                             <h2 id="quote-heading" class="quote-section__title">Request a Private Quote</h2>
                             <p class="quote-section__subtitle">We respond within 24 hours. Discreet service for premium properties.</p>
                         </header>
-                        <form class="quote-form" id="quote-form" action="https://formspree.io/f/xrearyzp" method="POST" novalidate>
+                        <form class="quote-form" id="quote-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
+                            <input type="hidden" name="access_key" value="c71d7195-2bff-4926-bf83-3a61e1d31d55">
+                            <input type="hidden" name="subject" value="New Quote Request - Aurum Roofing">
+                            <input type="hidden" name="from_name" value="Aurum Roofing Website">
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="name" class="form-label">Full Name *</label>

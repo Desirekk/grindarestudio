@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       if (isValid) {
-        // Submit to Formspree
+        // Submit to Web3Forms
         const submitBtn = quoteForm.querySelector('button[type="submit"]');
         const originalText = submitBtn ? submitBtn.textContent : '';
 
@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
           submitBtn.disabled = true;
         }
 
-        // Actually submit the form
+        // Submit the form
         const formData = new FormData(quoteForm);
 
         fetch(quoteForm.action, {
@@ -303,11 +303,14 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         })
         .then(function(response) {
-          if (response.ok) {
+          return response.json();
+        })
+        .then(function(data) {
+          if (data.success) {
             alert('Thank you for your enquiry! We will contact you within 24 hours.');
             quoteForm.reset();
           } else {
-            alert('There was an error. Please try again or contact us directly.');
+            alert('There was an error: ' + (data.message || 'Please try again or contact us directly.'));
           }
         })
         .catch(function(error) {
