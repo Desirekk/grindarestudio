@@ -1140,6 +1140,175 @@
       .pricing-tabs { flex-direction: column; width: 100%; }
       .services-grid { grid-template-columns: 1fr !important; }
     }
+
+    /* Demo Section */
+    .demo-section {
+      background: var(--bg-darker);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .demo-content {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .demo-info {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .demo-benefit {
+      display: flex;
+      gap: 16px;
+      padding: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: all 0.3s;
+    }
+
+    .demo-benefit:hover {
+      border-color: var(--border-hover);
+      transform: translateX(4px);
+    }
+
+    .demo-benefit-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .demo-benefit h4 {
+      font-size: 16px;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .demo-benefit p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .demo-form {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+    }
+
+    .demo-form h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 15px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: var(--text-subtle);
+    }
+
+    .form-group select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+    }
+
+    .form-group select option {
+      background: var(--bg-dark);
+      color: var(--text);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .demo-form .btn-submit {
+      width: 100%;
+      padding: 18px 32px;
+      font-size: 16px;
+      margin-top: 8px;
+    }
+
+    .form-note {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .demo-content {
+        grid-template-columns: 1fr;
+      }
+
+      .demo-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .demo-info {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .demo-form {
+        padding: 24px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1158,7 +1327,7 @@
         <li><a href="#projects">Projects</a></li>
         <li><a href="#process">Process</a></li>
       </ul>
-      <a href="#contact" class="nav-cta">Get Started</a>
+      <a href="#demo" class="nav-cta">Get Free Demo</a>
     </div>
   </nav>
 
@@ -1171,7 +1340,7 @@
         Professional game development and web design agency. From mobile RPGs to business websites — we create digital experiences that engage users and drive results.
       </p>
       <div class="hero-cta">
-        <a href="#pricing" class="btn btn-primary">View Pricing</a>
+        <a href="#demo" class="btn btn-primary">Get Free Demo</a>
         <a href="#projects" class="btn btn-secondary">See Our Work</a>
       </div>
       <div class="hero-stats">
@@ -1661,14 +1830,150 @@
     </div>
   </section>
 
+  <!-- Free Demo Section -->
+  <section class="demo-section" id="demo">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Try Before You Buy</p>
+        <h2 class="section-title">Get a Free Demo Website</h2>
+        <p class="section-desc">See exactly what your website will look like before you commit. We'll create a personalized demo just for your business — completely free, no obligations.</p>
+      </div>
+
+      <div class="demo-content">
+        <div class="demo-info">
+          <div class="demo-benefit">
+            <div class="demo-benefit-icon">🎨</div>
+            <div>
+              <h4>Personalized Design</h4>
+              <p>Your colors, your logo, your content — see a real preview of your future website.</p>
+            </div>
+          </div>
+          <div class="demo-benefit">
+            <div class="demo-benefit-icon">⚡</div>
+            <div>
+              <h4>Ready in 24-48h</h4>
+              <p>We'll build your demo quickly so you can see results fast.</p>
+            </div>
+          </div>
+          <div class="demo-benefit">
+            <div class="demo-benefit-icon">🔗</div>
+            <div>
+              <h4>Your Own Link</h4>
+              <p>Get a preview at grindarestudio.com/demo/yourcompany that you can share.</p>
+            </div>
+          </div>
+          <div class="demo-benefit">
+            <div class="demo-benefit-icon">💰</div>
+            <div>
+              <h4>100% Free</h4>
+              <p>No payment required. Only pay if you love it and want to go live.</p>
+            </div>
+          </div>
+        </div>
+
+        <form class="demo-form" id="demo-form" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="c71d7195-2bff-4926-bf83-3a61e1d31d55">
+          <input type="hidden" name="subject" value="New Demo Request - Grindare Studio">
+          <input type="hidden" name="from_name" value="Grindare Studio Demo Form">
+          <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
+          <h3>Request Your Free Demo</h3>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="company">Company Name *</label>
+              <input type="text" id="company" name="company" placeholder="e.g. Smith Roofing Ltd" required>
+            </div>
+            <div class="form-group">
+              <label for="industry">Industry *</label>
+              <select id="industry" name="industry" required>
+                <option value="">Select your industry</option>
+                <option value="Roofing">Roofing</option>
+                <option value="Plumbing">Plumbing</option>
+                <option value="Electrical">Electrical</option>
+                <option value="Landscaping">Landscaping</option>
+                <option value="Building/Construction">Building / Construction</option>
+                <option value="Cleaning">Cleaning Services</option>
+                <option value="HVAC">HVAC / Heating</option>
+                <option value="Painting">Painting & Decorating</option>
+                <option value="Flooring">Flooring</option>
+                <option value="Fencing">Fencing</option>
+                <option value="Other">Other (specify below)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Your Name *</label>
+              <input type="text" id="name" name="name" placeholder="John Smith" required>
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number *</label>
+              <input type="tel" id="phone" name="phone" placeholder="07XXX XXXXXX" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" placeholder="john@smithroofing.co.uk" required>
+          </div>
+
+          <div class="form-group">
+            <label for="location">Service Area / Location *</label>
+            <input type="text" id="location" name="location" placeholder="e.g. Manchester and surrounding areas" required>
+          </div>
+
+          <div class="form-group">
+            <label for="colors">Preferred Colors</label>
+            <input type="text" id="colors" name="colors" placeholder="e.g. Dark blue and gold, or 'match my logo'">
+          </div>
+
+          <div class="form-group">
+            <label for="logo">Logo (URL or description)</label>
+            <input type="text" id="logo" name="logo" placeholder="Link to your logo, or describe it (optional)">
+          </div>
+
+          <div class="form-group">
+            <label for="services">What services do you offer? *</label>
+            <textarea id="services" name="services" rows="3" placeholder="e.g. Roof repairs, new roofs, guttering, fascias, flat roofs..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="style">Website Style Preference</label>
+            <select id="style" name="style">
+              <option value="Modern Dark">Modern Dark (like our demo)</option>
+              <option value="Clean Light">Clean Light</option>
+              <option value="Professional Corporate">Professional Corporate</option>
+              <option value="Bold and Colorful">Bold and Colorful</option>
+              <option value="No Preference">No Preference - Surprise me!</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Anything else we should know?</label>
+            <textarea id="notes" name="notes" rows="3" placeholder="Any specific features, existing website to reference, photos to include, etc."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-submit">
+            <span class="btn-text">Request Free Demo</span>
+            <span class="btn-loading" style="display: none;">Sending...</span>
+          </button>
+
+          <p class="form-note">We'll contact you within 24 hours with your demo link. No payment required.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA -->
   <section class="cta" id="contact">
     <div class="container">
       <div class="cta-card">
-        <h2>Ready to Start Your Project?</h2>
-        <p>Get in touch today. Free consultation, fast response, no obligations.</p>
+        <h2>Questions? Get in Touch</h2>
+        <p>Prefer to chat first? No problem. Reach out via WhatsApp or email.</p>
         <div class="cta-buttons">
-          <a href="https://wa.me/447392305505?text=Hi,%20I'm%20interested%20in%20working%20with%20Grindare%20Studio" class="btn btn-whatsapp" target="_blank">
+          <a href="https://wa.me/447392305505?text=Hi,%20I'm%20interested%20in%20a%20website%20for%20my%20business" class="btn btn-whatsapp" target="_blank">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             WhatsApp
           </a>
@@ -1744,6 +2049,46 @@
         document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
       });
     });
+
+    // Demo form submission
+    const demoForm = document.getElementById('demo-form');
+    if (demoForm) {
+      demoForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const btnText = this.querySelector('.btn-text');
+        const btnLoading = this.querySelector('.btn-loading');
+        const submitBtn = this.querySelector('.btn-submit');
+
+        btnText.style.display = 'none';
+        btnLoading.style.display = 'inline';
+        submitBtn.disabled = true;
+
+        const formData = new FormData(this);
+
+        fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('Thank you! Your demo request has been received. We\'ll contact you within 24 hours with your personalized demo link.');
+            demoForm.reset();
+          } else {
+            alert('Something went wrong. Please try again or contact us via WhatsApp.');
+          }
+        })
+        .catch(error => {
+          alert('Something went wrong. Please try again or contact us via WhatsApp.');
+        })
+        .finally(() => {
+          btnText.style.display = 'inline';
+          btnLoading.style.display = 'none';
+          submitBtn.disabled = false;
+        });
+      });
+    }
   </script>
 </body>
 </html>
