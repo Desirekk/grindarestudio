@@ -1867,23 +1867,72 @@
 
           <div class="form-row">
             <div class="form-group">
-              <label for="company">Company Name *</label>
-              <input type="text" id="company" name="company" placeholder="e.g. Smith Roofing Ltd" required>
+              <label for="company">Company / Business Name *</label>
+              <input type="text" id="company" name="company" placeholder="e.g. Your Business Name" required>
             </div>
             <div class="form-group">
               <label for="industry">Industry *</label>
               <select id="industry" name="industry" required>
                 <option value="">Select your industry</option>
-                <option value="Roofing">Roofing</option>
-                <option value="Plumbing">Plumbing</option>
-                <option value="Electrical">Electrical</option>
-                <option value="Landscaping">Landscaping</option>
-                <option value="Building/Construction">Building / Construction</option>
-                <option value="Cleaning">Cleaning Services</option>
-                <option value="HVAC">HVAC / Heating</option>
-                <option value="Painting">Painting & Decorating</option>
-                <option value="Flooring">Flooring</option>
-                <option value="Fencing">Fencing</option>
+                <optgroup label="Trade & Construction">
+                  <option value="Roofing">Roofing</option>
+                  <option value="Plumbing">Plumbing</option>
+                  <option value="Electrical">Electrical</option>
+                  <option value="Building/Construction">Building / Construction</option>
+                  <option value="HVAC">HVAC / Heating</option>
+                  <option value="Painting">Painting & Decorating</option>
+                  <option value="Flooring">Flooring</option>
+                  <option value="Fencing">Fencing</option>
+                  <option value="Landscaping">Landscaping / Gardening</option>
+                  <option value="Carpentry">Carpentry / Joinery</option>
+                  <option value="Plastering">Plastering</option>
+                  <option value="Tiling">Tiling</option>
+                  <option value="Windows/Doors">Windows & Doors</option>
+                </optgroup>
+                <optgroup label="Services">
+                  <option value="Cleaning">Cleaning Services</option>
+                  <option value="Removals">Removals / Moving</option>
+                  <option value="Locksmith">Locksmith</option>
+                  <option value="Pest Control">Pest Control</option>
+                  <option value="Security">Security Services</option>
+                  <option value="Car Services">Car Services / Mechanics</option>
+                  <option value="Pet Services">Pet Services / Grooming</option>
+                </optgroup>
+                <optgroup label="Health & Beauty">
+                  <option value="Salon">Hair Salon / Barber</option>
+                  <option value="Beauty">Beauty / Aesthetics</option>
+                  <option value="Spa/Massage">Spa / Massage</option>
+                  <option value="Fitness">Fitness / Personal Training</option>
+                  <option value="Dental">Dental Practice</option>
+                  <option value="Healthcare">Healthcare / Clinic</option>
+                </optgroup>
+                <optgroup label="Food & Hospitality">
+                  <option value="Restaurant">Restaurant / Cafe</option>
+                  <option value="Takeaway">Takeaway / Fast Food</option>
+                  <option value="Catering">Catering</option>
+                  <option value="Bakery">Bakery</option>
+                  <option value="Pub/Bar">Pub / Bar</option>
+                </optgroup>
+                <optgroup label="Professional Services">
+                  <option value="Accountant">Accountant / Finance</option>
+                  <option value="Legal">Legal / Solicitor</option>
+                  <option value="Estate Agent">Estate Agent</option>
+                  <option value="Insurance">Insurance</option>
+                  <option value="Consultant">Consultant</option>
+                  <option value="Marketing">Marketing Agency</option>
+                </optgroup>
+                <optgroup label="Retail & E-commerce">
+                  <option value="Retail Shop">Retail Shop</option>
+                  <option value="E-commerce">E-commerce / Online Store</option>
+                  <option value="Fashion">Fashion / Clothing</option>
+                </optgroup>
+                <optgroup label="Creative & Events">
+                  <option value="Photography">Photography</option>
+                  <option value="Videography">Videography</option>
+                  <option value="Events">Events / Wedding Planning</option>
+                  <option value="Music/DJ">Music / DJ</option>
+                  <option value="Design">Design / Creative Agency</option>
+                </optgroup>
                 <option value="Other">Other (specify below)</option>
               </select>
             </div>
@@ -1892,7 +1941,7 @@
           <div class="form-row">
             <div class="form-group">
               <label for="name">Your Name *</label>
-              <input type="text" id="name" name="name" placeholder="John Smith" required>
+              <input type="text" id="name" name="name" placeholder="Your full name" required>
             </div>
             <div class="form-group">
               <label for="phone">Phone Number *</label>
@@ -1902,43 +1951,45 @@
 
           <div class="form-group">
             <label for="email">Email Address *</label>
-            <input type="email" id="email" name="email" placeholder="john@smithroofing.co.uk" required>
+            <input type="email" id="email" name="email" placeholder="you@yourbusiness.co.uk" required>
           </div>
 
           <div class="form-group">
-            <label for="location">Service Area / Location *</label>
-            <input type="text" id="location" name="location" placeholder="e.g. Manchester and surrounding areas" required>
+            <label for="location">Location / Service Area *</label>
+            <input type="text" id="location" name="location" placeholder="e.g. London, Manchester, UK-wide, etc." required>
           </div>
 
           <div class="form-group">
             <label for="colors">Preferred Colors</label>
-            <input type="text" id="colors" name="colors" placeholder="e.g. Dark blue and gold, or 'match my logo'">
+            <input type="text" id="colors" name="colors" placeholder="e.g. Blue and white, match my logo, dark theme, etc.">
           </div>
 
           <div class="form-group">
             <label for="logo">Logo (URL or description)</label>
-            <input type="text" id="logo" name="logo" placeholder="Link to your logo, or describe it (optional)">
+            <input type="text" id="logo" name="logo" placeholder="Link to your logo image, or describe it (optional)">
           </div>
 
           <div class="form-group">
-            <label for="services">What services do you offer? *</label>
-            <textarea id="services" name="services" rows="3" placeholder="e.g. Roof repairs, new roofs, guttering, fascias, flat roofs..." required></textarea>
+            <label for="services">What does your business offer? *</label>
+            <textarea id="services" name="services" rows="3" placeholder="Describe your main services or products..." required></textarea>
           </div>
 
           <div class="form-group">
             <label for="style">Website Style Preference</label>
             <select id="style" name="style">
-              <option value="Modern Dark">Modern Dark (like our demo)</option>
+              <option value="Modern Dark">Modern Dark</option>
               <option value="Clean Light">Clean Light</option>
               <option value="Professional Corporate">Professional Corporate</option>
               <option value="Bold and Colorful">Bold and Colorful</option>
+              <option value="Elegant/Luxury">Elegant / Luxury</option>
+              <option value="Minimalist">Minimalist</option>
               <option value="No Preference">No Preference - Surprise me!</option>
             </select>
           </div>
 
           <div class="form-group">
             <label for="notes">Anything else we should know?</label>
-            <textarea id="notes" name="notes" rows="3" placeholder="Any specific features, existing website to reference, photos to include, etc."></textarea>
+            <textarea id="notes" name="notes" rows="3" placeholder="Special features needed, websites you like, photos to include, etc."></textarea>
           </div>
 
           <button type="submit" class="btn btn-primary btn-submit">
