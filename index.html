@@ -526,11 +526,21 @@
       box-shadow: 0 10px 30px rgba(245, 185, 66, 0.3);
     }
 
-    /* Language Switcher */
-    .lang-switch { display: flex; gap: 8px; margin-left: 16px; }
-    .lang-switch a { padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; text-decoration: none; border: 1px solid var(--border); color: var(--text-muted); transition: all 0.2s; }
-    .lang-switch a.active { background: var(--gold); color: #000; border-color: var(--gold); }
-    .lang-switch a:hover:not(.active) { border-color: var(--gold); color: var(--gold); }
+    /* Language Switcher with Flags */
+    .lang-switch { display: flex; align-items: center; gap: 4px; margin-left: 16px; position: relative; }
+    .lang-current { display: flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 8px; cursor: pointer; border: 1px solid var(--border); background: var(--bg-card); transition: all 0.2s; }
+    .lang-current:hover { border-color: var(--gold); }
+    .lang-current .flag { font-size: 20px; line-height: 1; }
+    .lang-current .arrow { font-size: 10px; color: var(--text-muted); transition: transform 0.2s; }
+    .lang-switch.open .lang-current .arrow { transform: rotate(180deg); }
+    .lang-dropdown { position: absolute; top: 100%; right: 0; margin-top: 8px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 8px; min-width: 160px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.2s; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+    .lang-switch.open .lang-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+    .lang-dropdown a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; text-decoration: none; color: var(--text-muted); font-size: 14px; transition: all 0.2s; }
+    .lang-dropdown a:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+    .lang-dropdown a.active { background: var(--gold-dim); color: var(--gold); }
+    .lang-dropdown .flag { font-size: 20px; }
+    .lang-dropdown .lang-name { flex: 1; }
+    .lang-dropdown .lang-code { font-size: 11px; color: var(--text-subtle); text-transform: uppercase; }
 
     /* Hero */
     .hero {
@@ -2612,9 +2622,18 @@
         <li><a href="#faq">FAQ</a></li>
       </ul>
       <a href="#demo" class="nav-cta">Get Free Demo</a>
-      <div class="lang-switch">
-        <a href="/" class="active">EN</a>
-        <a href="/pl/">PL</a>
+      <div class="lang-switch" id="lang-switch">
+        <div class="lang-current" onclick="document.getElementById('lang-switch').classList.toggle('open')">
+          <span class="flag">🇬🇧</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="lang-dropdown">
+          <a href="/" class="active"><span class="flag">🇬🇧</span><span class="lang-name">English</span><span class="lang-code">EN</span></a>
+          <a href="/pl/"><span class="flag">🇵🇱</span><span class="lang-name">Polski</span><span class="lang-code">PL</span></a>
+          <a href="/ro/"><span class="flag">🇷🇴</span><span class="lang-name">Română</span><span class="lang-code">RO</span></a>
+          <a href="/es/"><span class="flag">🇪🇸</span><span class="lang-name">Español</span><span class="lang-code">ES</span></a>
+          <a href="/hi/"><span class="flag">🇮🇳</span><span class="lang-name">हिन्दी</span><span class="lang-code">HI</span></a>
+        </div>
       </div>
       <button class="mobile-menu-btn" aria-label="Menu">
         <span></span>
@@ -3683,6 +3702,16 @@
       easing: 'ease-out',
       once: true,
       offset: 50
+    });
+
+    // ============================================
+    // LANGUAGE SWITCHER
+    // ============================================
+    document.addEventListener('click', function(e) {
+      const langSwitch = document.getElementById('lang-switch');
+      if (langSwitch && !langSwitch.contains(e.target)) {
+        langSwitch.classList.remove('open');
+      }
     });
 
     // ============================================
