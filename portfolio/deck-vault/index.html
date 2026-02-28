@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DeckVault | Clash Royale Deck Builder & Sharing</title>
-  <meta name="description" content="Build, share and discover the best Clash Royale decks. Interactive deck builder with meta stats and community sharing.">
+  <meta name="description" content="Build, share and discover the best Clash Royale decks. Interactive deck builder with real card images, meta stats, and copy deck directly to game.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -215,6 +215,19 @@
       box-shadow: 0 8px 25px var(--purple-glow);
     }
 
+    .btn-game {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+      font-size: 15px;
+      padding: 14px 24px;
+    }
+
+    .btn-game:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+    }
+
     .btn-outline {
       background: transparent;
       border: 1px solid var(--border-strong);
@@ -228,6 +241,17 @@
 
     .btn-icon {
       padding: 12px;
+    }
+
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 12px;
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none !important;
     }
 
     /* Mobile Menu */
@@ -397,8 +421,15 @@
 
     .card-filters {
       display: flex;
-      gap: 12px;
-      margin-bottom: 24px;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .type-filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
       flex-wrap: wrap;
     }
 
@@ -428,6 +459,10 @@
     .filter-btn[data-rarity="legendary"].active { background: var(--legendary); border-color: var(--legendary); color: #000; }
     .filter-btn[data-rarity="champion"].active { background: var(--champion); border-color: var(--champion); }
 
+    .filter-btn[data-type="troop"].active { background: #3b82f6; border-color: #3b82f6; }
+    .filter-btn[data-type="spell"].active { background: #ef4444; border-color: #ef4444; }
+    .filter-btn[data-type="building"].active { background: #f59e0b; border-color: #f59e0b; color: #000; }
+
     .card-search {
       width: 100%;
       padding: 12px 16px;
@@ -438,7 +473,7 @@
       color: var(--text);
       font-family: 'Exo 2', sans-serif;
       font-size: 14px;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       transition: var(--transition);
     }
 
@@ -458,13 +493,14 @@
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-muted);
+      font-size: 14px;
     }
 
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
       gap: 8px;
-      max-height: 500px;
+      max-height: 600px;
       overflow-y: auto;
       padding-right: 8px;
     }
@@ -484,17 +520,17 @@
     }
 
     .card-item {
-      aspect-ratio: 1;
       background: var(--bg-input);
-      border: 2px solid var(--border);
+      border: 2px solid transparent;
       border-radius: 8px;
       cursor: pointer;
       transition: var(--transition);
       position: relative;
       overflow: hidden;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      padding: 6px 4px 4px;
     }
 
     .card-item:hover {
@@ -504,51 +540,72 @@
     }
 
     .card-item.selected {
-      border-color: var(--green);
+      border-color: var(--green) !important;
       box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
     }
 
-    .card-item[data-rarity="common"] { border-color: var(--common); }
-    .card-item[data-rarity="rare"] { border-color: var(--rare); }
-    .card-item[data-rarity="epic"] { border-color: var(--epic); }
-    .card-item[data-rarity="legendary"] { border-color: var(--legendary); }
-    .card-item[data-rarity="champion"] { border-color: var(--champion); }
+    .card-item[data-rarity="common"] { border-color: rgba(156,163,175,0.3); }
+    .card-item[data-rarity="rare"] { border-color: rgba(249,115,22,0.3); }
+    .card-item[data-rarity="epic"] { border-color: rgba(168,85,247,0.3); }
+    .card-item[data-rarity="legendary"] { border-color: rgba(251,191,36,0.3); }
+    .card-item[data-rarity="champion"] { border-color: rgba(96,165,250,0.3); }
 
-    .card-item-inner {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 8px;
+    .card-item:hover[data-rarity="common"] { border-color: var(--common); }
+    .card-item:hover[data-rarity="rare"] { border-color: var(--rare); }
+    .card-item:hover[data-rarity="epic"] { border-color: var(--epic); }
+    .card-item:hover[data-rarity="legendary"] { border-color: var(--legendary); }
+    .card-item:hover[data-rarity="champion"] { border-color: var(--champion); }
+
+    .card-item-img {
+      width: 60px;
+      height: 72px;
+      object-fit: contain;
+      image-rendering: auto;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+      transition: transform 0.2s;
     }
 
-    .card-item-icon {
-      font-size: 28px;
-      margin-bottom: 4px;
+    .card-item:hover .card-item-img {
+      transform: scale(1.08);
     }
 
     .card-item-cost {
       position: absolute;
-      top: 4px;
-      right: 4px;
-      width: 20px;
-      height: 20px;
-      background: var(--purple);
+      top: 3px;
+      left: 3px;
+      width: 22px;
+      height: 22px;
+      background: linear-gradient(135deg, #c026d3, #9333ea);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
+      color: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      z-index: 2;
     }
 
     .card-item-name {
       font-size: 9px;
       text-align: center;
       color: var(--text-muted);
-      line-height: 1.2;
+      line-height: 1.1;
+      margin-top: 2px;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .card-count-badge {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-left: auto;
+      padding: 4px 10px;
+      background: var(--bg-input);
+      border-radius: 6px;
     }
 
     /* Deck Panel */
@@ -591,27 +648,30 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .deck-slot {
-      aspect-ratio: 1;
+      aspect-ratio: 3/4;
       background: var(--bg-input);
       border: 2px dashed var(--border);
       border-radius: 8px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       font-size: 24px;
       color: var(--text-muted);
       position: relative;
       transition: var(--transition);
+      overflow: hidden;
     }
 
     .deck-slot.filled {
       border-style: solid;
       border-color: var(--purple);
       cursor: pointer;
+      padding: 4px;
     }
 
     .deck-slot.filled:hover {
@@ -619,35 +679,56 @@
     }
 
     .deck-slot.filled:hover::after {
-      content: '×';
+      content: '\00D7';
       position: absolute;
       inset: 0;
-      background: rgba(239, 68, 68, 0.9);
+      background: rgba(239, 68, 68, 0.85);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 28px;
       color: white;
       border-radius: 6px;
+      z-index: 3;
     }
 
-    .deck-slot-icon {
-      font-size: 28px;
+    .deck-slot-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
     }
 
     .deck-slot-cost {
       position: absolute;
-      top: 4px;
-      right: 4px;
+      top: 3px;
+      right: 3px;
       width: 18px;
       height: 18px;
-      background: var(--purple);
+      background: linear-gradient(135deg, #c026d3, #9333ea);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 10px;
       font-weight: 700;
+      z-index: 2;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .deck-slot-name {
+      font-size: 8px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1;
+      position: absolute;
+      bottom: 2px;
+      left: 2px;
+      right: 2px;
+      background: rgba(0,0,0,0.7);
+      padding: 2px;
+      border-radius: 3px;
+      z-index: 2;
     }
 
     /* Deck Stats */
@@ -655,7 +736,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .deck-stat {
@@ -682,11 +763,39 @@
     .deck-actions {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .deck-actions .btn {
       width: 100%;
+    }
+
+    .deck-link-preview {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .deck-link-preview.show {
+      display: block;
+    }
+
+    .deck-link-preview-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .deck-link-preview-url {
+      font-size: 11px;
+      color: var(--cyan);
+      word-break: break-all;
+      font-family: monospace;
     }
 
     /* ============================================
@@ -742,7 +851,7 @@
 
     .featured-deck-meta {
       display: flex;
-      gap: 12px;
+      gap: 8px;
     }
 
     .deck-tag {
@@ -767,14 +876,22 @@
     }
 
     .mini-card {
-      aspect-ratio: 1;
+      aspect-ratio: 3/4;
       background: var(--bg-input);
       border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
       position: relative;
+      overflow: hidden;
+      padding: 3px;
+    }
+
+    .mini-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
     }
 
     .mini-card-cost {
@@ -783,19 +900,21 @@
       right: 2px;
       font-size: 8px;
       font-weight: 700;
-      background: var(--purple);
+      background: linear-gradient(135deg, #c026d3, #9333ea);
       width: 14px;
       height: 14px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 2;
     }
 
     .featured-deck-stats {
       display: flex;
       justify-content: space-between;
-      padding-top: 16px;
+      align-items: center;
+      padding-top: 12px;
       border-top: 1px solid var(--border);
     }
 
@@ -807,13 +926,21 @@
       color: var(--text-muted);
     }
 
-    .featured-deck-stat-icon {
-      font-size: 16px;
-    }
-
     .featured-deck-stat-value {
       font-weight: 600;
       color: var(--text);
+    }
+
+    .featured-deck-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .featured-deck-actions .btn {
+      flex: 1;
+      padding: 8px 12px;
+      font-size: 11px;
     }
 
     /* ============================================
@@ -1043,6 +1170,19 @@
       .featured-deck-cards {
         grid-template-columns: repeat(4, 1fr);
       }
+
+      .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      }
+
+      .card-item-img {
+        width: 50px;
+        height: 60px;
+      }
+
+      .featured-deck-actions {
+        flex-direction: column;
+      }
     }
 
     /* ============================================
@@ -1071,10 +1211,6 @@
       opacity: 1;
     }
 
-    .toast-icon {
-      font-size: 20px;
-    }
-
     .toast-message {
       font-size: 14px;
     }
@@ -1096,12 +1232,10 @@
           <li><a href="#builder" class="active">Deck Builder</a></li>
           <li><a href="#featured">Meta Decks</a></li>
           <li><a href="#leaderboard">Leaderboard</a></li>
-          <li><a href="#cards">All Cards</a></li>
         </ul>
 
         <div class="nav-actions">
-          <button class="btn btn-outline btn-icon" title="Search">🔍</button>
-          <a href="#" class="btn btn-primary">Connect</a>
+          <a href="#builder" class="btn btn-primary">Build Deck</a>
         </div>
 
         <button class="mobile-menu-btn">
@@ -1126,13 +1260,13 @@
       </h1>
 
       <p class="hero-text">
-        Create winning Clash Royale decks with our interactive builder.
-        Discover meta strategies, share your builds, and climb the ladder.
+        Create winning Clash Royale decks with real card images.
+        Copy decks directly to the game, discover meta strategies, and climb the ladder.
       </p>
 
       <div class="hero-buttons">
         <a href="#builder" class="btn btn-primary">Start Building</a>
-        <a href="#featured" class="btn btn-outline">Browse Decks</a>
+        <a href="#featured" class="btn btn-outline">Browse Meta Decks</a>
       </div>
 
       <div class="hero-stats">
@@ -1141,7 +1275,7 @@
           <div class="hero-stat-label">Decks Created</div>
         </div>
         <div class="hero-stat">
-          <div class="hero-stat-value">109</div>
+          <div class="hero-stat-value" id="stat-cards">109</div>
           <div class="hero-stat-label">Cards Available</div>
         </div>
         <div class="hero-stat">
@@ -1163,7 +1297,7 @@
       <div class="builder-container">
         <!-- Card Selector -->
         <div class="card-selector">
-          <div class="card-filters">
+          <div class="card-filters" id="rarityFilters">
             <button class="filter-btn active" data-filter="all">All</button>
             <button class="filter-btn" data-rarity="common">Common</button>
             <button class="filter-btn" data-rarity="rare">Rare</button>
@@ -1172,13 +1306,21 @@
             <button class="filter-btn" data-rarity="champion">Champion</button>
           </div>
 
+          <div class="type-filters" id="typeFilters">
+            <button class="filter-btn active" data-type="all">All Types</button>
+            <button class="filter-btn" data-type="troop">Troops</button>
+            <button class="filter-btn" data-type="spell">Spells</button>
+            <button class="filter-btn" data-type="building">Buildings</button>
+            <span class="card-count-badge" id="cardCountBadge">109 cards</span>
+          </div>
+
           <div class="search-wrapper">
-            <span class="search-icon">🔍</span>
+            <span class="search-icon">&#128269;</span>
             <input type="text" class="card-search" placeholder="Search cards..." id="cardSearch">
           </div>
 
           <div class="cards-grid" id="cardsGrid">
-            <!-- Cards will be inserted by JavaScript -->
+            <!-- Cards inserted by JavaScript -->
           </div>
         </div>
 
@@ -1211,12 +1353,20 @@
             </div>
           </div>
 
+          <div class="deck-link-preview" id="deckLinkPreview">
+            <div class="deck-link-preview-label">Clash Royale Deck Link</div>
+            <div class="deck-link-preview-url" id="deckLinkUrl"></div>
+          </div>
+
           <div class="deck-actions">
+            <button class="btn btn-game" id="copyToGame" disabled>
+              &#127918; Open in Clash Royale
+            </button>
             <button class="btn btn-primary" id="copyDeck" disabled>
-              📋 Copy Deck Link
+              &#128203; Copy Deck Link
             </button>
             <button class="btn btn-outline" id="shareDeck" disabled>
-              📤 Share Deck
+              &#128228; Share Deck
             </button>
           </div>
         </div>
@@ -1248,17 +1398,13 @@
 
       <div class="leaderboard-grid">
         <div class="leaderboard-section">
-          <h3 class="leaderboard-title">🏆 Trophy Leaders</h3>
-          <div class="leaderboard-list" id="trophyLeaderboard">
-            <!-- Inserted by JavaScript -->
-          </div>
+          <h3 class="leaderboard-title">&#127942; Trophy Leaders</h3>
+          <div class="leaderboard-list" id="trophyLeaderboard"></div>
         </div>
 
         <div class="leaderboard-section">
-          <h3 class="leaderboard-title">⚔️ War Wins</h3>
-          <div class="leaderboard-list" id="warLeaderboard">
-            <!-- Inserted by JavaScript -->
-          </div>
+          <h3 class="leaderboard-title">&#9876;&#65039; War Wins</h3>
+          <div class="leaderboard-list" id="warLeaderboard"></div>
         </div>
       </div>
     </div>
@@ -1270,22 +1416,21 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="footer-logo">
-            <div class="logo-icon" style="width: 36px; height: 36px; font-size: 18px;">⚔️</div>
+            <div class="logo-icon" style="width: 36px; height: 36px; font-size: 18px;">&#9876;&#65039;</div>
             <span class="logo-text" style="font-size: 22px;">DeckVault</span>
           </div>
           <p class="footer-text">
             The ultimate Clash Royale deck builder and sharing platform.
-            Create winning strategies and dominate the arena.
+            Create winning strategies, copy decks directly to the game, and dominate the arena.
           </p>
         </div>
 
         <div>
           <h4 class="footer-title">Tools</h4>
           <ul class="footer-links">
-            <li><a href="#">Deck Builder</a></li>
-            <li><a href="#">Meta Analysis</a></li>
-            <li><a href="#">Card Stats</a></li>
-            <li><a href="#">Deck Finder</a></li>
+            <li><a href="#builder">Deck Builder</a></li>
+            <li><a href="#featured">Meta Decks</a></li>
+            <li><a href="#leaderboard">Leaderboard</a></li>
           </ul>
         </div>
 
@@ -1311,7 +1456,7 @@
 
       <div class="footer-bottom">
         <p class="footer-copyright">
-          DeckVault is not affiliated with Supercell. © 2024 Demo Site.
+          DeckVault is not affiliated with Supercell. This material is unofficial and is not endorsed by Supercell.
         </p>
         <p class="footer-credits">
           Website by <a href="https://grindarestudio.com" target="_blank">Grindare Studio</a>
@@ -1322,75 +1467,150 @@
 
   <!-- Toast -->
   <div class="toast" id="toast">
-    <span class="toast-icon">✅</span>
     <span class="toast-message" id="toastMessage">Deck link copied!</span>
   </div>
 
   <script>
     // ============================================
-    // CLASH ROYALE CARDS DATA
+    // CARD IMAGE CDN
+    // ============================================
+    const IMG_BASE = 'https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/master/cards-150/';
+
+    function cardImg(key) {
+      return `${IMG_BASE}${key}.png`;
+    }
+
+    // ============================================
+    // CLASH ROYALE CARDS DATA (Official IDs)
     // ============================================
     const cards = [
-      // Troops
-      { name: "Knight", icon: "🛡️", elixir: 3, rarity: "common", type: "troop" },
-      { name: "Archers", icon: "🏹", elixir: 3, rarity: "common", type: "troop" },
-      { name: "Goblins", icon: "👺", elixir: 2, rarity: "common", type: "troop" },
-      { name: "Giant", icon: "👊", elixir: 5, rarity: "rare", type: "troop" },
-      { name: "P.E.K.K.A", icon: "🤖", elixir: 7, rarity: "epic", type: "troop" },
-      { name: "Minions", icon: "👿", elixir: 3, rarity: "common", type: "troop" },
-      { name: "Balloon", icon: "🎈", elixir: 5, rarity: "epic", type: "troop" },
-      { name: "Witch", icon: "🧙‍♀️", elixir: 5, rarity: "epic", type: "troop" },
-      { name: "Skeleton Army", icon: "💀", elixir: 3, rarity: "epic", type: "troop" },
-      { name: "Valkyrie", icon: "⚔️", elixir: 4, rarity: "rare", type: "troop" },
-      { name: "Hog Rider", icon: "🐗", elixir: 4, rarity: "rare", type: "troop" },
-      { name: "Musketeer", icon: "🔫", elixir: 4, rarity: "rare", type: "troop" },
-      { name: "Golem", icon: "🗿", elixir: 8, rarity: "epic", type: "troop" },
-      { name: "Prince", icon: "🤴", elixir: 5, rarity: "epic", type: "troop" },
-      { name: "Baby Dragon", icon: "🐲", elixir: 4, rarity: "epic", type: "troop" },
-      { name: "Minion Horde", icon: "😈", elixir: 5, rarity: "common", type: "troop" },
-      { name: "Wizard", icon: "🧙", elixir: 5, rarity: "rare", type: "troop" },
-      { name: "Lava Hound", icon: "🔥", elixir: 7, rarity: "legendary", type: "troop" },
-      { name: "Ice Wizard", icon: "🥶", elixir: 3, rarity: "legendary", type: "troop" },
-      { name: "Princess", icon: "👸", elixir: 3, rarity: "legendary", type: "troop" },
-      { name: "Miner", icon: "⛏️", elixir: 3, rarity: "legendary", type: "troop" },
-      { name: "Sparky", icon: "⚡", elixir: 6, rarity: "legendary", type: "troop" },
-      { name: "Electro Wizard", icon: "🧙‍♂️", elixir: 4, rarity: "legendary", type: "troop" },
-      { name: "Bandit", icon: "🥷", elixir: 3, rarity: "legendary", type: "troop" },
-      { name: "Night Witch", icon: "🦇", elixir: 4, rarity: "legendary", type: "troop" },
-      { name: "Mega Knight", icon: "👑", elixir: 7, rarity: "legendary", type: "troop" },
-      { name: "Ram Rider", icon: "🐏", elixir: 5, rarity: "legendary", type: "troop" },
-      { name: "Archer Queen", icon: "👑", elixir: 5, rarity: "champion", type: "troop" },
-      { name: "Golden Knight", icon: "🏅", elixir: 4, rarity: "champion", type: "troop" },
-      { name: "Skeleton King", icon: "💀", elixir: 4, rarity: "champion", type: "troop" },
-      { name: "Mighty Miner", icon: "💎", elixir: 4, rarity: "champion", type: "troop" },
-      // Spells
-      { name: "Fireball", icon: "🔥", elixir: 4, rarity: "rare", type: "spell" },
-      { name: "Arrows", icon: "➡️", elixir: 3, rarity: "common", type: "spell" },
-      { name: "Zap", icon: "⚡", elixir: 2, rarity: "common", type: "spell" },
-      { name: "Lightning", icon: "🌩️", elixir: 6, rarity: "epic", type: "spell" },
-      { name: "Rocket", icon: "🚀", elixir: 6, rarity: "rare", type: "spell" },
-      { name: "Freeze", icon: "❄️", elixir: 4, rarity: "epic", type: "spell" },
-      { name: "Poison", icon: "☠️", elixir: 4, rarity: "epic", type: "spell" },
-      { name: "Tornado", icon: "🌪️", elixir: 3, rarity: "epic", type: "spell" },
-      { name: "Log", icon: "🪵", elixir: 2, rarity: "legendary", type: "spell" },
-      { name: "Graveyard", icon: "🪦", elixir: 5, rarity: "legendary", type: "spell" },
-      // Buildings
-      { name: "Cannon", icon: "💣", elixir: 3, rarity: "common", type: "building" },
-      { name: "Tesla", icon: "🔌", elixir: 4, rarity: "common", type: "building" },
-      { name: "Inferno Tower", icon: "🔥", elixir: 5, rarity: "rare", type: "building" },
-      { name: "X-Bow", icon: "🏹", elixir: 6, rarity: "epic", type: "building" },
-      { name: "Mortar", icon: "💥", elixir: 4, rarity: "common", type: "building" },
-      { name: "Goblin Hut", icon: "🏠", elixir: 5, rarity: "rare", type: "building" },
-      { name: "Elixir Collector", icon: "💜", elixir: 6, rarity: "rare", type: "building" },
+      // ---- TROOPS ----
+      { name: "Knight", key: "knight", id: 26000000, elixir: 3, rarity: "common", type: "troop" },
+      { name: "Archers", key: "archers", id: 26000001, elixir: 3, rarity: "common", type: "troop" },
+      { name: "Goblins", key: "goblins", id: 26000002, elixir: 2, rarity: "common", type: "troop" },
+      { name: "Giant", key: "giant", id: 26000003, elixir: 5, rarity: "rare", type: "troop" },
+      { name: "P.E.K.K.A", key: "pekka", id: 26000004, elixir: 7, rarity: "epic", type: "troop" },
+      { name: "Minions", key: "minions", id: 26000005, elixir: 3, rarity: "common", type: "troop" },
+      { name: "Balloon", key: "balloon", id: 26000006, elixir: 5, rarity: "epic", type: "troop" },
+      { name: "Witch", key: "witch", id: 26000007, elixir: 5, rarity: "epic", type: "troop" },
+      { name: "Barbarians", key: "barbarians", id: 26000008, elixir: 5, rarity: "common", type: "troop" },
+      { name: "Golem", key: "golem", id: 26000009, elixir: 8, rarity: "epic", type: "troop" },
+      { name: "Skeletons", key: "skeletons", id: 26000010, elixir: 1, rarity: "common", type: "troop" },
+      { name: "Valkyrie", key: "valkyrie", id: 26000011, elixir: 4, rarity: "rare", type: "troop" },
+      { name: "Skeleton Army", key: "skeleton-army", id: 26000012, elixir: 3, rarity: "epic", type: "troop" },
+      { name: "Bomber", key: "bomber", id: 26000013, elixir: 2, rarity: "common", type: "troop" },
+      { name: "Musketeer", key: "musketeer", id: 26000014, elixir: 4, rarity: "rare", type: "troop" },
+      { name: "Baby Dragon", key: "baby-dragon", id: 26000015, elixir: 4, rarity: "epic", type: "troop" },
+      { name: "Prince", key: "prince", id: 26000016, elixir: 5, rarity: "epic", type: "troop" },
+      { name: "Wizard", key: "wizard", id: 26000017, elixir: 5, rarity: "rare", type: "troop" },
+      { name: "Mini P.E.K.K.A", key: "mini-pekka", id: 26000018, elixir: 4, rarity: "rare", type: "troop" },
+      { name: "Spear Goblins", key: "spear-goblins", id: 26000019, elixir: 2, rarity: "common", type: "troop" },
+      { name: "Giant Skeleton", key: "giant-skeleton", id: 26000020, elixir: 6, rarity: "epic", type: "troop" },
+      { name: "Hog Rider", key: "hog-rider", id: 26000021, elixir: 4, rarity: "rare", type: "troop" },
+      { name: "Minion Horde", key: "minion-horde", id: 26000022, elixir: 5, rarity: "common", type: "troop" },
+      { name: "Ice Wizard", key: "ice-wizard", id: 26000023, elixir: 3, rarity: "legendary", type: "troop" },
+      { name: "Royal Giant", key: "royal-giant", id: 26000024, elixir: 6, rarity: "common", type: "troop" },
+      { name: "Guards", key: "guards", id: 26000025, elixir: 3, rarity: "epic", type: "troop" },
+      { name: "Princess", key: "princess", id: 26000026, elixir: 3, rarity: "legendary", type: "troop" },
+      { name: "Dark Prince", key: "dark-prince", id: 26000027, elixir: 4, rarity: "epic", type: "troop" },
+      { name: "Three Musketeers", key: "three-musketeers", id: 26000028, elixir: 9, rarity: "rare", type: "troop" },
+      { name: "Lava Hound", key: "lava-hound", id: 26000029, elixir: 7, rarity: "legendary", type: "troop" },
+      { name: "Ice Spirit", key: "ice-spirit", id: 26000030, elixir: 1, rarity: "common", type: "troop" },
+      { name: "Fire Spirit", key: "fire-spirit", id: 26000031, elixir: 1, rarity: "common", type: "troop" },
+      { name: "Miner", key: "miner", id: 26000032, elixir: 3, rarity: "legendary", type: "troop" },
+      { name: "Sparky", key: "sparky", id: 26000033, elixir: 6, rarity: "legendary", type: "troop" },
+      { name: "Bowler", key: "bowler", id: 26000034, elixir: 5, rarity: "epic", type: "troop" },
+      { name: "Lumberjack", key: "lumberjack", id: 26000035, elixir: 4, rarity: "legendary", type: "troop" },
+      { name: "Battle Ram", key: "battle-ram", id: 26000036, elixir: 4, rarity: "rare", type: "troop" },
+      { name: "Inferno Dragon", key: "inferno-dragon", id: 26000037, elixir: 4, rarity: "legendary", type: "troop" },
+      { name: "Ice Golem", key: "ice-golem", id: 26000038, elixir: 2, rarity: "rare", type: "troop" },
+      { name: "Mega Minion", key: "mega-minion", id: 26000039, elixir: 3, rarity: "rare", type: "troop" },
+      { name: "Dart Goblin", key: "dart-goblin", id: 26000040, elixir: 3, rarity: "rare", type: "troop" },
+      { name: "Goblin Gang", key: "goblin-gang", id: 26000041, elixir: 3, rarity: "common", type: "troop" },
+      { name: "Electro Wizard", key: "electro-wizard", id: 26000042, elixir: 4, rarity: "legendary", type: "troop" },
+      { name: "Elite Barbarians", key: "elite-barbarians", id: 26000043, elixir: 6, rarity: "common", type: "troop" },
+      { name: "Hunter", key: "hunter", id: 26000044, elixir: 4, rarity: "epic", type: "troop" },
+      { name: "Executioner", key: "executioner", id: 26000045, elixir: 5, rarity: "epic", type: "troop" },
+      { name: "Bandit", key: "bandit", id: 26000046, elixir: 3, rarity: "legendary", type: "troop" },
+      { name: "Royal Recruits", key: "royal-recruits", id: 26000047, elixir: 7, rarity: "common", type: "troop" },
+      { name: "Night Witch", key: "night-witch", id: 26000048, elixir: 4, rarity: "legendary", type: "troop" },
+      { name: "Bats", key: "bats", id: 26000049, elixir: 2, rarity: "common", type: "troop" },
+      { name: "Royal Ghost", key: "royal-ghost", id: 26000050, elixir: 3, rarity: "legendary", type: "troop" },
+      { name: "Ram Rider", key: "ram-rider", id: 26000051, elixir: 5, rarity: "legendary", type: "troop" },
+      { name: "Zappies", key: "zappies", id: 26000052, elixir: 4, rarity: "rare", type: "troop" },
+      { name: "Rascals", key: "rascals", id: 26000053, elixir: 5, rarity: "common", type: "troop" },
+      { name: "Cannon Cart", key: "cannon-cart", id: 26000054, elixir: 5, rarity: "epic", type: "troop" },
+      { name: "Mega Knight", key: "mega-knight", id: 26000055, elixir: 7, rarity: "legendary", type: "troop" },
+      { name: "Skeleton Barrel", key: "skeleton-barrel", id: 26000056, elixir: 3, rarity: "common", type: "troop" },
+      { name: "Flying Machine", key: "flying-machine", id: 26000057, elixir: 4, rarity: "rare", type: "troop" },
+      { name: "Wall Breakers", key: "wall-breakers", id: 26000058, elixir: 2, rarity: "epic", type: "troop" },
+      { name: "Royal Hogs", key: "royal-hogs", id: 26000059, elixir: 5, rarity: "rare", type: "troop" },
+      { name: "Goblin Giant", key: "goblin-giant", id: 26000060, elixir: 6, rarity: "epic", type: "troop" },
+      { name: "Fisherman", key: "fisherman", id: 26000061, elixir: 3, rarity: "legendary", type: "troop" },
+      { name: "Magic Archer", key: "magic-archer", id: 26000062, elixir: 4, rarity: "legendary", type: "troop" },
+      { name: "Electro Dragon", key: "electro-dragon", id: 26000063, elixir: 5, rarity: "epic", type: "troop" },
+      { name: "Firecracker", key: "firecracker", id: 26000064, elixir: 3, rarity: "common", type: "troop" },
+      { name: "Mighty Miner", key: "mighty-miner", id: 26000065, elixir: 4, rarity: "champion", type: "troop" },
+      { name: "Elixir Golem", key: "elixir-golem", id: 26000067, elixir: 3, rarity: "rare", type: "troop" },
+      { name: "Battle Healer", key: "battle-healer", id: 26000068, elixir: 4, rarity: "rare", type: "troop" },
+      { name: "Skeleton King", key: "skeleton-king", id: 26000069, elixir: 4, rarity: "champion", type: "troop" },
+      { name: "Archer Queen", key: "archer-queen", id: 26000072, elixir: 5, rarity: "champion", type: "troop" },
+      { name: "Golden Knight", key: "golden-knight", id: 26000074, elixir: 4, rarity: "champion", type: "troop" },
+      { name: "Monk", key: "monk", id: 26000077, elixir: 5, rarity: "champion", type: "troop" },
+      { name: "Skeleton Dragons", key: "skeleton-dragons", id: 26000080, elixir: 4, rarity: "common", type: "troop" },
+      { name: "Mother Witch", key: "mother-witch", id: 26000083, elixir: 4, rarity: "legendary", type: "troop" },
+      { name: "Electro Spirit", key: "electro-spirit", id: 26000084, elixir: 1, rarity: "common", type: "troop" },
+      { name: "Electro Giant", key: "electro-giant", id: 26000085, elixir: 7, rarity: "epic", type: "troop" },
+      { name: "Phoenix", key: "phoenix", id: 26000087, elixir: 4, rarity: "legendary", type: "troop" },
+
+      // ---- BUILDINGS ----
+      { name: "Cannon", key: "cannon", id: 27000000, elixir: 3, rarity: "common", type: "building" },
+      { name: "Goblin Hut", key: "goblin-hut", id: 27000001, elixir: 5, rarity: "rare", type: "building" },
+      { name: "Mortar", key: "mortar", id: 27000002, elixir: 4, rarity: "common", type: "building" },
+      { name: "Inferno Tower", key: "inferno-tower", id: 27000003, elixir: 5, rarity: "rare", type: "building" },
+      { name: "Bomb Tower", key: "bomb-tower", id: 27000004, elixir: 4, rarity: "rare", type: "building" },
+      { name: "Barbarian Hut", key: "barbarian-hut", id: 27000005, elixir: 6, rarity: "rare", type: "building" },
+      { name: "Tesla", key: "tesla", id: 27000006, elixir: 4, rarity: "common", type: "building" },
+      { name: "Elixir Collector", key: "elixir-collector", id: 27000007, elixir: 6, rarity: "rare", type: "building" },
+      { name: "X-Bow", key: "x-bow", id: 27000008, elixir: 6, rarity: "epic", type: "building" },
+      { name: "Tombstone", key: "tombstone", id: 27000009, elixir: 3, rarity: "rare", type: "building" },
+      { name: "Furnace", key: "furnace", id: 27000010, elixir: 4, rarity: "rare", type: "building" },
+      { name: "Goblin Cage", key: "goblin-cage", id: 27000012, elixir: 4, rarity: "rare", type: "building" },
+      { name: "Goblin Drill", key: "goblin-drill", id: 27000013, elixir: 4, rarity: "epic", type: "building" },
+
+      // ---- SPELLS ----
+      { name: "Fireball", key: "fireball", id: 28000000, elixir: 4, rarity: "rare", type: "spell" },
+      { name: "Arrows", key: "arrows", id: 28000001, elixir: 3, rarity: "common", type: "spell" },
+      { name: "Rage", key: "rage", id: 28000002, elixir: 2, rarity: "epic", type: "spell" },
+      { name: "Rocket", key: "rocket", id: 28000003, elixir: 6, rarity: "rare", type: "spell" },
+      { name: "Goblin Barrel", key: "goblin-barrel", id: 28000004, elixir: 3, rarity: "epic", type: "spell" },
+      { name: "Freeze", key: "freeze", id: 28000005, elixir: 4, rarity: "epic", type: "spell" },
+      { name: "Mirror", key: "mirror", id: 28000006, elixir: 1, rarity: "epic", type: "spell" },
+      { name: "Lightning", key: "lightning", id: 28000007, elixir: 6, rarity: "epic", type: "spell" },
+      { name: "Zap", key: "zap", id: 28000008, elixir: 2, rarity: "common", type: "spell" },
+      { name: "Poison", key: "poison", id: 28000009, elixir: 4, rarity: "epic", type: "spell" },
+      { name: "Graveyard", key: "graveyard", id: 28000010, elixir: 5, rarity: "legendary", type: "spell" },
+      { name: "The Log", key: "the-log", id: 28000011, elixir: 2, rarity: "legendary", type: "spell" },
+      { name: "Tornado", key: "tornado", id: 28000012, elixir: 3, rarity: "epic", type: "spell" },
+      { name: "Clone", key: "clone", id: 28000013, elixir: 3, rarity: "epic", type: "spell" },
+      { name: "Earthquake", key: "earthquake", id: 28000014, elixir: 3, rarity: "rare", type: "spell" },
+      { name: "Barbarian Barrel", key: "barbarian-barrel", id: 28000015, elixir: 2, rarity: "epic", type: "spell" },
+      { name: "Giant Snowball", key: "giant-snowball", id: 28000017, elixir: 2, rarity: "common", type: "spell" },
+      { name: "Royal Delivery", key: "royal-delivery", id: 28000018, elixir: 3, rarity: "common", type: "spell" },
     ];
 
-    // Featured decks data
+    // Update card count in hero
+    document.getElementById('stat-cards').textContent = cards.length;
+
+    // ============================================
+    // FEATURED DECKS DATA (Real meta decks)
+    // ============================================
     const featuredDecksData = [
       {
         name: "2.6 Hog Cycle",
         author: "MasterRoyale",
         tags: ["meta", "ladder"],
-        cards: ["Hog Rider", "Musketeer", "Ice Wizard", "Cannon", "Fireball", "Zap", "Knight", "Archers"],
+        cards: ["Hog Rider", "Musketeer", "Ice Spirit", "Skeletons", "Ice Golem", "Fireball", "The Log", "Cannon"],
         winRate: 54.2,
         uses: 12847
       },
@@ -1398,7 +1618,7 @@
         name: "Golem Beatdown",
         author: "ProPlayer99",
         tags: ["meta"],
-        cards: ["Golem", "Night Witch", "Baby Dragon", "Mega Knight", "Lightning", "Tornado", "Elixir Collector", "Skeleton Army"],
+        cards: ["Golem", "Night Witch", "Lumberjack", "Baby Dragon", "Lightning", "Tornado", "Mega Minion", "Barbarian Barrel"],
         winRate: 52.8,
         uses: 8432
       },
@@ -1406,21 +1626,23 @@
         name: "Log Bait Classic",
         author: "BaitMaster",
         tags: ["challenge", "ladder"],
-        cards: ["Princess", "Goblin Hut", "Goblins", "Knight", "Rocket", "Log", "Inferno Tower", "Skeleton Army"],
+        cards: ["Princess", "Goblin Barrel", "Goblin Gang", "Knight", "Rocket", "The Log", "Inferno Tower", "Ice Spirit"],
         winRate: 51.9,
         uses: 15203
       },
       {
-        name: "X-Bow 3.0",
-        author: "SiegePro",
+        name: "MK Bridge Spam",
+        author: "BridgeKing",
         tags: ["meta", "challenge"],
-        cards: ["X-Bow", "Tesla", "Archers", "Knight", "Fireball", "Log", "Ice Wizard", "Minions"],
+        cards: ["Mega Knight", "Ram Rider", "Bandit", "Electro Wizard", "Fireball", "Zap", "Inferno Dragon", "Minions"],
         winRate: 50.4,
         uses: 6821
       }
     ];
 
-    // Leaderboard data
+    // ============================================
+    // LEADERBOARD DATA
+    // ============================================
     const trophyLeaders = [
       { name: "Mohamed Light", clan: "Nova Esports", value: "9,247" },
       { name: "Morten", clan: "Team Liquid", value: "9,156" },
@@ -1441,50 +1663,75 @@
     // DECK BUILDER LOGIC
     // ============================================
     let currentDeck = [];
-    let currentFilter = 'all';
+    let currentRarityFilter = 'all';
+    let currentTypeFilter = 'all';
 
-    function renderCards(filter = 'all', search = '') {
+    function getCardByName(name) {
+      return cards.find(c => c.name === name);
+    }
+
+    function getDeckLink() {
+      if (currentDeck.length !== 8) return null;
+      const ids = currentDeck.map(name => {
+        const card = getCardByName(name);
+        return card ? card.id : null;
+      }).filter(Boolean);
+      if (ids.length !== 8) return null;
+      return `https://link.clashroyale.com/deck/en?deck=${ids.join(';')}`;
+    }
+
+    function getDeckLinkForCards(cardNames) {
+      const ids = cardNames.map(name => {
+        const card = getCardByName(name);
+        return card ? card.id : null;
+      }).filter(Boolean);
+      if (ids.length !== 8) return null;
+      return `https://link.clashroyale.com/deck/en?deck=${ids.join(';')}`;
+    }
+
+    function renderCards() {
       const grid = document.getElementById('cardsGrid');
-      let filteredCards = cards;
+      const search = document.getElementById('cardSearch').value.toLowerCase();
+      let filtered = cards;
 
-      if (filter !== 'all') {
-        filteredCards = cards.filter(c => c.rarity === filter);
+      if (currentRarityFilter !== 'all') {
+        filtered = filtered.filter(c => c.rarity === currentRarityFilter);
+      }
+
+      if (currentTypeFilter !== 'all') {
+        filtered = filtered.filter(c => c.type === currentTypeFilter);
       }
 
       if (search) {
-        filteredCards = filteredCards.filter(c =>
-          c.name.toLowerCase().includes(search.toLowerCase())
-        );
+        filtered = filtered.filter(c => c.name.toLowerCase().includes(search));
       }
 
-      grid.innerHTML = filteredCards.map(card => `
+      document.getElementById('cardCountBadge').textContent = `${filtered.length} cards`;
+
+      grid.innerHTML = filtered.map(card => `
         <div class="card-item ${currentDeck.includes(card.name) ? 'selected' : ''}"
              data-rarity="${card.rarity}"
-             data-name="${card.name}"
-             onclick="toggleCard('${card.name}')">
-          <div class="card-item-inner">
-            <span class="card-item-icon">${card.icon}</span>
-            <span class="card-item-name">${card.name}</span>
-          </div>
+             data-name="${card.name}">
+          <img src="${cardImg(card.key)}" alt="${card.name}" class="card-item-img" loading="lazy"
+               onerror="this.style.display='none'">
           <span class="card-item-cost">${card.elixir}</span>
+          <span class="card-item-name">${card.name}</span>
         </div>
       `).join('');
     }
 
     function toggleCard(cardName) {
-      const cardIndex = currentDeck.indexOf(cardName);
-
-      if (cardIndex > -1) {
-        currentDeck.splice(cardIndex, 1);
+      const idx = currentDeck.indexOf(cardName);
+      if (idx > -1) {
+        currentDeck.splice(idx, 1);
       } else if (currentDeck.length < 8) {
         currentDeck.push(cardName);
       } else {
         showToast('Deck is full! Remove a card first.');
         return;
       }
-
       updateDeckDisplay();
-      renderCards(currentFilter, document.getElementById('cardSearch').value);
+      renderCards();
     }
 
     function updateDeckDisplay() {
@@ -1493,10 +1740,11 @@
 
       slots.forEach((slot, index) => {
         if (currentDeck[index]) {
-          const card = cards.find(c => c.name === currentDeck[index]);
+          const card = getCardByName(currentDeck[index]);
           slot.innerHTML = `
-            <span class="deck-slot-icon">${card.icon}</span>
+            <img src="${cardImg(card.key)}" alt="${card.name}" class="deck-slot-img">
             <span class="deck-slot-cost">${card.elixir}</span>
+            <span class="deck-slot-name">${card.name}</span>
           `;
           slot.classList.add('filled');
           totalElixir += card.elixir;
@@ -1506,23 +1754,47 @@
         }
       });
 
-      // Update stats
       document.getElementById('avgElixir').textContent =
         currentDeck.length > 0 ? (totalElixir / currentDeck.length).toFixed(1) : '0.0';
       document.getElementById('cardCount').textContent = `${currentDeck.length}/8`;
 
-      // Update buttons
-      const copyBtn = document.getElementById('copyDeck');
-      const shareBtn = document.getElementById('shareDeck');
-      copyBtn.disabled = currentDeck.length !== 8;
-      shareBtn.disabled = currentDeck.length !== 8;
+      const isFull = currentDeck.length === 8;
+      document.getElementById('copyToGame').disabled = !isFull;
+      document.getElementById('copyDeck').disabled = !isFull;
+      document.getElementById('shareDeck').disabled = !isFull;
+
+      // Update link preview
+      const preview = document.getElementById('deckLinkPreview');
+      if (isFull) {
+        const link = getDeckLink();
+        document.getElementById('deckLinkUrl').textContent = link;
+        preview.classList.add('show');
+      } else {
+        preview.classList.remove('show');
+      }
     }
 
     function clearDeck() {
       currentDeck = [];
       updateDeckDisplay();
-      renderCards(currentFilter, document.getElementById('cardSearch').value);
+      renderCards();
     }
+
+    function loadDeck(cardNames) {
+      currentDeck = [...cardNames];
+      updateDeckDisplay();
+      renderCards();
+      document.getElementById('builder').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      showToast('Deck loaded into builder!');
+    }
+
+    // Event delegation for card grid clicks
+    document.getElementById('cardsGrid').addEventListener('click', (e) => {
+      const cardItem = e.target.closest('.card-item');
+      if (cardItem) {
+        toggleCard(cardItem.dataset.name);
+      }
+    });
 
     // Slot click to remove card
     document.getElementById('deckSlots').addEventListener('click', (e) => {
@@ -1531,41 +1803,68 @@
         const index = parseInt(slot.dataset.slot);
         currentDeck.splice(index, 1);
         updateDeckDisplay();
-        renderCards(currentFilter, document.getElementById('cardSearch').value);
+        renderCards();
       }
     });
 
-    // Filter buttons
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentFilter = btn.dataset.filter || btn.dataset.rarity || 'all';
-        renderCards(currentFilter, document.getElementById('cardSearch').value);
-      });
+    // Rarity filter buttons
+    document.getElementById('rarityFilters').addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('#rarityFilters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentRarityFilter = btn.dataset.filter || btn.dataset.rarity || 'all';
+      renderCards();
+    });
+
+    // Type filter buttons
+    document.getElementById('typeFilters').addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('#typeFilters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTypeFilter = btn.dataset.type || 'all';
+      renderCards();
     });
 
     // Search
-    document.getElementById('cardSearch').addEventListener('input', (e) => {
-      renderCards(currentFilter, e.target.value);
-    });
+    document.getElementById('cardSearch').addEventListener('input', renderCards);
 
     // Clear deck
     document.getElementById('clearDeck').addEventListener('click', clearDeck);
 
-    // Copy deck
+    // Open in Clash Royale (deep link)
+    document.getElementById('copyToGame').addEventListener('click', () => {
+      const link = getDeckLink();
+      if (link) {
+        window.open(link, '_blank');
+        showToast('Opening Clash Royale... If the game is installed, the deck will be copied!');
+      }
+    });
+
+    // Copy deck link to clipboard
     document.getElementById('copyDeck').addEventListener('click', () => {
-      if (currentDeck.length === 8) {
-        const deckString = currentDeck.join(',');
-        navigator.clipboard.writeText(`https://deckvault.gg/deck/${btoa(deckString)}`);
-        showToast('Deck link copied to clipboard!');
+      const link = getDeckLink();
+      if (link) {
+        navigator.clipboard.writeText(link).then(() => {
+          showToast('Clash Royale deck link copied to clipboard!');
+        });
       }
     });
 
     // Share deck
     document.getElementById('shareDeck').addEventListener('click', () => {
-      if (currentDeck.length === 8) {
-        showToast('Share modal would open here!');
+      const link = getDeckLink();
+      if (link && navigator.share) {
+        navigator.share({
+          title: 'My Clash Royale Deck',
+          text: `Check out my deck: ${currentDeck.join(', ')}`,
+          url: link
+        });
+      } else if (link) {
+        navigator.clipboard.writeText(link).then(() => {
+          showToast('Deck link copied! Share it with friends.');
+        });
       }
     });
 
@@ -1574,12 +1873,12 @@
     // ============================================
     function renderFeaturedDecks() {
       const container = document.getElementById('featuredDecks');
-      container.innerHTML = featuredDecksData.map(deck => {
+      container.innerHTML = featuredDecksData.map((deck, di) => {
         const deckCards = deck.cards.map(cardName => {
-          const card = cards.find(c => c.name === cardName);
+          const card = getCardByName(cardName);
           return card ? `
             <div class="mini-card">
-              ${card.icon}
+              <img src="${cardImg(card.key)}" alt="${card.name}" loading="lazy">
               <span class="mini-card-cost">${card.elixir}</span>
             </div>
           ` : '';
@@ -1588,6 +1887,8 @@
         const tags = deck.tags.map(tag =>
           `<span class="deck-tag ${tag}">${tag}</span>`
         ).join('');
+
+        const gameLink = getDeckLinkForCards(deck.cards);
 
         return `
           <div class="featured-deck">
@@ -1601,13 +1902,19 @@
             <div class="featured-deck-cards">${deckCards}</div>
             <div class="featured-deck-stats">
               <div class="featured-deck-stat">
-                <span class="featured-deck-stat-icon">📊</span>
                 <span class="featured-deck-stat-value">${deck.winRate}%</span> win rate
               </div>
               <div class="featured-deck-stat">
-                <span class="featured-deck-stat-icon">👥</span>
                 <span class="featured-deck-stat-value">${deck.uses.toLocaleString()}</span> uses
               </div>
+            </div>
+            <div class="featured-deck-actions">
+              <button class="btn btn-primary btn-sm" onclick="loadDeck(featuredDecksData[${di}].cards)">
+                Use This Deck
+              </button>
+              <a href="${gameLink}" target="_blank" class="btn btn-game btn-sm" style="text-decoration:none">
+                &#127918; Copy to Game
+              </a>
             </div>
           </div>
         `;
@@ -1645,7 +1952,7 @@
       const toast = document.getElementById('toast');
       document.getElementById('toastMessage').textContent = message;
       toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
+      setTimeout(() => toast.classList.remove('show'), 3500);
     }
 
     // ============================================
@@ -1671,15 +1978,20 @@
 
     // Animate stats on scroll
     let statsAnimated = false;
-    window.addEventListener('scroll', () => {
-      if (!statsAnimated && window.scrollY < 200) {
-        statsAnimated = true;
-        animateValue('stat-decks', 0, 12847, 2000);
-      }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !statsAnimated) {
+          statsAnimated = true;
+          animateValue('stat-decks', 0, 12847, 2000);
+        }
+      });
     });
+    const heroStats = document.querySelector('.hero-stats');
+    if (heroStats) observer.observe(heroStats);
 
     function animateValue(id, start, end, duration) {
       const obj = document.getElementById(id);
+      if (!obj) return;
       const range = end - start;
       const startTime = performance.now();
 
