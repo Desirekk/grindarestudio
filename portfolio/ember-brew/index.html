@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMBER & BREW | Artisan Coffee House Manchester</title>
+    <meta name="description" content="Artisan coffee house in Manchester. Specialty coffee, homemade pastries, cozy atmosphere. Visit us today!">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            --cream: #FDF8F3;
+            --cream-dark: #F5EDE4;
+            --espresso: #2C1810;
+            --espresso-light: #4A3428;
+            --caramel: #C4956A;
+            --caramel-light: #D4A574;
+            --sage: #8B9D83;
+            --sage-light: #A8B8A0;
+            --terracotta: #C17F59;
+            --white: #FFFFFF;
+            --black: #1A1A1A;
+
+            --font-display: 'DM Serif Display', serif;
+            --font-body: 'Lato', sans-serif;
+
+            --radius: 20px;
+            --radius-sm: 12px;
+            --radius-lg: 32px;
+            --radius-full: 9999px;
+
+            --shadow: 0 20px 40px rgba(44, 24, 16, 0.1);
+            --shadow-lg: 0 30px 60px rgba(44, 24, 16, 0.15);
+            --shadow-soft: 0 10px 30px rgba(44, 24, 16, 0.08);
+
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ===== RESET ===== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--cream);
+            color: var(--espresso);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul { list-style: none; }
+
+        /* ===== UTILITIES ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-cream {
+            background: var(--cream-dark);
+        }
+
+        .section-espresso {
+            background: var(--espresso);
+            color: var(--cream);
+        }
+
+        /* ===== DEMO BANNER ===== */
+        .demo-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10001;
+            background: var(--espresso);
+            border-bottom: 1px solid rgba(196, 149, 106, 0.3);
+            padding: 10px 20px;
+        }
+
+        .demo-banner-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 14px;
+        }
+
+        .demo-badge {
+            background: linear-gradient(135deg, var(--caramel), var(--terracotta));
+            color: var(--white);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .demo-text {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .demo-text strong {
+            color: var(--caramel);
+        }
+
+        .demo-cta {
+            background: rgba(196, 149, 106, 0.15);
+            border: 1px solid rgba(196, 149, 106, 0.4);
+            color: var(--caramel);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            transition: var(--transition);
+        }
+
+        .demo-cta:hover {
+            background: var(--caramel);
+            color: var(--espresso);
+        }
+
+        @media (max-width: 600px) {
+            .demo-banner-content { font-size: 12px; gap: 10px; }
+            .demo-text { display: none; }
+        }
+
+        /* ===== NAVIGATION ===== */
+        .nav {
+            position: fixed;
+            top: 44px;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 16px 0;
+            transition: var(--transition);
+        }
+
+        .nav.scrolled {
+            background: rgba(253, 248, 243, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--espresso);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 24px;
+            color: var(--espresso);
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            color: var(--caramel);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--espresso-light);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--caramel);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--espresso);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: var(--espresso);
+            color: var(--cream) !important;
+            padding: 12px 24px;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+        }
+
+        .nav-cta:hover {
+            background: var(--caramel);
+            color: var(--white) !important;
+        }
+
+        .nav-cta::after {
+            display: none !important;
+        }
+
+        /* Mobile Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .menu-toggle span {
+            width: 28px;
+            height: 2px;
+            background: var(--espresso);
+            transition: var(--transition);
+        }
+
+        @media (max-width: 900px) {
+            .nav-links { display: none; }
+            .menu-toggle { display: flex; }
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 160px 0 100px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 55%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, var(--cream) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--cream-dark);
+            border: 1px solid rgba(44, 24, 16, 0.1);
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--espresso-light);
+            margin-bottom: 24px;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--sage);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(48px, 7vw, 80px);
+            line-height: 1.1;
+            color: var(--espresso);
+            margin-bottom: 24px;
+        }
+
+        .hero-title span {
+            color: var(--caramel);
+            font-style: italic;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--espresso-light);
+            margin-bottom: 40px;
+            max-width: 480px;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 32px;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 16px;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--espresso);
+            color: var(--cream);
+        }
+
+        .btn-primary:hover {
+            background: var(--caramel);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--espresso);
+            border: 2px solid var(--espresso);
+        }
+
+        .btn-outline:hover {
+            background: var(--espresso);
+            color: var(--cream);
+        }
+
+        /* Hero Features */
+        .hero-features {
+            display: flex;
+            gap: 32px;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(44, 24, 16, 0.1);
+        }
+
+        .hero-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hero-feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--cream-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .hero-feature-text {
+            font-size: 14px;
+            color: var(--espresso-light);
+        }
+
+        .hero-feature-text strong {
+            display: block;
+            color: var(--espresso);
+            font-size: 16px;
+        }
+
+        @media (max-width: 900px) {
+            .hero-bg {
+                width: 100%;
+                opacity: 0.3;
+            }
+            .hero-bg::before {
+                background: linear-gradient(180deg, var(--cream) 0%, transparent 30%, transparent 70%, var(--cream) 100%);
+            }
+            .hero-content {
+                text-align: center;
+                max-width: 100%;
+            }
+            .hero-subtitle {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .hero-ctas {
+                justify-content: center;
+            }
+            .hero-features {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        .about {
+            padding: 120px 0;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .about-image-badge {
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            background: var(--caramel);
+            color: var(--white);
+            padding: 24px 32px;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .about-image-badge .number {
+            font-family: var(--font-display);
+            font-size: 48px;
+            line-height: 1;
+        }
+
+        .about-image-badge .text {
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .about-label {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--caramel);
+            margin-bottom: 16px;
+        }
+
+        .about-title {
+            font-family: var(--font-display);
+            font-size: clamp(32px, 4vw, 48px);
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+
+        .about-text {
+            font-size: 17px;
+            color: var(--espresso-light);
+            margin-bottom: 32px;
+        }
+
+        .about-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .about-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+        }
+
+        .about-feature::before {
+            content: '✓';
+            width: 24px;
+            height: 24px;
+            background: var(--sage-light);
+            color: var(--espresso);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 900px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .about-image-badge {
+                right: 20px;
+                bottom: -20px;
+            }
+        }
+
+        /* ===== MENU SECTION ===== */
+        .menu {
+            background: var(--cream-dark);
+            padding: 120px 0;
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .menu-label {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--caramel);
+            margin-bottom: 16px;
+        }
+
+        .menu-title {
+            font-family: var(--font-display);
+            font-size: clamp(36px, 5vw, 56px);
+            margin-bottom: 16px;
+        }
+
+        .menu-subtitle {
+            font-size: 18px;
+            color: var(--espresso-light);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .menu-categories {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+        }
+
+        .menu-category {
+            padding: 12px 28px;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 15px;
+            border: 2px solid var(--espresso);
+            background: transparent;
+            color: var(--espresso);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .menu-category:hover,
+        .menu-category.active {
+            background: var(--espresso);
+            color: var(--cream);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .menu-item {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 24px;
+            display: flex;
+            gap: 20px;
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition);
+        }
+
+        .menu-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+
+        .menu-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .menu-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .menu-item-content {
+            flex: 1;
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .menu-item-name {
+            font-family: var(--font-display);
+            font-size: 20px;
+        }
+
+        .menu-item-price {
+            font-weight: 700;
+            color: var(--caramel);
+            font-size: 18px;
+        }
+
+        .menu-item-desc {
+            font-size: 14px;
+            color: var(--espresso-light);
+        }
+
+        /* ===== GALLERY ===== */
+        .gallery {
+            padding: 120px 0;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 280px);
+            gap: 20px;
+        }
+
+        .gallery-item {
+            border-radius: var(--radius);
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-item:first-child {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        @media (max-width: 900px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: auto;
+            }
+            .gallery-item:first-child {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            .gallery-item:first-child {
+                grid-column: span 1;
+            }
+        }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonials {
+            background: var(--espresso);
+            color: var(--cream);
+            padding: 120px 0;
+            text-align: center;
+        }
+
+        .testimonials-quote {
+            font-family: var(--font-display);
+            font-size: clamp(24px, 4vw, 40px);
+            font-style: italic;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.4;
+        }
+
+        .testimonials-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .testimonials-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--caramel);
+        }
+
+        .testimonials-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .testimonials-info {
+            text-align: left;
+        }
+
+        .testimonials-name {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .testimonials-role {
+            color: var(--caramel);
+            font-size: 14px;
+        }
+
+        .testimonials-stars {
+            color: var(--caramel);
+            font-size: 20px;
+            margin-bottom: 24px;
+        }
+
+        /* ===== VISIT SECTION ===== */
+        .visit {
+            padding: 120px 0;
+        }
+
+        .visit-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .visit-info h2 {
+            font-family: var(--font-display);
+            font-size: clamp(36px, 5vw, 48px);
+            margin-bottom: 24px;
+        }
+
+        .visit-info p {
+            font-size: 17px;
+            color: var(--espresso-light);
+            margin-bottom: 32px;
+        }
+
+        .visit-details {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .visit-detail {
+            display: flex;
+            gap: 16px;
+        }
+
+        .visit-detail-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--cream-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .visit-detail-content h4 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .visit-detail-content p {
+            font-size: 15px;
+            color: var(--espresso-light);
+            margin: 0;
+        }
+
+        .visit-map {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            height: 400px;
+        }
+
+        .visit-map iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        @media (max-width: 900px) {
+            .visit-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== CTA SECTION ===== */
+        .cta {
+            background: linear-gradient(135deg, var(--caramel), var(--terracotta));
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-family: var(--font-display);
+            font-size: clamp(32px, 5vw, 48px);
+            color: var(--white);
+            margin-bottom: 16px;
+        }
+
+        .cta p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 32px;
+        }
+
+        .cta .btn-white {
+            background: var(--white);
+            color: var(--espresso);
+        }
+
+        .cta .btn-white:hover {
+            background: var(--espresso);
+            color: var(--cream);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--espresso);
+            color: var(--cream);
+            padding: 80px 0 40px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 20px;
+        }
+
+        .footer-brand .logo-text {
+            color: var(--cream);
+        }
+
+        .footer-brand p {
+            font-size: 15px;
+            color: rgba(253, 248, 243, 0.7);
+            margin-bottom: 24px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+        }
+
+        .footer-social a {
+            width: 44px;
+            height: 44px;
+            background: rgba(253, 248, 243, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: var(--transition);
+        }
+
+        .footer-social a:hover {
+            background: var(--caramel);
+        }
+
+        .footer-col h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .footer-col ul {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-col a {
+            font-size: 15px;
+            color: rgba(253, 248, 243, 0.7);
+            transition: var(--transition);
+        }
+
+        .footer-col a:hover {
+            color: var(--caramel);
+        }
+
+        .footer-bottom {
+            padding-top: 40px;
+            border-top: 1px solid rgba(253, 248, 243, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: rgba(253, 248, 243, 0.5);
+        }
+
+        @media (max-width: 900px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+
+        /* ===== FLOATING BUTTONS ===== */
+        .floating-btns {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .floating-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .floating-phone {
+            background: var(--espresso);
+            color: var(--cream);
+        }
+
+        .floating-instagram {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== MOBILE NAV OVERLAY ===== */
+        .mobile-nav {
+            position: fixed;
+            inset: 0;
+            background: var(--cream);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .mobile-nav.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-nav a {
+            font-family: var(--font-display);
+            font-size: 32px;
+            color: var(--espresso);
+        }
+
+        .mobile-nav-close {
+            position: absolute;
+            top: 70px;
+            right: 24px;
+            font-size: 32px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--espresso);
+        }
+    </style>
+</head>
+<body>
+    <!-- Demo Banner -->
+    <div class="demo-banner">
+        <div class="demo-banner-content">
+            <span class="demo-badge">DEMO</span>
+            <span class="demo-text">This is a demo website by <strong>Grindare Studio</strong></span>
+            <a href="https://grindarestudio.com" class="demo-cta">Get Yours Free →</a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="#" class="logo">
+                <img src="images/logo.jpg" alt="EB" class="logo-icon-img" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">
+                <div class="logo-text">EMBER <span>&</span> BREW</div>
+            </a>
+            <div class="nav-links">
+                <a href="#about">Our Story</a>
+                <a href="#menu">Menu</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#visit">Visit Us</a>
+                <a href="#visit" class="nav-cta">Order Now</a>
+            </div>
+            <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Nav -->
+    <div class="mobile-nav" id="mobileNav">
+        <button class="mobile-nav-close" id="mobileNavClose">×</button>
+        <a href="#about">Our Story</a>
+        <a href="#menu">Menu</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#visit">Visit Us</a>
+        <a href="#visit" class="btn btn-primary">Order Now</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-bg">
+            <img src="images/hero-interior.jpg" alt="Ember & Brew Coffee Shop Interior">
+        </div>
+        <div class="container">
+            <div class="hero-content reveal">
+                <div class="hero-badge">Open Today 7am - 6pm</div>
+                <h1 class="hero-title">Where Every Cup Tells a <span>Story</span></h1>
+                <p class="hero-subtitle">Artisan coffee roasted in-house, homemade pastries baked fresh daily, and a cozy corner waiting just for you.</p>
+                <div class="hero-ctas">
+                    <a href="#menu" class="btn btn-primary">Explore Menu</a>
+                    <a href="#visit" class="btn btn-outline">Find Us</a>
+                </div>
+                <div class="hero-features">
+                    <div class="hero-feature">
+                        <div class="hero-feature-icon">🌱</div>
+                        <div class="hero-feature-text">
+                            <strong>Ethically Sourced</strong>
+                            Direct trade beans
+                        </div>
+                    </div>
+                    <div class="hero-feature">
+                        <div class="hero-feature-icon">🥐</div>
+                        <div class="hero-feature-text">
+                            <strong>Fresh Daily</strong>
+                            Baked in-house
+                        </div>
+                    </div>
+                    <div class="hero-feature">
+                        <div class="hero-feature-icon">💚</div>
+                        <div class="hero-feature-text">
+                            <strong>Eco-Friendly</strong>
+                            Sustainable cups
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="about section" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image reveal">
+                    <img src="images/barista-latte.jpg" alt="Barista Creating Latte Art">
+                    <div class="about-image-badge">
+                        <div class="number">8</div>
+                        <div class="text">Years of Passion</div>
+                    </div>
+                </div>
+                <div class="about-content reveal">
+                    <span class="about-label">Our Story</span>
+                    <h2 class="about-title">Crafted with Love, Served with Soul</h2>
+                    <p class="about-text">What started as a dream in a tiny kitchen has grown into Manchester's favourite neighbourhood coffee house. We believe great coffee is about more than just beans — it's about community, connection, and those perfect quiet moments.</p>
+                    <p class="about-text">Every cup we serve is roasted locally, every pastry baked fresh, and every smile genuine. Welcome to our family.</p>
+                    <div class="about-features">
+                        <div class="about-feature">Single-origin beans</div>
+                        <div class="about-feature">In-house roasting</div>
+                        <div class="about-feature">Vegan options</div>
+                        <div class="about-feature">Free WiFi</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu -->
+    <section class="menu section" id="menu">
+        <div class="container">
+            <div class="menu-header reveal">
+                <span class="menu-label">Our Menu</span>
+                <h2 class="menu-title">Taste the Difference</h2>
+                <p class="menu-subtitle">From bold espressos to silky lattes, find your perfect brew</p>
+            </div>
+
+            <div class="menu-categories reveal">
+                <button class="menu-category active">Coffee</button>
+                <button class="menu-category">Pastries</button>
+                <button class="menu-category">Breakfast</button>
+                <button class="menu-category">Lunch</button>
+            </div>
+
+            <div class="menu-grid">
+                <div class="menu-item reveal">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=200&q=80" alt="Espresso">
+                    </div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-name">House Espresso</h3>
+                            <span class="menu-item-price">£2.80</span>
+                        </div>
+                        <p class="menu-item-desc">Rich, bold, and perfectly balanced. Our signature blend.</p>
+                    </div>
+                </div>
+
+                <div class="menu-item reveal">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=200&q=80" alt="Flat White">
+                    </div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-name">Flat White</h3>
+                            <span class="menu-item-price">£3.40</span>
+                        </div>
+                        <p class="menu-item-desc">Velvety microfoam meets double ristretto.</p>
+                    </div>
+                </div>
+
+                <div class="menu-item reveal">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=200&q=80" alt="Cappuccino">
+                    </div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-name">Cappuccino</h3>
+                            <span class="menu-item-price">£3.20</span>
+                        </div>
+                        <p class="menu-item-desc">Classic Italian style with silky foam art.</p>
+                    </div>
+                </div>
+
+                <div class="menu-item reveal">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=200&q=80" alt="Latte">
+                    </div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-name">Oat Milk Latte</h3>
+                            <span class="menu-item-price">£3.60</span>
+                        </div>
+                        <p class="menu-item-desc">Creamy oat milk with our house espresso.</p>
+                    </div>
+                </div>
+
+                <div class="menu-item reveal">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=200&q=80" alt="Pour Over">
+                    </div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-name">Pour Over</h3>
+                            <span class="menu-item-price">£4.00</span>
+                        </div>
+                        <p class="menu-item-desc">Single origin, hand-poured for maximum flavour.</p>
+                    </div>
+                </div>
+
+                <div class="menu-item reveal">
+                    <div class="menu-item-image">
+                        <img src="images/croissant.jpg" alt="Croissant">
+                    </div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-name">Butter Croissant</h3>
+                            <span class="menu-item-price">£2.50</span>
+                        </div>
+                        <p class="menu-item-desc">Flaky, buttery, baked fresh every morning.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="gallery section" id="gallery">
+        <div class="container">
+            <div class="gallery-header reveal">
+                <span class="menu-label">Gallery</span>
+                <h2 class="menu-title">Moments at Ember & Brew</h2>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item reveal">
+                    <img src="images/interior-wide.jpg" alt="Coffee Shop Interior">
+                </div>
+                <div class="gallery-item reveal">
+                    <img src="images/latte-art.jpg" alt="Latte Art">
+                </div>
+                <div class="gallery-item reveal">
+                    <img src="images/flat-white.jpg" alt="Flat White Coffee">
+                </div>
+                <div class="gallery-item reveal">
+                    <img src="images/pastries-display.jpg" alt="Fresh Pastries">
+                </div>
+                <div class="gallery-item reveal">
+                    <img src="images/barista-latte.jpg" alt="Barista at Work">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials section">
+        <div class="container">
+            <div class="testimonials-stars reveal">★★★★★</div>
+            <blockquote class="testimonials-quote reveal">
+                "Best coffee in Manchester, hands down. The atmosphere is cozy, the staff are lovely, and their almond croissants are absolutely divine!"
+            </blockquote>
+            <div class="testimonials-author reveal">
+                <div class="testimonials-avatar">
+                    <img src="images/avatar-woman.jpg" alt="Sarah Mitchell">
+                </div>
+                <div class="testimonials-info">
+                    <div class="testimonials-name">Sarah Mitchell</div>
+                    <div class="testimonials-role">Regular Customer</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visit -->
+    <section class="visit section" id="visit">
+        <div class="container">
+            <div class="visit-grid">
+                <div class="visit-info reveal">
+                    <h2>Come Say Hello</h2>
+                    <p>Whether you need your morning fuel, a quiet place to work, or a cozy catch-up with friends — we've got a seat for you.</p>
+                    <div class="visit-details">
+                        <div class="visit-detail">
+                            <div class="visit-detail-icon">📍</div>
+                            <div class="visit-detail-content">
+                                <h4>Address</h4>
+                                <p>42 Beech Road, Chorlton<br>Manchester M21 9EL</p>
+                            </div>
+                        </div>
+                        <div class="visit-detail">
+                            <div class="visit-detail-icon">🕐</div>
+                            <div class="visit-detail-content">
+                                <h4>Opening Hours</h4>
+                                <p>Mon-Fri: 7am - 6pm<br>Sat-Sun: 8am - 5pm</p>
+                            </div>
+                        </div>
+                        <div class="visit-detail">
+                            <div class="visit-detail-icon">📞</div>
+                            <div class="visit-detail-content">
+                                <h4>Contact</h4>
+                                <p>0161 123 4567<br>hello@emberandbrew.co.uk</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="visit-map reveal">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2376.8!2d-2.28!3d53.44!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sen!2suk!4v1" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content reveal">
+                <h2>Start Your Day Right</h2>
+                <p>Order ahead and skip the queue. Your coffee will be waiting.</p>
+                <a href="tel:01611234567" class="btn btn-white">Order Now →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <img src="images/logo.jpg" alt="EB" class="logo-icon-img" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">
+                        <div class="logo-text">EMBER <span>&</span> BREW</div>
+                    </a>
+                    <p>Artisan coffee house in the heart of Chorlton. Serving specialty coffee and fresh pastries since 2018.</p>
+                    <div class="footer-social">
+                        <a href="#">📷</a>
+                        <a href="#">📘</a>
+                        <a href="#">🐦</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#about">Our Story</a></li>
+                        <li><a href="#menu">Menu</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
+                        <li><a href="#visit">Visit Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Menu</h4>
+                    <ul>
+                        <li><a href="#">Coffee</a></li>
+                        <li><a href="#">Pastries</a></li>
+                        <li><a href="#">Breakfast</a></li>
+                        <li><a href="#">Lunch</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="tel:01611234567">0161 123 4567</a></li>
+                        <li><a href="mailto:hello@emberandbrew.co.uk">hello@emberandbrew.co.uk</a></li>
+                        <li><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Ember & Brew. All rights reserved.</p>
+                <p>Website by <a href="https://grindarestudio.com" style="color: var(--caramel);">Grindare Studio</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Buttons -->
+    <div class="floating-btns">
+        <a href="tel:01611234567" class="floating-btn floating-phone">📞</a>
+        <a href="https://instagram.com" class="floating-btn floating-instagram">📷</a>
+    </div>
+
+    <script>
+        // Navbar scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileNav = document.getElementById('mobileNav');
+        const mobileNavClose = document.getElementById('mobileNavClose');
+        const mobileNavLinks = mobileNav.querySelectorAll('a');
+
+        menuToggle.addEventListener('click', () => {
+            mobileNav.classList.add('active');
+        });
+
+        mobileNavClose.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+        });
+
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNav.classList.remove('active');
+            });
+        });
+
+        // Reveal on scroll
+        const reveals = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        reveals.forEach(el => revealObserver.observe(el));
+
+        // Menu category tabs (demo functionality)
+        const menuCategories = document.querySelectorAll('.menu-category');
+        menuCategories.forEach(btn => {
+            btn.addEventListener('click', () => {
+                menuCategories.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 100;
+                    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+                    window.scrollTo({ top, behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
