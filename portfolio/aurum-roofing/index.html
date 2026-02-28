@@ -3,1332 +3,1985 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AURUM ROOFING | Premium Roofing Manchester</title>
+    <meta name="description" content="Luxury roofing services in Manchester. Slate, tile, flat roofs & emergency repairs. 15+ years experience, fully insured.">
 
-    <!-- Primary Meta Tags -->
-    <title>AURUM ROOFING | Luxury Roofing & Restoration in Manchester</title>
-    <meta name="title" content="AURUM ROOFING | Luxury Roofing & Restoration in Manchester">
-    <meta name="description" content="Premium roofing services in Manchester & Greater Manchester. Slate, tile, flat roofing, repairs & restoration for high-value properties. Fully insured, 10+ years experience.">
-    <meta name="keywords" content="luxury roofing Manchester, premium roofers, slate roofing, tile roofing, flat roofing EPDM, roof repairs Manchester, chimney repairs, guttering, Salford, Stockport, Bolton, Altrincham">
-    <meta name="author" content="AURUM ROOFING">
-    <meta name="robots" content="index, follow">
-
-    <!-- Geo Tags for Local SEO -->
-    <meta name="geo.region" content="GB-MAN">
-    <meta name="geo.placename" content="Manchester">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.aurumroofing.co.uk/">
-    <meta property="og:title" content="AURUM ROOFING | Luxury Roofing & Restoration in Manchester">
-    <meta property="og:description" content="Premium roofing services for high-value properties in Manchester & Greater Manchester. Craftsmanship, premium materials, flawless finishes.">
-    <meta property="og:image" content="https://www.aurumroofing.co.uk/images/og-image.jpg">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://www.aurumroofing.co.uk/">
-    <meta property="twitter:title" content="AURUM ROOFING | Luxury Roofing & Restoration in Manchester">
-    <meta property="twitter:description" content="Premium roofing services for high-value properties in Manchester & Greater Manchester.">
-    <meta property="twitter:image" content="https://www.aurumroofing.co.uk/images/og-image.jpg">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-
-    <!-- Google Fonts -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css">
-
-    <!-- AOS Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
-    <!-- Custom Premium Features -->
     <style>
-      /* Scroll Progress */
-      .scroll-progress {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 3px;
-        background: linear-gradient(90deg, #c9a227, #e8c547);
-        z-index: 9999;
-        transition: width 0.1s linear;
-      }
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-600: #475569;
+            --slate-500: #64748b;
+            --slate-400: #94a3b8;
+            --slate-200: #e2e8f0;
+            --slate-100: #f1f5f9;
 
-      /* Sticky WhatsApp Button */
-      .sticky-whatsapp {
-        position: fixed;
-        bottom: 100px;
-        right: 24px;
-        width: 60px;
-        height: 60px;
-        background: #25D366;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-        z-index: 1000;
-        transition: all 0.3s;
-        animation: bounce 2s infinite;
-      }
+            --copper: #c77d4a;
+            --copper-light: #d4956a;
+            --copper-dark: #a66a3d;
+            --bronze: #d4a574;
+            --gold: #f5c878;
 
-      .sticky-whatsapp:hover {
-        transform: scale(1.1);
-        box-shadow: 0 6px 30px rgba(37, 211, 102, 0.5);
-      }
+            --white: #ffffff;
+            --black: #000000;
 
-      .sticky-whatsapp svg {
-        width: 32px;
-        height: 32px;
-        fill: white;
-      }
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
 
-      @keyframes bounce {
-        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-        40% { transform: translateY(-8px); }
-        60% { transform: translateY(-4px); }
-      }
+            --radius: 16px;
+            --radius-sm: 8px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
 
-      /* Weather Banner */
-      .weather-banner {
-        position: fixed;
-        bottom: 24px;
-        left: 24px;
-        background: rgba(255, 255, 255, 0.98);
-        border: 1px solid rgba(184, 134, 11, 0.2);
-        border-radius: 12px;
-        padding: 16px 20px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        z-index: 1000;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        animation: slideInLeft 0.5s ease 2s both;
-        max-width: 300px;
-      }
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 35px 60px -15px rgba(0, 0, 0, 0.5);
+            --shadow-copper: 0 20px 40px -10px rgba(199, 125, 74, 0.3);
 
-      @keyframes slideInLeft {
-        from { transform: translateX(-120%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-      }
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-      .weather-icon {
-        font-size: 28px;
-      }
+        /* ===== RESET ===== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-      .weather-text {
-        font-size: 13px;
-        color: #4a5568;
-        line-height: 1.4;
-      }
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
 
-      .weather-text strong {
-        color: #b8860b;
-      }
+        body {
+            font-family: var(--font-body);
+            background: var(--slate-900);
+            color: var(--slate-200);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-      .weather-close {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        background: none;
-        border: none;
-        color: #999;
-        cursor: pointer;
-        font-size: 16px;
-      }
+        img {
+            max-width: 100%;
+            display: block;
+        }
 
-      @media (max-width: 768px) {
-        .weather-banner { display: none; }
-      }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
 
-      /* Quote Calculator */
-      .quote-calculator {
-        background: rgba(255, 255, 255, 0.98);
-        border: 1px solid rgba(184, 134, 11, 0.2);
-        border-radius: 16px;
-        padding: 32px;
-        margin-top: 48px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-      }
+        ul { list-style: none; }
 
-      .quote-calculator h4 {
-        font-family: 'Cinzel', serif;
-        font-size: 20px;
-        color: #b8860b;
-        margin-bottom: 24px;
-        text-align: center;
-      }
+        /* ===== UTILITIES ===== */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
 
-      .calc-input-group {
-        margin-bottom: 20px;
-      }
+        .section {
+            padding: 120px 0;
+            position: relative;
+        }
 
-      .calc-input-group label {
-        display: block;
-        font-size: 14px;
-        color: #4a5568;
-        margin-bottom: 8px;
-      }
+        .section-dark {
+            background: var(--slate-800);
+        }
 
-      .calc-input-group select,
-      .calc-input-group input {
-        width: 100%;
-        padding: 14px 16px;
-        background: #f8f9fa;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        color: #1a1a1a;
-        font-size: 15px;
-        font-family: inherit;
-      }
+        .gradient-text {
+            background: linear-gradient(135deg, var(--copper), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-      .calc-input-group select:focus,
-      .calc-input-group input:focus {
-        outline: none;
-        border-color: #b8860b;
-        box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.1);
-      }
+        /* ===== ANIMATED BACKGROUND ===== */
+        .bg-pattern {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
 
-      .calc-result {
-        background: linear-gradient(135deg, rgba(184, 134, 11, 0.08), rgba(184, 134, 11, 0.03));
-        border: 1px solid rgba(184, 134, 11, 0.2);
-        border-radius: 12px;
-        padding: 24px;
-        text-align: center;
-        margin-top: 24px;
-      }
+        /* Floating orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: -1;
+        }
 
-      .calc-result-label {
-        font-size: 13px;
-        color: #4a5568;
-        margin-bottom: 8px;
-      }
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(199, 125, 74, 0.15), transparent 70%);
+            top: -200px;
+            right: -200px;
+            animation: float1 20s ease-in-out infinite;
+        }
 
-      .calc-result-value {
-        font-family: 'Cinzel', serif;
-        font-size: 36px;
-        color: #b8860b;
-      }
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(212, 165, 116, 0.1), transparent 70%);
+            bottom: -100px;
+            left: -200px;
+            animation: float2 25s ease-in-out infinite;
+        }
 
-      .calc-note {
-        font-size: 12px;
-        color: #718096;
-        margin-top: 8px;
-      }
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-50px, 50px) rotate(180deg); }
+        }
 
-      /* Emergency Pulse Banner */
-      .emergency-pulse {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 16px;
-        background: rgba(220, 38, 38, 0.15);
-        border: 1px solid rgba(220, 38, 38, 0.3);
-        border-radius: 999px;
-        font-size: 12px;
-        color: #ef4444;
-        animation: emergencyPulse 2s infinite;
-      }
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -30px); }
+        }
 
-      @keyframes emergencyPulse {
-        0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
-        50% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
-      }
+        /* ===== SCROLL PROGRESS ===== */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--copper), var(--gold));
+            z-index: 10000;
+            transform-origin: left;
+            transform: scaleX(0);
+        }
 
-      .emergency-dot {
-        width: 8px;
-        height: 8px;
-        background: #ef4444;
-        border-radius: 50%;
-        animation: blink 1s infinite;
-      }
+        /* ===== NAVIGATION ===== */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 0;
+            transition: var(--transition);
+        }
 
-      @keyframes blink {
-        0%, 50% { opacity: 1; }
-        51%, 100% { opacity: 0.3; }
-      }
+        .nav.scrolled {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
 
-      /* Magnetic Button Effect */
-      .magnetic-btn {
-        transition: transform 0.2s ease-out;
-      }
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-      /* Counter Animation */
-      .count-up {
-        display: inline-block;
-      }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--copper), var(--bronze));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: var(--shadow-copper);
+        }
+
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--white);
+        }
+
+        .logo-text span {
+            color: var(--copper);
+        }
+
+        .nav-links {
+            display: none;
+            gap: 40px;
+        }
+
+        @media (min-width: 1024px) {
+            .nav-links { display: flex; }
+        }
+
+        .nav-links a {
+            color: var(--slate-300);
+            font-weight: 500;
+            font-size: 15px;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--copper);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--copper), var(--copper-dark));
+            color: var(--white);
+            padding: 12px 28px;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            box-shadow: var(--shadow-copper);
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .nav-cta { display: inline-flex; }
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 50px -10px rgba(199, 125, 74, 0.4);
+        }
+
+        /* Mobile Menu */
+        .mobile-toggle {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        @media (min-width: 1024px) {
+            .mobile-toggle { display: none; }
+        }
+
+        .mobile-toggle span {
+            width: 28px;
+            height: 2px;
+            background: var(--white);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        .mobile-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .mobile-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: var(--slate-800);
+            padding: 100px 40px 40px;
+            transition: var(--transition);
+            z-index: 999;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu a {
+            display: block;
+            font-size: 24px;
+            font-family: var(--font-display);
+            padding: 16px 0;
+            border-bottom: 1px solid var(--slate-700);
+            transition: var(--transition);
+        }
+
+        .mobile-menu a:hover {
+            color: var(--copper);
+            padding-left: 16px;
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 998;
+        }
+
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 140px 0 80px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: -2;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.3);
+        }
+
+        .hero-gradient {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(15, 23, 42, 0.95) 0%,
+                rgba(15, 23, 42, 0.7) 50%,
+                rgba(30, 41, 59, 0.9) 100%
+            );
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: rgba(199, 125, 74, 0.15);
+            border: 1px solid rgba(199, 125, 74, 0.3);
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--copper-light);
+            margin-bottom: 32px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--copper);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(40px, 8vw, 80px);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        .hero-title-line {
+            display: block;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--slate-400);
+            max-width: 560px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 18px 36px;
+            font-weight: 600;
+            font-size: 15px;
+            border-radius: var(--radius-full);
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--copper), var(--copper-dark));
+            color: var(--white);
+            box-shadow: var(--shadow-copper);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 30px 60px -15px rgba(199, 125, 74, 0.5);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--slate-600);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--copper);
+            color: var(--copper);
+        }
+
+        .btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hero Stats */
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--slate-700);
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-number {
+            font-family: var(--font-display);
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--copper);
+            line-height: 1;
+        }
+
+        .hero-stat-label {
+            font-size: 14px;
+            color: var(--slate-400);
+            margin-top: 8px;
+        }
+
+        /* Hero Floating Elements */
+        .hero-float {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            display: none;
+        }
+
+        @media (min-width: 1280px) {
+            .hero-float { display: block; }
+        }
+
+        .hero-float-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--slate-700);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            max-width: 280px;
+            animation: floatCard 6s ease-in-out infinite;
+        }
+
+        .hero-float-card:nth-child(2) {
+            margin-top: -40px;
+            margin-left: 60px;
+            animation-delay: -3s;
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .float-card-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--copper), var(--bronze));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .float-card-title {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .float-card-text {
+            font-size: 14px;
+            color: var(--slate-400);
+        }
+
+        /* ===== SERVICES ===== */
+        .services {
+            background: var(--slate-800);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 64px;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--copper);
+            margin-bottom: 16px;
+        }
+
+        .section-label::before,
+        .section-label::after {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--copper));
+        }
+
+        .section-label::after {
+            background: linear-gradient(90deg, var(--copper), transparent);
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--white);
+        }
+
+        .section-subtitle {
+            font-size: 17px;
+            color: var(--slate-400);
+            line-height: 1.7;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, var(--slate-700), var(--slate-800));
+            border: 1px solid var(--slate-600);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--copper), var(--gold));
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--copper);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, rgba(199, 125, 74, 0.2), rgba(199, 125, 74, 0.05));
+            border: 1px solid rgba(199, 125, 74, 0.3);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 24px;
+            transition: var(--transition);
+        }
+
+        .service-card:hover .service-icon {
+            background: linear-gradient(135deg, var(--copper), var(--copper-dark));
+            border-color: transparent;
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .service-title {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--white);
+        }
+
+        .service-text {
+            font-size: 15px;
+            color: var(--slate-400);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .service-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--copper);
+            transition: var(--transition);
+        }
+
+        .service-link:hover {
+            gap: 12px;
+        }
+
+        .service-link svg {
+            width: 16px;
+            height: 16px;
+            transition: var(--transition);
+        }
+
+        /* ===== WHY CHOOSE US ===== */
+        .why-us {
+            position: relative;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .why-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .why-image {
+            position: relative;
+        }
+
+        .why-image-main {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .why-image-main img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .why-image-badge {
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            background: linear-gradient(135deg, var(--copper), var(--copper-dark));
+            border-radius: var(--radius);
+            padding: 24px 32px;
+            text-align: center;
+            box-shadow: var(--shadow-copper);
+        }
+
+        .why-image-badge-number {
+            font-family: var(--font-display);
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1;
+        }
+
+        .why-image-badge-text {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+            margin-top: 4px;
+        }
+
+        .why-content {
+            padding-left: 0;
+        }
+
+        @media (min-width: 1024px) {
+            .why-content { padding-left: 40px; }
+        }
+
+        .why-list {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .why-item {
+            display: flex;
+            gap: 20px;
+            padding: 24px;
+            background: var(--slate-800);
+            border: 1px solid var(--slate-700);
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+
+        .why-item:hover {
+            border-color: var(--copper);
+            transform: translateX(8px);
+        }
+
+        .why-item-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(199, 125, 74, 0.2), transparent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .why-item-title {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--white);
+        }
+
+        .why-item-text {
+            font-size: 14px;
+            color: var(--slate-400);
+        }
+
+        /* ===== PROJECTS ===== */
+        .projects {
+            background: var(--slate-800);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .project-card {
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            cursor: pointer;
+            group: project;
+        }
+
+        .project-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .project-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .project-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.95), transparent 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 32px;
+            transition: var(--transition);
+        }
+
+        .project-card:hover .project-overlay {
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.4) 60%);
+        }
+
+        .project-tag {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(199, 125, 74, 0.2);
+            border: 1px solid var(--copper);
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--copper);
+            margin-bottom: 12px;
+            width: fit-content;
+        }
+
+        .project-title {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+
+        .project-location {
+            font-size: 14px;
+            color: var(--slate-400);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonials {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonials-wrapper {
+            position: relative;
+        }
+
+        .testimonial-card {
+            background: var(--slate-800);
+            border: 1px solid var(--slate-700);
+            border-radius: var(--radius-lg);
+            padding: 48px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+        }
+
+        .testimonial-quote {
+            position: absolute;
+            top: 24px;
+            left: 32px;
+            font-size: 80px;
+            font-family: var(--font-display);
+            color: var(--copper);
+            opacity: 0.3;
+            line-height: 1;
+        }
+
+        .testimonial-stars {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 24px;
+        }
+
+        .testimonial-stars svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--gold);
+        }
+
+        .testimonial-text {
+            font-size: 20px;
+            line-height: 1.8;
+            color: var(--slate-200);
+            margin-bottom: 32px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .testimonial-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--copper);
+        }
+
+        .testimonial-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .testimonial-info {
+            text-align: left;
+        }
+
+        .testimonial-name {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .testimonial-role {
+            font-size: 14px;
+            color: var(--slate-400);
+        }
+
+        /* ===== CTA SECTION ===== */
+        .cta-section {
+            background: linear-gradient(135deg, var(--copper), var(--copper-dark));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .cta-content {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-family: var(--font-display);
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 16px;
+        }
+
+        .cta-subtitle {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 40px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .btn-white {
+            background: var(--white);
+            color: var(--copper-dark);
+        }
+
+        .btn-white:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255,255,255,0.4);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--white);
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--slate-900);
+            border-top: 1px solid var(--slate-800);
+            padding: 80px 0 32px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 48px;
+            margin-bottom: 64px;
+        }
+
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+            }
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 20px;
+        }
+
+        .footer-brand p {
+            font-size: 15px;
+            color: var(--slate-400);
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+        }
+
+        .footer-social a {
+            width: 44px;
+            height: 44px;
+            background: var(--slate-800);
+            border: 1px solid var(--slate-700);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--slate-400);
+            transition: var(--transition);
+        }
+
+        .footer-social a:hover {
+            background: var(--copper);
+            border-color: var(--copper);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+
+        .footer-social svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .footer-column h4 {
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 24px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links a {
+            font-size: 15px;
+            color: var(--slate-400);
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--copper);
+            padding-left: 6px;
+        }
+
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid var(--slate-800);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .footer-bottom p {
+            font-size: 14px;
+            color: var(--slate-500);
+        }
+
+        .footer-bottom a {
+            color: var(--copper);
+        }
+
+        /* ===== FLOATING ELEMENTS ===== */
+        .floating-phone {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            z-index: 1000;
+        }
+
+        .floating-phone a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--copper), var(--copper-dark));
+            border-radius: 50%;
+            color: var(--white);
+            box-shadow: var(--shadow-copper);
+            transition: var(--transition);
+            animation: bounce 2s infinite;
+        }
+
+        .floating-phone a:hover {
+            transform: scale(1.1);
+            box-shadow: 0 25px 50px -10px rgba(199, 125, 74, 0.5);
+        }
+
+        .floating-phone svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .floating-whatsapp {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+        }
+
+        .floating-whatsapp a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            background: #25D366;
+            border-radius: 50%;
+            color: var(--white);
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+            transition: var(--transition);
+        }
+
+        .floating-whatsapp a:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.5);
+        }
+
+        .floating-whatsapp svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* Emergency Banner */
+        .emergency-banner {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--slate-700);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            max-width: 320px;
+            z-index: 999;
+            animation: slideInLeft 0.5s ease 2s both;
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .emergency-banner { display: block; }
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .emergency-banner-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .emergency-dot {
+            width: 10px;
+            height: 10px;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: emergencyPulse 1.5s infinite;
+        }
+
+        @keyframes emergencyPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+            50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        }
+
+        .emergency-title {
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 600;
+            color: #ef4444;
+        }
+
+        .emergency-text {
+            font-size: 14px;
+            color: var(--slate-400);
+            margin-bottom: 16px;
+        }
+
+        .emergency-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--copper);
+        }
+
+        .emergency-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: none;
+            border: none;
+            color: var(--slate-500);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .section {
+                padding: 80px 0;
+            }
+
+            .hero {
+                padding: 120px 0 60px;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                margin-top: 48px;
+            }
+
+            .hero-stat-number {
+                font-size: 36px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonial-card {
+                padding: 32px 24px;
+            }
+
+            .testimonial-text {
+                font-size: 17px;
+            }
+
+            .floating-phone {
+                bottom: 90px;
+                right: 16px;
+            }
+
+            .floating-phone a,
+            .floating-whatsapp a {
+                width: 56px;
+                height: 56px;
+            }
+
+            .floating-whatsapp {
+                right: 16px;
+            }
+        }
+
+        /* ===== ANIMATIONS ON SCROLL ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
     </style>
-
-    <!-- JSON-LD Schema.org Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "RoofingContractor",
-        "name": "AURUM ROOFING",
-        "description": "Premium roofing services in Manchester & Greater Manchester. Slate, tile, flat roofing, repairs & restoration for high-value properties.",
-        "url": "https://www.aurumroofing.co.uk",
-        "telephone": "+44-XXXX-XXXXXX",
-        "email": "info@aurumroofing.co.uk",
-        "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "STREET_ADDRESS_PLACEHOLDER",
-            "addressLocality": "Manchester",
-            "addressRegion": "Greater Manchester",
-            "postalCode": "POSTCODE_PLACEHOLDER",
-            "addressCountry": "GB"
-        },
-        "geo": {
-            "@type": "GeoCoordinates",
-            "latitude": "53.4808",
-            "longitude": "-2.2426"
-        },
-        "areaServed": ["Manchester", "Salford", "Stockport", "Bolton", "Oldham", "Altrincham", "Didsbury", "Chorlton"],
-        "openingHoursSpecification": {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-            "opens": "08:00",
-            "closes": "18:00"
-        },
-        "priceRange": "$$$$",
-        "image": "https://www.aurumroofing.co.uk/images/og-image.jpg"
-    }
-    </script>
-
-    <!-- GOOGLE ANALYTICS: Add your GA4 tracking code here
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-XXXXXXXXXX');
-    </script>
-    -->
 </head>
 <body>
-    <!-- Scroll Progress Bar -->
+    <!-- Background Elements -->
+    <div class="bg-pattern"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- Scroll Progress -->
     <div class="scroll-progress" id="scroll-progress"></div>
 
-    <!-- Skip to main content for accessibility -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-
-    <!-- Sticky WhatsApp Button -->
-    <a href="https://wa.me/44XXXXXXXXXX?text=Hi,%20I%27d%20like%20to%20enquire%20about%20roofing%20services" class="sticky-whatsapp" target="_blank" aria-label="Contact us on WhatsApp">
-      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    </a>
-
-    <!-- Weather Banner -->
-    <div class="weather-banner" id="weather-banner">
-      <button class="weather-close" onclick="this.parentElement.style.display='none'">&times;</button>
-      <span class="weather-icon" id="weather-icon">🌧️</span>
-      <span class="weather-text" id="weather-text">
-        <strong>Rain expected this week!</strong><br>
-        Perfect time to check your roof.
-      </span>
-    </div>
-
-    <!-- TOP BAR -->
-    <div class="top-bar">
-        <div class="container top-bar__inner">
-            <div class="top-bar__contact">
-                <a href="tel:+44XXXXXXXXXX" class="top-bar__phone" aria-label="Call us">
-                    <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                    </svg>
-                    <span>+44 XXXX XXXXXX</span>
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="container">
+            <div class="nav-inner">
+                <a href="#" class="logo">
+                    <div class="logo-icon">🏠</div>
+                    <div class="logo-text">AURUM<span>.</span></div>
                 </a>
-                <span class="top-bar__divider" aria-hidden="true">|</span>
-                <span class="top-bar__emergency">
-                    <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+
+                <div class="nav-links">
+                    <a href="#services">Services</a>
+                    <a href="#about">About</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#testimonials">Reviews</a>
+                    <a href="#contact">Contact</a>
+                </div>
+
+                <a href="tel:+447123456789" class="nav-cta">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px">
+                        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
                     </svg>
-                    24/7 Emergency Service
-                </span>
+                    Call Now
+                </a>
+
+                <button class="mobile-toggle" id="mobile-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
-            <a href="#quote" class="btn btn--small btn--gold">Request a Quote</a>
         </div>
-    </div>
-
-    <!-- HEADER / NAVIGATION -->
-    <header class="header" id="header">
-        <div class="container header__inner">
-            <a href="/" class="header__logo" aria-label="AURUM ROOFING - Home">
-                <span class="logo-text">AURUM</span>
-                <span class="logo-accent">ROOFING</span>
-            </a>
-            <button class="header__menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav">
-                <span class="hamburger"></span>
-            </button>
-            <nav class="header__nav" id="main-nav" aria-label="Main navigation">
-                <ul class="nav-list">
-                    <li><a href="#services" class="nav-link">Services</a></li>
-                    <li><a href="#projects" class="nav-link">Projects</a></li>
-                    <li><a href="#reviews" class="nav-link">Reviews</a></li>
-                    <li><a href="#areas" class="nav-link">Areas</a></li>
-                    <li><a href="#contact" class="nav-link">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <!-- MOBILE NAVIGATION -->
-    <div class="mobile-nav__overlay"></div>
-    <nav class="mobile-nav" aria-label="Mobile navigation">
-        <ul class="mobile-nav__list">
-            <li><a href="#services" class="mobile-nav__link">Services</a></li>
-            <li><a href="#projects" class="mobile-nav__link">Projects</a></li>
-            <li><a href="#reviews" class="mobile-nav__link">Reviews</a></li>
-            <li><a href="#areas" class="mobile-nav__link">Areas</a></li>
-            <li><a href="#contact" class="mobile-nav__link">Contact</a></li>
-            <li><a href="#quote" class="mobile-nav__link mobile-nav__link--cta">Get a Quote</a></li>
-        </ul>
     </nav>
 
-    <!-- HERO SECTION -->
-    <section class="hero" id="hero">
-        <div class="hero__background" data-parallax></div>
-        <div class="hero__overlay"></div>
-        <div class="container hero__content">
-            <div class="emergency-pulse" data-aos="fade-down" data-aos-delay="100">
-                <span class="emergency-dot"></span>
-                24/7 Emergency Callouts Available
-            </div>
-            <span class="hero__badge animate-fade-in" data-aos="fade-down" data-aos-delay="200">
-                <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                </svg>
-                Fully Insured • 10+ Years • Guaranteed Work
-            </span>
-            <h1 class="hero__title animate-fade-in-up">
-                Luxury Roofing & Restoration<br><span class="text-gold">in Manchester</span>
-            </h1>
-            <p class="hero__subtitle animate-fade-in-up">
-                Craftsmanship, premium materials, and flawless finishes<br>for high-value properties.
-            </p>
-            <div class="hero__cta animate-fade-in-up">
-                <a href="#quote" class="btn btn--primary btn--large">Request a Private Quote</a>
-                <a href="#projects" class="btn btn--outline btn--large">View Projects</a>
+    <!-- Mobile Menu -->
+    <div class="mobile-overlay" id="mobile-overlay"></div>
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#services">Services</a>
+        <a href="#about">About Us</a>
+        <a href="#projects">Projects</a>
+        <a href="#testimonials">Reviews</a>
+        <a href="#contact">Contact</a>
+        <a href="tel:+447123456789" style="color: var(--copper); margin-top: 24px; border: none;">
+            📞 Call: 07123 456 789
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <img src="https://images.unsplash.com/photo-1632759145363-7d7e0d8a903d?w=1920&q=80" alt="Premium Roofing">
+        </div>
+        <div class="hero-gradient"></div>
+
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="hero-badge-dot"></span>
+                    15+ Years of Excellence
+                </div>
+
+                <h1 class="hero-title">
+                    <span class="hero-title-line">Premium Roofing</span>
+                    <span class="hero-title-line"><span class="gradient-text">Craftsmanship</span></span>
+                </h1>
+
+                <p class="hero-subtitle">
+                    Manchester's most trusted roofing specialists. We deliver exceptional quality,
+                    unmatched expertise, and lasting protection for your property.
+                </p>
+
+                <div class="hero-cta">
+                    <a href="#contact" class="btn btn-primary">
+                        Get Free Quote
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                    <a href="#projects" class="btn btn-outline">
+                        View Our Work
+                    </a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-number" data-count="500">500+</div>
+                        <div class="hero-stat-label">Projects Completed</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number" data-count="15">15+</div>
+                        <div class="hero-stat-label">Years Experience</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number" data-count="100">100%</div>
+                        <div class="hero-stat-label">Satisfaction Rate</div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="hero__scroll-indicator" aria-hidden="true">
-            <span>Scroll</span>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 5v14M19 12l-7 7-7-7"/>
-            </svg>
+
+        <!-- Floating Cards -->
+        <div class="hero-float">
+            <div class="hero-float-card">
+                <div class="float-card-icon">⚡</div>
+                <div class="float-card-title">Emergency Service</div>
+                <div class="float-card-text">24/7 rapid response for urgent roof repairs</div>
+            </div>
+            <div class="hero-float-card">
+                <div class="float-card-icon">✓</div>
+                <div class="float-card-title">Fully Insured</div>
+                <div class="float-card-text">£5M public liability coverage</div>
+            </div>
         </div>
     </section>
 
-    <!-- MAIN CONTENT -->
-    <main id="main-content">
+    <!-- Services Section -->
+    <section class="section services" id="services">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Our Services</div>
+                <h2 class="section-title">Expert Roofing Solutions</h2>
+                <p class="section-subtitle">From traditional slate to modern flat roofing, we deliver excellence in every project.</p>
+            </div>
 
-        <!-- TRUST SECTION -->
-        <section class="trust" aria-labelledby="trust-heading">
-            <div class="container">
-                <h2 id="trust-heading" class="sr-only">Why Choose Us</h2>
-                <div class="trust__grid">
-                    <div class="trust__card" data-animate data-aos="fade-up" data-aos-delay="100">
-                        <div class="trust__icon">
-                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                <path d="M24 4L6 12v12c0 11 8 17 18 20 10-3 18-9 18-20V12L24 4z"/>
-                                <path d="M16 24l6 6 10-12"/>
+            <div class="services-grid">
+                <div class="service-card reveal reveal-delay-1">
+                    <div class="service-icon">🏛️</div>
+                    <h3 class="service-title">Slate Roofing</h3>
+                    <p class="service-text">Traditional Welsh and Spanish slate installation with precision craftsmanship for timeless elegance.</p>
+                    <a href="#contact" class="service-link">
+                        Learn More
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="service-card reveal reveal-delay-2">
+                    <div class="service-icon">🏠</div>
+                    <h3 class="service-title">Tile Roofing</h3>
+                    <p class="service-text">Clay and concrete tile solutions with expert fitting and long-lasting durability guaranteed.</p>
+                    <a href="#contact" class="service-link">
+                        Learn More
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="service-card reveal reveal-delay-3">
+                    <div class="service-icon">📐</div>
+                    <h3 class="service-title">Flat Roofing</h3>
+                    <p class="service-text">EPDM, GRP, and felt systems with 20+ year guarantees for modern properties.</p>
+                    <a href="#contact" class="service-link">
+                        Learn More
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="service-card reveal reveal-delay-1">
+                    <div class="service-icon">🔧</div>
+                    <h3 class="service-title">Roof Repairs</h3>
+                    <p class="service-text">Swift, effective repairs for leaks, damaged tiles, and storm damage restoration.</p>
+                    <a href="#contact" class="service-link">
+                        Learn More
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="service-card reveal reveal-delay-2">
+                    <div class="service-icon">🏗️</div>
+                    <h3 class="service-title">Chimney Work</h3>
+                    <p class="service-text">Repointing, rebuilding, lead flashing, and cowl installation by specialists.</p>
+                    <a href="#contact" class="service-link">
+                        Learn More
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="service-card reveal reveal-delay-3">
+                    <div class="service-icon">🌧️</div>
+                    <h3 class="service-title">Guttering</h3>
+                    <p class="service-text">Complete gutter installation, repair, cleaning and downpipe solutions.</p>
+                    <a href="#contact" class="service-link">
+                        Learn More
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="section why-us" id="about">
+        <div class="container">
+            <div class="why-grid">
+                <div class="why-image reveal">
+                    <div class="why-image-main">
+                        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80" alt="Professional Roofers">
+                    </div>
+                    <div class="why-image-badge">
+                        <div class="why-image-badge-number">15+</div>
+                        <div class="why-image-badge-text">Years Experience</div>
+                    </div>
+                </div>
+
+                <div class="why-content reveal">
+                    <div class="section-label" style="justify-content: flex-start;">Why Choose Us</div>
+                    <h2 class="section-title" style="text-align: left;">Manchester's Most Trusted Roofers</h2>
+                    <p class="section-subtitle" style="text-align: left; margin: 0;">We combine traditional craftsmanship with modern techniques to deliver roofing solutions that stand the test of time.</p>
+
+                    <div class="why-list">
+                        <div class="why-item">
+                            <div class="why-item-icon">🏆</div>
+                            <div>
+                                <div class="why-item-title">Award-Winning Quality</div>
+                                <div class="why-item-text">Recognized for excellence in roofing craftsmanship</div>
+                            </div>
+                        </div>
+
+                        <div class="why-item">
+                            <div class="why-item-icon">🛡️</div>
+                            <div>
+                                <div class="why-item-title">Fully Guaranteed</div>
+                                <div class="why-item-text">Up to 20 years warranty on all installations</div>
+                            </div>
+                        </div>
+
+                        <div class="why-item">
+                            <div class="why-item-icon">⚡</div>
+                            <div>
+                                <div class="why-item-title">Rapid Response</div>
+                                <div class="why-item-text">Emergency service available 24/7</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="section projects" id="projects">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Our Portfolio</div>
+                <h2 class="section-title">Recent Projects</h2>
+                <p class="section-subtitle">Explore our latest roofing transformations across Greater Manchester.</p>
+            </div>
+
+            <div class="projects-grid">
+                <div class="project-card reveal reveal-delay-1">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="Victorian Restoration">
+                    <div class="project-overlay">
+                        <div class="project-tag">Slate Roofing</div>
+                        <h3 class="project-title">Victorian Villa Restoration</h3>
+                        <div class="project-location">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
                             </svg>
+                            Didsbury, Manchester
                         </div>
-                        <h3 class="trust__title">Industry Standards</h3>
-                        <p class="trust__text">Working to recognised industry practices with a commitment to excellence in every project.</p>
                     </div>
-                    <div class="trust__card" data-animate data-aos="fade-up" data-aos-delay="200">
-                        <div class="trust__icon">
-                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                <rect x="6" y="20" width="36" height="22" rx="2"/>
-                                <path d="M14 20V12a10 10 0 0 1 20 0v8"/>
-                                <circle cx="24" cy="31" r="3"/>
+                </div>
+
+                <div class="project-card reveal reveal-delay-2">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80" alt="Modern Extension">
+                    <div class="project-overlay">
+                        <div class="project-tag">Flat Roofing</div>
+                        <h3 class="project-title">Modern Extension EPDM</h3>
+                        <div class="project-location">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
                             </svg>
+                            Altrincham
                         </div>
-                        <h3 class="trust__title">Premium Materials</h3>
-                        <p class="trust__text">We source only the finest materials from trusted suppliers, ensuring durability and aesthetic appeal.</p>
                     </div>
-                    <div class="trust__card" data-animate data-aos="fade-up" data-aos-delay="300">
-                        <div class="trust__icon">
-                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                <circle cx="24" cy="24" r="18"/>
-                                <path d="M24 14v10l7 7"/>
+                </div>
+
+                <div class="project-card reveal reveal-delay-3">
+                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80" alt="Full Reroof">
+                    <div class="project-overlay">
+                        <div class="project-tag">Tile Roofing</div>
+                        <h3 class="project-title">Complete Tile Reroof</h3>
+                        <div class="project-location">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
                             </svg>
-                        </div>
-                        <h3 class="trust__title">Detailed Surveys</h3>
-                        <p class="trust__text">Comprehensive roof inspections with detailed reports, ensuring no issue goes unnoticed.</p>
-                    </div>
-                    <div class="trust__card" data-animate data-aos="fade-up" data-aos-delay="400">
-                        <div class="trust__icon">
-                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                <path d="M8 38h32"/><path d="M12 38V20l12-10 12 10v18"/><path d="M20 38v-10h8v10"/>
-                            </svg>
-                        </div>
-                        <h3 class="trust__title">Long-term Guarantees</h3>
-                        <p class="trust__text">Peace of mind with comprehensive workmanship guarantees on all our roofing projects.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SERVICES SECTION -->
-        <section class="services" id="services" aria-labelledby="services-heading">
-            <div class="container">
-                <header class="section-header" data-aos="fade-up">
-                    <span class="section-label">What We Offer</span>
-                    <h2 id="services-heading" class="section-title">Our Premium Services</h2>
-                    <p class="section-subtitle">Comprehensive roofing solutions tailored for discerning property owners across Greater Manchester.</p>
-                </header>
-                <div class="services__grid">
-                    <article class="service-card" data-animate>
-                        <div class="service-card__image">
-                            <img src="images/service-slate.jpg" alt="Slate and tile roofing work" loading="lazy" width="400" height="300">
-                        </div>
-                        <div class="service-card__content">
-                            <h3 class="service-card__title">Slate & Tile Roofing</h3>
-                            <p class="service-card__text">Traditional craftsmanship meets modern precision. We specialise in natural slate and premium tile installations for heritage and contemporary properties.</p>
-                            <a href="#quote" class="service-card__link">Learn more <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-                        </div>
-                    </article>
-                    <article class="service-card" data-animate>
-                        <div class="service-card__image">
-                            <img src="https://images.unsplash.com/photo-1632759145351-1d592919f522?w=800&h=600&fit=crop" alt="Flat roofing installation" loading="lazy" width="400" height="300">
-                        </div>
-                        <div class="service-card__content">
-                            <h3 class="service-card__title">Flat Roofing (EPDM/GRP)</h3>
-                            <p class="service-card__text">Advanced flat roofing systems using EPDM rubber and fibreglass. Seamless, weatherproof solutions with exceptional longevity.</p>
-                            <a href="#quote" class="service-card__link">Learn more <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-                        </div>
-                    </article>
-                    <article class="service-card" data-animate>
-                        <div class="service-card__image">
-                            <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop" alt="Roof repair and leak detection" loading="lazy" width="400" height="300">
-                        </div>
-                        <div class="service-card__content">
-                            <h3 class="service-card__title">Roof Repairs & Leak Detection</h3>
-                            <p class="service-card__text">Swift, thorough diagnostics and lasting repairs. We identify the root cause and resolve issues before they escalate.</p>
-                            <a href="#quote" class="service-card__link">Learn more <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-                        </div>
-                    </article>
-                    <article class="service-card" data-animate>
-                        <div class="service-card__image">
-                            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop" alt="Chimney and leadwork" loading="lazy" width="400" height="300">
-                        </div>
-                        <div class="service-card__content">
-                            <h3 class="service-card__title">Chimney & Leadwork</h3>
-                            <p class="service-card__text">Expert chimney stack repairs, re-pointing, and traditional lead flashing. Meticulous attention to detail for watertight results.</p>
-                            <a href="#quote" class="service-card__link">Learn more <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-                        </div>
-                    </article>
-                    <article class="service-card" data-animate>
-                        <div class="service-card__image">
-                            <img src="https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=800&h=600&fit=crop" alt="Guttering and fascias" loading="lazy" width="400" height="300">
-                        </div>
-                        <div class="service-card__content">
-                            <h3 class="service-card__title">Guttering & Fascias</h3>
-                            <p class="service-card__text">Complete rainwater systems in aluminium, cast iron, or uPVC. Precision-fitted to protect and enhance your property.</p>
-                            <a href="#quote" class="service-card__link">Learn more <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-                        </div>
-                    </article>
-                    <article class="service-card" data-animate>
-                        <div class="service-card__image">
-                            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=600&fit=crop" alt="Roof restoration" loading="lazy" width="400" height="300">
-                        </div>
-                        <div class="service-card__content">
-                            <h3 class="service-card__title">Roof Restoration</h3>
-                            <p class="service-card__text">Breathe new life into aging roofs. Comprehensive restoration services that preserve character while ensuring modern performance.</p>
-                            <a href="#quote" class="service-card__link">Learn more <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- PROCESS SECTION -->
-        <section class="process" aria-labelledby="process-heading">
-            <div class="container">
-                <header class="section-header section-header--light" data-aos="fade-up">
-                    <span class="section-label">How We Work</span>
-                    <h2 id="process-heading" class="section-title">Our Signature Process</h2>
-                    <p class="section-subtitle">A seamless journey from initial consultation to project completion.</p>
-                </header>
-                <div class="process__timeline">
-                    <div class="process__step" data-animate>
-                        <div class="process__number">01</div>
-                        <div class="process__content">
-                            <h3 class="process__title">Survey & Consultation</h3>
-                            <p class="process__text">We conduct a thorough on-site assessment, discussing your requirements and inspecting every detail of your roof.</p>
-                        </div>
-                    </div>
-                    <div class="process__step" data-animate>
-                        <div class="process__number">02</div>
-                        <div class="process__content">
-                            <h3 class="process__title">Proposal & Materials</h3>
-                            <p class="process__text">You receive a comprehensive quote with material options, timeline, and transparent pricing—no hidden costs.</p>
-                        </div>
-                    </div>
-                    <div class="process__step" data-animate>
-                        <div class="process__number">03</div>
-                        <div class="process__content">
-                            <h3 class="process__title">Scheduled Works</h3>
-                            <p class="process__text">Our skilled craftsmen execute the project with precision, keeping you informed at every stage.</p>
-                        </div>
-                    </div>
-                    <div class="process__step" data-animate>
-                        <div class="process__number">04</div>
-                        <div class="process__content">
-                            <h3 class="process__title">Final Inspection & Guarantee</h3>
-                            <p class="process__text">We complete a detailed walkthrough, ensure your satisfaction, and provide your workmanship guarantee.</p>
+                            Sale, Greater Manchester
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- PROJECTS SECTION -->
-        <section class="projects" id="projects" aria-labelledby="projects-heading">
-            <div class="container">
-                <header class="section-header" data-aos="fade-up">
-                    <span class="section-label">Our Work</span>
-                    <h2 id="projects-heading" class="section-title">Featured Projects</h2>
-                    <p class="section-subtitle">A selection of our recent work across Greater Manchester.</p>
-                </header>
-                <div class="projects__grid">
-                    <div class="project-card project-card--placeholder" data-animate>
-                        <div class="project-card__image">
-                            <div class="placeholder-box">
-                                <span class="placeholder-text">YOUR<br>PROJECT</span>
-                                <span class="placeholder-subtext">Client photo #1</span>
-                            </div>
-                        </div>
-                        <div class="project-card__overlay">
-                            <span class="project-card__title">Project Title</span>
-                            <span class="project-card__location">Location</span>
-                        </div>
+    <!-- Testimonials -->
+    <section class="section testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Testimonials</div>
+                <h2 class="section-title">What Our Clients Say</h2>
+            </div>
+
+            <div class="testimonials-wrapper reveal">
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <div class="testimonial-stars">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                     </div>
-                    <div class="project-card project-card--placeholder" data-animate>
-                        <div class="project-card__image">
-                            <div class="placeholder-box">
-                                <span class="placeholder-text">YOUR<br>PROJECT</span>
-                                <span class="placeholder-subtext">Client photo #2</span>
-                            </div>
+                    <p class="testimonial-text">
+                        "Absolutely outstanding work. The team completely transformed our Victorian home's roof.
+                        Professional, punctual, and the craftsmanship is impeccable. Highly recommend!"
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="James Wilson">
                         </div>
-                        <div class="project-card__overlay">
-                            <span class="project-card__title">Project Title</span>
-                            <span class="project-card__location">Location</span>
-                        </div>
-                    </div>
-                    <div class="project-card project-card--placeholder" data-animate>
-                        <div class="project-card__image">
-                            <div class="placeholder-box">
-                                <span class="placeholder-text">YOUR<br>PROJECT</span>
-                                <span class="placeholder-subtext">Client photo #3</span>
-                            </div>
-                        </div>
-                        <div class="project-card__overlay">
-                            <span class="project-card__title">Project Title</span>
-                            <span class="project-card__location">Location</span>
-                        </div>
-                    </div>
-                    <div class="project-card project-card--placeholder" data-animate>
-                        <div class="project-card__image">
-                            <div class="placeholder-box">
-                                <span class="placeholder-text">YOUR<br>PROJECT</span>
-                                <span class="placeholder-subtext">Client photo #4</span>
-                            </div>
-                        </div>
-                        <div class="project-card__overlay">
-                            <span class="project-card__title">Project Title</span>
-                            <span class="project-card__location">Location</span>
-                        </div>
-                    </div>
-                    <div class="project-card project-card--placeholder" data-animate>
-                        <div class="project-card__image">
-                            <div class="placeholder-box">
-                                <span class="placeholder-text">YOUR<br>PROJECT</span>
-                                <span class="placeholder-subtext">Client photo #5</span>
-                            </div>
-                        </div>
-                        <div class="project-card__overlay">
-                            <span class="project-card__title">Project Title</span>
-                            <span class="project-card__location">Location</span>
-                        </div>
-                    </div>
-                    <div class="project-card project-card--placeholder" data-animate>
-                        <div class="project-card__image">
-                            <div class="placeholder-box">
-                                <span class="placeholder-text">YOUR<br>PROJECT</span>
-                                <span class="placeholder-subtext">Client photo #6</span>
-                            </div>
-                        </div>
-                        <div class="project-card__overlay">
-                            <span class="project-card__title">Project Title</span>
-                            <span class="project-card__location">Location</span>
+                        <div class="testimonial-info">
+                            <div class="testimonial-name">James Wilson</div>
+                            <div class="testimonial-role">Homeowner, Didsbury</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- REVIEWS SECTION -->
-        <section class="reviews" id="reviews" aria-labelledby="reviews-heading">
-            <div class="container">
-                <header class="section-header section-header--light" data-aos="fade-up">
-                    <span class="section-label">Testimonials</span>
-                    <h2 id="reviews-heading" class="section-title">What Our Clients Say</h2>
-                    <div class="reviews__rating">
-                        <div class="stars" aria-label="5 out of 5 stars">
-                            <svg class="star" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        </div>
-                        <span class="reviews__average">5.0 Average Rating</span>
-                        <span class="reviews__count">Based on XX local reviews</span>
-                    </div>
-                </header>
-                <div class="reviews__grid">
-                    <blockquote class="review-card" data-animate>
-                        <div class="review-card__stars" aria-label="5 stars">
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        </div>
-                        <p class="review-card__text">"Absolutely outstanding work on our Victorian terrace. The team were professional from start to finish, and the attention to detail was remarkable. Our slate roof looks better than when the house was built!"</p>
-                        <footer class="review-card__author"><strong>James & Sarah T.</strong><span>Didsbury, Manchester</span></footer>
-                    </blockquote>
-                    <blockquote class="review-card" data-animate>
-                        <div class="review-card__stars" aria-label="5 stars">
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        </div>
-                        <p class="review-card__text">"We had a complex leak issue that three other roofers couldn't solve. AURUM diagnosed the problem within an hour and fixed it properly. Worth every penny for their expertise and thoroughness."</p>
-                        <footer class="review-card__author"><strong>Dr. Michael R.</strong><span>Altrincham</span></footer>
-                    </blockquote>
-                    <blockquote class="review-card" data-animate>
-                        <div class="review-card__stars" aria-label="5 stars">
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        </div>
-                        <p class="review-card__text">"Impeccable service from the initial survey to completion. The flat roof on our extension is flawless—not a single issue after two Manchester winters. Highly recommend to anyone seeking quality."</p>
-                        <footer class="review-card__author"><strong>Emma L.</strong><span>Stockport</span></footer>
-                    </blockquote>
-                    <blockquote class="review-card" data-animate>
-                        <div class="review-card__stars" aria-label="5 stars">
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        </div>
-                        <p class="review-card__text">"Called for an emergency repair during a storm and they were there within hours. Professional, courteous, and clearly knew what they were doing. The temporary fix held perfectly until the full repair."</p>
-                        <footer class="review-card__author"><strong>Robert & Anne K.</strong><span>Bolton</span></footer>
-                    </blockquote>
-                    <blockquote class="review-card" data-animate>
-                        <div class="review-card__stars" aria-label="5 stars">
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        </div>
-                        <p class="review-card__text">"Our listed building required sensitive restoration work. AURUM understood the heritage requirements perfectly and sourced matching Welsh slate. The council officer was impressed with the result."</p>
-                        <footer class="review-card__author"><strong>The Heritage Trust</strong><span>Manchester City Centre</span></footer>
-                    </blockquote>
-                </div>
-                <div class="reviews__cta">
-                    <a href="#" class="btn btn--outline btn--light">See All Reviews</a>
+    <!-- CTA Section -->
+    <section class="section cta-section" id="contact">
+        <div class="container">
+            <div class="cta-content reveal">
+                <h2 class="cta-title">Ready to Transform Your Roof?</h2>
+                <p class="cta-subtitle">Get a free, no-obligation quote today. Our experts are ready to help.</p>
+                <div class="cta-buttons">
+                    <a href="tel:+447123456789" class="btn btn-white">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px">
+                            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+                        </svg>
+                        Call: 07123 456 789
+                    </a>
+                    <a href="mailto:info@aurumroofing.co.uk" class="btn btn-ghost">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                        Email Us
+                    </a>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- WEBSITE FEATURES SECTION - Portfolio Showcase -->
-        <section class="features" id="features" aria-labelledby="features-heading">
-            <div class="container">
-                <header class="section-header">
-                    <span class="section-label section-label--highlight">🚀 Website Features</span>
-                    <h2 id="features-heading" class="section-title">What's Included In This Website</h2>
-                    <p class="section-subtitle">Every website we build comes with powerful features to help you convert visitors into customers.</p>
-                </header>
-
-                <div class="features__grid">
-                    <!-- Feature 1: WhatsApp -->
-                    <div class="feature-card feature-card--active" data-animate>
-                        <div class="feature-card__icon feature-card__icon--whatsapp">
-                            <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/></svg>
-                        </div>
-                        <h3 class="feature-card__title">WhatsApp Live Chat</h3>
-                        <p class="feature-card__text">Instant messaging directly to your phone. Customers click → you receive messages on WhatsApp.</p>
-                        <span class="feature-card__badge">Included ✓</span>
-                    </div>
-
-                    <!-- Feature 2: Contact Form -->
-                    <div class="feature-card feature-card--active" data-animate>
-                        <div class="feature-card__icon feature-card__icon--form">
-                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                        </div>
-                        <h3 class="feature-card__title">Smart Contact Form</h3>
-                        <p class="feature-card__text">Enquiries sent directly to your email. No spam, instant notifications, lead capture.</p>
-                        <span class="feature-card__badge">Included ✓</span>
-                    </div>
-
-                    <!-- Feature 3: Google Maps -->
-                    <div class="feature-card feature-card--active" data-animate>
-                        <div class="feature-card__icon feature-card__icon--map">
-                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        </div>
-                        <h3 class="feature-card__title">Google Maps Integration</h3>
-                        <p class="feature-card__text">Interactive map showing your service areas. Helps local customers find you.</p>
-                        <span class="feature-card__badge">Included ✓</span>
-                    </div>
-
-                    <!-- Feature 4: Mobile Responsive -->
-                    <div class="feature-card feature-card--active" data-animate>
-                        <div class="feature-card__icon feature-card__icon--mobile">
-                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-                        </div>
-                        <h3 class="feature-card__title">Mobile-First Design</h3>
-                        <p class="feature-card__text">Perfect on phones, tablets & desktops. 70% of your visitors are on mobile.</p>
-                        <span class="feature-card__badge">Included ✓</span>
-                    </div>
-
-                    <!-- Feature 5: SEO -->
-                    <div class="feature-card feature-card--active" data-animate>
-                        <div class="feature-card__icon feature-card__icon--seo">
-                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                        </div>
-                        <h3 class="feature-card__title">Local SEO Optimised</h3>
-                        <p class="feature-card__text">Built for Google rankings. Schema markup, meta tags, fast loading - all included.</p>
-                        <span class="feature-card__badge">Included ✓</span>
-                    </div>
-
-                    <!-- Feature 6: Analytics -->
-                    <div class="feature-card feature-card--active" data-animate>
-                        <div class="feature-card__icon feature-card__icon--analytics">
-                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-                        </div>
-                        <h3 class="feature-card__title">Google Analytics</h3>
-                        <p class="feature-card__text">Track visitors, see what works, understand your customers. Data-driven decisions.</p>
-                        <span class="feature-card__badge">Included ✓</span>
-                    </div>
-
-                    <!-- Feature 7: Booking -->
-                    <div class="feature-card feature-card--active" data-animate>
-                        <div class="feature-card__icon feature-card__icon--calendar">
-                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                        </div>
-                        <h3 class="feature-card__title">Online Booking</h3>
-                        <p class="feature-card__text">Calendly integration. Customers book inspection times directly - syncs with your calendar.</p>
-                        <span class="feature-card__badge">Included ✓</span>
-                    </div>
-
-                    <!-- Feature 8: Reviews -->
-                    <div class="feature-card feature-card--active" data-animate>
-                        <div class="feature-card__icon feature-card__icon--reviews">
-                            <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        </div>
-                        <h3 class="feature-card__title">Google Reviews Widget</h3>
-                        <p class="feature-card__text">Display your 5-star reviews automatically. Social proof that converts visitors.</p>
-                        <span class="feature-card__badge">Included ✓</span>
-                    </div>
-                </div>
-
-                <div class="features__cta">
-                    <p class="features__cta-text">Want a website like this for your roofing business?</p>
-                    <a href="#quote" class="btn btn--primary btn--large">Get Your Custom Quote</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- GRINDARE STUDIO - SERVICES SECTION -->
-        <section class="studio-promo" id="studio">
-            <div class="container">
-                <a href="../../" class="studio-promo__badge" style="text-decoration: none; color: inherit;">
-                    <span class="studio-promo__made-by">Website crafted by</span>
-                    <span class="studio-promo__logo">GRINDARE STUDIO</span>
-                </a>
-
-                <div class="studio-promo__content">
-                    <div class="studio-promo__intro">
-                        <h2 class="studio-promo__title">Premium Websites for Trade Businesses</h2>
-                        <p class="studio-promo__text">We specialise in creating high-converting websites for roofing companies, builders, electricians, and trade professionals. No templates — every site is custom-built to showcase your work and generate leads.</p>
-                        <p class="studio-promo__custom"><strong>100% Customisable:</strong> Style, colours, layout, and features — everything is tailored to your brand and preferences. Additional features available on request.</p>
-                    </div>
-
-                    <div class="studio-promo__services" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
-                        <!-- Starter -->
-                        <div class="service-option">
-                            <div class="service-option__header">
-                                <h3 class="service-option__title">Starter</h3>
-                                <p class="service-option__price"><strong>£499</strong></p>
-                            </div>
-                            <ul class="service-option__features">
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Single page website</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Mobile responsive</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Contact form & WhatsApp</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Basic SEO setup</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Google Maps integration</li>
-                                <li class="feature-highlight"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>1 month free support</li>
-                            </ul>
-                            <a href="https://grindarestudio.com/services.html#starter" class="btn btn--outline btn--full" target="_blank" rel="noopener">Learn More</a>
-                        </div>
-
-                        <!-- Business -->
-                        <div class="service-option service-option--featured">
-                            <div class="service-option__header">
-                                <span class="service-option__badge">Most Popular</span>
-                                <h3 class="service-option__title">Business</h3>
-                                <p class="service-option__price"><strong>£899</strong></p>
-                            </div>
-                            <ul class="service-option__features">
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Up to 5 pages</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Premium custom design</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>WhatsApp live chat</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Full SEO optimization</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Google Analytics setup</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Image gallery / portfolio</li>
-                                <li class="feature-highlight"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>3 months free support</li>
-                            </ul>
-                            <a href="https://grindarestudio.com/services.html#business" class="btn btn--primary btn--full" target="_blank" rel="noopener">Learn More</a>
-                        </div>
-
-                        <!-- Premium -->
-                        <div class="service-option">
-                            <div class="service-option__header">
-                                <h3 class="service-option__title">Premium</h3>
-                                <p class="service-option__price"><strong>£1,499</strong></p>
-                            </div>
-                            <ul class="service-option__features">
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Unlimited pages</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Bespoke design & branding</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Advanced animations</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Blog / news section</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Full SEO + local SEO</li>
-                                <li class="feature-highlight"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>6 months free support</li>
-                            </ul>
-                            <a href="https://grindarestudio.com/services.html#premium" class="btn btn--outline btn--full" target="_blank" rel="noopener">Learn More</a>
-                        </div>
-                    </div>
-
-                    <!-- Add-ons row -->
-                    <div class="studio-promo__services" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px;">
-                        <div class="service-option">
-                            <div class="service-option__header">
-                                <span class="service-option__badge service-option__badge--addon">Add-on</span>
-                                <h3 class="service-option__title">Monthly Care</h3>
-                                <p class="service-option__price"><strong>£79</strong>/month</p>
-                            </div>
-                            <ul class="service-option__features">
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Content updates (2/month)</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Security & backups</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Priority support</li>
-                            </ul>
-                            <a href="https://grindarestudio.com/services.html#monthly-care" class="btn btn--outline btn--full" target="_blank" rel="noopener">Learn More</a>
-                        </div>
-
-                        <div class="service-option">
-                            <div class="service-option__header">
-                                <span class="service-option__badge service-option__badge--addon">Add-on</span>
-                                <h3 class="service-option__title">SEO Boost</h3>
-                                <p class="service-option__price"><strong>£149</strong>/month</p>
-                            </div>
-                            <ul class="service-option__features">
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Keyword research</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Google Business setup</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Monthly SEO reports</li>
-                            </ul>
-                            <a href="https://grindarestudio.com/services.html#seo-boost" class="btn btn--outline btn--full" target="_blank" rel="noopener">Learn More</a>
-                        </div>
-
-                        <div class="service-option">
-                            <div class="service-option__header">
-                                <span class="service-option__badge service-option__badge--addon">Add-on</span>
-                                <h3 class="service-option__title">Logo & Branding</h3>
-                                <p class="service-option__price"><strong>£299</strong></p>
-                            </div>
-                            <ul class="service-option__features">
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Custom logo design</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Brand color palette</li>
-                                <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>All file formats</li>
-                            </ul>
-                            <a href="https://grindarestudio.com/services.html#branding" class="btn btn--outline btn--full" target="_blank" rel="noopener">Learn More</a>
-                        </div>
-                    </div>
-
-                    <div class="studio-promo__contact">
-                        <p class="studio-promo__contact-text">Ready to get started? Get in touch:</p>
-                        <div class="studio-promo__contact-buttons">
-                            <a href="https://wa.me/447392305505?text=Hi,%20I'm%20interested%20in%20a%20website%20for%20my%20business" class="btn btn--whatsapp" target="_blank" rel="noopener">
-                                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/></svg>
-                                WhatsApp
-                            </a>
-                            <a href="mailto:patrykmajecki30@gmail.com?subject=Website%20Enquiry" class="btn btn--outline btn--email">
-                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                                Email Us
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="studio-promo__trust">
-                        <p>Trusted by trade businesses across the UK</p>
-                        <div class="studio-promo__stats">
-                            <div class="stat">
-                                <span class="stat__number">50+</span>
-                                <span class="stat__label">Websites Built</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat__number">98%</span>
-                                <span class="stat__label">Client Satisfaction</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat__number">24h</span>
-                                <span class="stat__label">Response Time</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- AREAS SECTION -->
-        <section class="areas" id="areas" aria-labelledby="areas-heading">
-            <div class="container">
-                <header class="section-header">
-                    <span class="section-label">Service Coverage</span>
-                    <h2 id="areas-heading" class="section-title">Areas We Cover</h2>
-                    <p class="section-subtitle">Providing premium roofing services across Greater Manchester and surrounding areas.</p>
-                </header>
-                <div class="areas__content">
-                    <div class="areas__list">
-                        <ul class="areas__grid">
-                            <li class="areas__item" data-animate><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="var(--color-charcoal)"/></svg>Manchester</li>
-                            <li class="areas__item" data-animate><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="var(--color-charcoal)"/></svg>Salford</li>
-                            <li class="areas__item" data-animate><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="var(--color-charcoal)"/></svg>Stockport</li>
-                            <li class="areas__item" data-animate><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="var(--color-charcoal)"/></svg>Bolton</li>
-                            <li class="areas__item" data-animate><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="var(--color-charcoal)"/></svg>Oldham</li>
-                            <li class="areas__item" data-animate><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="var(--color-charcoal)"/></svg>Altrincham</li>
-                            <li class="areas__item" data-animate><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="var(--color-charcoal)"/></svg>Didsbury</li>
-                            <li class="areas__item" data-animate><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="var(--color-charcoal)"/></svg>Chorlton</li>
-                            <li class="areas__item" data-animate><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="var(--color-charcoal)"/></svg>Trafford</li>
-                            <li class="areas__item" data-animate><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="var(--color-charcoal)"/></svg>Rochdale</li>
-                            <li class="areas__item" data-animate><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="var(--color-charcoal)"/></svg>Bury</li>
-                            <li class="areas__item" data-animate><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="var(--color-charcoal)"/></svg>Wigan</li>
-                        </ul>
-                        <p class="areas__note">Don't see your area? <a href="#contact">Contact us</a> — we may still be able to help.</p>
-                    </div>
-                    <div class="areas__map">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d152515.25332502842!2d-2.379519278498858!3d53.47231038738498!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487a4d4c5226f5db%3A0xd9be143804fe6baa!2sManchester%2C%20UK!5e0!3m2!1sen!2spl!4v1708905600000!5m2!1sen!2spl"
-                            width="100%"
-                            height="400"
-                            style="border:0; border-radius: 8px;"
-                            allowfullscreen=""
-                            loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"
-                            title="Map of Greater Manchester service area">
-                        </iframe>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- QUOTE SECTION -->
-        <section class="quote-section" id="quote" aria-labelledby="quote-heading">
-            <div class="container">
-                <div class="quote-section__grid">
-                    <div class="quote-section__form-wrapper">
-                        <header class="quote-section__header">
-                            <h2 id="quote-heading" class="quote-section__title">Request a Private Quote</h2>
-                            <p class="quote-section__subtitle">We respond within 24 hours. Discreet service for premium properties.</p>
-                        </header>
-                        <form class="quote-form" id="quote-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
-                            <input type="hidden" name="access_key" value="c71d7195-2bff-4926-bf83-3a61e1d31d55">
-                            <input type="hidden" name="subject" value="New Quote Request - Aurum Roofing">
-                            <input type="hidden" name="from_name" value="Aurum Roofing Website">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="name" class="form-label">Full Name *</label>
-                                    <input type="text" id="name" name="name" class="form-input" required autocomplete="name" placeholder="John Smith">
-                                    <span class="form-error" aria-live="polite"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone" class="form-label">Phone Number *</label>
-                                    <input type="tel" id="phone" name="phone" class="form-input" required autocomplete="tel" placeholder="07XXX XXXXXX">
-                                    <span class="form-error" aria-live="polite"></span>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="email" class="form-label">Email Address *</label>
-                                    <input type="email" id="email" name="email" class="form-input" required autocomplete="email" placeholder="john@example.com">
-                                    <span class="form-error" aria-live="polite"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label for="postcode" class="form-label">Postcode *</label>
-                                    <input type="text" id="postcode" name="postcode" class="form-input" required autocomplete="postal-code" placeholder="M1 1AA">
-                                    <span class="form-error" aria-live="polite"></span>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="property-type" class="form-label">Type of Property</label>
-                                    <select id="property-type" name="property-type" class="form-select">
-                                        <option value="">Select property type</option>
-                                        <option value="detached">Detached House</option>
-                                        <option value="semi-detached">Semi-Detached House</option>
-                                        <option value="terraced">Terraced House</option>
-                                        <option value="bungalow">Bungalow</option>
-                                        <option value="flat">Flat / Apartment</option>
-                                        <option value="commercial">Commercial Property</option>
-                                        <option value="listed">Listed Building</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="service-type" class="form-label">Service Needed</label>
-                                    <select id="service-type" name="service-type" class="form-select">
-                                        <option value="">Select service</option>
-                                        <option value="slate-tile">Slate & Tile Roofing</option>
-                                        <option value="flat-roofing">Flat Roofing (EPDM/GRP)</option>
-                                        <option value="repairs">Roof Repairs & Leak Detection</option>
-                                        <option value="chimney">Chimney & Leadwork</option>
-                                        <option value="guttering">Guttering & Fascias</option>
-                                        <option value="restoration">Roof Restoration</option>
-                                        <option value="survey">Roof Survey Only</option>
-                                        <option value="other">Other / Not Sure</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group form-group--full">
-                                <label for="message" class="form-label">Message</label>
-                                <textarea id="message" name="message" class="form-textarea" rows="4" placeholder="Please describe your roofing needs..."></textarea>
-                            </div>
-                            <div class="form-group form-group--full">
-                                <label class="form-checkbox">
-                                    <input type="checkbox" name="consent" required>
-                                    <span class="checkmark"></span>
-                                    <span class="checkbox-text">I agree to be contacted regarding my enquiry. View our <a href="#">Privacy Policy</a>.</span>
-                                </label>
-                                <span class="form-error" aria-live="polite"></span>
-                            </div>
-                            <button type="submit" class="btn btn--primary btn--large btn--full">
-                                Submit Request
-                                <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                            </button>
-                            <div class="form-success" id="form-success" hidden>
-                                <svg class="icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                                <h3>Thank You!</h3>
-                                <p>Your request has been received. We'll be in touch within 24 hours.</p>
-                            </div>
-                        </form>
-                    </div>
-                    <aside class="quote-section__emergency" id="contact">
-                        <div class="emergency-card">
-                            <div class="emergency-card__icon">
-                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            </div>
-                            <h3 class="emergency-card__title">Emergency?</h3>
-                            <p class="emergency-card__text">Storm damage, severe leak, or urgent repair needed? Call our emergency line now.</p>
-                            <a href="tel:+44XXXXXXXXXX" class="emergency-card__phone">+44 XXXX XXXXXX</a>
-                            <span class="emergency-card__availability">Available 24/7</span>
-                        </div>
-                        <div class="contact-info">
-                            <h4 class="contact-info__title">Other Ways to Reach Us</h4>
-                            <ul class="contact-info__list">
-                                <li><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:info@aurumroofing.co.uk">info@aurumroofing.co.uk</a></li>
-                                <li><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><address>STREET_ADDRESS_PLACEHOLDER<br>Manchester, POSTCODE_PLACEHOLDER</address></li>
-                                <li><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>Mon–Sat: 8am – 6pm</span></li>
-                            </ul>
-                        </div>
-                    </aside>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- FOOTER -->
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer__grid">
-                <div class="footer__brand">
-                    <a href="/" class="footer__logo" aria-label="AURUM ROOFING - Home"><span class="logo-text">AURUM</span><span class="logo-accent">ROOFING</span></a>
-                    <p class="footer__description">Premium roofing services for discerning property owners across Greater Manchester. Craftsmanship, quality materials, and exceptional results.</p>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <div class="logo-icon">🏠</div>
+                        <div class="logo-text">AURUM<span>.</span></div>
+                    </a>
+                    <p>Premium roofing services across Manchester and Greater Manchester. Quality craftsmanship since 2009.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                        </a>
+                        <a href="#" aria-label="LinkedIn">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 6a2 2 0 100-4 2 2 0 000 4z"/></svg>
+                        </a>
+                    </div>
                 </div>
-                <nav class="footer__links" aria-label="Footer navigation">
-                    <h4 class="footer__heading">Quick Links</h4>
-                    <ul>
-                        <li><a href="#services">Our Services</a></li>
-                        <li><a href="#projects">Projects</a></li>
-                        <li><a href="#reviews">Reviews</a></li>
-                        <li><a href="#areas">Areas Covered</a></li>
-                        <li><a href="#quote">Get a Quote</a></li>
-                    </ul>
-                </nav>
-                <nav class="footer__links" aria-label="Services navigation">
-                    <h4 class="footer__heading">Services</h4>
-                    <ul>
-                        <li><a href="#services">Slate & Tile Roofing</a></li>
-                        <li><a href="#services">Flat Roofing</a></li>
-                        <li><a href="#services">Roof Repairs</a></li>
-                        <li><a href="#services">Chimney & Leadwork</a></li>
-                        <li><a href="#services">Guttering</a></li>
-                    </ul>
-                </nav>
-                <div class="footer__contact">
-                    <h4 class="footer__heading">Contact</h4>
-                    <ul>
-                        <li><a href="tel:+44XXXXXXXXXX">+44 XXXX XXXXXX</a></li>
-                        <li><a href="mailto:info@aurumroofing.co.uk">info@aurumroofing.co.uk</a></li>
-                        <li><address>STREET_ADDRESS_PLACEHOLDER<br>Manchester, POSTCODE_PLACEHOLDER</address></li>
-                    </ul>
+
+                <div class="footer-column">
+                    <h4>Services</h4>
+                    <div class="footer-links">
+                        <a href="#services">Slate Roofing</a>
+                        <a href="#services">Tile Roofing</a>
+                        <a href="#services">Flat Roofing</a>
+                        <a href="#services">Roof Repairs</a>
+                        <a href="#services">Chimney Work</a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Areas</h4>
+                    <div class="footer-links">
+                        <a href="#">Manchester</a>
+                        <a href="#">Salford</a>
+                        <a href="#">Stockport</a>
+                        <a href="#">Bolton</a>
+                        <a href="#">Altrincham</a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Contact</h4>
+                    <div class="footer-links">
+                        <a href="tel:+447123456789">07123 456 789</a>
+                        <a href="mailto:info@aurumroofing.co.uk">info@aurumroofing.co.uk</a>
+                        <a href="#">Manchester, UK</a>
+                    </div>
                 </div>
             </div>
-            <div class="footer__compliance">
-                <div class="footer__badges">
-                    <span class="compliance-badge"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Fully Insured</span>
-                    <span class="compliance-badge"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Safety-First Approach</span>
-                    <span class="compliance-badge"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01" fill="none" stroke="currentColor" stroke-width="2"/></svg>Workmanship Guaranteed</span>
-                </div>
-            </div>
-            <div class="footer__bottom">
-                <p class="footer__copyright">&copy; <span id="current-year">2024</span> AURUM ROOFING. All rights reserved.</p>
-                <p class="footer__legal">Company No: XXXXXXXX | VAT No: GB XXXXXXXXX</p>
-                <nav class="footer__legal-links" aria-label="Legal links"><a href="#">Privacy Policy</a><a href="#">Terms & Conditions</a></nav>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Aurum Roofing. All rights reserved.</p>
+                <p>Website by <a href="https://grindarestudio.com" target="_blank">Grindare Studio</a></p>
             </div>
         </div>
     </footer>
 
-    <!-- LIGHTBOX MODAL -->
-    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Project image viewer" hidden>
-        <button class="lightbox__close" aria-label="Close lightbox"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-        <div class="lightbox__content"><img src="" alt="" id="lightbox-image"></div>
-        <button class="lightbox__nav lightbox__nav--prev" aria-label="Previous image"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <button class="lightbox__nav lightbox__nav--next" aria-label="Next image"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+    <!-- Floating Buttons -->
+    <div class="floating-phone">
+        <a href="tel:+447123456789" aria-label="Call Us">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+            </svg>
+        </a>
     </div>
 
-    <!-- WHATSAPP FLOATING BUTTON -->
-    <a href="https://wa.me/447392305505?text=Hello,%20I'm%20interested%20in%20a%20roofing%20quote"
-       class="whatsapp-float"
-       target="_blank"
-       rel="noopener noreferrer"
-       aria-label="Chat with us on WhatsApp">
-        <svg viewBox="0 0 32 32" width="32" height="32" fill="currentColor">
-            <path d="M16.004 0h-.008C7.174 0 0 7.176 0 16c0 3.5 1.128 6.744 3.046 9.378L1.054 32l6.826-1.968C10.39 31.296 13.1 32 16.004 32 24.826 32 32 24.822 32 16S24.826 0 16.004 0zm9.35 22.614c-.39 1.092-1.92 2-3.148 2.264-.842.18-1.94.322-5.64-1.214-4.736-1.964-7.786-6.78-8.02-7.094-.226-.314-1.9-2.53-1.9-4.828s1.202-3.428 1.63-3.898c.39-.428.914-.608 1.222-.608.148 0 .28.008.4.014.428.02.642.046.924.716.352.838 1.214 2.952 1.32 3.168.106.216.212.5.064.786-.14.294-.264.476-.478.732-.214.256-.44.454-.654.73-.198.244-.422.506-.176.934.246.428 1.094 1.804 2.35 2.922 1.616 1.438 2.978 1.886 3.4 2.094.428.214.676.18.924-.106.256-.294 1.084-1.26 1.372-1.694.288-.428.576-.356.97-.214.4.148 2.506 1.182 2.934 1.396.428.214.714.322.82.5.106.178.106 1.028-.284 2.12z"/>
-        </svg>
-        <span class="whatsapp-float__label">Chat with us</span>
-    </a>
+    <div class="floating-whatsapp">
+        <a href="https://wa.me/447123456789?text=Hi,%20I%27d%20like%20a%20quote%20for%20roofing%20services" target="_blank" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </a>
+    </div>
 
-    <!-- DEMO BADGE - Shows this is a portfolio demo -->
-    <a href="../../" class="demo-badge" style="text-decoration: none;">
-        <span class="demo-badge__icon">🎨</span>
-        <span class="demo-badge__text">Portfolio Demo</span>
-        <span class="demo-badge__subtext">Click to view more demos</span>
-    </a>
+    <!-- Emergency Banner -->
+    <div class="emergency-banner" id="emergency-banner">
+        <button class="emergency-close" onclick="document.getElementById('emergency-banner').style.display='none'">✕</button>
+        <div class="emergency-banner-header">
+            <div class="emergency-dot"></div>
+            <div class="emergency-title">Emergency Repairs</div>
+        </div>
+        <p class="emergency-text">Storm damage? Leaking roof? We offer 24/7 emergency call-out service.</p>
+        <a href="tel:+447123456789" class="emergency-link">
+            Call Now: 07123 456 789
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </a>
+    </div>
 
-    <script src="script.js"></script>
-
-    <!-- AOS Animation Library -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
-    <!-- Premium Features Script -->
     <script>
-      // Initialize AOS
-      AOS.init({
-        duration: 800,
-        easing: 'ease-out',
-        once: true,
-        offset: 50
-      });
-
-      // Scroll Progress Bar
-      const scrollProgress = document.getElementById('scroll-progress');
-      window.addEventListener('scroll', () => {
-        const scrollTop = window.pageYOffset;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const scrollPercent = (scrollTop / docHeight) * 100;
-        if (scrollProgress) {
-          scrollProgress.style.width = scrollPercent + '%';
-        }
-      });
-
-      // Weather-based messaging
-      function updateWeatherBanner() {
-        const hour = new Date().getHours();
-        const weatherIcon = document.getElementById('weather-icon');
-        const weatherText = document.getElementById('weather-text');
-
-        if (!weatherIcon || !weatherText) return;
-
-        // Simulate weather conditions (in production, could use real API)
-        const conditions = [
-          { icon: '🌧️', text: '<strong>Rain expected this week!</strong><br>Perfect time to check your roof.' },
-          { icon: '❄️', text: '<strong>Cold weather ahead!</strong><br>Is your roof winter-ready?' },
-          { icon: '☀️', text: '<strong>Great weather for repairs!</strong><br>Book your inspection today.' },
-          { icon: '🌬️', text: '<strong>Windy conditions expected!</strong><br>Check for loose tiles.' }
-        ];
-
-        const condition = conditions[Math.floor(Math.random() * conditions.length)];
-        weatherIcon.textContent = condition.icon;
-        weatherText.innerHTML = condition.text;
-      }
-      updateWeatherBanner();
-
-      // Count-up animation for stats
-      const countElements = document.querySelectorAll('.count-up');
-      const countObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const el = entry.target;
-            const target = parseInt(el.dataset.target) || 0;
-            let current = 0;
-            const increment = target / 50;
-            const timer = setInterval(() => {
-              current += increment;
-              if (current >= target) {
-                el.textContent = target;
-                clearInterval(timer);
-              } else {
-                el.textContent = Math.floor(current);
-              }
-            }, 30);
-            countObserver.unobserve(el);
-          }
+        // ===== SCROLL PROGRESS =====
+        const scrollProgress = document.getElementById('scroll-progress');
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const progress = scrollTop / scrollHeight;
+            scrollProgress.style.transform = `scaleX(${progress})`;
         });
-      }, { threshold: 0.5 });
 
-      countElements.forEach(el => countObserver.observe(el));
-
-      // Magnetic button effect
-      document.querySelectorAll('.btn').forEach(btn => {
-        btn.classList.add('magnetic-btn');
-        btn.addEventListener('mousemove', (e) => {
-          const rect = btn.getBoundingClientRect();
-          const x = e.clientX - rect.left - rect.width / 2;
-          const y = e.clientY - rect.top - rect.height / 2;
-          btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+        // ===== NAVBAR SCROLL =====
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
         });
-        btn.addEventListener('mouseleave', () => {
-          btn.style.transform = 'translate(0, 0)';
-        });
-      });
 
-      // Hide duplicate WhatsApp button (we already have one)
-      const stickyWA = document.querySelector('.sticky-whatsapp');
-      if (stickyWA) stickyWA.style.display = 'none';
+        // ===== MOBILE MENU =====
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+
+        mobileToggle.addEventListener('click', () => {
+            mobileToggle.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        mobileOverlay.addEventListener('click', () => {
+            mobileToggle.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        // Close menu on link click
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileToggle.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // ===== REVEAL ON SCROLL =====
+        const reveals = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        reveals.forEach(el => revealObserver.observe(el));
+
+        // ===== SMOOTH SCROLL =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // ===== COUNTER ANIMATION =====
+        const counters = document.querySelectorAll('.hero-stat-number');
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = entry.target;
+                    const count = parseInt(target.getAttribute('data-count'));
+                    const duration = 2000;
+                    const increment = count / (duration / 16);
+                    let current = 0;
+
+                    const updateCounter = () => {
+                        current += increment;
+                        if (current < count) {
+                            target.textContent = Math.floor(current) + (target.textContent.includes('%') ? '%' : '+');
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            target.textContent = count + (count === 100 ? '%' : '+');
+                        }
+                    };
+
+                    updateCounter();
+                    counterObserver.unobserve(target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        counters.forEach(counter => counterObserver.observe(counter));
     </script>
 </body>
 </html>
