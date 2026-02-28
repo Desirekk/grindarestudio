@@ -190,15 +190,11 @@
             gap: 12px;
         }
 
-        .logo-icon {
+        .logo-img {
             width: 48px;
             height: 48px;
-            background: linear-gradient(135deg, var(--copper), var(--bronze));
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
+            object-fit: cover;
             box-shadow: var(--shadow-copper);
         }
 
@@ -531,6 +527,26 @@
             margin-top: 8px;
         }
 
+        /* Trust Badges */
+        .trust-badges {
+            margin-top: 48px;
+            text-align: center;
+        }
+
+        .trust-badges img {
+            max-width: 400px;
+            width: 100%;
+            border-radius: var(--radius);
+            opacity: 0.9;
+            filter: brightness(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .trust-badges img {
+                max-width: 280px;
+            }
+        }
+
         /* Hero Floating Elements */
         .hero-float {
             position: absolute;
@@ -594,6 +610,15 @@
             background: var(--slate-800);
             position: relative;
             overflow: hidden;
+        }
+
+        .services::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('images/welsh-slate.jpg') center/cover;
+            opacity: 0.03;
+            pointer-events: none;
         }
 
         .section-header {
@@ -1413,12 +1438,84 @@
     <!-- Scroll Progress -->
     <div class="scroll-progress" id="scroll-progress"></div>
 
+    <!-- Back to Grindare Banner -->
+    <div class="demo-banner">
+        <div class="demo-banner-content">
+            <span class="demo-badge">✨ DEMO</span>
+            <span class="demo-text">This is a demo website by <strong>Grindare Studio</strong></span>
+            <a href="https://grindarestudio.com" class="demo-cta">Get Yours Free →</a>
+        </div>
+    </div>
+
+    <style>
+        .demo-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10001;
+            background: linear-gradient(135deg, #09090b 0%, #18181b 100%);
+            border-bottom: 1px solid rgba(245, 185, 66, 0.3);
+            padding: 10px 20px;
+        }
+        .demo-banner-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 14px;
+        }
+        .demo-badge {
+            background: linear-gradient(135deg, #f5b942, #f59e0b);
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+        .demo-text {
+            color: rgba(255,255,255,0.8);
+        }
+        .demo-text strong {
+            color: #f5b942;
+        }
+        .demo-cta {
+            background: rgba(245, 185, 66, 0.15);
+            border: 1px solid rgba(245, 185, 66, 0.4);
+            color: #f5b942;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+        .demo-cta:hover {
+            background: #f5b942;
+            color: #000;
+        }
+        @media (max-width: 600px) {
+            .demo-banner-content { font-size: 12px; gap: 10px; }
+            .demo-text { display: none; }
+        }
+        /* Adjust nav position for demo banner */
+        .nav { top: 44px; }
+        .hero { padding-top: 180px; }
+        @media (max-width: 600px) {
+            .nav { top: 40px; }
+            .hero { padding-top: 160px; }
+        }
+    </style>
+
     <!-- Navigation -->
     <nav class="nav" id="nav">
         <div class="container">
             <div class="nav-inner">
                 <a href="#" class="logo">
-                    <div class="logo-icon">🏠</div>
+                    <img src="images/logo.jpg" alt="Aurum" class="logo-img">
                     <div class="logo-text">AURUM<span>.</span></div>
                 </a>
 
@@ -1462,7 +1559,7 @@
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-bg">
-            <img src="https://images.unsplash.com/photo-1632759145363-7d7e0d8a903d?w=1920&q=80" alt="Premium Roofing">
+            <img src="images/hero-silhouette.png" alt="Professional Roofer at Sunset">
         </div>
         <div class="hero-gradient"></div>
 
@@ -1508,6 +1605,11 @@
                         <div class="hero-stat-number" data-count="100">100%</div>
                         <div class="hero-stat-label">Satisfaction Rate</div>
                     </div>
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="trust-badges" data-aos="fade-up" data-aos-delay="500">
+                    <img src="images/trust-badges.jpg" alt="15 Years Experience, Fully Insured, Free Quote, 5 Star Rated">
                 </div>
             </div>
         </div>
@@ -1618,7 +1720,7 @@
             <div class="why-grid">
                 <div class="why-image reveal">
                     <div class="why-image-main">
-                        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80" alt="Professional Roofers">
+                        <img src="images/team-inspection.png" alt="Professional Roofers Inspecting Roof">
                     </div>
                     <div class="why-image-badge">
                         <div class="why-image-badge-number">15+</div>
@@ -1672,10 +1774,10 @@
 
             <div class="projects-grid">
                 <div class="project-card reveal reveal-delay-1">
-                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="Victorian Restoration">
+                    <img src="images/roofer-working.png" alt="Victorian Slate Restoration">
                     <div class="project-overlay">
                         <div class="project-tag">Slate Roofing</div>
-                        <h3 class="project-title">Victorian Villa Restoration</h3>
+                        <h3 class="project-title">Victorian Slate Restoration</h3>
                         <div class="project-location">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px">
                                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
@@ -1687,10 +1789,10 @@
                 </div>
 
                 <div class="project-card reveal reveal-delay-2">
-                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80" alt="Modern Extension">
+                    <img src="images/consultation.png" alt="Client Consultation">
                     <div class="project-overlay">
-                        <div class="project-tag">Flat Roofing</div>
-                        <h3 class="project-title">Modern Extension EPDM</h3>
+                        <div class="project-tag">Consultation</div>
+                        <h3 class="project-title">Client Project Planning</h3>
                         <div class="project-location">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px">
                                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
@@ -1702,10 +1804,10 @@
                 </div>
 
                 <div class="project-card reveal reveal-delay-3">
-                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80" alt="Full Reroof">
+                    <img src="images/tools.jpg" alt="Professional Roofing Tools">
                     <div class="project-overlay">
-                        <div class="project-tag">Tile Roofing</div>
-                        <h3 class="project-title">Complete Tile Reroof</h3>
+                        <div class="project-tag">Craftsmanship</div>
+                        <h3 class="project-title">Professional Tools & Skills</h3>
                         <div class="project-location">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px">
                                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
@@ -1743,7 +1845,7 @@
                     </p>
                     <div class="testimonial-author">
                         <div class="testimonial-avatar">
-                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="James Wilson">
+                            <img src="images/avatar-man.jpg" alt="James Wilson">
                         </div>
                         <div class="testimonial-info">
                             <div class="testimonial-name">James Wilson</div>
