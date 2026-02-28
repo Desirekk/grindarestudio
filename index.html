@@ -220,6 +220,209 @@
       mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
     }
 
+    /* Particle Canvas */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.6;
+    }
+
+    /* Morphing Blobs */
+    .blob-container {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      animation: blobMorph 15s ease-in-out infinite;
+    }
+
+    .blob-1 {
+      width: 500px;
+      height: 500px;
+      background: linear-gradient(135deg, var(--gold), var(--purple));
+      top: -10%;
+      right: -10%;
+      animation-delay: 0s;
+    }
+
+    .blob-2 {
+      width: 400px;
+      height: 400px;
+      background: linear-gradient(135deg, var(--purple), #3b82f6);
+      bottom: 20%;
+      left: -10%;
+      animation-delay: -5s;
+    }
+
+    .blob-3 {
+      width: 300px;
+      height: 300px;
+      background: linear-gradient(135deg, #3b82f6, var(--gold));
+      top: 50%;
+      right: 20%;
+      animation-delay: -10s;
+    }
+
+    @keyframes blobMorph {
+      0%, 100% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+        border-radius: 50%;
+      }
+      25% {
+        transform: translate(30px, -50px) scale(1.1) rotate(90deg);
+        border-radius: 60% 40% 70% 30%;
+      }
+      50% {
+        transform: translate(-20px, 20px) scale(0.9) rotate(180deg);
+        border-radius: 40% 60% 30% 70%;
+      }
+      75% {
+        transform: translate(50px, 30px) scale(1.05) rotate(270deg);
+        border-radius: 30% 70% 50% 50%;
+      }
+    }
+
+    /* Spotlight Reveal Effect */
+    .spotlight-section {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .spotlight-section::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(245, 185, 66, 0.1), transparent 70%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+
+    .spotlight-section:hover::before {
+      opacity: 1;
+    }
+
+    /* Glowing Border Animation */
+    .glow-border {
+      position: relative;
+    }
+
+    .glow-border::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(90deg, var(--gold), var(--purple), var(--gold));
+      background-size: 200% 100%;
+      border-radius: inherit;
+      z-index: -1;
+      opacity: 0;
+      animation: glowMove 3s linear infinite;
+      transition: opacity 0.3s;
+    }
+
+    .glow-border:hover::after {
+      opacity: 1;
+    }
+
+    @keyframes glowMove {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    /* Text Shimmer Effect */
+    .shimmer-text {
+      background: linear-gradient(
+        90deg,
+        var(--text) 0%,
+        var(--gold) 25%,
+        var(--text) 50%,
+        var(--gold) 75%,
+        var(--text) 100%
+      );
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s linear infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+
+    /* Floating Icons Animation */
+    .float-icon {
+      animation: floatY 3s ease-in-out infinite;
+    }
+
+    .float-icon:nth-child(2) { animation-delay: -1s; }
+    .float-icon:nth-child(3) { animation-delay: -2s; }
+
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    /* Staggered Reveal Animation */
+    .reveal-stagger > * {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .reveal-stagger.revealed > *:nth-child(1) { transition-delay: 0.1s; }
+    .reveal-stagger.revealed > *:nth-child(2) { transition-delay: 0.2s; }
+    .reveal-stagger.revealed > *:nth-child(3) { transition-delay: 0.3s; }
+    .reveal-stagger.revealed > *:nth-child(4) { transition-delay: 0.4s; }
+    .reveal-stagger.revealed > *:nth-child(5) { transition-delay: 0.5s; }
+    .reveal-stagger.revealed > *:nth-child(6) { transition-delay: 0.6s; }
+
+    .reveal-stagger.revealed > * {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 3D Perspective Cards */
+    .perspective-card {
+      perspective: 1000px;
+    }
+
+    .perspective-card-inner {
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+
+    .perspective-card:hover .perspective-card-inner {
+      transform: rotateY(10deg) rotateX(-5deg);
+    }
+
+    /* Noise Texture Overlay */
+    .noise-overlay::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 1;
+    }
+
     .container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
 
     /* Navigation */
@@ -249,7 +452,7 @@
       color: var(--text);
     }
 
-    .nav-logo img { height: 44px; width: auto; }
+    .nav-logo img { height: 56px; width: auto; }
 
     .nav-links {
       display: flex;
@@ -1848,17 +2051,6 @@
       51%, 100% { opacity: 0; }
     }
 
-    /* Confetti Canvas */
-    #confetti-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9998;
-    }
-
     /* Live Visitor Count */
     .visitor-count {
       position: fixed;
@@ -1897,7 +2089,12 @@
     }
 
     @media (max-width: 768px) {
-      .visitor-count { display: none; }
+      .visitor-count {
+        bottom: 80px;
+        left: 12px;
+        padding: 8px 14px;
+        font-size: 11px;
+      }
     }
 
     /* Exit Intent Popup */
@@ -1976,52 +2173,122 @@
     }
 
     /* Dark Mode Toggle */
-    .theme-toggle {
+    /* Sticky WhatsApp Button */
+    .whatsapp-sticky {
       position: fixed;
       bottom: 24px;
       right: 24px;
-      width: 48px;
-      height: 48px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #25d366, #128c7e);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      z-index: 100;
-      font-size: 20px;
-      transition: all 0.3s;
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+      z-index: 1000;
+      transition: all 0.3s ease;
+      animation: whatsappPulse 2s infinite;
     }
 
-    .theme-toggle:hover {
-      border-color: var(--gold);
+    .whatsapp-sticky:hover {
       transform: scale(1.1);
+      box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
     }
 
-    /* Light Mode Styles */
-    body.light-mode {
-      --bg-dark: #f8f9fa;
-      --bg-darker: #ffffff;
-      --bg-card: rgba(255, 255, 255, 0.95);
-      --bg-card-hover: rgba(255, 255, 255, 0.98);
-      --border: rgba(0, 0, 0, 0.08);
-      --border-hover: rgba(0, 0, 0, 0.15);
-      --text: rgba(0, 0, 0, 0.9);
-      --text-muted: rgba(0, 0, 0, 0.6);
-      --text-subtle: rgba(0, 0, 0, 0.4);
+    .whatsapp-sticky svg {
+      width: 32px;
+      height: 32px;
+      fill: white;
     }
 
-    body.light-mode .bg-gradient::before {
-      background:
-        radial-gradient(ellipse 40% 30% at 70% 20%, rgba(168, 85, 247, 0.12), transparent),
-        radial-gradient(ellipse 50% 40% at 30% 80%, rgba(245, 185, 66, 0.1), transparent);
+    @keyframes whatsappPulse {
+      0%, 100% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); }
+      50% { box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7); }
     }
 
-    body.light-mode .bg-grid {
-      background-image:
-        linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+    @media (max-width: 768px) {
+      .whatsapp-sticky {
+        width: 56px;
+        height: 56px;
+        bottom: 20px;
+        right: 16px;
+      }
+      .whatsapp-sticky svg {
+        width: 28px;
+        height: 28px;
+      }
+    }
+
+    /* Section Navigation (Sticky Side Nav) */
+    .section-nav {
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 99;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .section-nav-item {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--border);
+      border: 2px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .section-nav-item:hover,
+    .section-nav-item.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      transform: scale(1.3);
+    }
+
+    .section-nav-item::after {
+      content: attr(data-label);
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: var(--radius);
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    .section-nav-item:hover::after {
+      opacity: 1;
+      right: 28px;
+    }
+
+    @media (max-width: 1200px) {
+      .section-nav {
+        right: 12px;
+      }
+      .section-nav-item {
+        width: 10px;
+        height: 10px;
+      }
+      .section-nav-item::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .section-nav {
+        display: none;
+      }
     }
 
     /* Personalized Greeting */
@@ -2168,8 +2435,15 @@
   <!-- Cursor Glow Effect -->
   <div class="cursor-glow" id="cursor-glow"></div>
 
-  <!-- Confetti Canvas -->
-  <canvas id="confetti-canvas"></canvas>
+  <!-- Morphing Blobs -->
+  <div class="blob-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- Particle Canvas -->
+  <canvas id="particle-canvas"></canvas>
 
   <div class="bg-gradient"></div>
   <div class="bg-grid"></div>
@@ -2180,11 +2454,29 @@
     <span><span class="visitor-count-number" id="visitor-number">17</span> people viewing now</span>
   </div>
 
-  <!-- Theme Toggle -->
-  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+  <!-- Sticky WhatsApp Button -->
+  <a href="https://wa.me/447392305505?text=Hi,%20I'm%20interested%20in%20a%20website%20for%20my%20business" class="whatsapp-sticky" target="_blank" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
 
   <!-- Sound Toggle -->
   <button class="sound-toggle" id="sound-toggle" aria-label="Toggle sound effects">🔊</button>
+
+  <!-- Section Navigation -->
+  <div class="section-nav" id="section-nav">
+    <div class="section-nav-item active" data-section="hero" data-label="Home"></div>
+    <div class="section-nav-item" data-section="services" data-label="Services"></div>
+    <div class="section-nav-item" data-section="pricing" data-label="Pricing"></div>
+    <div class="section-nav-item" data-section="projects" data-label="Portfolio"></div>
+    <div class="section-nav-item" data-section="process" data-label="Process"></div>
+    <div class="section-nav-item" data-section="testimonials" data-label="Reviews"></div>
+    <div class="section-nav-item" data-section="demo" data-label="Free Demo"></div>
+    <div class="section-nav-item" data-section="roi" data-label="ROI Calculator"></div>
+    <div class="section-nav-item" data-section="faq" data-label="FAQ"></div>
+    <div class="section-nav-item" data-section="contact" data-label="Contact"></div>
+  </div>
 
   <!-- Navigation -->
   <nav>
@@ -2219,7 +2511,7 @@
   </div>
 
   <!-- Hero -->
-  <section class="hero">
+  <section class="hero" id="hero">
     <div class="hero-content">
       <div class="greeting-badge" id="greeting-badge" data-aos="fade-down" data-aos-delay="50">
         <span id="greeting-emoji">👋</span>
@@ -2661,7 +2953,7 @@
   </section>
 
   <!-- Testimonials -->
-  <section class="testimonials">
+  <section class="testimonials" id="testimonials">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
         <p class="section-label">Testimonials</p>
@@ -3141,6 +3433,145 @@
       offset: 50
     });
 
+    // ============================================
+    // PARTICLE BACKGROUND
+    // ============================================
+    const particleCanvas = document.getElementById('particle-canvas');
+    const pCtx = particleCanvas ? particleCanvas.getContext('2d') : null;
+    let particles = [];
+
+    function resizeParticleCanvas() {
+      if (particleCanvas) {
+        particleCanvas.width = window.innerWidth;
+        particleCanvas.height = window.innerHeight;
+      }
+    }
+    resizeParticleCanvas();
+    window.addEventListener('resize', resizeParticleCanvas);
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * particleCanvas.width;
+        this.y = Math.random() * particleCanvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.opacity = Math.random() * 0.5 + 0.1;
+        this.color = ['#f5b942', '#a855f7', '#3b82f6'][Math.floor(Math.random() * 3)];
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x < 0 || this.x > particleCanvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > particleCanvas.height) this.speedY *= -1;
+      }
+
+      draw() {
+        pCtx.beginPath();
+        pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        pCtx.fillStyle = this.color;
+        pCtx.globalAlpha = this.opacity;
+        pCtx.fill();
+      }
+    }
+
+    function initParticles() {
+      if (!pCtx) return;
+      const particleCount = Math.min(80, Math.floor(window.innerWidth / 15));
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animateParticles() {
+      if (!pCtx) return;
+      pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+
+      particles.forEach((p, i) => {
+        p.update();
+        p.draw();
+
+        // Draw connections
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[j].x - p.x;
+          const dy = particles[j].y - p.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 120) {
+            pCtx.beginPath();
+            pCtx.strokeStyle = p.color;
+            pCtx.globalAlpha = 0.1 * (1 - distance / 120);
+            pCtx.lineWidth = 0.5;
+            pCtx.moveTo(p.x, p.y);
+            pCtx.lineTo(particles[j].x, particles[j].y);
+            pCtx.stroke();
+          }
+        }
+      });
+
+      requestAnimationFrame(animateParticles);
+    }
+
+    initParticles();
+    animateParticles();
+
+    // ============================================
+    // STAGGERED REVEAL ON SCROLL
+    // ============================================
+    const revealSections = document.querySelectorAll('.reveal-stagger');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    revealSections.forEach(section => revealObserver.observe(section));
+
+    // ============================================
+    // SECTION NAVIGATION
+    // ============================================
+    const sectionNavItems = document.querySelectorAll('.section-nav-item');
+    const sections = [];
+
+    sectionNavItems.forEach(item => {
+      const sectionId = item.dataset.section;
+      const section = document.getElementById(sectionId);
+      if (section) {
+        sections.push({ id: sectionId, element: section, navItem: item });
+
+        // Click to scroll
+        item.addEventListener('click', () => {
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
+    });
+
+    // Update active section on scroll
+    function updateActiveSection() {
+      const scrollPos = window.scrollY + window.innerHeight / 3;
+
+      sections.forEach(({ element, navItem }) => {
+        const top = element.offsetTop;
+        const bottom = top + element.offsetHeight;
+
+        if (scrollPos >= top && scrollPos < bottom) {
+          sectionNavItems.forEach(item => item.classList.remove('active'));
+          navItem.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveSection);
+    updateActiveSection();
+
     // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -3391,7 +3822,13 @@
     // ============================================
     // TYPING EFFECT
     // ============================================
-    const typingWords = ['Roofers', 'Plumbers', 'Electricians', 'Builders', 'Painters', 'Landscapers', 'Plasterers', 'Cleaners'];
+    const typingWords = [
+      'Roofers', 'Plumbers', 'Electricians', 'Builders', 'Painters',
+      'Landscapers', 'Plasterers', 'Cleaners', 'Restaurants', 'Cafes',
+      'Salons', 'Barbers', 'Dentists', 'Lawyers', 'Gyms', 'Coaches',
+      'Photographers', 'Artists', 'Musicians', 'Therapists', 'Freelancers',
+      'Shops', 'Bakeries', 'Florists', 'Mechanics', 'Vets', 'Agencies', 'You'
+    ];
     let wordIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
@@ -3425,89 +3862,6 @@
     }
 
     setTimeout(typeEffect, 1500);
-
-    // ============================================
-    // CONFETTI EFFECT
-    // ============================================
-    const confettiCanvas = document.getElementById('confetti-canvas');
-    const confettiCtx = confettiCanvas ? confettiCanvas.getContext('2d') : null;
-    let confettiParticles = [];
-
-    function resizeConfetti() {
-      if (confettiCanvas) {
-        confettiCanvas.width = window.innerWidth;
-        confettiCanvas.height = window.innerHeight;
-      }
-    }
-    resizeConfetti();
-    window.addEventListener('resize', resizeConfetti);
-
-    class ConfettiParticle {
-      constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.vx = (Math.random() - 0.5) * 20;
-        this.vy = Math.random() * -15 - 5;
-        this.gravity = 0.5;
-        this.drag = 0.97;
-        this.size = Math.random() * 10 + 5;
-        this.color = ['#f5b942', '#a855f7', '#3b82f6', '#22c55e', '#f59e0b'][Math.floor(Math.random() * 5)];
-        this.rotation = Math.random() * 360;
-        this.rotationSpeed = (Math.random() - 0.5) * 10;
-        this.opacity = 1;
-      }
-
-      update() {
-        this.vy += this.gravity;
-        this.vx *= this.drag;
-        this.vy *= this.drag;
-        this.x += this.vx;
-        this.y += this.vy;
-        this.rotation += this.rotationSpeed;
-        this.opacity -= 0.01;
-      }
-
-      draw() {
-        confettiCtx.save();
-        confettiCtx.translate(this.x, this.y);
-        confettiCtx.rotate(this.rotation * Math.PI / 180);
-        confettiCtx.globalAlpha = this.opacity;
-        confettiCtx.fillStyle = this.color;
-        confettiCtx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size / 2);
-        confettiCtx.restore();
-      }
-    }
-
-    function animateConfetti() {
-      if (!confettiCtx) return;
-      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-
-      confettiParticles = confettiParticles.filter(p => p.opacity > 0);
-      confettiParticles.forEach(p => {
-        p.update();
-        p.draw();
-      });
-
-      if (confettiParticles.length > 0) {
-        requestAnimationFrame(animateConfetti);
-      }
-    }
-
-    function launchConfetti(x, y) {
-      for (let i = 0; i < 100; i++) {
-        confettiParticles.push(new ConfettiParticle(x, y));
-      }
-      animateConfetti();
-      playSound('success');
-    }
-
-    // Add confetti to CTA buttons
-    document.querySelectorAll('.btn-primary').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const rect = btn.getBoundingClientRect();
-        launchConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2);
-      });
-    });
 
     // ============================================
     // MAGNETIC BUTTONS
@@ -3639,27 +3993,6 @@
       roiJobValue.addEventListener('input', calculateROI);
       roiCurrentRate.addEventListener('input', calculateROI);
       calculateROI(); // Initial calculation
-    }
-
-    // ============================================
-    // DARK MODE TOGGLE
-    // ============================================
-    const themeToggle = document.getElementById('theme-toggle');
-    const savedTheme = localStorage.getItem('theme');
-
-    if (savedTheme === 'light') {
-      document.body.classList.add('light-mode');
-      if (themeToggle) themeToggle.textContent = '☀️';
-    }
-
-    if (themeToggle) {
-      themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('light-mode');
-        const isLight = document.body.classList.contains('light-mode');
-        themeToggle.textContent = isLight ? '☀️' : '🌙';
-        localStorage.setItem('theme', isLight ? 'light' : 'dark');
-        playSound('click');
-      });
     }
 
     // ============================================
