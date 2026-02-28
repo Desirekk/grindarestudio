@@ -954,20 +954,20 @@
         <h3>💰 Kalkulator Zysku</h3>
 
         <div class="roi-input-group">
-          <label>Ile średnio zarabiasz na jednym zleceniu?</label>
-          <input type="range" id="roi-job-value" min="200" max="10000" value="1500" step="100">
-          <p class="roi-value"><span id="roi-job-value-display">1,500</span> zł</p>
+          <label>Ile średnio zarabiasz na jednym kliencie/zamówieniu?</label>
+          <input type="range" id="roi-job-value" min="20" max="15000" value="500" step="10">
+          <p class="roi-value"><span id="roi-job-value-display">500</span> zł</p>
         </div>
 
         <div class="roi-result">
           <p class="roi-result-label">Profesjonalna strona może przynieść Ci:</p>
-          <p class="roi-result-extra"><span id="roi-extra-clients">24</span> dodatkowych klientów rocznie</p>
-          <p class="roi-result-value"><span id="roi-result-amount">36,000</span> zł</p>
+          <p class="roi-result-extra"><span id="roi-extra-clients">360</span> dodatkowych klientów rocznie</p>
+          <p class="roi-result-value"><span id="roi-result-amount">180,000</span> zł</p>
           <p class="roi-result-subtext">dodatkowego przychodu rocznie</p>
         </div>
 
         <p style="text-align: center; font-size: 13px; color: var(--text-muted); margin-top: 16px;">
-          * Zakładamy 2 dodatkowych klientów miesięcznie dzięki lepszej stronie
+          * Liczba klientów dopasowana do typu biznesu (kawiarnia vs firma budowlana)
         </p>
 
         <a href="#demo" class="btn btn-primary" style="width: 100%; margin-top: 24px;">Zamów Darmowe Demo</a>
@@ -1257,19 +1257,36 @@
     }
     setGreeting();
 
-    // ROI Calculator - Simple version
+    // ROI Calculator - Smart version (adjusts for business type)
     const roiJobValue = document.getElementById('roi-job-value');
 
     function calculateROI() {
       if (!roiJobValue) return;
 
       const jobValue = parseInt(roiJobValue.value);
-      const extraClientsPerMonth = 2; // Założenie: 2 dodatkowych klientów miesięcznie
+
+      // Dynamicznie dostosuj liczbę klientów do typu biznesu
+      // Niższa wartość zlecenia = więcej klientów (kawiarnia vs dekarz)
+      let extraClientsPerMonth;
+      if (jobValue <= 50) {
+        extraClientsPerMonth = 300; // Kawiarnia, mały sklep
+      } else if (jobValue <= 200) {
+        extraClientsPerMonth = 80; // Salon, mała usługa
+      } else if (jobValue <= 500) {
+        extraClientsPerMonth = 30; // Średnia usługa
+      } else if (jobValue <= 1500) {
+        extraClientsPerMonth = 10; // Większa usługa
+      } else if (jobValue <= 5000) {
+        extraClientsPerMonth = 4; // Duża usługa (remont)
+      } else {
+        extraClientsPerMonth = 2; // Premium usługa (dach, budowa)
+      }
+
       const extraClientsPerYear = extraClientsPerMonth * 12;
       const yearlyGain = extraClientsPerYear * jobValue;
 
       document.getElementById('roi-job-value-display').textContent = jobValue.toLocaleString('pl-PL');
-      document.getElementById('roi-extra-clients').textContent = extraClientsPerYear;
+      document.getElementById('roi-extra-clients').textContent = extraClientsPerYear.toLocaleString('pl-PL');
       document.getElementById('roi-result-amount').textContent = yearlyGain.toLocaleString('pl-PL');
     }
 

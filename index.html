@@ -3531,20 +3531,20 @@
         <h3>💰 Earnings Calculator</h3>
 
         <div class="roi-input-group">
-          <label>How much do you earn per job on average?</label>
-          <input type="range" id="roi-job-value" min="100" max="5000" value="500" step="50">
-          <p class="roi-value">£<span id="roi-job-value-display">500</span></p>
+          <label>How much do you earn per customer/order on average?</label>
+          <input type="range" id="roi-job-value" min="5" max="10000" value="200" step="5">
+          <p class="roi-value">£<span id="roi-job-value-display">200</span></p>
         </div>
 
         <div class="roi-result">
           <p class="roi-result-label">A professional website could bring you:</p>
-          <p class="roi-result-extra"><span id="roi-extra-clients">24</span> extra customers per year</p>
-          <p class="roi-result-value">£<span id="roi-result-amount">12,000</span></p>
+          <p class="roi-result-extra"><span id="roi-extra-clients">360</span> extra customers per year</p>
+          <p class="roi-result-value">£<span id="roi-result-amount">72,000</span></p>
           <p class="roi-result-subtext">extra revenue per year</p>
         </div>
 
         <p style="text-align: center; font-size: 13px; color: var(--text-muted); margin-top: 16px;">
-          * Based on 2 additional customers per month with a better website
+          * Customer count adjusted for your business type (cafe vs construction)
         </p>
 
         <a href="#demo" class="btn btn-primary" style="width: 100%; margin-top: 24px;">Get Your Free Demo</a>
@@ -4253,7 +4253,7 @@
     setInterval(updateVisitorCount, 30000); // Update every 30s
 
     // ============================================
-    // ROI CALCULATOR - Simple version
+    // ROI CALCULATOR - Smart version (adjusts for business type)
     // ============================================
     const roiJobValue = document.getElementById('roi-job-value');
 
@@ -4261,12 +4261,29 @@
       if (!roiJobValue) return;
 
       const jobValue = parseInt(roiJobValue.value);
-      const extraClientsPerMonth = 2; // Assumption: 2 extra customers per month
+
+      // Dynamically adjust customer count based on business type
+      // Lower job value = more customers (cafe vs roofer)
+      let extraClientsPerMonth;
+      if (jobValue <= 20) {
+        extraClientsPerMonth = 300; // Cafe, small shop
+      } else if (jobValue <= 100) {
+        extraClientsPerMonth = 80; // Salon, small service
+      } else if (jobValue <= 300) {
+        extraClientsPerMonth = 30; // Medium service
+      } else if (jobValue <= 1000) {
+        extraClientsPerMonth = 10; // Larger service
+      } else if (jobValue <= 3000) {
+        extraClientsPerMonth = 4; // Big service (renovation)
+      } else {
+        extraClientsPerMonth = 2; // Premium service (roofing, construction)
+      }
+
       const extraClientsPerYear = extraClientsPerMonth * 12;
       const yearlyGain = extraClientsPerYear * jobValue;
 
       document.getElementById('roi-job-value-display').textContent = jobValue.toLocaleString();
-      document.getElementById('roi-extra-clients').textContent = extraClientsPerYear;
+      document.getElementById('roi-extra-clients').textContent = extraClientsPerYear.toLocaleString();
       document.getElementById('roi-result-amount').textContent = yearlyGain.toLocaleString();
     }
 

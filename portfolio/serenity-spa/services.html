@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services | Serenity Spa & Wellness</title>
+  <meta name="description" content="Explore our range of luxury spa treatments including massages, facials, body rituals, and exclusive packages.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+  <style>
+    :root {
+      --cream: #FAF7F2;
+      --gold: #C9A962;
+      --gold-dark: #B8944D;
+      --sage: #8B9D83;
+      --sage-dark: #6B7D63;
+      --charcoal: #2C2C2C;
+      --text: #3D3D3D;
+      --text-light: #6B6B6B;
+      --white: #FFFFFF;
+      --border: rgba(201, 169, 98, 0.2);
+      --shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.12);
+      --radius: 4px;
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      color: var(--text);
+      background: var(--cream);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+    h1, h2, h3, h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      line-height: 1.2;
+      color: var(--charcoal);
+    }
+    a { text-decoration: none; color: inherit; transition: var(--transition); }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* Header - same as index */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(250, 247, 242, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 80px; }
+    .logo { display: flex; flex-direction: column; align-items: flex-start; }
+    .logo-text { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: var(--charcoal); letter-spacing: 2px; text-transform: uppercase; }
+    .logo-tagline { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-top: -2px; }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a { font-size: 13px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--text); position: relative; padding: 8px 0; }
+    .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px; background: var(--gold); transition: var(--transition); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    .nav-cta { display: flex; align-items: center; gap: 16px; }
+    .nav-phone { font-size: 14px; font-weight: 500; color: var(--charcoal); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 14px 32px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; border: none; cursor: pointer; transition: var(--transition); }
+    .btn-primary { background: var(--gold); color: var(--white); }
+    .btn-primary:hover { background: var(--gold-dark); transform: translateY(-2px); }
+    .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
+    .btn-outline:hover { background: var(--gold); color: var(--white); }
+    .mobile-menu-btn { display: none; flex-direction: column; gap: 6px; background: none; border: none; cursor: pointer; padding: 8px; }
+    .mobile-menu-btn span { width: 28px; height: 2px; background: var(--charcoal); transition: var(--transition); }
+    .mobile-nav { display: none; position: fixed; top: 80px; left: 0; right: 0; background: var(--cream); padding: 32px 24px; border-bottom: 1px solid var(--border); }
+    .mobile-nav.active { display: block; }
+    .mobile-nav a { display: block; padding: 16px 0; font-size: 14px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--text); border-bottom: 1px solid var(--border); }
+
+    /* Page Hero */
+    .page-hero {
+      padding: 180px 0 100px;
+      background: linear-gradient(135deg, var(--cream) 0%, #F5F0E8 100%);
+      text-align: center;
+    }
+    .page-hero-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .page-hero-title {
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 400;
+      margin-bottom: 20px;
+    }
+    .page-hero-title span { font-style: italic; color: var(--sage); }
+    .page-hero-text {
+      font-size: 18px;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Services Categories */
+    .services-nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 80px;
+      z-index: 100;
+    }
+    .services-nav-inner {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      padding: 24px 0;
+    }
+    .services-nav a {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-light);
+      padding-bottom: 8px;
+      border-bottom: 2px solid transparent;
+    }
+    .services-nav a:hover, .services-nav a.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    /* Services Section */
+    .services-category {
+      padding: 100px 0;
+    }
+    .services-category:nth-child(even) {
+      background: var(--white);
+    }
+    .category-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .category-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    .category-title {
+      font-size: 36px;
+      margin-bottom: 16px;
+    }
+    .category-desc {
+      font-size: 16px;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Service Cards */
+    .services-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .service-item {
+      background: var(--cream);
+      padding: 40px;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    .services-category:nth-child(even) .service-item {
+      background: var(--white);
+      border: 1px solid var(--border);
+    }
+    .service-item:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .service-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .service-item-title {
+      font-size: 24px;
+    }
+    .service-item-price {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--gold);
+    }
+    .service-item-duration {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-bottom: 12px;
+    }
+    .service-item-desc {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-bottom: 20px;
+    }
+    .service-item-cta {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .service-item-cta:hover {
+      color: var(--gold-dark);
+    }
+
+    /* Packages Section */
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+    .package-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      text-align: center;
+      padding: 48px 32px;
+      transition: var(--transition);
+      position: relative;
+    }
+    .package-card.featured {
+      border-color: var(--gold);
+      transform: scale(1.05);
+    }
+    .package-card.featured::before {
+      content: 'Most Popular';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--gold);
+      color: var(--white);
+      padding: 8px 24px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .package-card:hover {
+      box-shadow: var(--shadow-lg);
+    }
+    .package-title {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    .package-duration {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-bottom: 24px;
+    }
+    .package-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 48px;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+    .package-features {
+      list-style: none;
+      margin-bottom: 32px;
+    }
+    .package-features li {
+      padding: 12px 0;
+      font-size: 14px;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+    .package-features li:last-child {
+      border-bottom: none;
+    }
+
+    /* Footer */
+    .footer { background: var(--charcoal); color: var(--white); padding: 80px 0 40px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 60px; }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: var(--white); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+    .footer-text { font-size: 14px; color: rgba(255, 255, 255, 0.6); line-height: 1.8; margin-bottom: 24px; }
+    .footer-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; margin-bottom: 24px; }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 12px; }
+    .footer-links a { font-size: 14px; color: rgba(255, 255, 255, 0.6); }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-bottom { padding-top: 40px; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; }
+    .footer-copyright { font-size: 13px; color: rgba(255, 255, 255, 0.4); }
+    .footer-credits a { font-size: 13px; color: var(--gold); }
+
+    @media (max-width: 1024px) {
+      .services-list { grid-template-columns: 1fr; }
+      .packages-grid { grid-template-columns: 1fr; }
+      .package-card.featured { transform: none; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .mobile-menu-btn { display: flex; }
+      .services-nav-inner { gap: 24px; flex-wrap: wrap; justify-content: center; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <nav class="nav">
+        <a href="index.html" class="logo">
+          <span class="logo-text">Serenity</span>
+          <span class="logo-tagline">Spa & Wellness</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="services.html" class="active">Services</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="nav-cta">
+          <span class="nav-phone">+44 123 456 7890</span>
+          <a href="contact.html" class="btn btn-primary">Book Now</a>
+        </div>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <nav class="mobile-nav" id="mobile-nav">
+    <a href="index.html">Home</a>
+    <a href="services.html">Services</a>
+    <a href="about.html">About</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <div class="container">
+      <span class="page-hero-label" data-aos="fade-up">Our Services</span>
+      <h1 class="page-hero-title" data-aos="fade-up" data-aos-delay="100">
+        Luxury <span>Treatments</span>
+      </h1>
+      <p class="page-hero-text" data-aos="fade-up" data-aos-delay="200">
+        Discover our comprehensive menu of rejuvenating treatments, each designed
+        to restore balance and enhance your natural beauty.
+      </p>
+    </div>
+  </section>
+
+  <!-- Services Navigation -->
+  <nav class="services-nav">
+    <div class="container">
+      <div class="services-nav-inner">
+        <a href="#massage" class="active">Massage</a>
+        <a href="#facial">Facials</a>
+        <a href="#body">Body</a>
+        <a href="#packages">Packages</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Massage Therapy -->
+  <section class="services-category" id="massage">
+    <div class="container">
+      <div class="category-header" data-aos="fade-up">
+        <div class="category-icon">💆</div>
+        <h2 class="category-title">Massage Therapy</h2>
+        <p class="category-desc">
+          Our therapeutic massage treatments combine ancient techniques with modern
+          expertise to release tension and restore balance.
+        </p>
+      </div>
+
+      <div class="services-list">
+        <div class="service-item" data-aos="fade-up" data-aos-delay="100">
+          <div class="service-item-header">
+            <h3 class="service-item-title">Swedish Massage</h3>
+            <span class="service-item-price">£85</span>
+          </div>
+          <p class="service-item-duration">60 minutes</p>
+          <p class="service-item-desc">
+            A classic relaxation massage using long, flowing strokes to ease muscle
+            tension and improve circulation. Perfect for first-time spa visitors.
+          </p>
+          <a href="contact.html" class="service-item-cta">Book Now →</a>
+        </div>
+
+        <div class="service-item" data-aos="fade-up" data-aos-delay="200">
+          <div class="service-item-header">
+            <h3 class="service-item-title">Deep Tissue</h3>
+            <span class="service-item-price">£105</span>
+          </div>
+          <p class="service-item-duration">75 minutes</p>
+          <p class="service-item-desc">
+            Targeted pressure to release chronic muscle tension and knots. Ideal for
+            those with specific areas of pain or athletic recovery.
+          </p>
+          <a href="contact.html" class="service-item-cta">Book Now →</a>
+        </div>
+
+        <div class="service-item" data-aos="fade-up" data-aos-delay="100">
+          <div class="service-item-header">
+            <h3 class="service-item-title">Hot Stone Therapy</h3>
+            <span class="service-item-price">£120</span>
+          </div>
+          <p class="service-item-duration">90 minutes</p>
+          <p class="service-item-desc">
+            Heated basalt stones are placed on key points to melt away tension while
+            warm oils are massaged into tired muscles.
+          </p>
+          <a href="contact.html" class="service-item-cta">Book Now →</a>
+        </div>
+
+        <div class="service-item" data-aos="fade-up" data-aos-delay="200">
+          <div class="service-item-header">
+            <h3 class="service-item-title">Aromatherapy Journey</h3>
+            <span class="service-item-price">£110</span>
+          </div>
+          <p class="service-item-duration">75 minutes</p>
+          <p class="service-item-desc">
+            Custom-blended essential oils enhance this therapeutic massage, addressing
+            your specific needs—whether relaxation, energy, or balance.
+          </p>
+          <a href="contact.html" class="service-item-cta">Book Now →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Facial Treatments -->
+  <section class="services-category" id="facial">
+    <div class="container">
+      <div class="category-header" data-aos="fade-up">
+        <div class="category-icon">🧖</div>
+        <h2 class="category-title">Facial Treatments</h2>
+        <p class="category-desc">
+          Advanced skincare treatments using premium organic products to rejuvenate
+          and restore your skin's natural radiance.
+        </p>
+      </div>
+
+      <div class="services-list">
+        <div class="service-item" data-aos="fade-up" data-aos-delay="100">
+          <div class="service-item-header">
+            <h3 class="service-item-title">Classic Facial</h3>
+            <span class="service-item-price">£75</span>
+          </div>
+          <p class="service-item-duration">45 minutes</p>
+          <p class="service-item-desc">
+            Deep cleansing, exfoliation, and hydrating mask tailored to your skin type.
+            The perfect introduction to professional skincare.
+          </p>
+          <a href="contact.html" class="service-item-cta">Book Now →</a>
+        </div>
+
+        <div class="service-item" data-aos="fade-up" data-aos-delay="200">
+          <div class="service-item-header">
+            <h3 class="service-item-title">Anti-Aging Luxe</h3>
+            <span class="service-item-price">£140</span>
+          </div>
+          <p class="service-item-duration">75 minutes</p>
+          <p class="service-item-desc">
+            Advanced treatment with collagen-boosting serums, LED therapy, and facial
+            massage to reduce fine lines and restore youthful radiance.
+          </p>
+          <a href="contact.html" class="service-item-cta">Book Now →</a>
+        </div>
+
+        <div class="service-item" data-aos="fade-up" data-aos-delay="100">
+          <div class="service-item-header">
+            <h3 class="service-item-title">Hydrating Rose Ritual</h3>
+            <span class="service-item-price">£95</span>
+          </div>
+          <p class="service-item-duration">60 minutes</p>
+          <p class="service-item-desc">
+            Rose-infused treatment to deeply hydrate and calm sensitive or dehydrated
+            skin. Includes gentle lymphatic drainage massage.
+          </p>
+          <a href="contact.html" class="service-item-cta">Book Now →</a>
+        </div>
+
+        <div class="service-item" data-aos="fade-up" data-aos-delay="200">
+          <div class="service-item-header">
+            <h3 class="service-item-title">Gentleman's Facial</h3>
+            <span class="service-item-price">£85</span>
+          </div>
+          <p class="service-item-duration">50 minutes</p>
+          <p class="service-item-desc">
+            Designed specifically for men's skin, addressing concerns like shaving
+            irritation, congestion, and environmental damage.
+          </p>
+          <a href="contact.html" class="service-item-cta">Book Now →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Body Rituals -->
+  <section class="services-category" id="body">
+    <div class="container">
+      <div class="category-header" data-aos="fade-up">
+        <div class="category-icon">🛁</div>
+        <h2 class="category-title">Body Rituals</h2>
+        <p class="category-desc">
+          Indulgent full-body treatments that nourish, detoxify, and revitalize
+          from head to toe.
+        </p>
+      </div>
+
+      <div class="services-list">
+        <div class="service-item" data-aos="fade-up" data-aos-delay="100">
+          <div class="service-item-header">
+            <h3 class="service-item-title">Salt & Oil Glow</h3>
+            <span class="service-item-price">£90</span>
+          </div>
+          <p class="service-item-duration">60 minutes</p>
+          <p class="service-item-desc">
+            Mineral-rich sea salt exfoliation followed by nourishing oil application.
+            Leaves skin incredibly soft and smooth.
+          </p>
+          <a href="contact.html" class="service-item-cta">Book Now →</a>
+        </div>
+
+        <div class="service-item" data-aos="fade-up" data-aos-delay="200">
+          <div class="service-item-header">
+            <h3 class="service-item-title">Detox Mud Wrap</h3>
+            <span class="service-item-price">£120</span>
+          </div>
+          <p class="service-item-duration">75 minutes</p>
+          <p class="service-item-desc">
+            Mineral-rich mud wrap to draw out toxins and impurities while deeply
+            nourishing the skin. Includes scalp massage.
+          </p>
+          <a href="contact.html" class="service-item-cta">Book Now →</a>
+        </div>
+
+        <div class="service-item" data-aos="fade-up" data-aos-delay="100">
+          <div class="service-item-header">
+            <h3 class="service-item-title">Cocoon Wrap</h3>
+            <span class="service-item-price">£135</span>
+          </div>
+          <p class="service-item-duration">90 minutes</p>
+          <p class="service-item-desc">
+            Full body wrap with choice of chocolate, lavender, or aloe vera. Includes
+            face mask and scalp treatment while you drift away.
+          </p>
+          <a href="contact.html" class="service-item-cta">Book Now →</a>
+        </div>
+
+        <div class="service-item" data-aos="fade-up" data-aos-delay="200">
+          <div class="service-item-header">
+            <h3 class="service-item-title">Hydrotherapy Circuit</h3>
+            <span class="service-item-price">£65</span>
+          </div>
+          <p class="service-item-duration">2 hours access</p>
+          <p class="service-item-desc">
+            Access to our thermal suite including steam room, sauna, ice fountain,
+            and hydrotherapy pool. Perfect before any treatment.
+          </p>
+          <a href="contact.html" class="service-item-cta">Book Now →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Packages -->
+  <section class="services-category" id="packages">
+    <div class="container">
+      <div class="category-header" data-aos="fade-up">
+        <div class="category-icon">🎁</div>
+        <h2 class="category-title">Spa Packages</h2>
+        <p class="category-desc">
+          Curated experiences combining our most popular treatments for the
+          ultimate spa journey.
+        </p>
+      </div>
+
+      <div class="packages-grid">
+        <div class="package-card" data-aos="fade-up" data-aos-delay="100">
+          <h3 class="package-title">Escape</h3>
+          <p class="package-duration">2 Hours</p>
+          <div class="package-price">£150</div>
+          <ul class="package-features">
+            <li>Swedish Massage (60 min)</li>
+            <li>Classic Facial (45 min)</li>
+            <li>Refreshments</li>
+            <li>Thermal Suite Access</li>
+          </ul>
+          <a href="contact.html" class="btn btn-outline">Book Package</a>
+        </div>
+
+        <div class="package-card featured" data-aos="fade-up" data-aos-delay="200">
+          <h3 class="package-title">Serenity Day</h3>
+          <p class="package-duration">4 Hours</p>
+          <div class="package-price">£295</div>
+          <ul class="package-features">
+            <li>Hot Stone Massage (90 min)</li>
+            <li>Anti-Aging Luxe Facial (75 min)</li>
+            <li>Salt & Oil Glow (60 min)</li>
+            <li>Lunch & Champagne</li>
+            <li>Full Day Thermal Access</li>
+          </ul>
+          <a href="contact.html" class="btn btn-primary">Book Package</a>
+        </div>
+
+        <div class="package-card" data-aos="fade-up" data-aos-delay="300">
+          <h3 class="package-title">Couples Retreat</h3>
+          <p class="package-duration">3 Hours</p>
+          <div class="package-price">£380</div>
+          <ul class="package-features">
+            <li>Side-by-Side Massage (60 min)</li>
+            <li>Private Suite Experience</li>
+            <li>Champagne & Chocolates</li>
+            <li>Thermal Suite Access</li>
+            <li>Rose Petal Bath</li>
+          </ul>
+          <a href="contact.html" class="btn btn-outline">Book Package</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo">Serenity</div>
+          <p class="footer-text">A sanctuary of peace and rejuvenation, where luxury meets wellness.</p>
+        </div>
+        <div>
+          <h4 class="footer-title">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Services</h4>
+          <ul class="footer-links">
+            <li><a href="#massage">Massage Therapy</a></li>
+            <li><a href="#facial">Facial Treatments</a></li>
+            <li><a href="#body">Body Rituals</a></li>
+            <li><a href="#packages">Spa Packages</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Contact</h4>
+          <ul class="footer-links">
+            <li>123 Wellness Avenue</li>
+            <li>London, W1K 1AB</li>
+            <li>+44 123 456 7890</li>
+            <li>hello@serenityspa.com</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">© 2024 Serenity Spa & Wellness. All rights reserved.</p>
+        <p class="footer-credits">Website by <a href="https://grindarestudio.com" target="_blank">Grindare Studio</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, easing: 'ease-out', once: true, offset: 50 });
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    mobileMenuBtn.addEventListener('click', () => mobileNav.classList.toggle('active'));
+  </script>
+</body>
+</html>
