@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CBMCKR6X8R"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CBMCKR6X8R');
+  </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grindare Studio | Tworzenie Gier i Stron Internetowych</title>
+
+  <meta name="description" content="Grindare Studio - Profesjonalne tworzenie gier i stron internetowych. Tworzymy gry mobilne i premium strony dla firm. Działamy w UK i Polsce.">
+  <meta property="og:title" content="Grindare Studio | Tworzenie Gier i Stron Internetowych">
+  <meta property="og:description" content="Profesjonalne tworzenie gier i stron. Gry mobilne RPG, strony biznesowe i rozwiązania cyfrowe.">
+  <meta property="og:image" content="https://grindarestudio.com/images/grindare_logo.png">
+  <meta property="og:url" content="https://grindarestudio.com/pl/">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <meta name="keywords" content="tworzenie gier, strony internetowe, gry mobilne, strony UK, Godot, strony dla firm, studio gier, web design, responsywne strony, gry RPG">
+  <meta name="author" content="Grindare Studio">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="Polish">
+  <link rel="canonical" href="https://grindarestudio.com/pl/">
+  <link rel="alternate" hreflang="en" href="https://grindarestudio.com/">
+  <link rel="alternate" hreflang="pl" href="https://grindarestudio.com/pl/">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="../styles-shared.css">
+  <style>
+    :root {
+      --bg-dark: #09090b;
+      --bg-darker: #050506;
+      --bg-card: rgba(18, 18, 22, 0.95);
+      --bg-card-hover: rgba(24, 24, 30, 0.98);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(255, 255, 255, 0.12);
+      --text: rgba(255, 255, 255, 0.95);
+      --text-muted: rgba(255, 255, 255, 0.6);
+      --text-subtle: rgba(255, 255, 255, 0.4);
+      --gold: #f5b942;
+      --gold-light: #fcd978;
+      --gold-dim: rgba(245, 185, 66, 0.12);
+      --purple: #a855f7;
+      --purple-dim: rgba(168, 85, 247, 0.12);
+      --blue: #3b82f6;
+      --blue-dim: rgba(59, 130, 246, 0.12);
+      --green: #22c55e;
+      --green-dim: rgba(34, 197, 94, 0.12);
+      --gradient-gold: linear-gradient(135deg, #f5b942, #f59e0b);
+      --gradient-purple: linear-gradient(135deg, #a855f7, #7c3aed);
+      --gradient-blue: linear-gradient(135deg, #3b82f6, #2563eb);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --radius-lg: 24px;
+      --max-width: 1200px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .bg-gradient { position: fixed; inset: 0; z-index: -1; background: var(--bg-dark); }
+    .bg-gradient::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background:
+        radial-gradient(ellipse 40% 30% at 70% 20%, rgba(168, 85, 247, 0.08), transparent),
+        radial-gradient(ellipse 50% 40% at 30% 80%, rgba(245, 185, 66, 0.06), transparent),
+        radial-gradient(ellipse 30% 20% at 90% 60%, rgba(59, 130, 246, 0.05), transparent);
+      animation: bgMove 20s ease-in-out infinite alternate;
+    }
+    @keyframes bgMove { 0% { transform: translate(0, 0); } 100% { transform: translate(-5%, -5%); } }
+
+    .blob-container { position: fixed; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.2; animation: blobMorph 25s ease-in-out infinite; }
+    .blob-1 { width: 600px; height: 600px; background: radial-gradient(circle, var(--gold) 0%, transparent 70%); top: -15%; right: -15%; }
+    .blob-2 { width: 500px; height: 500px; background: radial-gradient(circle, var(--purple) 0%, transparent 70%); bottom: 10%; left: -15%; animation-delay: -7s; }
+    .blob-3 { width: 400px; height: 400px; background: radial-gradient(circle, #3b82f6 0%, transparent 70%); top: 40%; right: 10%; animation-delay: -14s; }
+    @keyframes blobMorph {
+      0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); border-radius: 50%; }
+      25% { transform: translate(30px, -50px) scale(1.1) rotate(90deg); border-radius: 60% 40% 70% 30%; }
+      50% { transform: translate(-20px, 20px) scale(0.9) rotate(180deg); border-radius: 40% 60% 30% 70%; }
+      75% { transform: translate(50px, 30px) scale(1.05) rotate(270deg); border-radius: 30% 70% 50% 50%; }
+    }
+
+    .container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+
+    /* Navigation */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 12px 24px;
+      background: rgba(9, 9, 11, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner { max-width: var(--max-width); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); }
+    .nav-logo img { height: 72px; width: auto; filter: drop-shadow(0 0 20px rgba(245, 185, 66, 0.3)); transition: all 0.3s ease; }
+    .nav-logo img:hover { filter: drop-shadow(0 0 30px rgba(245, 185, 66, 0.5)); transform: scale(1.05); }
+    .nav-links { display: flex; gap: 8px; list-style: none; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; padding: 10px 16px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; transition: all 0.2s; }
+    .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+    .nav-cta { background: var(--gradient-gold); color: #000; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 600; font-size: 14px; text-decoration: none; transition: all 0.2s; }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(245, 185, 66, 0.3); }
+
+    /* Language Switcher */
+    .lang-switch { display: flex; gap: 8px; margin-left: 16px; }
+    .lang-switch a { padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; text-decoration: none; border: 1px solid var(--border); color: var(--text-muted); transition: all 0.2s; }
+    .lang-switch a.active { background: var(--gold); color: #000; border-color: var(--gold); }
+    .lang-switch a:hover:not(.active) { border-color: var(--gold); color: var(--gold); }
+
+    .mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+    .mobile-menu-btn span { display: block; width: 24px; height: 2px; background: var(--text); margin: 5px 0; transition: all 0.3s; }
+    .mobile-nav { display: none; position: fixed; top: 80px; left: 0; right: 0; background: rgba(9, 9, 11, 0.98); padding: 24px; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--border); }
+    .mobile-nav a { color: var(--text-muted); text-decoration: none; padding: 16px; border-radius: var(--radius-sm); font-size: 16px; transition: all 0.2s; }
+    .mobile-nav a:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+    .mobile-nav.active { display: flex; }
+    .mobile-menu-btn.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+    .mobile-menu-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    @media (max-width: 900px) {
+      .nav-links, .nav-cta { display: none; }
+      .mobile-menu-btn { display: block; }
+    }
+
+    /* Hero */
+    .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 120px 24px 80px; position: relative; z-index: 10; }
+    .hero-content { max-width: 900px; }
+    .hero-badge { display: inline-block; padding: 8px 16px; background: var(--gold-dim); border: 1px solid rgba(245, 185, 66, 0.2); border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--gold); margin-bottom: 24px; }
+    .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(36px, 6vw, 72px); font-weight: 700; line-height: 1.1; margin-bottom: 24px; }
+    .hero .highlight { background: var(--gradient-gold); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-sub { font-size: clamp(16px, 2vw, 20px); color: var(--text-muted); max-width: 600px; margin: 0 auto 40px; line-height: 1.7; }
+    .hero-cta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: var(--radius-sm); font-weight: 600; font-size: 15px; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; }
+    .btn-primary { background: var(--gradient-gold); color: #000; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(245, 185, 66, 0.3); }
+    .btn-secondary { background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: var(--border-hover); }
+    .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    .hero-stats { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; }
+    .hero-stat { text-align: center; }
+    .hero-stat-value { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; color: var(--gold); }
+    .hero-stat-label { font-size: 14px; color: var(--text-muted); }
+
+    .greeting-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: 999px; font-size: 12px; color: #22c55e; margin-bottom: 16px; }
+
+    .typing-text { display: inline-block; min-width: 200px; }
+    .typing-cursor { display: inline-block; width: 3px; height: 1em; background: var(--gold); margin-left: 4px; animation: blink 1s infinite; vertical-align: middle; }
+    @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+
+    .gradient-text-animated {
+      background: linear-gradient(90deg, #f5b942, #f59e0b, #fcd978, #f5b942);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 4s ease infinite;
+    }
+    @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    /* Sections */
+    section { padding: 100px 0; position: relative; z-index: 10; }
+    .section-header { text-align: center; max-width: 700px; margin: 0 auto 60px; }
+    .section-label { font-size: 13px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+    .section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px, 4vw, 42px); font-weight: 700; margin-bottom: 16px; }
+    .section-desc { color: var(--text-muted); font-size: 17px; line-height: 1.7; }
+
+    /* Services Grid */
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .services-3col { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 900px) { .services-grid, .services-3col { grid-template-columns: 1fr; } }
+
+    .service-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gradient-gold); opacity: 0; transition: opacity 0.3s; }
+    .service-card:hover { border-color: var(--border-hover); transform: translateY(-4px); }
+    .service-card:hover::before { opacity: 1; }
+    .service-card.web::before { background: var(--gradient-purple); }
+    .service-card.game::before { background: var(--gradient-gold); }
+    .service-icon { width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; background: var(--gold-dim); border-radius: var(--radius); margin-bottom: 24px; font-size: 28px; }
+    .service-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; margin-bottom: 12px; }
+    .service-card > p { color: var(--text-muted); font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
+    .service-features { list-style: none; margin-bottom: 32px; }
+    .service-features li { padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-muted); display: flex; align-items: center; gap: 12px; }
+    .service-features li:last-child { border-bottom: none; }
+    .service-features li::before { content: '✓'; color: var(--gold); font-weight: bold; font-size: 12px; }
+
+    /* Pricing */
+    .pricing { background: var(--bg-dark); }
+    .pricing-tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 48px; background: rgba(255,255,255,0.03); padding: 6px; border-radius: var(--radius); width: fit-content; margin-left: auto; margin-right: auto; flex-wrap: wrap; }
+    .pricing-tab { padding: 12px 24px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; color: var(--text-muted); background: transparent; border: none; cursor: pointer; transition: all 0.2s; }
+    .pricing-tab.active { background: var(--gold); color: #000; }
+    .pricing-tab:hover:not(.active) { color: var(--text); background: rgba(255,255,255,0.05); }
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; } }
+    .pricing-panel { display: none; }
+    .pricing-panel.active { display: block; }
+    .pricing-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 40px; position: relative; transition: all 0.3s; }
+    .pricing-card:hover { border-color: var(--border-hover); transform: translateY(-4px); }
+    .pricing-card.featured { border-color: var(--gold); background: linear-gradient(180deg, rgba(245, 185, 66, 0.05), transparent); }
+    .pricing-card.featured::before { content: 'Najpopularniejszy'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gradient-gold); color: #000; padding: 6px 16px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .pricing-header { text-align: center; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+    .pricing-name { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+    .pricing-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+    .pricing-price { font-family: 'Space Grotesk', sans-serif; font-size: 48px; font-weight: 700; }
+    .pricing-price span { font-size: 16px; font-weight: 400; color: var(--text-muted); }
+    .pricing-features { list-style: none; margin-bottom: 32px; }
+    .pricing-features li { padding: 10px 0; font-size: 14px; color: var(--text-muted); display: flex; align-items: flex-start; gap: 12px; }
+    .pricing-features li::before { content: '✓'; color: var(--green); font-weight: bold; margin-top: 2px; }
+    .pricing-card .btn { width: 100%; }
+
+    /* Projects */
+    .projects { background: var(--bg-darker); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    @media (max-width: 768px) { .projects-grid { grid-template-columns: 1fr; } }
+    .project-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: all 0.3s; }
+    .project-card:hover { border-color: var(--border-hover); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .project-image { width: 100%; height: 280px; object-fit: cover; border-bottom: 1px solid var(--border); }
+    .project-content { padding: 32px; }
+    .project-tag { display: inline-block; padding: 6px 14px; background: var(--gold-dim); border: 1px solid rgba(245, 185, 66, 0.2); border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--gold); margin-bottom: 16px; }
+    .project-tag.web { background: var(--purple-dim); border-color: rgba(168, 85, 247, 0.2); color: var(--purple); }
+    .project-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 24px; margin-bottom: 12px; }
+    .project-card p { color: var(--text-muted); font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+    .project-link { display: inline-flex; align-items: center; gap: 8px; color: var(--gold); text-decoration: none; font-weight: 600; font-size: 14px; transition: gap 0.2s; }
+    .project-link:hover { gap: 12px; }
+
+    /* Process */
+    .process { background: var(--bg-dark); }
+    .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    @media (max-width: 900px) { .process-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .process-grid { grid-template-columns: 1fr; } }
+    .process-step { text-align: center; padding: 32px 24px; }
+    .process-number { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; background: var(--gold-dim); border: 1px solid rgba(245, 185, 66, 0.2); border-radius: 50%; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: var(--gold); margin: 0 auto 20px; }
+    .process-step h4 { font-size: 16px; margin-bottom: 8px; }
+    .process-step p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+    /* FAQ */
+    .faq-section { background: var(--bg-dark); }
+    .faq-container { max-width: 800px; margin: 0 auto; }
+    .faq-item { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 16px; overflow: hidden; transition: all 0.3s; }
+    .faq-item:hover { border-color: var(--border-hover); }
+    .faq-question { width: 100%; padding: 24px; background: var(--bg-card); border: none; text-align: left; font-size: 16px; font-weight: 600; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; transition: all 0.2s; }
+    .faq-question:hover { background: var(--bg-card-hover); }
+    .faq-icon { font-size: 20px; color: var(--gold); transition: transform 0.3s; flex-shrink: 0; }
+    .faq-item.active .faq-icon { transform: rotate(45deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
+    .faq-item.active .faq-answer { max-height: 500px; }
+    .faq-answer-inner { padding: 0 24px 24px; color: var(--text-muted); font-size: 15px; line-height: 1.7; }
+
+    /* CTA */
+    .cta { background: var(--bg-dark); text-align: center; }
+    .cta-card { background: linear-gradient(135deg, rgba(245, 185, 66, 0.1), rgba(168, 85, 247, 0.05)); border: 1px solid rgba(245, 185, 66, 0.2); border-radius: var(--radius-lg); padding: 80px 48px; position: relative; overflow: hidden; }
+    .cta-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient-gold); }
+    .cta h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px, 4vw, 40px); margin-bottom: 16px; }
+    .cta p { color: var(--text-muted); font-size: 17px; margin-bottom: 40px; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-whatsapp { background: #25D366; color: white; }
+    .btn-whatsapp:hover { background: #128C7E; transform: translateY(-2px); }
+
+    /* Footer */
+    footer { background: var(--bg-darker); padding: 80px 0 40px; border-top: 1px solid var(--border); position: relative; z-index: 10; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
+    @media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; } }
+    .footer-brand img { height: 48px; margin-bottom: 16px; }
+    .footer-brand p { color: var(--text-muted); font-size: 14px; line-height: 1.6; }
+    .footer-links h4 { font-size: 14px; font-weight: 600; margin-bottom: 16px; color: var(--text); }
+    .footer-links a { display: block; color: var(--text-muted); font-size: 14px; text-decoration: none; padding: 6px 0; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-bottom { text-align: center; padding-top: 32px; border-top: 1px solid var(--border); }
+    .footer-bottom p { color: var(--text-subtle); font-size: 13px; }
+
+    /* WhatsApp Button */
+    .whatsapp-sticky { position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px; background: linear-gradient(135deg, #25d366, #128c7e); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); z-index: 1000; transition: all 0.3s ease; }
+    .whatsapp-sticky:hover { transform: scale(1.1); box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6); }
+    .whatsapp-sticky svg { width: 32px; height: 32px; fill: white; }
+
+    /* No Limits Section */
+    .no-limits { padding: 60px 0 100px; }
+    .no-limits-card { position: relative; background: linear-gradient(135deg, rgba(245, 185, 66, 0.08), rgba(168, 85, 247, 0.05)); border: 1px solid rgba(245, 185, 66, 0.2); border-radius: 32px; padding: 60px 40px; text-align: center; overflow: hidden; }
+    .no-limits-glow { position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 400px; height: 400px; background: radial-gradient(circle, rgba(245, 185, 66, 0.15), transparent 70%); pointer-events: none; }
+    .no-limits-icon { font-size: 64px; background: linear-gradient(135deg, #f5b942, #a855f7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; font-weight: 800; }
+    .no-limits-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px, 5vw, 42px); font-weight: 700; margin-bottom: 16px; background: linear-gradient(135deg, #fff, rgba(255,255,255,0.8)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .no-limits-text { font-size: 17px; color: var(--text-muted); max-width: 600px; margin: 0 auto 32px; line-height: 1.7; }
+    .no-limits-text strong { color: var(--gold); }
+    .no-limits-features { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 32px; margin-bottom: 32px; }
+    .no-limits-feature { display: flex; align-items: center; gap: 8px; font-size: 15px; color: var(--text); }
+    .no-limits-check { color: var(--gold); font-weight: 700; }
+    @media (max-width: 768px) { .no-limits-card { padding: 40px 24px; } .no-limits-icon { font-size: 48px; } }
+
+    @media (max-width: 600px) {
+      .pricing-card { padding: 24px; }
+      .service-card { padding: 24px; }
+      .cta-card { padding: 48px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="blob-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <div class="bg-gradient"></div>
+
+  <!-- WhatsApp -->
+  <a href="https://wa.me/447392305505?text=Cześć,%20interesuje%20mnie%20strona%20internetowa%20dla%20mojej%20firmy" class="whatsapp-sticky" target="_blank" aria-label="Napisz na WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/pl/" class="nav-logo">
+        <img src="../images/grindare_logo.png" alt="Grindare Studio">
+      </a>
+      <ul class="nav-links">
+        <li><a href="#uslugi">Usługi</a></li>
+        <li><a href="#cennik">Cennik</a></li>
+        <li><a href="#projekty">Projekty</a></li>
+        <li><a href="#proces">Proces</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+      <a href="#demo" class="nav-cta">Darmowe Demo</a>
+      <div class="lang-switch">
+        <a href="/">EN</a>
+        <a href="/pl/" class="active">PL</a>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="#uslugi">Usługi</a>
+    <a href="#cennik">Cennik</a>
+    <a href="#projekty">Projekty</a>
+    <a href="#proces">Proces</a>
+    <a href="#faq">FAQ</a>
+    <a href="#demo" class="mobile-cta">Darmowe Demo</a>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <div class="greeting-badge" id="greeting-badge" data-aos="fade-down" data-aos-delay="50">
+        <span id="greeting-emoji">👋</span>
+        <span id="greeting-text">Dobry wieczór!</span>
+      </div>
+      <div class="hero-badge" data-aos="fade-down" data-aos-delay="100">Dostępni dla nowych projektów</div>
+      <h1 data-aos="fade-up" data-aos-delay="200">Tworzymy Strony dla<br><span class="highlight gradient-text-animated typing-text" id="typing-text">Rzemieślników</span><span class="typing-cursor"></span></h1>
+      <p class="hero-sub" data-aos="fade-up" data-aos-delay="300">
+        Profesjonalna agencja tworzenia gier i stron internetowych. Od gier mobilnych RPG po strony biznesowe — tworzymy cyfrowe doświadczenia, które angażują i przynoszą rezultaty.
+      </p>
+      <div class="hero-cta" data-aos="fade-up" data-aos-delay="400">
+        <a href="#demo" class="btn btn-primary">Darmowe Demo</a>
+        <a href="#projekty" class="btn btn-secondary">Zobacz Prace</a>
+      </div>
+      <div class="hero-stats" data-aos="fade-up" data-aos-delay="500">
+        <div class="hero-stat">
+          <div class="hero-stat-value"><span class="counter" data-target="50">0</span>+</div>
+          <div class="hero-stat-label">Zrealizowanych Projektów</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value"><span class="counter" data-target="24">0</span>h</div>
+          <div class="hero-stat-label">Czas Odpowiedzi</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value"><span class="counter" data-target="100">0</span>%</div>
+          <div class="hero-stat-label">Zadowolonych Klientów</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="services-overview" id="uslugi">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <p class="section-label">Co Robimy</p>
+        <h2 class="section-title">Trzy Usługi, Jedno Studio</h2>
+        <p class="section-desc">Strony internetowe, aplikacje mobilne lub gry — niezależnie od potrzeb, mamy rozwiązanie.</p>
+      </div>
+
+      <div class="services-grid services-3col">
+        <div class="service-card web" data-aos="fade-up" data-aos-delay="100">
+          <div class="service-icon"><img src="../images/icon-website.png" alt="Strona" style="width: 40px; height: 40px;"></div>
+          <h3>Strony Internetowe</h3>
+          <p>Premium strony dla firm — indywidualny design, responsywne, zoptymalizowane pod SEO, stworzone do generowania leadów.</p>
+          <ul class="service-features">
+            <li>Indywidualny responsywny design</li>
+            <li>Podejście mobile-first</li>
+            <li>Formularze kontaktowe i WhatsApp</li>
+            <li>Mapy Google i lokalne SEO</li>
+            <li>Szybkie ładowanie i optymalizacja</li>
+          </ul>
+          <a href="#cennik" class="btn btn-secondary">Zobacz Pakiety →</a>
+        </div>
+
+        <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="service-icon" style="--icon-bg: rgba(59, 130, 246, 0.12);"><img src="../images/icon-app.png" alt="Aplikacja" style="width: 40px; height: 40px;"></div>
+          <h3>Aplikacje Mobilne</h3>
+          <p>Aplikacje cross-platform na iOS i Android. Od narzędzi biznesowych po aplikacje dla klientów — budujemy funkcjonalne rozwiązania mobilne.</p>
+          <ul class="service-features">
+            <li>iOS i Android (cross-platform)</li>
+            <li>Autentykacja i bezpieczeństwo</li>
+            <li>Powiadomienia push</li>
+            <li>Backend i baza danych</li>
+            <li>Publikacja w App Store</li>
+          </ul>
+          <a href="#cennik" class="btn btn-secondary">Zobacz Pakiety →</a>
+        </div>
+
+        <div class="service-card game" data-aos="fade-up" data-aos-delay="300">
+          <div class="service-icon"><img src="../images/icon-game.png" alt="Gra" style="width: 40px; height: 40px;"></div>
+          <h3>Tworzenie Gier</h3>
+          <p>Gry mobilne w Godot 4.5 z backendem PlayFab. Od koncepcji do premiery — pełne tworzenie gier.</p>
+          <ul class="service-features">
+            <li>Rozwój w Godot 4.5</li>
+            <li>Integracja z PlayFab</li>
+            <li>Game design i balansowanie</li>
+            <li>Projektowanie UI/UX</li>
+            <li>Wsparcie po premierze</li>
+          </ul>
+          <a href="#cennik" class="btn btn-secondary">Zobacz Pakiety →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- No Limits -->
+  <section class="no-limits" id="no-limits">
+    <div class="container">
+      <div class="no-limits-card" data-aos="zoom-in">
+        <div class="no-limits-glow"></div>
+        <div class="no-limits-icon">∞</div>
+        <h2 class="no-limits-title">Bez Limitów. Bez Granic.</h2>
+        <p class="no-limits-text">
+          Chcesz system rezerwacji? Interaktywną prezentację 3D? Chatbota AI? Unikalne animacje?<br>
+          <strong>Jeśli możesz to sobie wyobrazić, możemy to zbudować.</strong> Każda funkcja, każdy pomysł — realizujemy.
+        </p>
+        <div class="no-limits-features">
+          <div class="no-limits-feature"><span class="no-limits-check">✓</span><span>Dowolna funkcja</span></div>
+          <div class="no-limits-feature"><span class="no-limits-check">✓</span><span>Niestandardowa funkcjonalność</span></div>
+          <div class="no-limits-feature"><span class="no-limits-check">✓</span><span>Unikalne projekty</span></div>
+          <div class="no-limits-feature"><span class="no-limits-check">✓</span><span>Zaawansowane integracje</span></div>
+        </div>
+        <a href="#kontakt" class="btn btn-primary">Opowiedz Nam Swój Pomysł →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="pricing" id="cennik">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <p class="section-label">Cennik</p>
+        <h2 class="section-title">Przejrzysty Cennik, Bez Niespodzianek</h2>
+        <p class="section-desc">Wybierz pakiet dopasowany do potrzeb. Wszystkie ceny zawierają to, co wymienione — bez ukrytych opłat.</p>
+      </div>
+
+      <div class="pricing-tabs">
+        <button class="pricing-tab active" data-tab="web">Strony WWW</button>
+        <button class="pricing-tab" data-tab="app">Aplikacje</button>
+        <button class="pricing-tab" data-tab="game">Gry</button>
+        <button class="pricing-tab" data-tab="addons">Dodatki</button>
+      </div>
+
+      <div class="pricing-panel active" id="panel-web">
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-name">Starter</div>
+              <div class="pricing-desc">Idealny dla małych firm</div>
+              <div class="pricing-price">£499 <span>jednorazowo</span></div>
+            </div>
+            <ul class="pricing-features">
+              <li>Strona jednostronicowa</li>
+              <li>Responsywny design</li>
+              <li>Formularz kontaktowy</li>
+              <li>Przycisk WhatsApp</li>
+              <li>Podstawowe SEO</li>
+              <li>Integracja Google Maps</li>
+              <li>1 miesiąc darmowego wsparcia</li>
+            </ul>
+            <a href="#demo" class="btn btn-outline">Dowiedz się więcej</a>
+          </div>
+
+          <div class="pricing-card featured">
+            <div class="pricing-header">
+              <div class="pricing-name">Business</div>
+              <div class="pricing-desc">Dla rozwijających się firm</div>
+              <div class="pricing-price">£899 <span>jednorazowo</span></div>
+            </div>
+            <ul class="pricing-features">
+              <li>Do 5 podstron</li>
+              <li>Premium indywidualny design</li>
+              <li>Zaawansowane formularze</li>
+              <li>WhatsApp live chat</li>
+              <li>Pełna optymalizacja SEO</li>
+              <li>Konfiguracja Google Analytics</li>
+              <li>Galeria zdjęć / portfolio</li>
+              <li>3 miesiące darmowego wsparcia</li>
+            </ul>
+            <a href="#demo" class="btn btn-primary">Dowiedz się więcej</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-name">Premium</div>
+              <div class="pricing-desc">Kompletne rozwiązanie cyfrowe</div>
+              <div class="pricing-price">£1,499 <span>jednorazowo</span></div>
+            </div>
+            <ul class="pricing-features">
+              <li>Nieograniczona liczba podstron</li>
+              <li>Spersonalizowany design i branding</li>
+              <li>Zaawansowane animacje</li>
+              <li>Sekcja blog / aktualności</li>
+              <li>Pełne SEO + lokalne SEO</li>
+              <li>Optymalizacja szybkości</li>
+              <li>Integracja social media</li>
+              <li>6 miesięcy darmowego wsparcia</li>
+              <li>Priorytetowa obsługa</li>
+            </ul>
+            <a href="#demo" class="btn btn-outline">Dowiedz się więcej</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pricing-panel" id="panel-app">
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-name">Design Aplikacji</div>
+              <div class="pricing-desc">Planowanie i prototypowanie</div>
+              <div class="pricing-price">£799 <span>od</span></div>
+            </div>
+            <ul class="pricing-features">
+              <li>Koncepcja i wireframes</li>
+              <li>Mapowanie przepływu użytkownika</li>
+              <li>Makiety UI/UX</li>
+              <li>Klikalny prototyp</li>
+              <li>Specyfikacja techniczna</li>
+              <li>Priorytetyzacja funkcji</li>
+              <li>2 rundy poprawek</li>
+            </ul>
+            <a href="#demo" class="btn btn-outline">Dowiedz się więcej</a>
+          </div>
+
+          <div class="pricing-card featured">
+            <div class="pricing-header">
+              <div class="pricing-name">MVP Aplikacji</div>
+              <div class="pricing-desc">Funkcjonalny prototyp</div>
+              <div class="pricing-price">£3,999 <span>od</span></div>
+            </div>
+            <ul class="pricing-features">
+              <li>Cross-platform (iOS i Android)</li>
+              <li>Rozwój głównych funkcji</li>
+              <li>Autentykacja użytkowników</li>
+              <li>Podstawowy backend/baza danych</li>
+              <li>Powiadomienia push</li>
+              <li>Buildy testowe do przeglądu</li>
+              <li>Własność kodu źródłowego</li>
+              <li>1 miesiąc wsparcia</li>
+            </ul>
+            <a href="#demo" class="btn btn-primary">Dowiedz się więcej</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-name">Pełna Aplikacja</div>
+              <div class="pricing-desc">Kompletne rozwiązanie</div>
+              <div class="pricing-price">Wycena</div>
+            </div>
+            <ul class="pricing-features">
+              <li>Wszystko z MVP</li>
+              <li>Pełny rozwój funkcji</li>
+              <li>Zaawansowane integracje</li>
+              <li>Panel administracyjny</li>
+              <li>Publikacja w App Store</li>
+              <li>Publikacja w Play Store</li>
+              <li>Wsparcie przy premierze</li>
+              <li>Bieżąca konserwacja</li>
+            </ul>
+            <a href="#demo" class="btn btn-outline">Dowiedz się więcej</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pricing-panel" id="panel-game">
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-name">Game Design</div>
+              <div class="pricing-desc">Planowanie i dokumentacja</div>
+              <div class="pricing-price">£999 <span>od</span></div>
+            </div>
+            <ul class="pricing-features">
+              <li>Rozwój koncepcji gry</li>
+              <li>Projektowanie core gameplay loop</li>
+              <li>Strategia monetyzacji</li>
+              <li>Dokumentacja techniczna</li>
+              <li>Przewodnik stylu graficznego</li>
+              <li>Priorytetyzacja funkcji</li>
+              <li>2 rundy poprawek</li>
+            </ul>
+            <a href="#demo" class="btn btn-outline">Dowiedz się więcej</a>
+          </div>
+
+          <div class="pricing-card featured">
+            <div class="pricing-header">
+              <div class="pricing-name">MVP Development</div>
+              <div class="pricing-desc">Grywalna wersja demo</div>
+              <div class="pricing-price">£4,999 <span>od</span></div>
+            </div>
+            <ul class="pricing-features">
+              <li>Rozwój w Godot 4.5</li>
+              <li>Główne systemy rozgrywki</li>
+              <li>Podstawowa implementacja UI</li>
+              <li>Integracja placeholder art</li>
+              <li>Konfiguracja backendu PlayFab</li>
+              <li>Testowy build Android</li>
+              <li>Własność kodu źródłowego</li>
+              <li>1 miesiąc wsparcia</li>
+            </ul>
+            <a href="#demo" class="btn btn-primary">Dowiedz się więcej</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-name">Pełny Development</div>
+              <div class="pricing-desc">Kompletne rozwiązanie</div>
+              <div class="pricing-price">Wycena</div>
+            </div>
+            <ul class="pricing-features">
+              <li>Wszystko z MVP</li>
+              <li>Pełny rozwój gry</li>
+              <li>Kierownictwo artystyczne</li>
+              <li>Integracja dźwięku i muzyki</li>
+              <li>Kompletne systemy backend</li>
+              <li>Publikacja w sklepach</li>
+              <li>Wsparcie przy premierze</li>
+              <li>Aktualizacje po premierze</li>
+            </ul>
+            <a href="#demo" class="btn btn-outline">Dowiedz się więcej</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pricing-panel" id="panel-addons">
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-name">Miesięczna Opieka</div>
+              <div class="pricing-desc">Konserwacja strony</div>
+              <div class="pricing-price">£79 <span>/miesiąc</span></div>
+            </div>
+            <ul class="pricing-features">
+              <li>Aktualizacje treści (2/miesiąc)</li>
+              <li>Monitoring bezpieczeństwa</li>
+              <li>Monitoring dostępności</li>
+              <li>Miesięczne backupy</li>
+              <li>Raporty wydajności</li>
+              <li>Priorytetowe wsparcie</li>
+              <li>Poprawki błędów w cenie</li>
+            </ul>
+            <a href="#demo" class="btn btn-outline">Dowiedz się więcej</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-name">SEO Boost</div>
+              <div class="pricing-desc">Miesięczna usługa SEO</div>
+              <div class="pricing-price">£149 <span>/miesiąc</span></div>
+            </div>
+            <ul class="pricing-features">
+              <li>Badanie słów kluczowych</li>
+              <li>Optymalizacja on-page</li>
+              <li>Konfiguracja Google Business</li>
+              <li>Lokalne cytowania</li>
+              <li>Miesięczne raporty SEO</li>
+              <li>Analiza konkurencji</li>
+              <li>Rekomendacje treści</li>
+            </ul>
+            <a href="#demo" class="btn btn-outline">Dowiedz się więcej</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-name">Logo i Branding</div>
+              <div class="pricing-desc">Identyfikacja wizualna</div>
+              <div class="pricing-price">£299 <span>jednorazowo</span></div>
+            </div>
+            <ul class="pricing-features">
+              <li>Indywidualny projekt logo</li>
+              <li>3 wstępne koncepcje</li>
+              <li>Nieograniczone poprawki</li>
+              <li>Paleta kolorów marki</li>
+              <li>Dobór typografii</li>
+              <li>Wszystkie formaty plików</li>
+              <li>PDF z wytycznymi marki</li>
+            </ul>
+            <a href="#demo" class="btn btn-outline">Dowiedz się więcej</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="projects" id="projekty">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <p class="section-label">Nasze Prace</p>
+        <h2 class="section-title">Wyróżnione Projekty</h2>
+        <p class="section-desc">Prawdziwe projekty, które zrealizowaliśmy. Gry w rozwoju, strony generujące leady.</p>
+      </div>
+
+      <div class="projects-grid" style="max-width: 600px; margin: 0 auto;">
+        <article class="project-card" data-aos="fade-up">
+          <img src="../portfolio/aurum-roofing/images/hero-bg.jpg" alt="Strona Aurum Roofing" class="project-image">
+          <div class="project-content">
+            <span class="project-tag web">Strona WWW</span>
+            <h3>Aurum Roofing</h3>
+            <p>Premium szablon strony dla firm dekarskich. Ciemny luksusowy motyw, integracja WhatsApp, formularze, Google Maps, w pełni responsywny.</p>
+            <a href="../portfolio/aurum-roofing/" class="project-link" style="color: var(--purple);">
+              Zobacz Demo <span>→</span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="process" id="proces">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <p class="section-label">Jak Pracujemy</p>
+        <h2 class="section-title">Prosty Proces w 4 Krokach</h2>
+        <p class="section-desc">Od pierwszego kontaktu do premiery — przejrzysta komunikacja na każdym etapie.</p>
+      </div>
+
+      <div class="process-grid">
+        <div class="process-step" data-aos="fade-up" data-aos-delay="100">
+          <div class="process-number">1</div>
+          <h4>Wyślij Brief</h4>
+          <p>Napisz do nas przez email lub WhatsApp z pomysłem na projekt. Im więcej szczegółów, tym lepiej — odpowiemy w ciągu 24h.</p>
+        </div>
+        <div class="process-step" data-aos="fade-up" data-aos-delay="200">
+          <div class="process-number">2</div>
+          <h4>Propozycja i Wycena</h4>
+          <p>Szczegółowa propozycja z zakresem, harmonogramem i stałą ceną. Bez niespodzianek, bez ukrytych opłat.</p>
+        </div>
+        <div class="process-step" data-aos="fade-up" data-aos-delay="300">
+          <div class="process-number">3</div>
+          <h4>Budowa i Przegląd</h4>
+          <p>Budujemy Twój projekt z regularnymi aktualizacjami. Przeglądasz i dajesz feedback po drodze.</p>
+        </div>
+        <div class="process-step" data-aos="fade-up" data-aos-delay="400">
+          <div class="process-number">4</div>
+          <h4>Premiera i Wsparcie</h4>
+          <p>Uruchamiamy projekt i zapewniamy bieżące wsparcie. Otrzymujesz pełną własność wszystkiego.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <p class="section-label">FAQ</p>
+        <h2 class="section-title">Najczęściej Zadawane Pytania</h2>
+        <p class="section-desc">Masz pytania? Mamy odpowiedzi. Jeśli nie znajdziesz tego, czego szukasz, po prostu napisz.</p>
+      </div>
+
+      <div class="faq-container">
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
+          <button class="faq-question">
+            Ile czasu zajmuje zbudowanie strony?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Większość stron jest gotowa w ciągu 1-2 tygodni. Pakiety Starter (jedna strona) mogą być gotowe w 3-5 dni, podczas gdy bardziej złożone pakiety Business i Premium zajmują 1-2 tygodnie. Dokładny harmonogram podamy w propozycji.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="150">
+          <button class="faq-question">
+            Co zawiera darmowe demo?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Darmowe demo zawiera w pełni zaprojektowaną stronę główną z nazwą Twojej firmy, kolorami i usługami. To prawdziwa, działająca strona — nie tylko makieta. Możesz udostępnić link innym i płacisz tylko jeśli zdecydujesz się uruchomić stronę.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="200">
+          <button class="faq-question">
+            Czy jestem właścicielem strony po jej zbudowaniu?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Tak! Masz pełną własność swojej strony. Możemy ją dla Ciebie hostować lub przekazać wszystkie pliki, abyś mógł hostować ją samodzielnie. Nie ma ukrytych opłat ani umów wiążących.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="250">
+          <button class="faq-question">
+            Czy możecie pomóc z hostingiem i domeną?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Oczywiście! Oferujemy usługę konfiguracji Domeny i Hostingu (£99 jednorazowo), która obejmuje rejestrację domeny, certyfikat SSL, profesjonalną pocztę email i wdrożenie. Zajmujemy się wszystkimi kwestiami technicznymi.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
+          <button class="faq-question">
+            Co jeśli potrzebuję zmian po uruchomieniu?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Wszystkie pakiety zawierają darmowe wsparcie (1-6 miesięcy w zależności od pakietu). Potem możesz samodzielnie wprowadzać zmiany, zlecić nam jednorazowe aktualizacje lub wykupić plan Miesięcznej Opieki (£79/miesiąc) dla bieżącego wsparcia.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="350">
+          <button class="faq-question">
+            Czy pracujecie z firmami spoza UK?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Tak! Pracujemy z klientami na całym świecie. Cała komunikacja odbywa się online przez email, WhatsApp lub wideorozmowy. Płatności można dokonać w GBP, EUR lub PLN.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="kontakt">
+    <div class="container">
+      <div class="cta-card" data-aos="zoom-in">
+        <h2>Pytania? Skontaktuj się</h2>
+        <p>Wolisz najpierw porozmawiać? Żaden problem. Napisz przez WhatsApp lub email.</p>
+        <div class="cta-buttons">
+          <a href="https://wa.me/447392305505?text=Cześć,%20interesuje%20mnie%20strona%20internetowa%20dla%20mojej%20firmy" class="btn btn-whatsapp" target="_blank">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp
+          </a>
+          <a href="mailto:patrykmajecki30@gmail.com" class="btn btn-secondary">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Wyślij Email
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="../images/grindare_logo.png" alt="Grindare Studio">
+          <p>Profesjonalna agencja tworzenia gier, aplikacji i stron. Budujemy cyfrowe doświadczenia, które mają znaczenie.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Usługi</h4>
+          <a href="#cennik">Strony Internetowe</a>
+          <a href="#cennik">Aplikacje Mobilne</a>
+          <a href="#cennik">Tworzenie Gier</a>
+          <a href="#cennik">Dodatki i Wsparcie</a>
+        </div>
+        <div class="footer-links">
+          <h4>Portfolio</h4>
+          <a href="../portfolio/aurum-roofing/">Demo Aurum Roofing</a>
+          <a href="#demo">Zamów Swoje Demo</a>
+        </div>
+        <div class="footer-links">
+          <h4>Kontakt</h4>
+          <a href="https://wa.me/447392305505">WhatsApp</a>
+          <a href="mailto:patrykmajecki30@gmail.com">Email</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Grindare Studio. Wszelkie prawa zastrzeżone.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, easing: 'ease-out', once: true, offset: 50 });
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mobile menu
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    if (mobileMenuBtn && mobileNav) {
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileMenuBtn.classList.toggle('active');
+        mobileNav.classList.toggle('active');
+      });
+      mobileNav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenuBtn.classList.remove('active');
+          mobileNav.classList.remove('active');
+        });
+      });
+    }
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Pricing tabs
+    const tabs = document.querySelectorAll('.pricing-tab');
+    const panels = document.querySelectorAll('.pricing-panel');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    // FAQ
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+      const question = item.querySelector('.faq-question');
+      question.addEventListener('click', () => {
+        const isActive = item.classList.contains('active');
+        faqItems.forEach(i => i.classList.remove('active'));
+        if (!isActive) item.classList.add('active');
+      });
+    });
+
+    // Counter animation
+    const counters = document.querySelectorAll('.counter');
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const counter = entry.target;
+          const target = parseInt(counter.dataset.target);
+          const duration = 2000;
+          const startTime = performance.now();
+          const updateCounter = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            counter.textContent = Math.floor(easeOut * target);
+            if (progress < 1) requestAnimationFrame(updateCounter);
+            else counter.textContent = target;
+          };
+          requestAnimationFrame(updateCounter);
+          counterObserver.unobserve(counter);
+        }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(counter => counterObserver.observe(counter));
+
+    // Typing effect - Polish words
+    const typingWords = [
+      'Rzemieślników', 'Restauracje', 'Elektryków', 'Salony', 'Fotografów', 'Dekarzy',
+      'Siłownie', 'Hydraulików', 'Kawiarnie', 'Trenerów', 'Budowlańców', 'Fryzjerów',
+      'Terapeutów', 'Ogrodników', 'Dentystów', 'Artystów', 'Malarzy',
+      'Freelancerów', 'Firmy Sprzątające', 'Prawników', 'Kwiaciarnie', 'Tynkarzy',
+      'Muzyków', 'Sklepy', 'Mechaników', 'Piekarnie', 'Weterynarzy', 'Agencje', 'Ciebie'
+    ];
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    const typingElement = document.getElementById('typing-text');
+
+    function typeEffect() {
+      if (!typingElement) return;
+      const currentWord = typingWords[wordIndex];
+      if (isDeleting) {
+        typingElement.textContent = currentWord.substring(0, charIndex - 1);
+        charIndex--;
+      } else {
+        typingElement.textContent = currentWord.substring(0, charIndex + 1);
+        charIndex++;
+      }
+      let typeSpeed = isDeleting ? 50 : 100;
+      if (!isDeleting && charIndex === currentWord.length) {
+        typeSpeed = 2000;
+        isDeleting = true;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        wordIndex = (wordIndex + 1) % typingWords.length;
+        typeSpeed = 500;
+      }
+      setTimeout(typeEffect, typeSpeed);
+    }
+    setTimeout(typeEffect, 1500);
+
+    // Greeting
+    function setGreeting() {
+      const hour = new Date().getHours();
+      const greetingText = document.getElementById('greeting-text');
+      const greetingEmoji = document.getElementById('greeting-emoji');
+      if (!greetingText || !greetingEmoji) return;
+      if (hour >= 5 && hour < 12) {
+        greetingText.textContent = 'Dzień dobry!';
+        greetingEmoji.textContent = '☀️';
+      } else if (hour >= 12 && hour < 17) {
+        greetingText.textContent = 'Cześć!';
+        greetingEmoji.textContent = '👋';
+      } else if (hour >= 17 && hour < 21) {
+        greetingText.textContent = 'Dobry wieczór!';
+        greetingEmoji.textContent = '🌆';
+      } else {
+        greetingText.textContent = 'Pracujesz do późna?';
+        greetingEmoji.textContent = '🌙';
+      }
+    }
+    setGreeting();
+  </script>
+</body>
+</html>

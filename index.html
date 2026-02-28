@@ -526,6 +526,12 @@
       box-shadow: 0 10px 30px rgba(245, 185, 66, 0.3);
     }
 
+    /* Language Switcher */
+    .lang-switch { display: flex; gap: 8px; margin-left: 16px; }
+    .lang-switch a { padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; text-decoration: none; border: 1px solid var(--border); color: var(--text-muted); transition: all 0.2s; }
+    .lang-switch a.active { background: var(--gold); color: #000; border-color: var(--gold); }
+    .lang-switch a:hover:not(.active) { border-color: var(--gold); color: var(--gold); }
+
     /* Hero */
     .hero {
       min-height: 100vh;
@@ -2606,6 +2612,10 @@
         <li><a href="#faq">FAQ</a></li>
       </ul>
       <a href="#demo" class="nav-cta">Get Free Demo</a>
+      <div class="lang-switch">
+        <a href="/" class="active">EN</a>
+        <a href="/pl/">PL</a>
+      </div>
       <button class="mobile-menu-btn" aria-label="Menu">
         <span></span>
         <span></span>
@@ -3131,14 +3141,26 @@
         <p class="section-desc">Real projects we've built. Games in development, websites generating leads.</p>
       </div>
 
-      <div class="projects-grid" style="max-width: 600px; margin: 0 auto;">
-        <article class="project-card tilt-card" data-aos="fade-up">
+      <div class="projects-grid">
+        <article class="project-card tilt-card" data-aos="fade-up" data-aos-delay="100">
           <img src="portfolio/aurum-roofing/images/hero-bg.jpg" alt="Aurum Roofing Website" class="project-image">
           <div class="project-content">
             <span class="project-tag web">Website</span>
             <h3>Aurum Roofing</h3>
             <p>Premium website template for roofing companies. Dark luxury theme, WhatsApp integration, contact forms, Google Maps, fully responsive.</p>
             <a href="portfolio/aurum-roofing/" class="project-link" style="color: var(--purple);">
+              View Demo <span>→</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="project-card tilt-card" data-aos="fade-up" data-aos-delay="200">
+          <img src="portfolio/ember-brew/images/hero-interior.jpg" alt="Ember & Brew Cafe Website" class="project-image">
+          <div class="project-content">
+            <span class="project-tag web">Website</span>
+            <h3>Ember & Brew</h3>
+            <p>Warm, inviting cafe website with cozy aesthetic. Cream and espresso tones, menu showcase, gallery, testimonials, mobile-friendly design.</p>
+            <a href="portfolio/ember-brew/" class="project-link" style="color: var(--purple);">
               View Demo <span>→</span>
             </a>
           </div>
@@ -3622,6 +3644,7 @@
         <div class="footer-links">
           <h4>Portfolio</h4>
           <a href="portfolio/aurum-roofing/">Aurum Roofing Demo</a>
+          <a href="portfolio/ember-brew/">Ember & Brew Demo</a>
           <a href="#demo">Request Your Demo</a>
         </div>
         <div class="footer-links">
