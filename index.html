@@ -1794,11 +1794,397 @@
         padding: 24px;
       }
     }
+
+    /* ============================================
+       PREMIUM EFFECTS - UNIQUE FEATURES
+       ============================================ */
+
+    /* Scroll Progress Bar */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--gradient-gold);
+      z-index: 9999;
+      transition: width 0.1s linear;
+    }
+
+    /* Cursor Glow Effect */
+    .cursor-glow {
+      position: fixed;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(245, 185, 66, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s;
+    }
+
+    /* Magnetic Button Effect */
+    .magnetic-btn {
+      transition: transform 0.2s ease-out;
+    }
+
+    /* Typing Effect */
+    .typing-text {
+      display: inline-block;
+      min-width: 200px;
+    }
+
+    .typing-cursor {
+      display: inline-block;
+      width: 3px;
+      height: 1em;
+      background: var(--gold);
+      margin-left: 4px;
+      animation: blink 1s infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    /* Confetti Canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* Live Visitor Count */
+    .visitor-count {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 20px;
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      animation: slideInLeft 0.5s ease 3s both;
+    }
+
+    @keyframes slideInLeft {
+      from { transform: translateX(-120%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .visitor-dot {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .visitor-count-number {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    @media (max-width: 768px) {
+      .visitor-count { display: none; }
+    }
+
+    /* Exit Intent Popup */
+    .exit-popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .exit-popup-overlay.show {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .exit-popup {
+      background: var(--bg-card);
+      border: 1px solid var(--gold);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      max-width: 500px;
+      text-align: center;
+      position: relative;
+      animation: popIn 0.4s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .exit-popup-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 24px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .exit-popup-close:hover {
+      color: var(--text);
+    }
+
+    .exit-popup-emoji {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .exit-popup h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .exit-popup p {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      font-size: 16px;
+    }
+
+    .exit-popup .btn {
+      width: 100%;
+    }
+
+    /* Dark Mode Toggle */
+    .theme-toggle {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 48px;
+      height: 48px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 100;
+      font-size: 20px;
+      transition: all 0.3s;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--gold);
+      transform: scale(1.1);
+    }
+
+    /* Light Mode Styles */
+    body.light-mode {
+      --bg-dark: #f8f9fa;
+      --bg-darker: #ffffff;
+      --bg-card: rgba(255, 255, 255, 0.95);
+      --bg-card-hover: rgba(255, 255, 255, 0.98);
+      --border: rgba(0, 0, 0, 0.08);
+      --border-hover: rgba(0, 0, 0, 0.15);
+      --text: rgba(0, 0, 0, 0.9);
+      --text-muted: rgba(0, 0, 0, 0.6);
+      --text-subtle: rgba(0, 0, 0, 0.4);
+    }
+
+    body.light-mode .bg-gradient::before {
+      background:
+        radial-gradient(ellipse 40% 30% at 70% 20%, rgba(168, 85, 247, 0.12), transparent),
+        radial-gradient(ellipse 50% 40% at 30% 80%, rgba(245, 185, 66, 0.1), transparent);
+    }
+
+    body.light-mode .bg-grid {
+      background-image:
+        linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+    }
+
+    /* Personalized Greeting */
+    .greeting-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      border-radius: 999px;
+      font-size: 12px;
+      color: #22c55e;
+      margin-bottom: 16px;
+    }
+
+    /* ROI Calculator Section */
+    .roi-section {
+      background: linear-gradient(135deg, rgba(245, 185, 66, 0.05), rgba(168, 85, 247, 0.03));
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .roi-calculator {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+    }
+
+    .roi-calculator h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .roi-input-group {
+      margin-bottom: 24px;
+    }
+
+    .roi-input-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .roi-input-group input[type="range"] {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .roi-input-group input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      background: var(--gold);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(245, 185, 66, 0.4);
+    }
+
+    .roi-value {
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .roi-value span {
+      font-weight: 600;
+      color: var(--gold);
+    }
+
+    .roi-result {
+      background: linear-gradient(135deg, rgba(245, 185, 66, 0.1), rgba(245, 185, 66, 0.05));
+      border: 1px solid rgba(245, 185, 66, 0.3);
+      border-radius: var(--radius);
+      padding: 32px;
+      text-align: center;
+      margin-top: 32px;
+    }
+
+    .roi-result-label {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .roi-result-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .roi-result-subtext {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    /* Sound Toggle */
+    .sound-toggle {
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 100;
+      font-size: 16px;
+      opacity: 0.7;
+      transition: all 0.3s;
+    }
+
+    .sound-toggle:hover {
+      opacity: 1;
+    }
+
+    .sound-toggle.muted {
+      opacity: 0.4;
+    }
   </style>
 </head>
 <body>
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress" id="scroll-progress"></div>
+
+  <!-- Cursor Glow Effect -->
+  <div class="cursor-glow" id="cursor-glow"></div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
   <div class="bg-gradient"></div>
   <div class="bg-grid"></div>
+
+  <!-- Live Visitor Count -->
+  <div class="visitor-count" id="visitor-count">
+    <span class="visitor-dot"></span>
+    <span><span class="visitor-count-number" id="visitor-number">17</span> people viewing now</span>
+  </div>
+
+  <!-- Theme Toggle -->
+  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+
+  <!-- Sound Toggle -->
+  <button class="sound-toggle" id="sound-toggle" aria-label="Toggle sound effects">🔊</button>
 
   <!-- Navigation -->
   <nav>
@@ -1835,8 +2221,12 @@
   <!-- Hero -->
   <section class="hero">
     <div class="hero-content">
+      <div class="greeting-badge" id="greeting-badge" data-aos="fade-down" data-aos-delay="50">
+        <span id="greeting-emoji">👋</span>
+        <span id="greeting-text">Good evening!</span>
+      </div>
       <div class="hero-badge" data-aos="fade-down" data-aos-delay="100">Available for new projects</div>
-      <h1 data-aos="fade-up" data-aos-delay="200">We Build <span class="highlight gradient-text-animated">Games</span> &<br><span class="highlight gradient-text-animated">Websites</span> That Convert</h1>
+      <h1 data-aos="fade-up" data-aos-delay="200">We Build Websites for<br><span class="highlight gradient-text-animated typing-text" id="typing-text">Roofers</span><span class="typing-cursor"></span></h1>
       <p class="hero-sub" data-aos="fade-up" data-aos-delay="300">
         Professional game development and web design agency. From mobile RPGs to business websites — we create digital experiences that engage users and drive results.
       </p>
@@ -2547,6 +2937,47 @@
     </div>
   </section>
 
+  <!-- ROI Calculator -->
+  <section class="roi-section" id="roi">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <p class="section-label">Calculate Your Loss</p>
+        <h2 class="section-title">How Much Is a Bad Website Costing You?</h2>
+        <p class="section-desc">Most businesses lose thousands in potential revenue due to poor online presence. See what you're missing.</p>
+      </div>
+
+      <div class="roi-calculator" data-aos="fade-up" data-aos-delay="200">
+        <h3>💰 Lost Revenue Calculator</h3>
+
+        <div class="roi-input-group">
+          <label>Monthly website visitors (estimated)</label>
+          <input type="range" id="roi-visitors" min="100" max="5000" value="500" step="100">
+          <p class="roi-value"><span id="roi-visitors-value">500</span> visitors/month</p>
+        </div>
+
+        <div class="roi-input-group">
+          <label>Average job value (£)</label>
+          <input type="range" id="roi-job-value" min="100" max="5000" value="500" step="50">
+          <p class="roi-value">£<span id="roi-job-value-display">500</span> per job</p>
+        </div>
+
+        <div class="roi-input-group">
+          <label>Current conversion rate (%)</label>
+          <input type="range" id="roi-current-rate" min="0.5" max="5" value="1" step="0.5">
+          <p class="roi-value"><span id="roi-current-rate-value">1</span>% converting to enquiries</p>
+        </div>
+
+        <div class="roi-result">
+          <p class="roi-result-label">With a professional website (3% conversion), you could earn:</p>
+          <p class="roi-result-value">£<span id="roi-result-amount">5,000</span></p>
+          <p class="roi-result-subtext">extra per year — that's <span id="roi-multiplier">10x</span> the cost of a new website!</p>
+        </div>
+
+        <a href="#demo" class="btn btn-primary" style="width: 100%; margin-top: 24px;">Get Your Free Demo</a>
+      </div>
+    </div>
+  </section>
+
   <!-- FAQ -->
   <section class="faq-section" id="faq">
     <div class="container">
@@ -2956,6 +3387,368 @@
         resetAutoSlide();
       }
     }
+
+    // ============================================
+    // TYPING EFFECT
+    // ============================================
+    const typingWords = ['Roofers', 'Plumbers', 'Electricians', 'Builders', 'Painters', 'Landscapers', 'Plasterers', 'Cleaners'];
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    const typingElement = document.getElementById('typing-text');
+
+    function typeEffect() {
+      if (!typingElement) return;
+
+      const currentWord = typingWords[wordIndex];
+
+      if (isDeleting) {
+        typingElement.textContent = currentWord.substring(0, charIndex - 1);
+        charIndex--;
+      } else {
+        typingElement.textContent = currentWord.substring(0, charIndex + 1);
+        charIndex++;
+      }
+
+      let typeSpeed = isDeleting ? 50 : 100;
+
+      if (!isDeleting && charIndex === currentWord.length) {
+        typeSpeed = 2000; // Pause at end
+        isDeleting = true;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        wordIndex = (wordIndex + 1) % typingWords.length;
+        typeSpeed = 500;
+      }
+
+      setTimeout(typeEffect, typeSpeed);
+    }
+
+    setTimeout(typeEffect, 1500);
+
+    // ============================================
+    // CONFETTI EFFECT
+    // ============================================
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    const confettiCtx = confettiCanvas ? confettiCanvas.getContext('2d') : null;
+    let confettiParticles = [];
+
+    function resizeConfetti() {
+      if (confettiCanvas) {
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+      }
+    }
+    resizeConfetti();
+    window.addEventListener('resize', resizeConfetti);
+
+    class ConfettiParticle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.vx = (Math.random() - 0.5) * 20;
+        this.vy = Math.random() * -15 - 5;
+        this.gravity = 0.5;
+        this.drag = 0.97;
+        this.size = Math.random() * 10 + 5;
+        this.color = ['#f5b942', '#a855f7', '#3b82f6', '#22c55e', '#f59e0b'][Math.floor(Math.random() * 5)];
+        this.rotation = Math.random() * 360;
+        this.rotationSpeed = (Math.random() - 0.5) * 10;
+        this.opacity = 1;
+      }
+
+      update() {
+        this.vy += this.gravity;
+        this.vx *= this.drag;
+        this.vy *= this.drag;
+        this.x += this.vx;
+        this.y += this.vy;
+        this.rotation += this.rotationSpeed;
+        this.opacity -= 0.01;
+      }
+
+      draw() {
+        confettiCtx.save();
+        confettiCtx.translate(this.x, this.y);
+        confettiCtx.rotate(this.rotation * Math.PI / 180);
+        confettiCtx.globalAlpha = this.opacity;
+        confettiCtx.fillStyle = this.color;
+        confettiCtx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size / 2);
+        confettiCtx.restore();
+      }
+    }
+
+    function animateConfetti() {
+      if (!confettiCtx) return;
+      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+      confettiParticles = confettiParticles.filter(p => p.opacity > 0);
+      confettiParticles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      if (confettiParticles.length > 0) {
+        requestAnimationFrame(animateConfetti);
+      }
+    }
+
+    function launchConfetti(x, y) {
+      for (let i = 0; i < 100; i++) {
+        confettiParticles.push(new ConfettiParticle(x, y));
+      }
+      animateConfetti();
+      playSound('success');
+    }
+
+    // Add confetti to CTA buttons
+    document.querySelectorAll('.btn-primary').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const rect = btn.getBoundingClientRect();
+        launchConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      });
+    });
+
+    // ============================================
+    // MAGNETIC BUTTONS
+    // ============================================
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.classList.add('magnetic-btn');
+
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = 'translate(0, 0)';
+      });
+    });
+
+    // ============================================
+    // CURSOR GLOW
+    // ============================================
+    const cursorGlow = document.getElementById('cursor-glow');
+    let cursorX = 0, cursorY = 0;
+    let glowX = 0, glowY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      cursorX = e.clientX;
+      cursorY = e.clientY;
+    });
+
+    function updateCursorGlow() {
+      glowX += (cursorX - glowX) * 0.1;
+      glowY += (cursorY - glowY) * 0.1;
+      if (cursorGlow) {
+        cursorGlow.style.left = glowX + 'px';
+        cursorGlow.style.top = glowY + 'px';
+      }
+      requestAnimationFrame(updateCursorGlow);
+    }
+    updateCursorGlow();
+
+    // ============================================
+    // PERSONALIZED GREETING
+    // ============================================
+    function setGreeting() {
+      const hour = new Date().getHours();
+      const greetingText = document.getElementById('greeting-text');
+      const greetingEmoji = document.getElementById('greeting-emoji');
+
+      if (!greetingText || !greetingEmoji) return;
+
+      if (hour >= 5 && hour < 12) {
+        greetingText.textContent = 'Good morning!';
+        greetingEmoji.textContent = '☀️';
+      } else if (hour >= 12 && hour < 17) {
+        greetingText.textContent = 'Good afternoon!';
+        greetingEmoji.textContent = '👋';
+      } else if (hour >= 17 && hour < 21) {
+        greetingText.textContent = 'Good evening!';
+        greetingEmoji.textContent = '🌆';
+      } else {
+        greetingText.textContent = 'Working late?';
+        greetingEmoji.textContent = '🌙';
+      }
+    }
+    setGreeting();
+
+    // ============================================
+    // SCROLL PROGRESS BAR
+    // ============================================
+    const scrollProgress = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.pageYOffset;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      if (scrollProgress) {
+        scrollProgress.style.width = scrollPercent + '%';
+      }
+    });
+
+    // ============================================
+    // LIVE VISITOR COUNT (Simulated)
+    // ============================================
+    function updateVisitorCount() {
+      const visitorNumber = document.getElementById('visitor-number');
+      if (!visitorNumber) return;
+
+      // Simulate realistic fluctuation
+      const base = 12;
+      const variation = Math.floor(Math.random() * 15);
+      visitorNumber.textContent = base + variation;
+    }
+
+    updateVisitorCount();
+    setInterval(updateVisitorCount, 30000); // Update every 30s
+
+    // ============================================
+    // ROI CALCULATOR
+    // ============================================
+    const roiVisitors = document.getElementById('roi-visitors');
+    const roiJobValue = document.getElementById('roi-job-value');
+    const roiCurrentRate = document.getElementById('roi-current-rate');
+
+    function calculateROI() {
+      if (!roiVisitors || !roiJobValue || !roiCurrentRate) return;
+
+      const visitors = parseInt(roiVisitors.value);
+      const jobValue = parseInt(roiJobValue.value);
+      const currentRate = parseFloat(roiCurrentRate.value);
+
+      // Update display values
+      document.getElementById('roi-visitors-value').textContent = visitors.toLocaleString();
+      document.getElementById('roi-job-value-display').textContent = jobValue.toLocaleString();
+      document.getElementById('roi-current-rate-value').textContent = currentRate;
+
+      // Calculate potential with professional website (3% vs current rate)
+      const currentLeads = visitors * (currentRate / 100);
+      const potentialLeads = visitors * 0.03; // 3% conversion
+      const additionalLeads = potentialLeads - currentLeads;
+      const yearlyGain = Math.round(additionalLeads * jobValue * 12);
+
+      document.getElementById('roi-result-amount').textContent = yearlyGain.toLocaleString();
+      document.getElementById('roi-multiplier').textContent = Math.round(yearlyGain / 899) + 'x';
+    }
+
+    if (roiVisitors) {
+      roiVisitors.addEventListener('input', calculateROI);
+      roiJobValue.addEventListener('input', calculateROI);
+      roiCurrentRate.addEventListener('input', calculateROI);
+      calculateROI(); // Initial calculation
+    }
+
+    // ============================================
+    // DARK MODE TOGGLE
+    // ============================================
+    const themeToggle = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('theme');
+
+    if (savedTheme === 'light') {
+      document.body.classList.add('light-mode');
+      if (themeToggle) themeToggle.textContent = '☀️';
+    }
+
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light-mode');
+        const isLight = document.body.classList.contains('light-mode');
+        themeToggle.textContent = isLight ? '☀️' : '🌙';
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        playSound('click');
+      });
+    }
+
+    // ============================================
+    // SOUND EFFECTS (Optional)
+    // ============================================
+    let soundEnabled = localStorage.getItem('soundEnabled') !== 'false';
+    const soundToggle = document.getElementById('sound-toggle');
+
+    const sounds = {
+      click: () => {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = 800;
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.1);
+      },
+      success: () => {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = 523.25;
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        setTimeout(() => { osc.frequency.value = 659.25; }, 100);
+        setTimeout(() => { osc.frequency.value = 783.99; }, 200);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.4);
+      }
+    };
+
+    function playSound(type) {
+      if (soundEnabled && sounds[type]) {
+        try { sounds[type](); } catch(e) {}
+      }
+    }
+
+    if (soundToggle) {
+      soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
+      soundToggle.classList.toggle('muted', !soundEnabled);
+
+      soundToggle.addEventListener('click', () => {
+        soundEnabled = !soundEnabled;
+        localStorage.setItem('soundEnabled', soundEnabled);
+        soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
+        soundToggle.classList.toggle('muted', !soundEnabled);
+        if (soundEnabled) playSound('click');
+      });
+    }
+
+    // ============================================
+    // EXIT INTENT POPUP
+    // ============================================
+    let exitPopupShown = false;
+
+    document.addEventListener('mouseout', (e) => {
+      if (e.clientY < 10 && !exitPopupShown && !localStorage.getItem('exitPopupDismissed')) {
+        showExitPopup();
+      }
+    });
+
+    function showExitPopup() {
+      exitPopupShown = true;
+      const overlay = document.getElementById('exit-popup-overlay');
+      if (overlay) overlay.classList.add('show');
+    }
+
+    function closeExitPopup() {
+      const overlay = document.getElementById('exit-popup-overlay');
+      if (overlay) overlay.classList.remove('show');
+      localStorage.setItem('exitPopupDismissed', 'true');
+    }
   </script>
+
+  <!-- Exit Intent Popup -->
+  <div class="exit-popup-overlay" id="exit-popup-overlay">
+    <div class="exit-popup">
+      <button class="exit-popup-close" onclick="closeExitPopup()">&times;</button>
+      <div class="exit-popup-emoji">👋</div>
+      <h3>Wait! Before you go...</h3>
+      <p>Get a <strong>FREE custom demo</strong> of your website — no obligation, no payment required. See exactly what we can build for you!</p>
+      <a href="#demo" class="btn btn-primary" onclick="closeExitPopup()">Yes, Show Me My Free Demo!</a>
+    </div>
+  </div>
 </body>
 </html>

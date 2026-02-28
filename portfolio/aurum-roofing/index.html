@@ -43,6 +43,225 @@
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
 
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Custom Premium Features -->
+    <style>
+      /* Scroll Progress */
+      .scroll-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #c9a227, #e8c547);
+        z-index: 9999;
+        transition: width 0.1s linear;
+      }
+
+      /* Sticky WhatsApp Button */
+      .sticky-whatsapp {
+        position: fixed;
+        bottom: 100px;
+        right: 24px;
+        width: 60px;
+        height: 60px;
+        background: #25D366;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+        z-index: 1000;
+        transition: all 0.3s;
+        animation: bounce 2s infinite;
+      }
+
+      .sticky-whatsapp:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 30px rgba(37, 211, 102, 0.5);
+      }
+
+      .sticky-whatsapp svg {
+        width: 32px;
+        height: 32px;
+        fill: white;
+      }
+
+      @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-8px); }
+        60% { transform: translateY(-4px); }
+      }
+
+      /* Weather Banner */
+      .weather-banner {
+        position: fixed;
+        bottom: 24px;
+        left: 24px;
+        background: rgba(15, 15, 15, 0.95);
+        border: 1px solid rgba(201, 162, 39, 0.3);
+        border-radius: 12px;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        animation: slideInLeft 0.5s ease 2s both;
+        max-width: 300px;
+      }
+
+      @keyframes slideInLeft {
+        from { transform: translateX(-120%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+
+      .weather-icon {
+        font-size: 28px;
+      }
+
+      .weather-text {
+        font-size: 13px;
+        color: #a0a0a0;
+        line-height: 1.4;
+      }
+
+      .weather-text strong {
+        color: #c9a227;
+      }
+
+      .weather-close {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      @media (max-width: 768px) {
+        .weather-banner { display: none; }
+      }
+
+      /* Quote Calculator */
+      .quote-calculator {
+        background: rgba(15, 15, 15, 0.95);
+        border: 1px solid rgba(201, 162, 39, 0.3);
+        border-radius: 16px;
+        padding: 32px;
+        margin-top: 48px;
+      }
+
+      .quote-calculator h4 {
+        font-family: 'Cinzel', serif;
+        font-size: 20px;
+        color: #c9a227;
+        margin-bottom: 24px;
+        text-align: center;
+      }
+
+      .calc-input-group {
+        margin-bottom: 20px;
+      }
+
+      .calc-input-group label {
+        display: block;
+        font-size: 14px;
+        color: #a0a0a0;
+        margin-bottom: 8px;
+      }
+
+      .calc-input-group select,
+      .calc-input-group input {
+        width: 100%;
+        padding: 14px 16px;
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(201, 162, 39, 0.2);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 15px;
+        font-family: inherit;
+      }
+
+      .calc-input-group select:focus,
+      .calc-input-group input:focus {
+        outline: none;
+        border-color: #c9a227;
+      }
+
+      .calc-result {
+        background: linear-gradient(135deg, rgba(201, 162, 39, 0.15), rgba(201, 162, 39, 0.05));
+        border: 1px solid rgba(201, 162, 39, 0.3);
+        border-radius: 12px;
+        padding: 24px;
+        text-align: center;
+        margin-top: 24px;
+      }
+
+      .calc-result-label {
+        font-size: 13px;
+        color: #a0a0a0;
+        margin-bottom: 8px;
+      }
+
+      .calc-result-value {
+        font-family: 'Cinzel', serif;
+        font-size: 36px;
+        color: #c9a227;
+      }
+
+      .calc-note {
+        font-size: 12px;
+        color: #666;
+        margin-top: 8px;
+      }
+
+      /* Emergency Pulse Banner */
+      .emergency-pulse {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: rgba(220, 38, 38, 0.15);
+        border: 1px solid rgba(220, 38, 38, 0.3);
+        border-radius: 999px;
+        font-size: 12px;
+        color: #ef4444;
+        animation: emergencyPulse 2s infinite;
+      }
+
+      @keyframes emergencyPulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+        50% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+      }
+
+      .emergency-dot {
+        width: 8px;
+        height: 8px;
+        background: #ef4444;
+        border-radius: 50%;
+        animation: blink 1s infinite;
+      }
+
+      @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0.3; }
+      }
+
+      /* Magnetic Button Effect */
+      .magnetic-btn {
+        transition: transform 0.2s ease-out;
+      }
+
+      /* Counter Animation */
+      .count-up {
+        display: inline-block;
+      }
+    </style>
+
     <!-- JSON-LD Schema.org Structured Data -->
     <script type="application/ld+json">
     {
@@ -89,8 +308,26 @@
     -->
 </head>
 <body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scroll-progress"></div>
+
     <!-- Skip to main content for accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Sticky WhatsApp Button -->
+    <a href="https://wa.me/44XXXXXXXXXX?text=Hi,%20I%27d%20like%20to%20enquire%20about%20roofing%20services" class="sticky-whatsapp" target="_blank" aria-label="Contact us on WhatsApp">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+
+    <!-- Weather Banner -->
+    <div class="weather-banner" id="weather-banner">
+      <button class="weather-close" onclick="this.parentElement.style.display='none'">&times;</button>
+      <span class="weather-icon" id="weather-icon">🌧️</span>
+      <span class="weather-text" id="weather-text">
+        <strong>Rain expected this week!</strong><br>
+        Perfect time to check your roof.
+      </span>
+    </div>
 
     <!-- TOP BAR -->
     <div class="top-bar">
@@ -154,7 +391,11 @@
         <div class="hero__background" data-parallax></div>
         <div class="hero__overlay"></div>
         <div class="container hero__content">
-            <span class="hero__badge animate-fade-in">
+            <div class="emergency-pulse" data-aos="fade-down" data-aos-delay="100">
+                <span class="emergency-dot"></span>
+                24/7 Emergency Callouts Available
+            </div>
+            <span class="hero__badge animate-fade-in" data-aos="fade-down" data-aos-delay="200">
                 <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                 </svg>
@@ -187,7 +428,7 @@
             <div class="container">
                 <h2 id="trust-heading" class="sr-only">Why Choose Us</h2>
                 <div class="trust__grid">
-                    <div class="trust__card" data-animate>
+                    <div class="trust__card" data-animate data-aos="fade-up" data-aos-delay="100">
                         <div class="trust__icon">
                             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                                 <path d="M24 4L6 12v12c0 11 8 17 18 20 10-3 18-9 18-20V12L24 4z"/>
@@ -197,7 +438,7 @@
                         <h3 class="trust__title">Industry Standards</h3>
                         <p class="trust__text">Working to recognised industry practices with a commitment to excellence in every project.</p>
                     </div>
-                    <div class="trust__card" data-animate>
+                    <div class="trust__card" data-animate data-aos="fade-up" data-aos-delay="200">
                         <div class="trust__icon">
                             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                                 <rect x="6" y="20" width="36" height="22" rx="2"/>
@@ -208,7 +449,7 @@
                         <h3 class="trust__title">Premium Materials</h3>
                         <p class="trust__text">We source only the finest materials from trusted suppliers, ensuring durability and aesthetic appeal.</p>
                     </div>
-                    <div class="trust__card" data-animate>
+                    <div class="trust__card" data-animate data-aos="fade-up" data-aos-delay="300">
                         <div class="trust__icon">
                             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                                 <circle cx="24" cy="24" r="18"/>
@@ -218,7 +459,7 @@
                         <h3 class="trust__title">Detailed Surveys</h3>
                         <p class="trust__text">Comprehensive roof inspections with detailed reports, ensuring no issue goes unnoticed.</p>
                     </div>
-                    <div class="trust__card" data-animate>
+                    <div class="trust__card" data-animate data-aos="fade-up" data-aos-delay="400">
                         <div class="trust__icon">
                             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                                 <path d="M8 38h32"/><path d="M12 38V20l12-10 12 10v18"/><path d="M20 38v-10h8v10"/>
@@ -234,7 +475,7 @@
         <!-- SERVICES SECTION -->
         <section class="services" id="services" aria-labelledby="services-heading">
             <div class="container">
-                <header class="section-header">
+                <header class="section-header" data-aos="fade-up">
                     <span class="section-label">What We Offer</span>
                     <h2 id="services-heading" class="section-title">Our Premium Services</h2>
                     <p class="section-subtitle">Comprehensive roofing solutions tailored for discerning property owners across Greater Manchester.</p>
@@ -307,7 +548,7 @@
         <!-- PROCESS SECTION -->
         <section class="process" aria-labelledby="process-heading">
             <div class="container">
-                <header class="section-header section-header--light">
+                <header class="section-header section-header--light" data-aos="fade-up">
                     <span class="section-label">How We Work</span>
                     <h2 id="process-heading" class="section-title">Our Signature Process</h2>
                     <p class="section-subtitle">A seamless journey from initial consultation to project completion.</p>
@@ -348,7 +589,7 @@
         <!-- PROJECTS SECTION -->
         <section class="projects" id="projects" aria-labelledby="projects-heading">
             <div class="container">
-                <header class="section-header">
+                <header class="section-header" data-aos="fade-up">
                     <span class="section-label">Our Work</span>
                     <h2 id="projects-heading" class="section-title">Featured Projects</h2>
                     <p class="section-subtitle">A selection of our recent work across Greater Manchester.</p>
@@ -433,7 +674,7 @@
         <!-- REVIEWS SECTION -->
         <section class="reviews" id="reviews" aria-labelledby="reviews-heading">
             <div class="container">
-                <header class="section-header section-header--light">
+                <header class="section-header section-header--light" data-aos="fade-up">
                     <span class="section-label">Testimonials</span>
                     <h2 id="reviews-heading" class="section-title">What Our Clients Say</h2>
                     <div class="reviews__rating">
@@ -996,5 +1237,95 @@
     </a>
 
     <script src="script.js"></script>
+
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Premium Features Script -->
+    <script>
+      // Initialize AOS
+      AOS.init({
+        duration: 800,
+        easing: 'ease-out',
+        once: true,
+        offset: 50
+      });
+
+      // Scroll Progress Bar
+      const scrollProgress = document.getElementById('scroll-progress');
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+        if (scrollProgress) {
+          scrollProgress.style.width = scrollPercent + '%';
+        }
+      });
+
+      // Weather-based messaging
+      function updateWeatherBanner() {
+        const hour = new Date().getHours();
+        const weatherIcon = document.getElementById('weather-icon');
+        const weatherText = document.getElementById('weather-text');
+
+        if (!weatherIcon || !weatherText) return;
+
+        // Simulate weather conditions (in production, could use real API)
+        const conditions = [
+          { icon: '🌧️', text: '<strong>Rain expected this week!</strong><br>Perfect time to check your roof.' },
+          { icon: '❄️', text: '<strong>Cold weather ahead!</strong><br>Is your roof winter-ready?' },
+          { icon: '☀️', text: '<strong>Great weather for repairs!</strong><br>Book your inspection today.' },
+          { icon: '🌬️', text: '<strong>Windy conditions expected!</strong><br>Check for loose tiles.' }
+        ];
+
+        const condition = conditions[Math.floor(Math.random() * conditions.length)];
+        weatherIcon.textContent = condition.icon;
+        weatherText.innerHTML = condition.text;
+      }
+      updateWeatherBanner();
+
+      // Count-up animation for stats
+      const countElements = document.querySelectorAll('.count-up');
+      const countObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            const target = parseInt(el.dataset.target) || 0;
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+              current += increment;
+              if (current >= target) {
+                el.textContent = target;
+                clearInterval(timer);
+              } else {
+                el.textContent = Math.floor(current);
+              }
+            }, 30);
+            countObserver.unobserve(el);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      countElements.forEach(el => countObserver.observe(el));
+
+      // Magnetic button effect
+      document.querySelectorAll('.btn').forEach(btn => {
+        btn.classList.add('magnetic-btn');
+        btn.addEventListener('mousemove', (e) => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+        });
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transform = 'translate(0, 0)';
+        });
+      });
+
+      // Hide duplicate WhatsApp button (we already have one)
+      const stickyWA = document.querySelector('.sticky-whatsapp');
+      if (stickyWA) stickyWA.style.display = 'none';
+    </script>
 </body>
 </html>
