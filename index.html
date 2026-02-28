@@ -2521,7 +2521,18 @@
     .roi-result-label {
       font-size: 14px;
       color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .roi-result-extra {
+      font-size: 18px;
+      color: var(--text);
       margin-bottom: 8px;
+    }
+
+    .roi-result-extra span {
+      font-weight: 700;
+      color: var(--gold);
     }
 
     .roi-result-value {
@@ -2532,9 +2543,9 @@
     }
 
     .roi-result-subtext {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text-muted);
-      margin-top: 8px;
+      margin-top: 4px;
     }
 
     /* Sound Toggle */
@@ -3511,37 +3522,30 @@
   <section class="roi-section" id="roi">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
-        <p class="section-label">Calculate Your Loss</p>
-        <h2 class="section-title">How Much Is a Bad Website Costing You?</h2>
-        <p class="section-desc">Most businesses lose thousands in potential revenue due to poor online presence. See what you're missing.</p>
+        <p class="section-label">See Your Potential</p>
+        <h2 class="section-title">How Much More Could You Earn?</h2>
+        <p class="section-desc">A professional website attracts more customers. See what you could gain.</p>
       </div>
 
       <div class="roi-calculator" data-aos="fade-up" data-aos-delay="200">
-        <h3>💰 Lost Revenue Calculator</h3>
+        <h3>💰 Earnings Calculator</h3>
 
         <div class="roi-input-group">
-          <label>Monthly website visitors (estimated)</label>
-          <input type="range" id="roi-visitors" min="100" max="5000" value="500" step="100">
-          <p class="roi-value"><span id="roi-visitors-value">500</span> visitors/month</p>
-        </div>
-
-        <div class="roi-input-group">
-          <label>Average job value (£)</label>
+          <label>How much do you earn per job on average?</label>
           <input type="range" id="roi-job-value" min="100" max="5000" value="500" step="50">
-          <p class="roi-value">£<span id="roi-job-value-display">500</span> per job</p>
-        </div>
-
-        <div class="roi-input-group">
-          <label>Current conversion rate (%)</label>
-          <input type="range" id="roi-current-rate" min="0.5" max="5" value="1" step="0.5">
-          <p class="roi-value"><span id="roi-current-rate-value">1</span>% converting to enquiries</p>
+          <p class="roi-value">£<span id="roi-job-value-display">500</span></p>
         </div>
 
         <div class="roi-result">
-          <p class="roi-result-label">With a professional website (3% conversion), you could earn:</p>
-          <p class="roi-result-value">£<span id="roi-result-amount">5,000</span></p>
-          <p class="roi-result-subtext">extra per year — that's <span id="roi-multiplier">10x</span> the cost of a new website!</p>
+          <p class="roi-result-label">A professional website could bring you:</p>
+          <p class="roi-result-extra"><span id="roi-extra-clients">24</span> extra customers per year</p>
+          <p class="roi-result-value">£<span id="roi-result-amount">12,000</span></p>
+          <p class="roi-result-subtext">extra revenue per year</p>
         </div>
+
+        <p style="text-align: center; font-size: 13px; color: var(--text-muted); margin-top: 16px;">
+          * Based on 2 additional customers per month with a better website
+        </p>
 
         <a href="#demo" class="btn btn-primary" style="width: 100%; margin-top: 24px;">Get Your Free Demo</a>
       </div>
@@ -4249,38 +4253,25 @@
     setInterval(updateVisitorCount, 30000); // Update every 30s
 
     // ============================================
-    // ROI CALCULATOR
+    // ROI CALCULATOR - Simple version
     // ============================================
-    const roiVisitors = document.getElementById('roi-visitors');
     const roiJobValue = document.getElementById('roi-job-value');
-    const roiCurrentRate = document.getElementById('roi-current-rate');
 
     function calculateROI() {
-      if (!roiVisitors || !roiJobValue || !roiCurrentRate) return;
+      if (!roiJobValue) return;
 
-      const visitors = parseInt(roiVisitors.value);
       const jobValue = parseInt(roiJobValue.value);
-      const currentRate = parseFloat(roiCurrentRate.value);
+      const extraClientsPerMonth = 2; // Assumption: 2 extra customers per month
+      const extraClientsPerYear = extraClientsPerMonth * 12;
+      const yearlyGain = extraClientsPerYear * jobValue;
 
-      // Update display values
-      document.getElementById('roi-visitors-value').textContent = visitors.toLocaleString();
       document.getElementById('roi-job-value-display').textContent = jobValue.toLocaleString();
-      document.getElementById('roi-current-rate-value').textContent = currentRate;
-
-      // Calculate potential with professional website (3% vs current rate)
-      const currentLeads = visitors * (currentRate / 100);
-      const potentialLeads = visitors * 0.03; // 3% conversion
-      const additionalLeads = potentialLeads - currentLeads;
-      const yearlyGain = Math.round(additionalLeads * jobValue * 12);
-
+      document.getElementById('roi-extra-clients').textContent = extraClientsPerYear;
       document.getElementById('roi-result-amount').textContent = yearlyGain.toLocaleString();
-      document.getElementById('roi-multiplier').textContent = Math.round(yearlyGain / 899) + 'x';
     }
 
-    if (roiVisitors) {
-      roiVisitors.addEventListener('input', calculateROI);
+    if (roiJobValue) {
       roiJobValue.addEventListener('input', calculateROI);
-      roiCurrentRate.addEventListener('input', calculateROI);
       calculateROI(); // Initial calculation
     }
 
