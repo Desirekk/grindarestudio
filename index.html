@@ -137,6 +137,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
   <style>
     :root {
       --bg-dark: #09090b;
@@ -1348,6 +1351,281 @@
       .pricing-card { padding: 20px; }
     }
 
+    /* ============================================
+       ENHANCED EFFECTS
+       ============================================ */
+
+    /* Glow effect on primary buttons */
+    .btn-primary {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: var(--gradient-gold);
+      border-radius: inherit;
+      z-index: -1;
+      opacity: 0;
+      filter: blur(15px);
+      transition: opacity 0.3s;
+    }
+
+    .btn-primary:hover::after {
+      opacity: 0.6;
+    }
+
+    /* Glassmorphism cards */
+    .glass-card {
+      background: rgba(18, 18, 22, 0.7) !important;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    /* Floating animation */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .floating {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .floating-delay-1 { animation-delay: 0.5s; }
+    .floating-delay-2 { animation-delay: 1s; }
+
+    /* 3D Tilt hover effect */
+    .tilt-card {
+      transform-style: preserve-3d;
+      transition: transform 0.3s ease;
+    }
+
+    .tilt-card:hover {
+      transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-8px);
+    }
+
+    /* Gradient text animation */
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .gradient-text-animated {
+      background: linear-gradient(90deg, #f5b942, #f59e0b, #fcd978, #f5b942);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 4s ease infinite;
+    }
+
+    /* Pulse glow on badge */
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 5px rgba(245, 185, 66, 0.3); }
+      50% { box-shadow: 0 0 20px rgba(245, 185, 66, 0.6); }
+    }
+
+    .hero-badge {
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+
+    /* Cookie Consent */
+    .cookie-consent {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(9, 9, 11, 0.98);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      padding: 20px 24px;
+      z-index: 1000;
+      display: none;
+    }
+
+    .cookie-consent.show {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .cookie-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .cookie-text {
+      flex: 1;
+      font-size: 14px;
+      color: var(--text-muted);
+      min-width: 200px;
+    }
+
+    .cookie-text a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    .cookie-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .cookie-btn {
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .cookie-accept {
+      background: var(--gradient-gold);
+      color: #000;
+    }
+
+    .cookie-decline {
+      background: rgba(255,255,255,0.1);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      .cookie-inner { flex-direction: column; text-align: center; }
+      .cookie-buttons { width: 100%; justify-content: center; }
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      background: var(--bg-dark);
+    }
+
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .faq-item:hover {
+      border-color: var(--border-hover);
+    }
+
+    .faq-question {
+      width: 100%;
+      padding: 24px;
+      background: var(--bg-card);
+      border: none;
+      text-align: left;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.2s;
+    }
+
+    .faq-question:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .faq-icon {
+      font-size: 20px;
+      color: var(--gold);
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+
+    .faq-item.active .faq-icon {
+      transform: rotate(45deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 500px;
+    }
+
+    .faq-answer-inner {
+      padding: 0 24px 24px;
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* Testimonials Carousel */
+    .testimonials-carousel {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .testimonials-track {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+
+    .testimonial-slide {
+      min-width: 100%;
+      padding: 0 20px;
+    }
+
+    .testimonial-dots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 32px;
+    }
+
+    .testimonial-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .testimonial-dot.active {
+      background: var(--gold);
+      transform: scale(1.2);
+    }
+
+    /* Stats counter animation */
+    .counter {
+      display: inline-block;
+    }
+
     /* Demo Section */
     .demo-section {
       background: var(--bg-darker);
@@ -1533,6 +1811,7 @@
         <li><a href="#pricing">Pricing</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#process">Process</a></li>
+        <li><a href="#faq">FAQ</a></li>
       </ul>
       <a href="#demo" class="nav-cta">Get Free Demo</a>
       <button class="mobile-menu-btn" aria-label="Menu">
@@ -1549,32 +1828,33 @@
     <a href="#pricing">Pricing</a>
     <a href="#projects">Projects</a>
     <a href="#process">Process</a>
+    <a href="#faq">FAQ</a>
     <a href="#demo" class="mobile-cta">Get Free Demo</a>
   </div>
 
   <!-- Hero -->
   <section class="hero">
     <div class="hero-content">
-      <div class="hero-badge">Available for new projects</div>
-      <h1>We Build <span class="highlight">Games</span> &<br><span class="highlight">Websites</span> That Convert</h1>
-      <p class="hero-sub">
+      <div class="hero-badge" data-aos="fade-down" data-aos-delay="100">Available for new projects</div>
+      <h1 data-aos="fade-up" data-aos-delay="200">We Build <span class="highlight gradient-text-animated">Games</span> &<br><span class="highlight gradient-text-animated">Websites</span> That Convert</h1>
+      <p class="hero-sub" data-aos="fade-up" data-aos-delay="300">
         Professional game development and web design agency. From mobile RPGs to business websites — we create digital experiences that engage users and drive results.
       </p>
-      <div class="hero-cta">
+      <div class="hero-cta" data-aos="fade-up" data-aos-delay="400">
         <a href="#demo" class="btn btn-primary">Get Free Demo</a>
         <a href="#projects" class="btn btn-secondary">See Our Work</a>
       </div>
-      <div class="hero-stats">
+      <div class="hero-stats" data-aos="fade-up" data-aos-delay="500">
         <div class="hero-stat">
-          <div class="hero-stat-value">50+</div>
+          <div class="hero-stat-value"><span class="counter" data-target="50">0</span>+</div>
           <div class="hero-stat-label">Projects Delivered</div>
         </div>
         <div class="hero-stat">
-          <div class="hero-stat-value">24h</div>
+          <div class="hero-stat-value"><span class="counter" data-target="24">0</span>h</div>
           <div class="hero-stat-label">Response Time</div>
         </div>
         <div class="hero-stat">
-          <div class="hero-stat-value">100%</div>
+          <div class="hero-stat-value"><span class="counter" data-target="100">0</span>%</div>
           <div class="hero-stat-label">Client Satisfaction</div>
         </div>
       </div>
@@ -1584,15 +1864,15 @@
   <!-- Services Overview -->
   <section class="services-overview" id="services">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header" data-aos="fade-up">
         <p class="section-label">What We Do</p>
         <h2 class="section-title">Three Core Services, One Studio</h2>
         <p class="section-desc">Websites, mobile apps, or games — whatever digital product you need, we've got you covered.</p>
       </div>
 
       <div class="services-grid services-3col">
-        <div class="service-card web">
-          <div class="service-icon"><img src="images/icon-website.png" alt="Website" style="width: 40px; height: 40px;"></div>
+        <div class="service-card web tilt-card glass-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="service-icon floating"><img src="images/icon-website.png" alt="Website" style="width: 40px; height: 40px;"></div>
           <h3>Website Development</h3>
           <p>Premium websites for businesses — custom design, mobile responsive, SEO optimized, built to generate leads.</p>
           <ul class="service-features">
@@ -1605,8 +1885,8 @@
           <a href="#pricing" class="btn btn-secondary">View Packages →</a>
         </div>
 
-        <div class="service-card" style="--card-accent: linear-gradient(135deg, #3b82f6, #2563eb);">
-          <div class="service-icon" style="--icon-bg: rgba(59, 130, 246, 0.12);"><img src="images/icon-app.png" alt="Mobile App" style="width: 40px; height: 40px;"></div>
+        <div class="service-card tilt-card glass-card" style="--card-accent: linear-gradient(135deg, #3b82f6, #2563eb);" data-aos="fade-up" data-aos-delay="200">
+          <div class="service-icon floating floating-delay-1" style="--icon-bg: rgba(59, 130, 246, 0.12);"><img src="images/icon-app.png" alt="Mobile App" style="width: 40px; height: 40px;"></div>
           <h3>Mobile App Development</h3>
           <p>Cross-platform apps for iOS & Android. From business tools to customer apps — we build functional mobile solutions.</p>
           <ul class="service-features">
@@ -1619,8 +1899,8 @@
           <a href="#pricing" class="btn btn-secondary">View Packages →</a>
         </div>
 
-        <div class="service-card game">
-          <div class="service-icon"><img src="images/icon-game.png" alt="Game" style="width: 40px; height: 40px;"></div>
+        <div class="service-card game tilt-card glass-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="service-icon floating floating-delay-2"><img src="images/icon-game.png" alt="Game" style="width: 40px; height: 40px;"></div>
           <h3>Game Development</h3>
           <p>Mobile games built in Godot 4.5 with PlayFab backend. From concept to launch — full game development.</p>
           <ul class="service-features">
@@ -1639,7 +1919,7 @@
   <!-- Pricing -->
   <section class="pricing" id="pricing">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header" data-aos="fade-up">
         <p class="section-label">Pricing</p>
         <h2 class="section-title">Transparent Pricing, No Surprises</h2>
         <p class="section-desc">Choose the package that fits your needs. All prices include everything listed — no hidden fees.</p>
@@ -1934,14 +2214,14 @@
   <!-- Projects -->
   <section class="projects" id="projects">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header" data-aos="fade-up">
         <p class="section-label">Our Work</p>
         <h2 class="section-title">Featured Projects</h2>
         <p class="section-desc">Real projects we've built. Games in development, websites generating leads.</p>
       </div>
 
       <div class="projects-grid" style="max-width: 600px; margin: 0 auto;">
-        <article class="project-card">
+        <article class="project-card tilt-card" data-aos="fade-up">
           <img src="portfolio/aurum-roofing/images/hero-bg.jpg" alt="Aurum Roofing Website" class="project-image">
           <div class="project-content">
             <span class="project-tag web">Website</span>
@@ -1959,30 +2239,30 @@
   <!-- Process -->
   <section class="process" id="process">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header" data-aos="fade-up">
         <p class="section-label">How We Work</p>
         <h2 class="section-title">Simple 4-Step Process</h2>
         <p class="section-desc">From first contact to launch — transparent communication every step of the way.</p>
       </div>
 
       <div class="process-grid">
-        <div class="process-step">
-          <div class="process-number">1</div>
+        <div class="process-step" data-aos="fade-up" data-aos-delay="100">
+          <div class="process-number floating">1</div>
           <h4>Send Your Brief</h4>
           <p>Message us via email or WhatsApp with your project idea. The more details, the better — we'll get back within 24h.</p>
         </div>
-        <div class="process-step">
-          <div class="process-number">2</div>
+        <div class="process-step" data-aos="fade-up" data-aos-delay="200">
+          <div class="process-number floating floating-delay-1">2</div>
           <h4>Proposal & Quote</h4>
           <p>Detailed proposal with scope, timeline, and fixed price. No surprises, no hidden fees.</p>
         </div>
-        <div class="process-step">
-          <div class="process-number">3</div>
+        <div class="process-step" data-aos="fade-up" data-aos-delay="300">
+          <div class="process-number floating floating-delay-2">3</div>
           <h4>Build & Review</h4>
           <p>We build your project with regular updates. You review and provide feedback along the way.</p>
         </div>
-        <div class="process-step">
-          <div class="process-number">4</div>
+        <div class="process-step" data-aos="fade-up" data-aos-delay="400">
+          <div class="process-number floating">4</div>
           <h4>Launch & Support</h4>
           <p>We launch your project and provide ongoing support. You get full ownership of everything.</p>
         </div>
@@ -1990,8 +2270,49 @@
     </div>
   </section>
 
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <p class="section-label">Testimonials</p>
+        <h2 class="section-title">What Clients Say</h2>
+      </div>
+
+      <div class="testimonials-carousel" data-aos="fade-up" data-aos-delay="200">
+        <div class="testimonials-track" id="testimonials-track">
+          <div class="testimonial-slide">
+            <div class="testimonial-card glass-card">
+              <p class="testimonial-text">"Grindare Studio delivered exactly what we needed — a clean, professional website that our customers love. The team was responsive, creative, and made the whole process effortless."</p>
+              <p class="testimonial-author">Mark Thompson</p>
+              <p class="testimonial-role">Director, Thompson Roofing Ltd</p>
+            </div>
+          </div>
+          <div class="testimonial-slide">
+            <div class="testimonial-card glass-card">
+              <p class="testimonial-text">"Outstanding work on our company website. They understood our vision immediately and delivered a site that perfectly represents our brand. Highly recommended!"</p>
+              <p class="testimonial-author">Sarah Mitchell</p>
+              <p class="testimonial-role">Owner, Mitchell Electrical Services</p>
+            </div>
+          </div>
+          <div class="testimonial-slide">
+            <div class="testimonial-card glass-card">
+              <p class="testimonial-text">"From the free demo to the final launch, everything was professional and on time. Our new website has already brought in more enquiries than we expected."</p>
+              <p class="testimonial-author">James Wilson</p>
+              <p class="testimonial-role">Managing Director, Wilson Plumbing</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-dots">
+          <button class="testimonial-dot active" data-slide="0"></button>
+          <button class="testimonial-dot" data-slide="1"></button>
+          <button class="testimonial-dot" data-slide="2"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- AI Enhanced -->
-  <section class="ai-section">
+  <section class="ai-section" data-aos="fade-up">
     <div class="container">
       <div class="ai-card">
         <div class="ai-badge">
@@ -2042,7 +2363,7 @@
   <!-- Free Demo Section -->
   <section class="demo-section" id="demo">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header" data-aos="fade-up">
         <p class="section-label">Try Before You Buy</p>
         <h2 class="section-title">Get a Free Demo Website</h2>
         <p class="section-desc">See exactly what your website will look like before you commit. We'll create a personalized demo just for your business — completely free, no obligations.</p>
@@ -2226,10 +2547,95 @@
     </div>
   </section>
 
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <p class="section-label">FAQ</p>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-desc">Got questions? We've got answers. If you don't find what you're looking for, just reach out.</p>
+      </div>
+
+      <div class="faq-container">
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
+          <button class="faq-question">
+            How long does it take to build a website?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Most websites are completed within 1-2 weeks. Starter packages (single page) can be done in 3-5 days, while more complex Business and Premium packages take 1-2 weeks. We'll give you an exact timeline in our proposal.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="150">
+          <button class="faq-question">
+            What's included in the free demo?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Your free demo includes a fully designed homepage with your company name, colors, and services. It's a real, working website preview — not just a mockup. You can share the link with others and only pay if you decide to go live.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="200">
+          <button class="faq-question">
+            Do I own the website after it's built?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Yes! You have full ownership of your website. We can host it for you or transfer all files so you can host it yourself. There are no hidden fees or lock-in contracts.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="250">
+          <button class="faq-question">
+            Can you help with hosting and domain?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Absolutely! We offer a Domain & Hosting setup service (£99 one-time) that includes domain registration, SSL certificate, professional email setup, and deployment. We handle all the technical stuff so you don't have to.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
+          <button class="faq-question">
+            What if I need changes after launch?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              All packages include free support (1-6 months depending on package). After that, you can either make changes yourself, hire us for one-off updates, or subscribe to our Monthly Care plan (£79/month) for ongoing support and updates.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="350">
+          <button class="faq-question">
+            Do you work with businesses outside the UK?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Yes! We work with clients worldwide. All communication is done online via email, WhatsApp, or video calls. Payments can be made in GBP, EUR, or USD.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA -->
   <section class="cta" id="contact">
     <div class="container">
-      <div class="cta-card">
+      <div class="cta-card" data-aos="zoom-in">
         <h2>Questions? Get in Touch</h2>
         <p>Prefer to chat first? No problem. Reach out via WhatsApp or email.</p>
         <div class="cta-buttons">
@@ -2278,7 +2684,32 @@
     </div>
   </footer>
 
+  <!-- Cookie Consent -->
+  <div class="cookie-consent" id="cookie-consent">
+    <div class="cookie-inner">
+      <p class="cookie-text">
+        🍪 We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.
+        <a href="#" onclick="return false;">Learn more</a>
+      </p>
+      <div class="cookie-buttons">
+        <button class="cookie-btn cookie-decline" onclick="declineCookies()">Decline</button>
+        <button class="cookie-btn cookie-accept" onclick="acceptCookies()">Accept All</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AOS Animation Library -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
   <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      easing: 'ease-out',
+      once: true,
+      offset: 50
+    });
+
     // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -2364,6 +2795,166 @@
           submitBtn.disabled = false;
         });
       });
+    }
+
+    // ============================================
+    // ANIMATED COUNTERS
+    // ============================================
+    const counters = document.querySelectorAll('.counter');
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const counter = entry.target;
+          const target = parseInt(counter.dataset.target);
+          const duration = 2000;
+          const start = 0;
+          const startTime = performance.now();
+
+          const updateCounter = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            counter.textContent = Math.floor(easeOut * target);
+
+            if (progress < 1) {
+              requestAnimationFrame(updateCounter);
+            } else {
+              counter.textContent = target;
+            }
+          };
+
+          requestAnimationFrame(updateCounter);
+          counterObserver.unobserve(counter);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    counters.forEach(counter => counterObserver.observe(counter));
+
+    // ============================================
+    // FAQ ACCORDION
+    // ============================================
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+      const question = item.querySelector('.faq-question');
+      question.addEventListener('click', () => {
+        const isActive = item.classList.contains('active');
+
+        // Close all others
+        faqItems.forEach(i => i.classList.remove('active'));
+
+        // Toggle current
+        if (!isActive) {
+          item.classList.add('active');
+        }
+      });
+    });
+
+    // ============================================
+    // COOKIE CONSENT
+    // ============================================
+    function checkCookieConsent() {
+      const consent = localStorage.getItem('cookieConsent');
+      if (!consent) {
+        setTimeout(() => {
+          document.getElementById('cookie-consent').classList.add('show');
+        }, 2000);
+      }
+    }
+
+    function acceptCookies() {
+      localStorage.setItem('cookieConsent', 'accepted');
+      document.getElementById('cookie-consent').classList.remove('show');
+      // Enable analytics if needed
+    }
+
+    function declineCookies() {
+      localStorage.setItem('cookieConsent', 'declined');
+      document.getElementById('cookie-consent').classList.remove('show');
+    }
+
+    checkCookieConsent();
+
+    // ============================================
+    // SMOOTH REVEAL ON SCROLL (Parallax-like)
+    // ============================================
+    const heroSection = document.querySelector('.hero');
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      if (heroSection && scrolled < window.innerHeight) {
+        heroSection.style.backgroundPositionY = scrolled * 0.5 + 'px';
+      }
+    });
+
+    // ============================================
+    // TESTIMONIALS CAROUSEL
+    // ============================================
+    const testimonialsTrack = document.getElementById('testimonials-track');
+    const testimonialDots = document.querySelectorAll('.testimonial-dot');
+    let currentSlide = 0;
+    let autoSlideInterval;
+
+    function goToSlide(index) {
+      currentSlide = index;
+      if (testimonialsTrack) {
+        testimonialsTrack.style.transform = `translateX(-${index * 100}%)`;
+      }
+      testimonialDots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+    }
+
+    testimonialDots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        goToSlide(index);
+        resetAutoSlide();
+      });
+    });
+
+    function nextSlide() {
+      const totalSlides = testimonialDots.length;
+      goToSlide((currentSlide + 1) % totalSlides);
+    }
+
+    function resetAutoSlide() {
+      clearInterval(autoSlideInterval);
+      autoSlideInterval = setInterval(nextSlide, 5000);
+    }
+
+    // Start auto-slide
+    if (testimonialDots.length > 0) {
+      autoSlideInterval = setInterval(nextSlide, 5000);
+    }
+
+    // Touch/swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    if (testimonialsTrack) {
+      testimonialsTrack.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+
+      testimonialsTrack.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      });
+    }
+
+    function handleSwipe() {
+      const swipeThreshold = 50;
+      const diff = touchStartX - touchEndX;
+
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          // Swipe left - next slide
+          goToSlide((currentSlide + 1) % testimonialDots.length);
+        } else {
+          // Swipe right - previous slide
+          goToSlide((currentSlide - 1 + testimonialDots.length) % testimonialDots.length);
+        }
+        resetAutoSlide();
+      }
     }
   </script>
 </body>
