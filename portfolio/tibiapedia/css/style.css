@@ -190,8 +190,11 @@ tr:hover td{background:rgba(212,165,55,.03)}
 .bv:hover{border-color:var(--border-h);color:var(--parchment)}
 .bv.active{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);box-shadow:0 0 8px rgba(212,165,55,.15)}
 /* ===== CHARACTER INFO PANEL ===== */
-.build-info{padding:14px 18px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:12px;display:none}
-.build-info.visible{display:block}
+.build-info{padding:14px 18px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:12px;position:relative}
+.bi-overlay{position:absolute;inset:0;background:rgba(13,11,10,.82);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:5;border-radius:var(--rl);color:var(--parch-dim);font-size:14px;text-align:center;padding:20px;backdrop-filter:blur(3px)}
+.bi-overlay-icon{width:36px;height:36px;opacity:.45;image-rendering:auto}
+.bi-overlay b{color:var(--gold)}
+.build-info.visible .bi-overlay{display:none}
 .bi-stats-row{display:flex;gap:6px;margin-bottom:12px}
 .bi-stat{display:flex;flex-direction:column;align-items:center;padding:8px 10px 6px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--r);text-align:center;flex:1;transition:border-color .15s}
 .bi-stat-hl{background:linear-gradient(135deg,rgba(212,165,55,.06),rgba(212,165,55,.02));border-color:var(--border-h)}
