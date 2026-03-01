@@ -687,19 +687,39 @@ function renderHunting() {
           <button class="btn-s" onclick="editorFixSpot(${s._origIdx})">Edit Route</button>
           <button class="btn-s" onclick="toggleFeedback(this)" style="margin-left:auto">Suggest Changes</button>
         </div>
-        <div class="spot-feedback" style="display:none;margin-top:10px">
-          <div style="font-family:Cinzel,serif;font-size:12px;color:var(--gold);margin-bottom:8px">Suggest changes to this spot</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
-            <label style="font-size:11px;color:var(--parch-dim);display:flex;align-items:center;gap:3px"><input type="checkbox" class="fb-cat" value="creatures"> Creatures</label>
-            <label style="font-size:11px;color:var(--parch-dim);display:flex;align-items:center;gap:3px"><input type="checkbox" class="fb-cat" value="imbuements"> Imbuements</label>
-            <label style="font-size:11px;color:var(--parch-dim);display:flex;align-items:center;gap:3px"><input type="checkbox" class="fb-cat" value="supplies"> Supplies</label>
-            <label style="font-size:11px;color:var(--parch-dim);display:flex;align-items:center;gap:3px"><input type="checkbox" class="fb-cat" value="gear"> Gear/Set</label>
-            <label style="font-size:11px;color:var(--parch-dim);display:flex;align-items:center;gap:3px"><input type="checkbox" class="fb-cat" value="loot"> Loot/Drops</label>
-            <label style="font-size:11px;color:var(--parch-dim);display:flex;align-items:center;gap:3px"><input type="checkbox" class="fb-cat" value="tips"> Tips</label>
-            <label style="font-size:11px;color:var(--parch-dim);display:flex;align-items:center;gap:3px"><input type="checkbox" class="fb-cat" value="other"> Other</label>
+        <div class="spot-feedback" style="display:none;margin-top:14px;padding:16px;background:var(--bg-darker);border:1px solid var(--border-h);border-radius:var(--rl)">
+          <div style="font-family:Cinzel,serif;font-size:14px;color:var(--gold);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">Suggest Changes to This Spot</div>
+          <div class="fb-sections">
+            <div class="fb-sec">
+              <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="creatures"> <img src="${WIKI_IMG('Creature_Products')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Creatures</label>
+              <textarea class="fb-field" data-cat="creatures" rows="2" placeholder="Which creatures should be added/removed? e.g. 'Add Demon Outcast, remove Ghoul'"></textarea>
+            </div>
+            <div class="fb-sec">
+              <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="imbuements"> <img src="${WIKI_IMG('Imbuing_Shrine')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Imbuements</label>
+              <textarea class="fb-field" data-cat="imbuements" rows="2" placeholder="What imbuements should be used? e.g. 'T3 Vampirism + T3 Void + T2 Fire Strike'"></textarea>
+            </div>
+            <div class="fb-sec">
+              <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="gear"> <img src="${WIKI_IMG('Magic_Plate_Armor')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Best Equipment</label>
+              <textarea class="fb-field" data-cat="gear" rows="2" placeholder="Best gear for this spot? e.g. 'EK 300+: Falcon Plate, Soulbastion, Gnome Helmet...'"></textarea>
+            </div>
+            <div class="fb-sec">
+              <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="supplies"> <img src="${WIKI_IMG('Strong_Health_Potion')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Supplies</label>
+              <textarea class="fb-field" data-cat="supplies" rows="2" placeholder="Supplies needed? e.g. 'EK: 200 supreme health, 50 mana, 10 spirit potions'"></textarea>
+            </div>
+            <div class="fb-sec">
+              <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="loot"> <img src="${WIKI_IMG('Gold_Coin')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Loot / Drops</label>
+              <textarea class="fb-field" data-cat="loot" rows="2" placeholder="Valuable drops to add/fix? e.g. 'Add Falcon Longsword (very rare), Gold Token (rare)'"></textarea>
+            </div>
+            <div class="fb-sec">
+              <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="tips"> <img src="${WIKI_IMG('Book_(Brown)')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Tips / Strategy</label>
+              <textarea class="fb-field" data-cat="tips" rows="2" placeholder="Hunting tips? e.g. 'Pull 3-4 at a time, use fire wall to split packs...'"></textarea>
+            </div>
+            <div class="fb-sec">
+              <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="other"> Other</label>
+              <textarea class="fb-field" data-cat="other" rows="2" placeholder="Any other changes needed..."></textarea>
+            </div>
           </div>
-          <textarea class="fb-text" rows="3" style="width:100%;background:var(--bg-input);color:var(--parchment);border:1px solid var(--border);border-radius:var(--r);padding:8px;font-family:'Crimson Text',serif;font-size:13px;resize:vertical" placeholder="Describe what should be changed, added, or removed..."></textarea>
-          <div style="display:flex;gap:6px;margin-top:6px;align-items:center">
+          <div style="display:flex;gap:8px;margin-top:12px;align-items:center;padding-top:10px;border-top:1px solid var(--border)">
             <input type="text" class="fb-author" placeholder="Your character name" style="flex:1;font-size:12px">
             <button class="btn-s btn-g" onclick="submitFeedback(this,${s._origIdx})">Send Feedback</button>
           </div>
@@ -1820,6 +1840,18 @@ function editorSetStatus(msg, type) {
 function toggleFeedback(btn) {
   const fb = btn.closest('.hunt-body').querySelector('.spot-feedback');
   if (fb) fb.style.display = fb.style.display === 'none' ? 'block' : 'none';
+  // Attach toggle listeners for checkbox → textarea visibility (fallback for :has())
+  if (fb) {
+    fb.querySelectorAll('.fb-cat').forEach(cb => {
+      if (cb._fbBound) return;
+      cb._fbBound = true;
+      cb.addEventListener('change', function() {
+        const sec = this.closest('.fb-sec');
+        const field = sec?.querySelector('.fb-field');
+        if (field) field.style.display = this.checked ? 'block' : 'none';
+      });
+    });
+  }
 }
 
 // Submit spot feedback to Discord
@@ -1827,12 +1859,24 @@ function submitFeedback(btn, spotIdx) {
   const fb = btn.closest('.spot-feedback');
   const categories = [];
   fb.querySelectorAll('.fb-cat:checked').forEach(cb => categories.push(cb.value));
-  const text = fb.querySelector('.fb-text').value.trim();
   const author = fb.querySelector('.fb-author').value.trim() || 'Anonymous';
   const statusEl = fb.querySelector('.fb-status');
 
-  if (!text) { statusEl.textContent = 'Please describe the changes.'; statusEl.style.color = 'var(--fire)'; return; }
-  if (categories.length === 0) { statusEl.textContent = 'Select at least one category.'; statusEl.style.color = 'var(--fire)'; return; }
+  if (categories.length === 0) { statusEl.textContent = 'Check at least one category and fill in the details.'; statusEl.style.color = 'var(--fire)'; return; }
+
+  // Collect text from each checked category's field
+  const feedbackFields = [];
+  let hasContent = false;
+  categories.forEach(cat => {
+    const field = fb.querySelector(`.fb-field[data-cat="${cat}"]`);
+    const text = field ? field.value.trim() : '';
+    if (text) {
+      hasContent = true;
+      feedbackFields.push({ name: cat.charAt(0).toUpperCase() + cat.slice(1), value: text.substring(0, 500) });
+    }
+  });
+
+  if (!hasContent) { statusEl.textContent = 'Please fill in at least one category field.'; statusEl.style.color = 'var(--fire)'; return; }
 
   const spot = HUNTING_SPOTS[spotIdx];
   const embed = {
@@ -1842,7 +1886,7 @@ function submitFeedback(btn, spotIdx) {
       { name: 'Spot', value: spot.name, inline: true },
       { name: 'Submitter', value: author, inline: true },
       { name: 'Categories', value: categories.join(', '), inline: true },
-      { name: 'Feedback', value: text.substring(0, 1000) }
+      ...feedbackFields
     ],
     timestamp: new Date().toISOString()
   };
@@ -1858,7 +1902,9 @@ function submitFeedback(btn, spotIdx) {
       if (res.ok) {
         statusEl.textContent = 'Feedback sent! Thank you for contributing.';
         statusEl.style.color = 'var(--common)';
-        fb.querySelector('.fb-text').value = '';
+        // Clear all fields
+        fb.querySelectorAll('.fb-field').forEach(f => f.value = '');
+        fb.querySelectorAll('.fb-cat').forEach(cb => cb.checked = false);
       } else {
         statusEl.textContent = 'Failed to send. Try again later.';
         statusEl.style.color = 'var(--fire)';
