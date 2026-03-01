@@ -591,7 +591,7 @@ function updateBuildCharInfo(ch, acct, worldData, otherChars) {
   const others = (otherChars || []).filter(c => c.name !== ch.name && !c.deleted);
   if (others.length > 0) {
     html += `<div class="bi-divider"></div>
-    <div class="bi-section-label">Other Characters (${others.length})</div>
+    <div class="bi-section-label">Other Characters (${others.length}) <span style="font-family:'Crimson Text',serif;font-weight:400;font-size:9px;color:var(--parch-dim);letter-spacing:0;text-transform:none">· hidden characters are not shown</span></div>
     <div class="bi-alts">${others.map(c => {
       const n = esc(c.name).replace(/'/g,"\\'");
       return `<span class="bi-alt${c.status === 'online' ? ' bi-alt-on' : ''}" title="${esc(c.world)} — click to switch" onclick="switchToAlt('${n}')">${esc(c.name)} <span class="bi-alt-w">${esc(c.world)}</span></span>`;
