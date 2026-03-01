@@ -134,7 +134,7 @@ const HUNTING_SPOTS = [
   prot:["physical","death"],
   cx:33333,cy:31690,
   route:"From Edron depot go east across the bridge. Continue east past the academy. Enter Grimvale cave entrance near the mountain.",
-  waypoints:[[33217,31814,"Start at Edron depot"],[33250,31800,"Go east, cross the bridge"],[33280,31770,"Continue east past Academy"],[33310,31730,"Head NE towards mountains"],[33333,31690,"Enter Grimvale cave"]],
+  waypoints:[[33217,31814,"Start at Edron depot"],[33267,31810,"Go east, cross the bridge"],[33300,31792,"Continue east past Academy"],[33333,31773,"Enter Grimvale cave (go down)"],[33333,31690,"Navigate underground to hunting area",8]],
   access:"Grimvale Quest (short access). Only during full moon phase!",
   premium:true,
   creatures:[
@@ -166,7 +166,7 @@ const HUNTING_SPOTS = [
   prot:["fire"],
   cx:33264,cy:32277,
   route:"From Darashia depot head north-east. Follow the sand path past the gardens. Enter the dragon cave opening in the mountain.",
-  waypoints:[[33224,32432,"Start at Darashia depot"],[33230,32400,"Head north through desert"],[33240,32360,"Follow sand path NE"],[33255,32320,"Past the gardens"],[33264,32277,"Enter dragon cave"]],
+  waypoints:[[33224,32432,"Start at Darashia depot"],[33226,32387,"Head north through desert"],[33245,32340,"Follow sand path towards mountains"],[33264,32300,"Find cave entrance, go down"],[33264,32277,"Navigate dragon tunnels",8]],
   access:"None — free access.",
   premium:false,
   creatures:[
@@ -193,7 +193,7 @@ const HUNTING_SPOTS = [
   prot:["death","earth"],
   cx:33450,cy:31580,
   route:"From Zao outpost use the steamship or walk south-east into the steppe. Enter the underground dragon tunnels heading deep.",
-  waypoints:[[33290,31500,"Start at Zao outpost"],[33320,31510,"Go SE into steppe"],[33360,31530,"Cross the barren land"],[33410,31560,"Find underground entrance"],[33450,31580,"Go down into dragon tunnels"]],
+  waypoints:[[33290,31500,"Start at Zao outpost"],[33340,31520,"Go SE into steppe"],[33390,31545,"Cross barren land"],[33430,31565,"Find cave entrance, go down"],[33450,31580,"Navigate dragon tunnels",8]],
   access:"The New Frontier + Children of the Revolution quests required.",
   premium:true,
   creatures:[
@@ -249,7 +249,7 @@ const HUNTING_SPOTS = [
   prot:["physical","fire"],
   cx:33650,cy:31910,
   route:"From Rathleton depot take the underground steam system south. Follow tunnels to the Oramond entrance, then navigate to the Minotaur area.",
-  waypoints:[[33594,31899,"Start at Rathleton depot"],[33610,31900,"Enter underground steam system"],[33630,31905,"Follow tunnels south"],[33650,31910,"Reach Minotaur area"]],
+  waypoints:[[33594,31899,"Start at Rathleton depot"],[33610,31900,"Enter underground steam system"],[33630,31905,"Follow tunnels south",8],[33650,31910,"Reach Minotaur area",8]],
   access:"Oramond Quest — need 40 daily task completions (voting + tasks). This takes ~2 weeks!",
   premium:true,
   creatures:[
@@ -280,7 +280,7 @@ const HUNTING_SPOTS = [
   prot:["physical"],
   cx:33660,cy:31900,
   route:"From Rathleton depot head to the Oramond underground system. Glooth Bandits area is in the first section — easier access than Minos.",
-  waypoints:[[33594,31899,"Start at Rathleton depot"],[33620,31900,"Enter Oramond underground"],[33640,31900,"Go through first section"],[33660,31900,"Reach Glooth Bandits"]],
+  waypoints:[[33594,31899,"Start at Rathleton depot"],[33615,31900,"Enter Oramond underground"],[33640,31900,"Go through first section",8],[33660,31900,"Reach Glooth Bandits",8]],
   access:"Oramond Quest — basic access (fewer tasks than Minos, ~1 week).",
   premium:true,
   creatures:[
@@ -308,7 +308,7 @@ const HUNTING_SPOTS = [
   prot:["fire","energy"],
   cx:32953,cy:32685,
   route:"From Port Hope depot head east through the jungle. Navigate the mountain paths north-east. The palace entrance is underground in the Kha'zeel mountains.",
-  waypoints:[[32623,32753,"Start at Port Hope depot"],[32680,32740,"Head east through jungle"],[32750,32720,"Cross mountain paths NE"],[32820,32710,"Continue through jungle"],[32900,32695,"Enter Kha'zeel mountains"],[32953,32685,"Go underground to Palace"]],
+  waypoints:[[32623,32753,"Start at Port Hope depot"],[32680,32740,"Head east through jungle"],[32750,32720,"Cross mountain paths NE"],[32900,32695,"Enter Kha'zeel mountains, go down"],[32953,32685,"Navigate underground to Palace",8]],
   access:"Short access quest from Port Hope NPCs (Jakundaf Desert Library access).",
   premium:true,
   creatures:[
@@ -338,7 +338,7 @@ const HUNTING_SPOTS = [
   prot:["ice"],
   cx:32230,cy:31412,
   route:"From Svargrond take the boat to Okolnir island. Walk north across the ice to the cave entrance. Go down into the frost dragon tunnels.",
-  waypoints:[[32267,31131,"Start at Svargrond depot"],[32260,31200,"Take boat to Okolnir"],[32250,31280,"Walk north across ice"],[32240,31350,"Find cave entrance"],[32230,31412,"Go down into tunnels"]],
+  waypoints:[[32267,31131,"Start at Svargrond depot"],[32260,31200,"Take boat to Okolnir island"],[32240,31350,"Walk north across ice, find cave"],[32230,31412,"Go down stairs into tunnels",8]],
   access:"The Ice Islands Quest required for Okolnir boat access.",
   premium:true,
   creatures:[
@@ -394,7 +394,7 @@ const HUNTING_SPOTS = [
   prot:["physical","death"],
   cx:33530,cy:32400,
   route:"From Roshamuul dock navigate the dangerous terrain south-west. Cross the bridge to the prison island entrance. Be careful of surface Guzzlemaws!",
-  waypoints:[[33513,32363,"Start at Roshamuul dock"],[33520,32370,"Navigate SW, avoid surface mobs"],[33525,32385,"Cross bridge to prison"],[33530,32400,"Enter prison area"]],
+  waypoints:[[33513,32363,"Start at Roshamuul dock"],[33520,32375,"Navigate SW, avoid Guzzlemaws!"],[33525,32385,"Cross bridge to prison entrance"],[33530,32400,"Go down into prison",8]],
   access:"Roshamuul Quest required.",
   premium:true,
   creatures:[
@@ -424,7 +424,7 @@ const HUNTING_SPOTS = [
   prot:["physical","holy"],
   cx:33362,cy:31343,
   route:"From Edron depot go east across the bridges. Take the boat north-east to Stonehome. Head north into the Falcon Bastion fortress.",
-  waypoints:[[33217,31814,"Start at Edron depot"],[33250,31780,"Go east across bridges"],[33280,31720,"Take boat NE to Stonehome"],[33310,31600,"Head north on island"],[33330,31500,"Continue north"],[33350,31400,"Approach fortress"],[33362,31343,"Enter Falcon Bastion"]],
+  waypoints:[[33217,31814,"Start at Edron depot"],[33260,31790,"Go east across bridges"],[33300,31720,"Take boat NE to Stonehome"],[33340,31450,"Head north on island"],[33362,31343,"Enter Falcon Bastion"]],
   access:"Grave Danger Quest required.",
   premium:true,
   creatures:[
@@ -453,7 +453,7 @@ const HUNTING_SPOTS = [
   prot:["fire","ice","energy"],
   cx:32177,cy:31927,
   route:"Access through portals in north-western Tiquanda after completing the Secret Library Quest. Different wings accessible from different portal locations.",
-  waypoints:[[32369,32241,"Start at Thais depot"],[32300,32150,"Head NW towards Tiquanda"],[32250,32050,"Find portal location"],[32200,31980,"Enter Secret Library portal"],[32177,31927,"Navigate to chosen wing"]],
+  waypoints:[[32369,32241,"Start at Thais depot"],[32300,32150,"Head NW towards Tiquanda"],[32250,32050,"Find portal in NW Tiquanda"],[32200,31980,"Enter Secret Library portal",10],[32177,31927,"Navigate to chosen wing",10]],
   access:"Secret Library Quest required.",
   premium:true,
   creatures:[
@@ -483,7 +483,7 @@ const HUNTING_SPOTS = [
   team:"team",expH:"5kk-9kk",profitH:"400k-1.2kk",
   cx:33301,cy:32647,
   route:"Travel to Cobra Bastion north-east of Ankrahmun. Take the steamship or walk through the desert to reach the bastion entrance.",
-  waypoints:[[33162,32688,"Start at Ankrahmun depot"],[33200,32680,"Head NE through desert"],[33250,32660,"Take steamship or walk"],[33301,32647,"Enter Cobra Bastion"]],
+  waypoints:[[33162,32688,"Start at Ankrahmun depot"],[33200,32680,"Head NE through desert"],[33250,32660,"Find Cobra Bastion entrance, go down"],[33301,32647,"Navigate Cobra Bastion underground",8]],
   access:"Cobra Bastion Quest required (Kilmaresh access first).",
   premium:true,
   creatures:[
@@ -544,7 +544,7 @@ const HUNTING_SPOTS = [
   city:"Rathleton",level:[200,300],voc:["knight","paladin","sorcerer","druid"],
   team:"solo",expH:"2kk-4kk",profitH:"300k-800k",
   cx:33620,cy:31850,
-  waypoints:[[33594,31899,"Start at Rathleton depot"],[33600,31890,"Enter underground tunnels east"],[33610,31870,"Navigate sewer passages"],[33620,31850,"Reach pirate hideout"]],
+  waypoints:[[33594,31899,"Start at Rathleton depot"],[33600,31890,"Enter underground tunnels east"],[33610,31870,"Navigate sewer passages",8],[33620,31850,"Reach pirate hideout",8]],
   route:"From Rathleton use the underground tunnel system east. Navigate through the sewer-like passages to reach the pirate hideout.",
   access:"Oramond access required. Short mission.",
   premium:true,
@@ -606,7 +606,7 @@ const HUNTING_SPOTS = [
   team:"team",expH:"5kk-10kk",profitH:"400k-1.5kk",
   cx:32121,cy:32688,
   route:"From Liberty Bay take the boat to Kharos island. Enter the Ferumbras Citadel after completing the quest.",
-  waypoints:[[32317,32826,"Start at Liberty Bay depot"],[32250,32800,"Take boat to Kharos"],[32200,32750,"Head SW on island"],[32150,32710,"Navigate volcanic terrain"],[32121,32688,"Enter Ferumbras Citadel"]],
+  waypoints:[[32317,32826,"Start at Liberty Bay depot"],[32250,32800,"Take boat to Kharos"],[32150,32710,"Navigate volcanic terrain SW"],[32121,32688,"Enter Ferumbras Citadel underground",8]],
   access:"Ferumbras' Ascension Quest required.",
   premium:true,
   creatures:[
@@ -635,7 +635,7 @@ const HUNTING_SPOTS = [
   city:"Edron",level:[60,100],voc:["knight","paladin"],
   team:"solo",expH:"300k-500k",profitH:"50k-120k",
   cx:33179,cy:31922,
-  waypoints:[[33217,31814,"Start at Edron depot"],[33210,31840,"Go south past Academy"],[33200,31870,"Continue SE towards mountain"],[33190,31900,"Follow path down hill"],[33179,31922,"Enter Hero Cave"]],
+  waypoints:[[33217,31814,"Start at Edron depot"],[33210,31850,"Go south past Academy"],[33195,31900,"Continue SE to mountain base"],[33179,31922,"Enter Hero Cave, go down",8]],
   route:"From Edron depot go south past the academy building. Continue south-east towards the mountain. The cave entrance is at the base of the hill.",
   access:"None — free access.",
   premium:false,
@@ -662,7 +662,7 @@ const HUNTING_SPOTS = [
   city:"Kazordoon",level:[50,80],voc:["knight","druid"],
   team:"solo",expH:"200k-350k",profitH:"30k-60k",
   cx:32580,cy:31900,
-  waypoints:[[32631,31925,"Start at Kazordoon depot"],[32610,31915,"Take mine cart down"],[32595,31908,"Follow Spike signs"],[32580,31900,"Enter Spike lower levels"]],
+  waypoints:[[32631,31925,"Start at Kazordoon depot"],[32610,31915,"Enter mine cart system"],[32595,31908,"Go down to Spike entrance",8],[32580,31900,"Navigate lower levels",9]],
   route:"From Kazordoon depot take the mine cart system down. Follow signs to the Spike entrance in the lower levels of the city.",
   access:"Spike Tasks Quest — talk to Gnome NPCs in Kazordoon.",
   premium:true,
@@ -719,7 +719,7 @@ const HUNTING_SPOTS = [
   city:"Liberty Bay",level:[200,350],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"3kk-5kk",profitH:"200k-500k",
   cx:32095,cy:32583,
-  waypoints:[[32317,32826,"Start at Liberty Bay depot"],[32280,32800,"Take boat to Goroma"],[32220,32750,"Head south on island"],[32170,32700,"Navigate volcanic terrain"],[32130,32650,"Find forge entrance"],[32095,32583,"Enter Demon Forge"]],
+  waypoints:[[32317,32826,"Start at Liberty Bay depot"],[32280,32800,"Take boat to Goroma"],[32170,32700,"Navigate volcanic terrain south"],[32130,32650,"Find forge entrance, go down"],[32095,32583,"Navigate Demon Forge",8]],
   route:"From Liberty Bay take the boat to Goroma island. Navigate through the volcanic terrain south to the demon forge entrance.",
   access:"None after reaching Goroma.",
   premium:true,
@@ -780,7 +780,7 @@ const HUNTING_SPOTS = [
   prot:["physical"],
   cx:32405,cy:32085,
   route:"From Thais depot head north through the city. Follow the path west past the troll cave. Enter the underground hole — Mintwallin is a massive underground minotaur city.",
-  waypoints:[[32369,32241,"Start at Thais depot"],[32380,32200,"Head north through city"],[32390,32150,"Go west past troll cave"],[32400,32100,"Find hole in ground"],[32405,32085,"Use shovel, rope down"]],
+  waypoints:[[32369,32241,"Start at Thais depot"],[32380,32200,"Head north through city"],[32400,32100,"Find hole in ground, use shovel"],[32405,32085,"Climb down to Mintwallin",8]],
   access:"None — free access. Bring a rope and shovel.",
   premium:false,
   creatures:[
@@ -860,7 +860,7 @@ const HUNTING_SPOTS = [
   prot:["earth","physical"],
   cx:33190,cy:32660,
   route:"From Ankrahmun depot head south-west to the desert tombs. Larvas are on the upper floors, Ancient Scarabs deeper down.",
-  waypoints:[[33162,32688,"Start at Ankrahmun depot"],[33170,32680,"Head SW to desert tombs"],[33180,32670,"Enter upper tomb floors"],[33190,32660,"Go deeper for Scarabs"]],
+  waypoints:[[33162,32688,"Start at Ankrahmun depot"],[33170,32680,"Head SW to desert tombs"],[33180,32670,"Enter upper tomb floors, go down"],[33190,32660,"Go deeper for Ancient Scarabs",8]],
   access:"None — free access (premium island).",
   premium:true,
   creatures:[
@@ -913,7 +913,7 @@ const HUNTING_SPOTS = [
   prot:["earth"],
   cx:32660,cy:32780,
   route:"From Port Hope depot head east into the jungle. Cross the bridge over the river. Enter the cave south-east of the jungle village.",
-  waypoints:[[32623,32753,"Start at Port Hope depot"],[32640,32760,"Head east into jungle"],[32650,32770,"Cross river bridge"],[32660,32780,"Enter spider cave SE"]],
+  waypoints:[[32623,32753,"Start at Port Hope depot"],[32640,32760,"Head east into jungle"],[32650,32770,"Cross river bridge, find cave entrance"],[32660,32780,"Enter spider cave underground",8]],
   access:"None — free access.",
   premium:true,
   creatures:[
@@ -939,7 +939,7 @@ const HUNTING_SPOTS = [
   prot:["death","physical"],
   cx:33250,cy:32450,
   route:"From Darashia depot head east through the desert. Enter the underground cave system beneath the sand hills.",
-  waypoints:[[33224,32432,"Start at Darashia depot"],[33235,32440,"Head east through desert"],[33245,32445,"Find underground entrance"],[33250,32450,"Enter cave system"]],
+  waypoints:[[33224,32432,"Start at Darashia depot"],[33235,32440,"Head east through desert"],[33245,32445,"Find underground cave entrance, go down"],[33250,32450,"Navigate Werehyaena cave",8]],
   access:"Short access quest.",
   premium:true,
   creatures:[
@@ -992,7 +992,7 @@ const HUNTING_SPOTS = [
   prot:["energy","fire"],
   cx:33250,cy:32380,
   route:"From Darashia depot head north-east through the desert. Cross the sand bridge to the Drefia underground crypt entrance.",
-  waypoints:[[33224,32432,"Start at Darashia depot"],[33230,32420,"Head NE through desert"],[33240,32400,"Cross sand bridge"],[33250,32380,"Enter Drefia crypt"]],
+  waypoints:[[33224,32432,"Start at Darashia depot"],[33230,32420,"Head NE through desert"],[33240,32400,"Cross sand bridge, enter crypt entrance"],[33250,32380,"Navigate Drefia underground",8]],
   access:"Access through Drefia underground crypt.",
   premium:true,
   creatures:[
@@ -1019,7 +1019,7 @@ const HUNTING_SPOTS = [
   prot:["earth","physical"],
   cx:32640,cy:31940,
   route:"From Kazordoon depot head to the mine entrance in the mountain. Take the elevator down to the Spike. Navigate to the upper levels.",
-  waypoints:[[32631,31925,"Start at Kazordoon depot"],[32635,31930,"Enter mine, take elevator"],[32638,31935,"Go to Spike entrance"],[32640,31940,"Navigate to upper levels"]],
+  waypoints:[[32631,31925,"Start at Kazordoon depot"],[32635,31930,"Enter mine, take elevator"],[32638,31935,"Go to Spike entrance",8],[32640,31940,"Navigate to upper levels",9]],
   access:"Gnomish access quest required.",
   premium:true,
   creatures:[
@@ -1046,7 +1046,7 @@ const HUNTING_SPOTS = [
   prot:["earth","physical"],
   cx:32700,cy:32800,
   route:"From Port Hope depot head south into the deep jungle. Cross the river and navigate to the ape city entrance at Banuta.",
-  waypoints:[[32623,32753,"Start at Port Hope depot"],[32650,32770,"Head south into deep jungle"],[32680,32790,"Cross river, go SE"],[32700,32800,"Enter Banuta ape city"]],
+  waypoints:[[32623,32753,"Start at Port Hope depot"],[32650,32770,"Head south into deep jungle"],[32680,32790,"Cross river, find Banuta entrance"],[32700,32800,"Enter Banuta underground levels",8]],
   access:"Ape City Quest for full access. Partial access without quest.",
   premium:true,
   creatures:[
@@ -1154,7 +1154,7 @@ const HUNTING_SPOTS = [
   prot:["earth","death"],
   cx:33930,cy:31420,
   route:"From Issavi depot head to the sewers entrance in the eastern part of the city. Navigate through the underground tunnels.",
-  waypoints:[[33921,31428,"Start at Issavi depot"],[33925,31425,"Head to eastern city"],[33928,31422,"Find sewers entrance"],[33930,31420,"Enter underground"]],
+  waypoints:[[33921,31428,"Start at Issavi depot"],[33925,31425,"Head to eastern city"],[33928,31422,"Find sewers entrance, go down"],[33930,31420,"Navigate sewers underground",8]],
   access:"Kilmaresh Quest for Issavi access.",
   premium:true,
   creatures:[
@@ -1181,7 +1181,7 @@ const HUNTING_SPOTS = [
   prot:["death","physical"],
   cx:33200,cy:31860,
   route:"Access through underground tunnels from Edron. Navigate through the ancient cemetery and dark passages below the city.",
-  waypoints:[[33217,31814,"Start at Edron depot"],[33210,31830,"Enter underground tunnels"],[33205,31845,"Navigate dark passages"],[33200,31860,"Reach Buried Cathedral"]],
+  waypoints:[[33217,31814,"Start at Edron depot"],[33210,31830,"Enter underground tunnels, go down"],[33205,31845,"Navigate dark passages",8],[33200,31860,"Reach Buried Cathedral",8]],
   access:"Grave Danger Quest required.",
   premium:true,
   creatures:[
@@ -1208,7 +1208,7 @@ const HUNTING_SPOTS = [
   prot:["fire","physical"],
   cx:32350,cy:32300,
   route:"Access through Pits of Inferno area south of Thais. Requires navigating through dangerous demon-filled corridors deep underground.",
-  waypoints:[[32369,32241,"Start at Thais depot"],[32365,32260,"Head south to PoI area"],[32360,32280,"Navigate demon corridors"],[32350,32300,"Go deep underground"]],
+  waypoints:[[32369,32241,"Start at Thais depot"],[32365,32260,"Head south to PoI area"],[32360,32280,"Enter demon corridors, go down"],[32355,32290,"Navigate deep underground",8],[32350,32300,"Reach Claustrophobic Inferno",9]],
   access:"Pits of Inferno Quest required + additional access.",
   premium:true,
   creatures:[
