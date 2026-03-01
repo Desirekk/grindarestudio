@@ -23,19 +23,9 @@ Zastąpiło Serenity Spa. Interaktywna aplikacja webowa:
 - Card pattern: `lucid-origin_Playing_card_back...jpg`
 - Arena floor: `lucid-origin_Top-down_view...jpg`
 
-### TibiaPedia - Nowe portfolio demo
-Interaktywna strona companion dla Tibia MMORPG:
-- Bestiary z TibiaData API v4 (900+ stworzeń, lazy loading, cache)
-- 55 hunting spotów z filtrami vocation/level
-- Equipment planner (4 vocations × 7 level brackets × 8 slotów)
-- Interaktywna mapa (Leaflet.js + floor-07 PNG z tibiamaps.github.io)
-- 35 questów z wyszukiwarką i filtrami
-- Dark medieval theme: Cinzel + Crimson Text, gold/amber akcenty
-- Jeden plik index.html z embedded CSS + JS (wzorzec DeckVault)
-
-**Grafiki** w `/portfolio/tibiapedia/images/`:
-- Hero background: `lucid-origin_Dark_medieval_fantasy_dungeon...jpg`
-- Logo: `ideogram-v3.0_TibiaPedia_medieval_fantasy_logo...jpg`
+### TibiaVault - External project
+Portfolio card links to https://tibiavault.com (separate repo: Desirekk/tibiavault)
+Hero image: `/images/tibiavault-hero.jpg`
 
 ### ROI Kalkulator (naprawiony)
 Problem: Kalkulator był nastawiony na firmy dachowe, nie pasował do kawiarni.
@@ -71,7 +61,7 @@ Rozwiązanie: Dynamiczna liczba klientów na podstawie wartości zlecenia:
 │   ├── aurum-roofing/ (firma dachowa)
 │   ├── ember-brew/ (kawiarnia)
 │   ├── deck-vault/ (gaming app)
-│   └── tibiapedia/ (Tibia MMORPG companion)
+│   └── (TibiaVault → external: tibiavault.com)
 └── demo/
 ```
 
