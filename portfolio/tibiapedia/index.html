@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/style.css?v=5">
   <style>
     .map-tip{background:var(--bg-card)!important;border:1px solid var(--border)!important;color:var(--parchment)!important;font-family:'Crimson Text',serif!important;font-size:12px!important;padding:6px 10px!important;border-radius:var(--r)!important;box-shadow:0 4px 12px rgba(0,0,0,.5)!important}
     .map-tip::before{border-top-color:var(--bg-card)!important}
@@ -204,17 +204,23 @@
         <!-- TAB: Browse Spots -->
         <div class="hunt-tab-content active" id="htab-browse">
         <div class="my-build">
-          <div class="build-label"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Citizen_Male.gif" onerror="this.style.display='none'" style="width:28px;height:28px"> My Build</div>
+          <div class="build-top">
+            <div class="build-label"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Citizen_Male.gif" onerror="this.style.display='none'" style="width:28px;height:28px"> My Build</div>
+            <div class="build-char">
+              <input type="text" id="myCharName" placeholder="Character name..." autocomplete="off" onkeydown="if(event.key==='Enter')lookupMyBuild()">
+              <button class="btn-g" onclick="lookupMyBuild()">Lookup</button>
+            </div>
+            <div class="build-level">
+              <label>Lv</label>
+              <input type="number" id="myLevel" value="150" min="8" max="999" oninput="state.hunting.myLevel=+this.value||150;renderHunting()">
+            </div>
+          </div>
           <div class="build-vocs">
             <button class="bv active" onclick="setMyVoc(this,'knight')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Knight_Male.gif" onerror="this.style.display='none'"><span>Knight</span></button>
             <button class="bv" onclick="setMyVoc(this,'paladin')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Hunter_Male.gif" onerror="this.style.display='none'"><span>Paladin</span></button>
             <button class="bv" onclick="setMyVoc(this,'sorcerer')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Mage_Male.gif" onerror="this.style.display='none'"><span>Sorcerer</span></button>
             <button class="bv" onclick="setMyVoc(this,'druid')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Summoner_Male.gif" onerror="this.style.display='none'"><span>Druid</span></button>
             <button class="bv" onclick="setMyVoc(this,'monk')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Monk_Male.gif" onerror="this.style.display='none'"><span>Monk</span></button>
-          </div>
-          <div class="build-level">
-            <label>Level</label>
-            <input type="number" id="myLevel" value="150" min="8" max="999" style="width:80px" oninput="state.hunting.myLevel=+this.value||150;renderHunting()">
           </div>
         </div>
         <div class="filters">
@@ -537,8 +543,8 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/data.js?v=4"></script>
-  <script src="js/app.js?v=4"></script>
+  <script src="js/data.js?v=5"></script>
+  <script src="js/app.js?v=5"></script>
   <script>
     // Filter helpers for inline onclick handlers
     function setHuntVoc(btn, voc) {

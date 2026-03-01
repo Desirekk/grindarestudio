@@ -172,16 +172,23 @@ tr:hover td{background:rgba(212,165,55,.03)}
 .lr-common{color:var(--common)}.lr-uncommon{color:var(--uncommon)}.lr-semi-rare{color:var(--semi-rare)}.lr-rare{color:var(--rare)}.lr-very-rare{color:var(--very-rare)}
 
 /* ===== MY BUILD BAR ===== */
-.my-build{display:flex;align-items:center;gap:16px;padding:12px 16px;background:linear-gradient(135deg,rgba(212,165,55,.06) 0%,rgba(212,165,55,.02) 100%);border:1px solid var(--border-h);border-radius:var(--rl);margin-bottom:14px}
+.my-build{display:flex;flex-direction:column;gap:10px;padding:12px 16px;background:linear-gradient(135deg,rgba(212,165,55,.06) 0%,rgba(212,165,55,.02) 100%);border:1px solid var(--border-h);border-radius:var(--rl);margin-bottom:14px}
+.build-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .build-label{display:flex;align-items:center;gap:8px;font-family:'Cinzel',serif;font-size:14px;color:var(--gold);font-weight:700;flex-shrink:0}
-.build-vocs{display:flex;gap:4px}
+.build-char{display:flex;align-items:center;gap:6px;flex:1;min-width:200px;max-width:320px}
+.build-char input{flex:1;min-width:0;padding:6px 10px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);color:var(--parchment);font-family:'Crimson Text',serif;font-size:13px}
+.build-char input:focus{border-color:var(--gold);outline:none;box-shadow:0 0 8px rgba(212,165,55,.15)}
+.build-char .btn-g{padding:6px 14px;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--bg-main);border:none;border-radius:var(--r);font-family:'Cinzel',serif;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .15s}
+.build-char .btn-g:hover{filter:brightness(1.15);box-shadow:0 0 10px rgba(212,165,55,.3)}
+.build-vocs{display:flex;gap:4px;flex-wrap:wrap}
 .bv{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 10px;border-radius:var(--r);font-size:10px;font-weight:700;border:1px solid var(--border);transition:all .12s;font-family:'Cinzel',serif;color:var(--parch-dim);min-width:56px}
 .bv img{width:36px;height:36px;image-rendering:auto;object-fit:contain;object-position:center bottom}
 .bv:hover{border-color:var(--border-h);color:var(--parchment)}
 .bv.active{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);box-shadow:0 0 10px rgba(212,165,55,.15)}
 .build-level{display:flex;align-items:center;gap:6px;margin-left:auto}
 .build-level label{font-family:'Cinzel',serif;font-size:12px;color:var(--gold);font-weight:600}
-.build-level input{width:80px;text-align:center;font-family:'Cinzel',serif;font-weight:700;font-size:14px;color:var(--gold-light)}
+.build-level input{width:70px;text-align:center;font-family:'Cinzel',serif;font-weight:700;font-size:14px;color:var(--gold-light);padding:6px 4px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r)}
+.build-level input:focus{border-color:var(--gold);outline:none}
 
 /* ===== HUNTING SPOTS — Card Grid ===== */
 .hunt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}

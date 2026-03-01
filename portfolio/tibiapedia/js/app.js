@@ -404,6 +404,8 @@ function initHuntingPanel() {
       });
       const lvlInput = document.getElementById('myLevel');
       if (lvlInput) lvlInput.value = state.hunting.myLevel;
+      const nameInput = document.getElementById('myCharName');
+      if (nameInput && b.name) nameInput.value = b.name;
     } catch(e) {}
   }
 
@@ -447,6 +449,8 @@ function hwSave() {
   });
   const lvlInput = document.getElementById('myLevel');
   if (lvlInput) lvlInput.value = level;
+  const nameInput = document.getElementById('myCharName');
+  if (nameInput && name) nameInput.value = name;
 
   // Hide welcome
   const w = document.getElementById('huntWelcome');
@@ -461,6 +465,58 @@ function hwSkip() {
   const w = document.getElementById('huntWelcome');
   if (w) w.style.display = 'none';
   renderHunting();
+}
+
+async function lookupMyBuild() {
+  const nameInput = document.getElementById('myCharName');
+  const name = nameInput.value.trim();
+  if (!name) return;
+
+  const btn = nameInput.nextElementSibling;
+  const origText = btn.textContent;
+  btn.textContent = '...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`${API}/character/${encodeURIComponent(name)}`);
+    const data = await res.json();
+    const ch = data?.character?.character;
+    if (!ch || !ch.name) {
+      nameInput.style.borderColor = '#ef4444';
+      setTimeout(() => nameInput.style.borderColor = '', 1500);
+      return;
+    }
+
+    const vocMap = {
+      'knight': 'knight', 'elite knight': 'knight',
+      'paladin': 'paladin', 'royal paladin': 'paladin',
+      'sorcerer': 'sorcerer', 'master sorcerer': 'sorcerer',
+      'druid': 'druid', 'elder druid': 'druid',
+      'monk': 'monk'
+    };
+    const voc = vocMap[ch.vocation.toLowerCase()] || 'knight';
+    const level = ch.level || 150;
+
+    state.hunting.myVoc = voc;
+    state.hunting.myLevel = level;
+    document.getElementById('myLevel').value = level;
+    nameInput.value = ch.name; // Use official casing
+    document.querySelectorAll('.my-build .bv').forEach(b => {
+      const v = b.getAttribute('onclick')?.match(/'(\w+)'/)?.[1];
+      b.classList.toggle('active', v === voc);
+    });
+
+    localStorage.setItem('tv_build', JSON.stringify({ name: ch.name, level, voc }));
+    nameInput.style.borderColor = '#22c55e';
+    setTimeout(() => nameInput.style.borderColor = '', 1500);
+    renderHunting();
+  } catch (e) {
+    nameInput.style.borderColor = '#ef4444';
+    setTimeout(() => nameInput.style.borderColor = '', 1500);
+  } finally {
+    btn.textContent = origText;
+    btn.disabled = false;
+  }
 }
 
 // ================================================================
