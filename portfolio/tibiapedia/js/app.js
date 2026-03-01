@@ -47,9 +47,9 @@ function showPanel(id) {
   document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.panel === id));
   document.querySelectorAll('.panel').forEach(el => el.classList.toggle('active', el.id === 'p-' + id));
   const loaders = {
-    news: loadNews, bestiary: loadBestiary, hunting: renderHunting,
+    news: loadNews, bestiary: loadBestiary, hunting: () => { renderHunting(); },
     equipment: renderEquipment, quests: renderQuests, spells: loadSpells,
-    map: initMap, editor: initEditor, character: () => {}, worlds: loadWorlds, calculators: initCalcs
+    map: initMap, character: () => {}, worlds: loadWorlds, calculators: initCalcs
   };
   if (loaders[id]) loaders[id]();
 }
@@ -556,12 +556,18 @@ function renderHunting() {
         <div class="hunt-sec">
           <div class="hunt-sec-title"><img src="${WIKI_IMG('Map_(Item)')}" onerror="this.style.display='none'"> Route & Access</div>
           <div class="hunt-route">
+            ${s.waypoints && s.waypoints.length > 0 ? `
             <div class="hunt-minimap" id="minimap-${idx}"></div>
-            ${s.waypoints && s.waypoints.some(wp => wp[2]) ? `<div class="route-steps">${s.waypoints.filter(wp => wp[2]).map((wp, i) => {
+            ${s.waypoints.some(wp => wp[2]) ? `<div class="route-steps">${s.waypoints.filter(wp => wp[2]).map((wp, i) => {
               const floor = wp[3] || 7;
-              const floorBadge = floor !== 7 ? ` <span class="rs-floor">Floor ${floor > 7 ? '-' + (floor - 7) : '+' + (7 - floor)}</span>` : '';
-              return `<div class="route-step${floor !== 7 ? ' rs-underground' : ''}"><span class="rs-num">${i + 1}</span>${esc(wp[2])}${floorBadge}</div>`;
-            }).join('')}</div>` : `<div class="hunt-route-text">${esc(s.route || '')}</div>`}
+              const floorBadge = floor !== 7 ? ' <span class="rs-floor">Floor ' + (floor > 7 ? '-' + (floor - 7) : '+' + (7 - floor)) + '</span>' : '';
+              return '<div class="route-step' + (floor !== 7 ? ' rs-underground' : '') + '"><span class="rs-num">' + (i + 1) + '</span>' + esc(wp[2]) + floorBadge + '</div>';
+            }).join('')}</div>` : ''}` : `
+            <div class="hunt-no-route">
+              <p>No community route yet — be the first to add one!</p>
+              <button class="btn-s btn-g" onclick="editorFixSpot(${s._origIdx})">Create Route</button>
+            </div>`}
+            ${s.route ? `<div class="hunt-route-text">${esc(s.route)}</div>` : ''}
             ${s.access ? `<div class="hunt-access" style="margin-top:8px"><strong>Access:</strong> ${esc(s.access)}</div>` : ''}
           </div>
         </div>
@@ -598,9 +604,29 @@ function renderHunting() {
 
         ${s.tips ? `<div class="hunt-sec"><div class="hunt-sec-title"><img src="${WIKI_IMG('Book_(Brown)')}" onerror="this.style.display='none'"> Tips</div><div class="hunt-tips">${esc(s.tips)}</div></div>` : ''}
 
-        <div style="margin-top:12px;display:flex;gap:8px">
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
           ${s.cx ? `<button class="btn-s btn-g" onclick="showOnMap(${s.cx},${s.cy},'${esc(s.name).replace(/'/g,"\\'")}')">Show on World Map</button>` : ''}
           <button class="btn-s" onclick="viewSpotCreatures([${s.creatures.map(c => `'${esc(typeof c === 'string' ? c : c.name).replace(/'/g,"\\'")}'`).join(',')}])">View in Bestiary</button>
+          <button class="btn-s" onclick="editorFixSpot(${s._origIdx})">Edit Route</button>
+          <button class="btn-s" onclick="toggleFeedback(this)" style="margin-left:auto">Suggest Changes</button>
+        </div>
+        <div class="spot-feedback" style="display:none;margin-top:10px">
+          <div style="font-family:Cinzel,serif;font-size:12px;color:var(--gold);margin-bottom:8px">Suggest changes to this spot</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+            <label style="font-size:11px;color:var(--parch-dim);display:flex;align-items:center;gap:3px"><input type="checkbox" class="fb-cat" value="creatures"> Creatures</label>
+            <label style="font-size:11px;color:var(--parch-dim);display:flex;align-items:center;gap:3px"><input type="checkbox" class="fb-cat" value="imbuements"> Imbuements</label>
+            <label style="font-size:11px;color:var(--parch-dim);display:flex;align-items:center;gap:3px"><input type="checkbox" class="fb-cat" value="supplies"> Supplies</label>
+            <label style="font-size:11px;color:var(--parch-dim);display:flex;align-items:center;gap:3px"><input type="checkbox" class="fb-cat" value="gear"> Gear/Set</label>
+            <label style="font-size:11px;color:var(--parch-dim);display:flex;align-items:center;gap:3px"><input type="checkbox" class="fb-cat" value="loot"> Loot/Drops</label>
+            <label style="font-size:11px;color:var(--parch-dim);display:flex;align-items:center;gap:3px"><input type="checkbox" class="fb-cat" value="tips"> Tips</label>
+            <label style="font-size:11px;color:var(--parch-dim);display:flex;align-items:center;gap:3px"><input type="checkbox" class="fb-cat" value="other"> Other</label>
+          </div>
+          <textarea class="fb-text" rows="3" style="width:100%;background:var(--bg-input);color:var(--parchment);border:1px solid var(--border);border-radius:var(--r);padding:8px;font-family:'Crimson Text',serif;font-size:13px;resize:vertical" placeholder="Describe what should be changed, added, or removed..."></textarea>
+          <div style="display:flex;gap:6px;margin-top:6px;align-items:center">
+            <input type="text" class="fb-author" placeholder="Your character name" style="flex:1;font-size:12px">
+            <button class="btn-s btn-g" onclick="submitFeedback(this,${s._origIdx})">Send Feedback</button>
+          </div>
+          <div class="fb-status" style="margin-top:6px;font-size:12px"></div>
         </div>
       </div>
     </div>`;
@@ -1659,10 +1685,78 @@ function editorSetStatus(msg, type) {
   }
 }
 
+// Toggle feedback form on hunt cards
+function toggleFeedback(btn) {
+  const fb = btn.closest('.hunt-body').querySelector('.spot-feedback');
+  if (fb) fb.style.display = fb.style.display === 'none' ? 'block' : 'none';
+}
+
+// Submit spot feedback to Discord
+function submitFeedback(btn, spotIdx) {
+  const fb = btn.closest('.spot-feedback');
+  const categories = [];
+  fb.querySelectorAll('.fb-cat:checked').forEach(cb => categories.push(cb.value));
+  const text = fb.querySelector('.fb-text').value.trim();
+  const author = fb.querySelector('.fb-author').value.trim() || 'Anonymous';
+  const statusEl = fb.querySelector('.fb-status');
+
+  if (!text) { statusEl.textContent = 'Please describe the changes.'; statusEl.style.color = 'var(--fire)'; return; }
+  if (categories.length === 0) { statusEl.textContent = 'Select at least one category.'; statusEl.style.color = 'var(--fire)'; return; }
+
+  const spot = HUNTING_SPOTS[spotIdx];
+  const embed = {
+    title: 'Spot Feedback: ' + spot.name,
+    color: 0x3b82f6,
+    fields: [
+      { name: 'Spot', value: spot.name, inline: true },
+      { name: 'Submitter', value: author, inline: true },
+      { name: 'Categories', value: categories.join(', '), inline: true },
+      { name: 'Feedback', value: text.substring(0, 1000) }
+    ],
+    timestamp: new Date().toISOString()
+  };
+
+  const payload = { embeds: [embed] };
+
+  if (DISCORD_WEBHOOK && DISCORD_WEBHOOK !== 'YOUR_WEBHOOK_URL_HERE') {
+    fetch(DISCORD_WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(res => {
+      if (res.ok) {
+        statusEl.textContent = 'Feedback sent! Thank you for contributing.';
+        statusEl.style.color = 'var(--common)';
+        fb.querySelector('.fb-text').value = '';
+      } else {
+        statusEl.textContent = 'Failed to send. Try again later.';
+        statusEl.style.color = 'var(--fire)';
+      }
+    }).catch(() => {
+      statusEl.textContent = 'Network error. Try again later.';
+      statusEl.style.color = 'var(--fire)';
+    });
+  } else {
+    statusEl.textContent = 'Webhook not configured.';
+    statusEl.style.color = 'var(--fire)';
+  }
+}
+
+// Sub-tab switching for Hunting System
+function switchHuntTab(tab, btn) {
+  document.querySelectorAll('.hunt-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.hunt-tab-content').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const tabEl = document.getElementById('htab-' + tab);
+  if (tabEl) tabEl.classList.add('active');
+  if (tab === 'editor') initEditor();
+}
+
 // Open editor pre-filled with a spot (called from hunt cards)
 function editorFixSpot(idx) {
-  showPanel('editor');
+  showPanel('hunting');
   setTimeout(() => {
+    switchHuntTab('editor', document.querySelector('.hunt-tab:last-child'));
     const fixBtn = document.querySelector('.ed-mode-btn[data-mode="fix"]');
     if (fixBtn) editorSetMode('fix', fixBtn);
     document.getElementById('edFixSpot').value = idx;

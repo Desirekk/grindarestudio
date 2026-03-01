@@ -440,3 +440,21 @@ tr:hover td{background:rgba(212,165,55,.03)}
 .hunt-verified.unverified{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);color:#f59e0b}
 .hunt-fix-btn{font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);color:var(--parch-dim);cursor:pointer;transition:all .12s;background:none;font-family:'Cinzel',serif;font-weight:600}
 .hunt-fix-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+/* Hunt sub-tabs */
+.hunt-tabs{display:flex;gap:4px;margin-bottom:14px}
+.hunt-tab{padding:8px 20px;border-radius:var(--r) var(--r) 0 0;font-size:13px;font-weight:700;font-family:'Cinzel',serif;border:1px solid var(--border);border-bottom:none;color:var(--parch-dim);background:var(--bg-darker);cursor:pointer;transition:all .12s}
+.hunt-tab:hover{color:var(--parchment);background:var(--bg-card)}
+.hunt-tab.active{color:var(--gold);background:var(--bg-card);border-color:var(--border-h);box-shadow:0 -2px 8px rgba(212,165,55,.08)}
+.hunt-tab-content{display:none}.hunt-tab-content.active{display:block}
+/* Community CTA Banner */
+.hunt-cta{display:flex;align-items:center;gap:16px;padding:14px 20px;margin-bottom:16px;background:linear-gradient(135deg,rgba(212,165,55,.08) 0%,rgba(212,165,55,.03) 100%);border:1px solid rgba(212,165,55,.2);border-radius:var(--rl);animation:ctaPulse 3s ease-in-out infinite}
+@keyframes ctaPulse{0%,100%{border-color:rgba(212,165,55,.2)}50%{border-color:rgba(212,165,55,.4)}}
+.hunt-cta-icon{font-size:28px;flex-shrink:0;filter:grayscale(20%)}
+.hunt-cta-text{flex:1}
+.hunt-cta-text strong{display:block;font-family:'Cinzel',serif;font-size:14px;color:var(--gold-light);margin-bottom:2px}
+.hunt-cta-text span{font-size:12px;color:var(--parch-dim);line-height:1.5}
+.hunt-cta-text b{color:var(--gold)}
+/* No-route placeholder */
+.hunt-no-route{padding:20px;text-align:center;background:var(--bg-darker);border:2px dashed var(--border);border-radius:var(--rl);margin-top:8px}
+.hunt-no-route p{color:var(--parch-dim);font-size:13px;margin-bottom:10px}
+.hunt-no-route .btn-s{font-size:12px;padding:6px 16px}

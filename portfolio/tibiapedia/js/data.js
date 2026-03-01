@@ -167,7 +167,7 @@ const HUNTING_SPOTS = [
   prot:["fire"],
   cx:33264,cy:32277,
   route:"From Darashia depot head north-east. Follow the sand path past the gardens. Enter the dragon cave opening in the mountain.",
-  waypoints:[[33214,32460,"Start at Darashia depot"],[33220,32440,"Head north through desert"],[33228,32415,"Follow road north past gardens"],[33236,32390,"Continue north on sand path"],[33245,32360,"Turn NE towards mountain"],[33255,32330,"Approach cave entrance in cliff"],[33264,32300,"Near Dragon Lair gate"],[33264,32285,"Enter Dragon Lair, go down"],[33264,32285,"Underground: Dragon Lair",8],[33264,32280,"Follow tunnel deeper",8],[33264,32277,"Main hunting area with Dragons",8]],
+  waypoints:[],
   access:"Level 40+ required (Gate of Expertise). Otherwise free access.",
   premium:false,
   creatures:[
@@ -194,7 +194,7 @@ const HUNTING_SPOTS = [
   prot:["death","earth"],
   cx:33450,cy:31580,
   route:"From Zao outpost use the steamship or walk south-east into the steppe. Enter the underground dragon tunnels heading deep.",
-  waypoints:[[33203,31421,"Start at Zao Steppe entrance"],[33230,31430,"Head east into the steppe"],[33270,31440,"Cross barren Zao land"],[33310,31460,"Follow path past corrupted trees"],[33350,31490,"Continue east through wasteland"],[33390,31520,"Approach mountain entrance"],[33420,31550,"Near cave entrance"],[33440,31570,"Enter dragon caves, go down"],[33440,31570,"Underground: Zao dragon caves",8],[33445,31575,"Follow underground passage",8],[33450,31580,"Reach Ghastly Dragon area",8]],
+  waypoints:[],
   access:"The New Frontier + Children of the Revolution quests required.",
   premium:true,
   creatures:[
@@ -220,7 +220,7 @@ const HUNTING_SPOTS = [
   prot:["fire","energy"],
   cx:33316,cy:31558,
   route:"From Zao outpost head south through the steppe into the city ruins. Cross the bridge and enter the main area.",
-  waypoints:[[33203,31421,"Start at Zao Steppe entrance"],[33220,31440,"Head SE into steppe"],[33240,31460,"Follow road through steppe"],[33270,31490,"Cross damaged bridge"],[33290,31520,"Continue SE"],[33305,31540,"Enter lizard city outskirts"],[33316,31558,"Arrive at main Lizard City area"]],
+  waypoints:[],
   access:"The New Frontier + Children of the Revolution quests.",
   premium:true,
   creatures:[
@@ -250,7 +250,7 @@ const HUNTING_SPOTS = [
   prot:["physical","fire"],
   cx:33651,cy:31942,
   route:"From Rathleton depot head east through the city. Cross over the hill to reach the Oramond Eastern Plains. The Minotaur Camp is on the surface with 3 sub-areas: East Plains, North Plains, and Hills.",
-  waypoints:[[33634,31895,"Start at Rathleton depot"],[33638,31900,"Head east through city"],[33642,31910,"Follow road east past buildings"],[33646,31920,"Exit city heading east"],[33648,31928,"Cross the hill eastward"],[33650,31935,"Continue east into Oramond Plains"],[33651,31940,"Enter Minotaur Camp area"],[33651,31942,"Main Oramond Minos hunting area"]],
+  waypoints:[],
   access:"Oramond Quest — need 40 daily task completions (voting + tasks). Takes ~2 weeks!",
   premium:true,
   creatures:[
@@ -281,7 +281,7 @@ const HUNTING_SPOTS = [
   prot:["physical"],
   cx:33659,cy:31958,
   route:"From Rathleton depot head to the Workshop Quarter. Find the building east of stairs to Upper Rathleton. Use the Slime Slide inside to enter the Underground Glooth Factory.",
-  waypoints:[[33634,31895,"Start at Rathleton depot"],[33638,31900,"Head to Workshop Quarter"],[33642,31910,"Find building east of Upper Rathleton stairs"],[33642,31910,"Use Slime Slide (one-way entrance!)",8],[33648,31920,"Arrive in Underground Glooth Factory",8],[33652,31935,"Navigate factory corridors",8],[33656,31948,"Continue through Glooth area",8],[33659,31958,"Main Glooth Bandits zone",8]],
+  waypoints:[],
   access:"Rathleton Quest — need Citizen rank (300 votes cast) to use Slime Slide.",
   premium:true,
   creatures:[
@@ -309,7 +309,7 @@ const HUNTING_SPOTS = [
   prot:["fire","energy"],
   cx:32953,cy:32685,
   route:"From Port Hope depot head east through the Tiquanda jungle. Climb into the Kha'zeel mountains heading NE. The palace entrance is in the mountain pass — go down stairs into the underground palace.",
-  waypoints:[[32627,32742,"Start at Port Hope depot"],[32660,32738,"Head east through jungle path"],[32700,32730,"Cross river bridge"],[32740,32720,"Continue NE through dense jungle"],[32780,32710,"Follow mountain trail uphill"],[32820,32705,"Climb Kha'zeel mountain pass"],[32870,32698,"Continue east through narrow paths"],[32920,32690,"Approach palace entrance"],[32953,32685,"Go down stairs into palace"],[32953,32685,"Underground: Asura Palace",8],[32953,32683,"Navigate palace corridors",8],[32953,32680,"Main Asura hunting area",8]],
+  waypoints:[],
   access:"None — free access. No quest required to enter.",
   premium:true,
   creatures:[
@@ -339,7 +339,7 @@ const HUNTING_SPOTS = [
   prot:["ice"],
   cx:32230,cy:31412,
   route:"From Svargrond take the boat to Okolnir island. Walk north across the ice to the cave entrance. Go down into the frost dragon tunnels.",
-  waypoints:[[32263,31141,"Start at Svargrond depot"],[32270,31160,"Head south to docks"],[32332,31230,"Take boat from Buddel to Okolnir"],[32260,31350,"Arrive on Okolnir island"],[32250,31370,"Head south across ice"],[32240,31390,"Continue south past formations"],[32235,31400,"Approach cave entrance"],[32230,31412,"Enter Frost Dragon cave, go down"],[32230,31412,"Underground: Frost Dragon tunnels",8],[32228,31415,"Navigate icy tunnels",8],[32226,31420,"Main Frost Dragon hunting area",8]],
+  waypoints:[],
   access:"The Ice Islands Quest required for Okolnir boat access.",
   premium:true,
   creatures:[
@@ -365,7 +365,7 @@ const HUNTING_SPOTS = [
   prot:["fire","energy"],
   cx:33350,cy:31700,
   route:"From Zao outpost navigate south through the steppe, past Zzaion. Cross the lava rivers south to the Draken fortress entrance.",
-  waypoints:[[33203,31421,"Start at Zao Steppe entrance"],[33220,31440,"Head SE into steppe"],[33250,31470,"Follow road through steppe"],[33280,31510,"Pass Zzaion ruins"],[33300,31550,"Continue south through steppe"],[33310,31580,"Cross lava river bridge"],[33320,31620,"Follow fortress approach"],[33330,31660,"Enter fortified Draken area"],[33340,31680,"Navigate fortress corridors"],[33350,31700,"Arrive at Draken Walls hunting"]],
+  waypoints:[],
   access:"Wrath of the Emperor Quest required.",
   premium:true,
   creatures:[
@@ -395,7 +395,7 @@ const HUNTING_SPOTS = [
   prot:["physical","death"],
   cx:33588,cy:32433,
   route:"From Roshamuul temple head south through dangerous terrain. Cross bridge to the prison entrance. Be careful of surface Guzzlemaws!",
-  waypoints:[[33513,32362,"Start at Roshamuul temple"],[33520,32370,"Head SE carefully (Guzzlemaws!)"],[33535,32380,"Avoid surface monsters"],[33550,32395,"Cross bridge south"],[33565,32410,"Continue SE to prison area"],[33575,32420,"Approach prison entrance"],[33588,32433,"Enter prison, go down stairs"],[33588,32433,"Underground: Roshamuul Prison",8],[33590,32435,"Navigate prison tunnels",8],[33592,32438,"Main prison hunting area",8]],
+  waypoints:[],
   access:"Roshamuul Quest required.",
   premium:true,
   creatures:[
@@ -425,7 +425,7 @@ const HUNTING_SPOTS = [
   prot:["physical","holy"],
   cx:33362,cy:31343,
   route:"Complex ritual access. North of Edron, go up ramp at Wyvern Mountain, cross bridge south, find chalk bed. Levitate UP facing south at SE corner. Go up stairs to Falcon Outpost. Pick up Page from chest. Perform ritual: pour Blood, then Water on symbol, use Chalk. Teleported to Falcon Bastion.",
-  waypoints:[[33210,31814,"Start at Edron depot"],[33230,31810,"Head east past bridges"],[33270,31780,"Continue NE towards Wyvern Mountain"],[33310,31700,"Go up ramp north of Wyvern Mountain"],[33330,31600,"Cross bridge south"],[33340,31500,"Find chalk bed, use chalk on ground"],[33350,31420,"Levitate UP at SE corner (face south)",6],[33358,31370,"Go up stairs to Falcon Outpost",5],[33360,31355,"Pick up Page from chest, do ritual",5],[33362,31343,"Teleported to Falcon Bastion Castle"]],
+  waypoints:[],
   access:"Grave Danger Quest / Secret Library Quest required (level 250+). Complex ritual access.",
   premium:true,
   creatures:[
@@ -454,7 +454,7 @@ const HUNTING_SPOTS = [
   prot:["fire","ice","energy"],
   cx:32177,cy:31927,
   route:"Access through portals in north-western Tiquanda after completing the Secret Library Quest. Different wings accessible from different portal locations.",
-  waypoints:[[33210,31814,"Start at Edron depot"],[33200,31830,"Head to boat to Isle of the Kings"],[33100,31870,"Take boat west"],[32800,31900,"Continue sailing"],[32500,31910,"Arrive at Isle of the Kings"],[32300,31920,"Head to altar area"],[32177,31927,"Use scythe on monument near altar"],[32177,31927,"Teleported to Secret Library",10],[32180,31930,"Navigate library corridors",10],[32180,31935,"Choose wing: fire/ice/energy",10],[32180,31940,"Arrive at chosen hunting wing",10]],
+  waypoints:[],
   access:"Secret Library Quest required (level 250+). Access via Isle of the Kings: use a Scythe on the Monument near the Altar. Teleported to library. Choose wing: Fire/Ice/Energy/Earth.",
   premium:true,
   creatures:[
@@ -484,7 +484,7 @@ const HUNTING_SPOTS = [
   team:"team",expH:"5kk-9kk",profitH:"400k-1.2kk",
   cx:33301,cy:32647,
   route:"Travel to Cobra Bastion north-east of Ankrahmun. Take the steamship or walk through the desert to reach the bastion entrance.",
-  waypoints:[[33126,32843,"Start at Ankrahmun depot"],[33140,32830,"Head north through desert"],[33160,32810,"Follow sand road north"],[33185,32780,"Continue through desert dunes"],[33210,32750,"Head NE through Kha'labal"],[33240,32720,"Cross desert expanse"],[33265,32690,"Continue NE towards coast"],[33285,32665,"Approach Cobra Bastion"],[33301,32647,"Enter Cobra Bastion (ground floor)"],[33301,32647,"Go to 3rd floor SE, defeat Gaffir miniboss"],[33301,32650,"Go down to basement for main hunting",8],[33301,32655,"Main Cobra hunting area (basement)",8]],
+  waypoints:[],
   access:"Grave Danger Quest required (level 250+). Need Kilmaresh access, Cheesy Figurine and Vial of Potent Holy Water.",
   premium:true,
   creatures:[
@@ -514,7 +514,7 @@ const HUNTING_SPOTS = [
   prot:["holy","death"],
   cx:33584,cy:32207,
   route:"For Summer Court: use a gem on a Holy Shrine in any temple to teleport to Feyrist (Threatened Dreams Quest required first). Head NE to court area. For Winter Court: go to Svargrond → Tyrsung → climb mountain.",
-  waypoints:[[33558,32224,"Teleport to Feyrist via Holy Shrine"],[33562,32220,"Arrive in Feyrist realm"],[33568,32216,"Follow fairy path NE"],[33575,32212,"Continue through enchanted forest"],[33580,32210,"Enter court area"],[33584,32207,"Arrive at Summer Court"],[33584,32205,"Main Summer Court hunting area"]],
+  waypoints:[],
   access:"The Dream Courts Quest required (level 250+). Threatened Dreams Quest + multiple prerequisites. Use gem on Holy Shrine for Feyrist access.",
   premium:true,
   creatures:[
@@ -545,7 +545,7 @@ const HUNTING_SPOTS = [
   city:"Issavi",level:[200,300],voc:["knight","paladin","sorcerer","druid"],
   team:"solo",expH:"2kk-4kk",profitH:"300k-800k",
   cx:33900,cy:31420,
-  waypoints:[[33921,31480,"Start at Issavi depot"],[33915,31470,"Head north from city"],[33910,31460,"Follow road north through Kilmaresh"],[33908,31450,"Continue north past outskirts"],[33905,31440,"Enter The Wreckoning area"],[33902,31430,"Navigate pirat territory"],[33900,31420,"Arrive at main Pirat spawn"]],
+  waypoints:[],
   route:"From Issavi depot head north through Kilmaresh to The Wreckoning area. The Pirat spawn is on the surface north of Issavi.",
   access:"No specific quest. Level 150+ recommended.",
   premium:true,
@@ -577,7 +577,7 @@ const HUNTING_SPOTS = [
   team:"team",expH:"6kk-12kk",profitH:"400k-1kk",
   cx:32962,cy:31497,
   route:"From Yalahar take the boat to Vengoth (NPC Harlow, Trade Quarter docks, 100gp). On Vengoth find the invisible teleport to Zarganash. Navigate through soul planes to reach the Lost Soul hunting areas.",
-  waypoints:[[32786,31248,"Start at Yalahar depot"],[32790,31260,"Head south to Trade Quarter docks"],[32800,31280,"Talk to NPC Harlow, pay 100gp for Vengoth"],[32962,31497,"Arrive on Vengoth island"],[32962,31497,"Find invisible teleport to Zarganash",10],[32960,31500,"Navigate Zarganash soul planes",10],[32958,31503,"Find Flickering Soul NPC",10],[32955,31505,"Enter Lost Soul hunting area",10]],
+  waypoints:[],
   access:"Blood Brothers Quest (Vengoth access) + Feaster of Souls Quest (level 250+).",
   premium:true,
   creatures:[
@@ -607,7 +607,7 @@ const HUNTING_SPOTS = [
   team:"team",expH:"5kk-10kk",profitH:"400k-1.5kk",
   cx:32121,cy:32688,
   route:"First talk to NPC Zoltan in Edron — ask for 'permission' and pay 500gp. Then travel to Liberty Bay and take the boat to the Forbidden Islands / Kharos. The citadel has multiple tower floors (UP) and a basement (DOWN).",
-  waypoints:[[32335,32837,"Start at Liberty Bay depot"],[32310,32830,"Head west to docks"],[32280,32810,"Take boat to Forbidden Islands"],[32230,32780,"Arrive on Kharos island"],[32200,32755,"Navigate volcanic terrain SW"],[32175,32730,"Continue through lava fields"],[32150,32710,"Cross dangerous terrain"],[32135,32695,"Approach Ferumbras Citadel"],[32121,32688,"Enter citadel ground floor"],[32121,32688,"Go UP tower floors (Demons, Liches, Warlocks)",6],[32121,32685,"Continue up through floors",5],[32121,32688,"Or go DOWN to basement",8]],
+  waypoints:[],
   access:"The Shattered Isles Quest required. Talk to Zoltan in Edron, pay 500gp for permission.",
   premium:true,
   creatures:[
@@ -636,7 +636,7 @@ const HUNTING_SPOTS = [
   city:"Edron",level:[60,100],voc:["knight","paladin"],
   team:"solo",expH:"300k-500k",profitH:"50k-120k",
   cx:33164,cy:31638,
-  waypoints:[[33210,31814,"Start at Edron depot"],[33205,31800,"Head NW from depot"],[33198,31780,"Continue north past buildings"],[33190,31760,"Follow path NW towards hills"],[33182,31730,"Cross bridge north"],[33176,31700,"Continue through forest"],[33170,31670,"Approach Hero Cave area"],[33167,31655,"Follow trail to cave entrance"],[33164,31638,"Enter cave, go down stairs"],[33164,31638,"Underground: Hero Cave",8],[33164,31635,"Navigate cave tunnels",8],[33164,31632,"Main Hero hunting area",8]],
+  waypoints:[],
   route:"From Edron depot head north-west through the forest to Hero Cave entrance.",
   access:"None — free access.",
   premium:false,
@@ -663,7 +663,7 @@ const HUNTING_SPOTS = [
   city:"Kazordoon",level:[50,80],voc:["knight","druid"],
   team:"solo",expH:"200k-350k",profitH:"30k-60k",
   cx:32246,cy:32601,
-  waypoints:[[32656,31911,"Start at Kazordoon depot"],[32650,31915,"Head to Kazordoon temple area"],[32648,31912,"Find NPC Xelvar near temple"],[32646,31910,"Use northern teleporter (no Teleport Crystals needed)"],[32246,32601,"Teleported into The Spike",8],[32250,32605,"Navigate gnome tunnels",8],[32255,32610,"Upper Spike hunting area",8]],
+  waypoints:[],
   route:"From Kazordoon depot head to the temple area. Find NPC Xelvar and use the northern teleporter nearby — it takes you directly into The Spike underground. No walking needed!",
   access:"Spike Tasks Quest — talk to Gnome NPCs. Level 25-49 only for Upper Spike!",
   premium:true,
@@ -691,7 +691,7 @@ const HUNTING_SPOTS = [
   city:"Rathleton",level:[60,100],voc:["knight","paladin","druid"],
   team:"solo",expH:"350k-600k",profitH:"40k-100k",
   cx:33580,cy:31584,
-  waypoints:[[33634,31895,"Start at Rathleton depot"],[33625,31880,"Head west from depot"],[33610,31850,"Take path NW"],[33600,31800,"Continue NW through outskirts"],[33595,31750,"Cross open terrain"],[33590,31700,"Head north towards Krailos"],[33588,31660,"Continue north through grasslands"],[33585,31630,"Follow path through ogre territory"],[33582,31610,"Approach hunting grounds"],[33580,31595,"Enter main Krailos area"],[33580,31584,"Arrive at ogre camp"]],
+  waypoints:[],
   route:"From Rathleton head NW through Oramond towards Krailos steppe. The ogre camp is on the surface.",
   access:"None after reaching Krailos.",
   premium:true,
@@ -720,7 +720,7 @@ const HUNTING_SPOTS = [
   city:"Edron",level:[200,350],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"3kk-5kk",profitH:"200k-500k",
   cx:33164,cy:31638,
-  waypoints:[[33210,31814,"Start at Edron depot"],[33200,31800,"Head north towards Hero Cave"],[33190,31760,"Follow path through forest"],[33176,31700,"Continue north past hills"],[33167,31655,"Approach Hero Cave entrance"],[33164,31638,"Enter Hero Cave, go down"],[33164,31638,"Navigate through Hero Cave",8],[33164,31636,"Pass through Temple of Xayepocax",10],[33164,31634,"Go through level 100 door",12],[33164,31632,"Continue deep underground",14],[33164,31630,"Arrive at Demon Forge",14]],
+  waypoints:[],
   route:"From Edron depot head north to Hero Cave. Navigate through the cave going deeper and deeper. Pass through the Temple of Xayepocax and the level 100 door to reach the Demon Forge on floor -7.",
   access:"The Inquisition Quest required (level 100+). Must complete Mission 6 and absorb a spirit from Pits of Inferno Quest.",
   premium:true,
@@ -749,7 +749,7 @@ const HUNTING_SPOTS = [
   city:"Yalahar",level:[300,999],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"10kk-20kk",profitH:"500k-2kk",
   cx:32962,cy:31497,
-  waypoints:[[32786,31248,"Start at Yalahar depot"],[32790,31260,"Head south to Trade Quarter docks"],[32800,31280,"Talk to NPC Harlow, pay 100gp"],[32800,31280,"Take boat to Vengoth island"],[32962,31497,"Find invisible teleport on Vengoth"],[32962,31497,"Teleported to Zarganash",10],[32960,31500,"Navigate soul planes",10],[32958,31503,"Find Flickering Soul NPC, accept task",10],[32955,31505,"Enter Fog Portal to chosen area",10]],
+  waypoints:[],
   route:"From Yalahar go to Trade Quarter docks. Talk to NPC Harlow and pay 100gp for boat to Vengoth. On Vengoth island find the invisible teleport to Zarganash. Choose from 5 Fog Portals for different hunting areas.",
   access:"Blood Brothers Quest (Vengoth access) + Feaster of Souls Quest (level 250+). Soul War Quest for boss areas.",
   premium:true,
@@ -781,7 +781,7 @@ const HUNTING_SPOTS = [
   prot:["physical"],
   cx:32356,cy:32170,
   route:"From Thais depot head north to the Ancient Temple. Descend 6-7 levels deep through rotworm caves, poison fields, and cyclops areas. Mintwallin is a massive underground minotaur city at floor -6/-7. Bring rope, shovel, and Antidote Runes!",
-  waypoints:[[32346,32227,"Start at Thais depot"],[32348,32215,"Head north from depot"],[32350,32200,"Follow road north through city"],[32354,32180,"Head NW towards Ancient Temple"],[32356,32175,"Enter Ancient Temple"],[32356,32170,"Go down 2 levels",9],[32360,32165,"Head north as far as possible",9],[32360,32165,"Go down to Rotworm level",10],[32370,32155,"Head east then south, go down ladder",11],[32380,32150,"Navigate through poison fields (bring Antidote!)",12],[32400,32140,"Go down, follow path east/north past Cyclopes",13],[32430,32110,"Descend 2 more ladders, head west",14],[32447,32101,"Arrive at Mintwallin gate",14]],
+  waypoints:[],
   access:"None — free access. Bring rope, shovel and Antidote Runes. Watch for one-way holes!",
   premium:false,
   creatures:[
@@ -809,7 +809,7 @@ const HUNTING_SPOTS = [
   prot:["physical"],
   cx:32853,cy:31924,
   route:"From Venore depot head north-west past the swamps. Cross the bridge and continue to the Amazon camp on the hill.",
-  waypoints:[[32920,32076,"Start at Venore depot"],[32910,32060,"Head NW from depot"],[32900,32040,"Follow road north"],[32890,32010,"Continue NW through fields"],[32880,31985,"Cross bridge over river"],[32870,31960,"Follow path NW"],[32860,31945,"Continue towards camp"],[32855,31930,"Approach Amazon territory"],[32853,31924,"Arrive at Amazon Camp"]],
+  waypoints:[],
   access:"None — free access.",
   premium:false,
   creatures:[
@@ -836,7 +836,7 @@ const HUNTING_SPOTS = [
   prot:["physical"],
   cx:32352,cy:32391,
   route:"From Thais depot head south through the city gate. Cross Mt. Sternum and continue south to the Cyclops camp.",
-  waypoints:[[32346,32227,"Start at Thais depot"],[32348,32250,"Head south from depot"],[32350,32280,"Follow road south through gate"],[32350,32310,"Continue south past fields"],[32351,32340,"Cross open terrain"],[32351,32365,"Navigate towards camp"],[32352,32380,"Approach Cyclops territory"],[32352,32391,"Arrive at Cyclops Camp"]],
+  waypoints:[],
   access:"None — free access.",
   premium:false,
   creatures:[
@@ -861,7 +861,7 @@ const HUNTING_SPOTS = [
   prot:["earth","physical"],
   cx:33072,cy:32760,
   route:"From Ankrahmun depot head west into the Kha'labal desert. Dig with a shovel to enter the Larva Caves underground.",
-  waypoints:[[33126,32843,"Start at Ankrahmun depot"],[33118,32830,"Head NW through desert"],[33110,32815,"Follow sand path west"],[33100,32800,"Continue NW past palm trees"],[33090,32785,"Cross desert expanse"],[33080,32770,"Approach cave entrance area"],[33072,32760,"Dig with shovel, go down"],[33072,32760,"Underground: Larva Caves",8],[33075,32758,"Navigate cave corridors",8],[33080,32755,"Main Larva & Scarab area",8]],
+  waypoints:[],
   access:"None — free access (premium island).",
   premium:true,
   creatures:[
@@ -888,7 +888,7 @@ const HUNTING_SPOTS = [
   prot:["physical"],
   cx:32930,cy:31774,
   route:"From Venore depot head north towards Ab'Dendriel. The Orc Fortress (Ulderek's Rock) is east of Ferngrims Gate.",
-  waypoints:[[32920,32076,"Start at Venore depot"],[32920,32050,"Head north from depot"],[32920,32010,"Follow road north"],[32920,31980,"Continue north through swamps"],[32920,31950,"Cross bridge over river"],[32922,31910,"Keep heading north"],[32925,31870,"Enter forest area"],[32928,31830,"Continue through woods"],[32930,31800,"Approach orc territory"],[32930,31774,"Arrive at Orc Fortress"]],
+  waypoints:[],
   access:"None — free access.",
   premium:false,
   creatures:[
@@ -914,7 +914,7 @@ const HUNTING_SPOTS = [
   prot:["earth"],
   cx:32845,cy:32871,
   route:"From Port Hope depot head south-east into the Tiquanda jungle to the Spider Caves.",
-  waypoints:[[32627,32742,"Start at Port Hope depot"],[32650,32750,"Head SE into jungle"],[32680,32770,"Follow jungle path SE"],[32720,32800,"Cross river bridge"],[32760,32830,"Continue SE through dense jungle"],[32800,32855,"Approach spider cave area"],[32830,32868,"Find cave entrance"],[32845,32871,"Enter spider cave, go down"],[32845,32871,"Underground: Giant Spider Cave",8],[32845,32875,"Navigate dark tunnels",8],[32845,32880,"Main spider hunting area",8]],
+  waypoints:[],
   access:"None — free access.",
   premium:true,
   creatures:[
@@ -940,7 +940,7 @@ const HUNTING_SPOTS = [
   prot:["death","physical"],
   cx:33256,cy:32325,
   route:"From Darashia depot head north through the desert to the Wyrm Hills area. Werehyaenas spawn on the surface during night. For permanent spawn, enter the Hyaena Lairs underground (go down).",
-  waypoints:[[33214,32460,"Start at Darashia depot"],[33218,32440,"Head north through desert"],[33222,32420,"Follow sand path north"],[33228,32400,"Continue past sand dunes"],[33235,32380,"Cross desert expanse"],[33242,32360,"Approach Wyrm Hills"],[33248,32345,"Enter Werehyaena territory"],[33253,32330,"Surface: hunt during night cycle"],[33256,32325,"Or enter Hyaena Lairs below",8]],
+  waypoints:[],
   access:"Grimvale Quest — An Ancient Feud. Surface spawn only during in-game night. Lairs permanent.",
   premium:true,
   creatures:[
@@ -966,7 +966,7 @@ const HUNTING_SPOTS = [
   prot:["energy","earth"],
   cx:32677,cy:31132,
   route:"From Yalahar depot go to the Alchemist Quarter in the NW part of the city.",
-  waypoints:[[32786,31248,"Start at Yalahar depot"],[32770,31230,"Head NW towards Alchemist Quarter"],[32750,31210,"Follow road NW"],[32730,31190,"Continue through city streets"],[32715,31170,"Cross quarter boundary"],[32700,31155,"Enter Alchemist Quarter ruins"],[32690,31145,"Navigate through mutated streets"],[32677,31132,"Main Mutated Humans zone"]],
+  waypoints:[],
   access:"In Service of Yalahar Quest required.",
   premium:true,
   creatures:[
@@ -993,7 +993,7 @@ const HUNTING_SPOTS = [
   prot:["energy","fire"],
   cx:33018,cy:32443,
   route:"From Darashia depot head north-east through the desert. Cross the sand bridge to the Drefia underground crypt entrance.",
-  waypoints:[[33214,32460,"Start at Darashia depot"],[33200,32458,"Head west from depot"],[33180,32455,"Follow desert road west"],[33160,32452,"Continue west through desert"],[33140,32450,"Cross sand expanse"],[33120,32448,"Keep heading west"],[33100,32446,"Approach Drefia area"],[33070,32444,"Follow path to crypt entrance"],[33040,32443,"Near Drefia underground entrance"],[33018,32443,"Enter Drefia Crypt, go down"],[33018,32443,"Underground: Drefia Wyrm area",8],[33020,32445,"Navigate crypt tunnels",8],[33022,32448,"Main Wyrm hunting area",8]],
+  waypoints:[],
   access:"Access through Drefia underground crypt.",
   premium:true,
   creatures:[
@@ -1020,7 +1020,7 @@ const HUNTING_SPOTS = [
   prot:["earth","physical"],
   cx:32246,cy:32601,
   route:"From Kazordoon depot head to the temple area. Use the teleporter near NPC Xelvar — it takes you directly into The Spike underground. No walking needed!",
-  waypoints:[[32656,31911,"Start at Kazordoon depot"],[32650,31915,"Head to Kazordoon temple area"],[32648,31912,"Find NPC Xelvar near temple"],[32646,31910,"Use teleporter (levels 50-99 for Mid Spike)"],[32246,32601,"Teleported into The Spike",8],[32248,32605,"Navigate gnome tunnels deeper",9],[32250,32610,"Main Mid/Lower Spike hunting area",9]],
+  waypoints:[],
   access:"Spike Tasks Quest — talk to Gnome NPCs in Kazordoon. Level 50-99 for Mid Spike, 100+ for Lower.",
   premium:true,
   creatures:[
@@ -1047,7 +1047,7 @@ const HUNTING_SPOTS = [
   prot:["earth","physical"],
   cx:32807,cy:32542,
   route:"From Port Hope depot head south into the deep jungle. Cross the river and navigate to the ape city entrance at Banuta.",
-  waypoints:[[32627,32742,"Start at Port Hope depot"],[32645,32730,"Head NW from depot"],[32665,32715,"Follow jungle path north"],[32690,32695,"Continue through jungle"],[32720,32670,"Cross river bridge"],[32745,32645,"Follow trail north"],[32770,32620,"Head NE through clearings"],[32785,32590,"Continue towards Banuta"],[32795,32565,"Approach ape city area"],[32807,32542,"Enter Banuta, go down"],[32807,32542,"Underground: Banuta floor -1",8],[32808,32540,"Navigate ape city corridors",8],[32810,32538,"Main Banuta hunting area",8]],
+  waypoints:[],
   access:"Ape City Quest for full access. Partial access without quest.",
   premium:true,
   creatures:[
@@ -1074,7 +1074,7 @@ const HUNTING_SPOTS = [
   prot:["death","physical"],
   cx:33037,cy:32404,
   route:"Mini World Change event — portals appear randomly near Drefia, Darashia coast, or Ankrahmun tar pits. Check TibiaBosses.com for active portal location. Portals only appear when the event is active!",
-  waypoints:[[33214,32460,"Start at Darashia depot"],[33180,32455,"Head west through desert"],[33150,32450,"Follow desert road west"],[33120,32440,"Continue west towards Drefia"],[33090,32430,"Search for active portal"],[33060,32420,"Portal may be near Plague Spike"],[33045,32410,"Or near Darashia coast"],[33037,32404,"Enter portal when found (event must be active!)"]],
+  waypoints:[],
   access:"Mini World Change event — portals only appear when active. No quest required. Level 250+ recommended.",
   premium:true,
   creatures:[
@@ -1102,7 +1102,7 @@ const HUNTING_SPOTS = [
   prot:["physical","earth"],
   cx:32760,cy:32628,
   route:"From Port Hope depot head north into the Tiquanda jungle. Carnivora's Rocks is underground north of the city.",
-  waypoints:[[32627,32742,"Start at Port Hope depot"],[32645,32730,"Head north from depot"],[32670,32710,"Follow jungle path NE"],[32700,32690,"Continue through jungle"],[32720,32670,"Cross terrain north"],[32740,32650,"Approach Carnivora's area"],[32755,32635,"Find entrance"],[32760,32628,"Enter Carnivora's Rocks, go down"],[32760,32628,"Underground: Carnivora's Rocks",8],[32760,32625,"Navigate tunnels",8],[32760,32620,"Main hunting zone",8]],
+  waypoints:[],
   access:"No quest required. Level 250+ minimum (restriction since Feb 2019).",
   premium:true,
   creatures:[
@@ -1128,7 +1128,7 @@ const HUNTING_SPOTS = [
   prot:["ice","holy"],
   cx:32263,cy:31141,
   route:"From Svargrond travel to Tyrsung island. Climb UP the mountain to the top to find the Court of Winter portal. Enter the portal to reach the hunting area.",
-  waypoints:[[32263,31141,"Start at Svargrond depot"],[32270,31150,"Head to Tyrsung boat"],[32280,31160,"Take boat to Tyrsung island"],[32290,31170,"Arrive on Tyrsung"],[32285,31165,"Climb mountain path UP",6],[32282,31160,"Continue climbing UP the peak",5],[32280,31155,"Reach mountain top — find portal",3],[32280,31155,"Enter Court of Winter portal"],[33565,32215,"Teleported to Court of Winter"],[33566,32210,"Navigate icy court corridors"],[33567,32205,"Main Crazed Winter Elves area"]],
+  waypoints:[],
   access:"The Dream Courts Quest required (level 250+). Prerequisites: Threatened Dreams Quest, access to Tyrsung, Okolnir, Feyrist.",
   premium:true,
   creatures:[
@@ -1155,7 +1155,7 @@ const HUNTING_SPOTS = [
   prot:["earth","death"],
   cx:33921,cy:31480,
   route:"From Issavi depot head east through the city to the sewers entrance. Navigate through the underground tunnel system.",
-  waypoints:[[33921,31480,"Start at Issavi depot"],[33918,31478,"Head west from depot"],[33912,31475,"Follow road through city"],[33908,31472,"Continue past marketplace"],[33905,31470,"Cross plaza to sewers"],[33902,31468,"Find sewers entrance grate"],[33900,31465,"Enter sewers, go down"],[33900,31465,"Underground: Issavi Sewers",8],[33900,31462,"Navigate sewer tunnels",8],[33900,31458,"Follow passages deeper",8],[33900,31455,"Main Usurper hunting area",8]],
+  waypoints:[],
   access:"Kilmaresh Quest for Issavi access.",
   premium:true,
   creatures:[
@@ -1182,7 +1182,7 @@ const HUNTING_SPOTS = [
   prot:["death","physical"],
   cx:33618,cy:32546,
   route:"Access through Grave Danger Quest portals. The Buried Cathedral is deep underground south of Roshamuul, beneath the sea.",
-  waypoints:[[33513,32362,"Start at Roshamuul temple"],[33530,32380,"Head south through dangerous terrain"],[33550,32400,"Cross bridge south"],[33570,32430,"Continue SE past prison"],[33590,32470,"Navigate to portal area"],[33610,32510,"Approach quest portal"],[33618,32546,"Enter portal to Buried Cathedral"],[33618,32546,"Deep underground: Buried Cathedral",13],[33618,32548,"Navigate ancient corridors",13],[33618,32550,"Main hunting room",13]],
+  waypoints:[],
   access:"Grave Danger Quest required.",
   premium:true,
   creatures:[
@@ -1209,7 +1209,7 @@ const HUNTING_SPOTS = [
   prot:["fire","physical"],
   cx:32962,cy:31497,
   route:"Access via Soul War teleport hub in Zarganash. From Yalahar take boat to Vengoth (NPC Harlow), find invisible teleport to Zarganash. Talk to Flickering Soul NPC and enter the Claustrophobic Inferno Fog Portal.",
-  waypoints:[[32786,31248,"Start at Yalahar depot"],[32790,31260,"Head south to Trade Quarter docks"],[32800,31280,"Talk to NPC Harlow, pay 100gp"],[32962,31497,"Take boat to Vengoth island"],[32962,31497,"Find invisible teleport to Zarganash",10],[32960,31500,"Navigate to teleport hub SW",10],[32958,31503,"Talk to Flickering Soul, accept task",10],[32955,31505,"Enter Claustrophobic Inferno Fog Portal",9],[32953,31507,"Main Claustrophobic Inferno area",9]],
+  waypoints:[],
   access:"Soul War Quest (level 250+). Requires: Blood Brothers Quest, Feaster of Souls Quest. Level 600+ recommended!",
   premium:true,
   creatures:[

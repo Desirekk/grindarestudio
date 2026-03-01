@@ -55,7 +55,7 @@
         </div>
         <div class="nav-item" data-panel="hunting">
           <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Sword.gif" alt="" class="ni-icon" onerror="this.style.display='none'">
-          <span>Hunting Spots</span>
+          <span>Hunting System</span>
         </div>
         <div class="nav-item" data-panel="equipment">
           <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Magic_Plate_Armor.gif" alt="" class="ni-icon" onerror="this.style.display='none'">
@@ -73,10 +73,6 @@
         <div class="nav-item" data-panel="map">
           <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Map_(Item).gif" alt="" class="ni-icon" onerror="this.style.display='none'">
           <span>World Map</span>
-        </div>
-        <div class="nav-item" data-panel="editor">
-          <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Sextant.gif" alt="" class="ni-icon" onerror="this.style.display='none'">
-          <span>Route Editor</span>
         </div>
         <div class="nav-item" data-panel="character">
           <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Citizen_Male.gif" alt="" class="ni-icon" onerror="this.style.display='none'">
@@ -131,9 +127,25 @@
         <div class="cd" id="creatureDetail"></div>
       </section>
 
-      <!-- HUNTING SPOTS -->
+      <!-- HUNTING SYSTEM -->
       <section class="panel" id="p-hunting">
-        <div class="ph"><h2>Hunting Spots</h2><p>Find the best hunting grounds — routes, charms, supplies, equipment</p><div class="ph-line"></div></div>
+        <div class="ph"><h2>Hunting System</h2><p>Community-driven hunting spots, routes, and the route editor</p><div class="ph-line"></div></div>
+        <!-- Sub-tabs -->
+        <div class="hunt-tabs">
+          <button class="hunt-tab active" onclick="switchHuntTab('browse',this)">Browse Spots</button>
+          <button class="hunt-tab" onclick="switchHuntTab('editor',this)">Route Editor</button>
+        </div>
+        <!-- Community CTA Banner -->
+        <div class="hunt-cta" id="huntCta">
+          <div class="hunt-cta-icon">&#9878;</div>
+          <div class="hunt-cta-text">
+            <strong>Help build the best route database!</strong>
+            <span>Create or fix routes using the Route Editor. Approved contributors get a special Discord role + a chance to win <b>250 Tibia Coins</b> every month!</span>
+          </div>
+          <button class="btn-s btn-g" onclick="switchHuntTab('editor',document.querySelector('.hunt-tab:last-child'))">Open Route Editor</button>
+        </div>
+        <!-- TAB: Browse Spots -->
+        <div class="hunt-tab-content active" id="htab-browse">
         <div class="my-build">
           <div class="build-label"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Citizen_Male.gif" onerror="this.style.display='none'" style="width:28px;height:28px"> My Build</div>
           <div class="build-vocs">
@@ -162,6 +174,88 @@
           <span class="rcount" id="huntCount" style="margin-left:auto"></span>
         </div>
         <div id="huntingGrid"></div>
+        </div><!-- /htab-browse -->
+        <!-- TAB: Route Editor -->
+        <div class="hunt-tab-content" id="htab-editor">
+        <div class="ed-toolbar">
+          <button class="btn-s btn-g ed-mode-btn active" data-mode="new" onclick="editorSetMode('new',this)">New Spot</button>
+          <button class="btn-s ed-mode-btn" data-mode="fix" onclick="editorSetMode('fix',this)">Fix Existing</button>
+          <select id="edFixSpot" class="ed-spot-select" style="display:none" onchange="editorLoadSpot(+this.value)">
+            <option value="-1">-- Select spot to fix --</option>
+          </select>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <button class="btn-s" onclick="editorUndo()" title="Undo last waypoint">Undo</button>
+            <button class="btn-s" onclick="editorClear()" title="Clear all">Clear All</button>
+          </div>
+        </div>
+        <div class="ed-layout">
+          <div class="ed-map-wrap">
+            <div id="editorMap" class="ed-map"></div>
+            <div class="ed-map-ctrl">
+              <button class="btn-s" onclick="editorFloor(-1)" title="Go up">▲</button>
+              <span id="edFloorLabel">Ground (7)</span>
+              <button class="btn-s" onclick="editorFloor(1)" title="Go down">▼</button>
+              <span id="edMapCoords" style="margin-left:12px;color:var(--gold);font-size:11px"></span>
+            </div>
+          </div>
+          <div class="ed-sidebar">
+            <div class="ed-wp-header">
+              <h4>Waypoints</h4>
+              <span class="ed-wp-count" id="edWpCount">0 steps</span>
+            </div>
+            <div class="ed-wp-list" id="edWpList">
+              <div class="ed-wp-empty">Click on the map to add waypoints</div>
+            </div>
+            <div class="ed-form">
+              <h4>Spot Details</h4>
+              <div class="ed-field">
+                <label>Spot Name</label>
+                <input type="text" id="edName" placeholder="e.g. Asura Palace">
+              </div>
+              <div class="ed-field">
+                <label>Nearest City</label>
+                <select id="edCity"></select>
+              </div>
+              <div class="ed-field-row">
+                <div class="ed-field">
+                  <label>Min Level</label>
+                  <input type="number" id="edLvlMin" placeholder="130" min="1" max="9999">
+                </div>
+                <div class="ed-field">
+                  <label>Max Level</label>
+                  <input type="number" id="edLvlMax" placeholder="400" min="1" max="9999">
+                </div>
+              </div>
+              <div class="ed-field">
+                <label>Vocations</label>
+                <div class="ed-vocs">
+                  <label><input type="checkbox" value="knight" checked> EK</label>
+                  <label><input type="checkbox" value="paladin" checked> RP</label>
+                  <label><input type="checkbox" value="sorcerer" checked> MS</label>
+                  <label><input type="checkbox" value="druid" checked> ED</label>
+                </div>
+              </div>
+              <div class="ed-field">
+                <label>Access / Quest Requirements</label>
+                <textarea id="edAccess" rows="2" placeholder="e.g. Free access, no quest needed"></textarea>
+              </div>
+              <div class="ed-field">
+                <label>Route Description</label>
+                <textarea id="edRoute" rows="3" placeholder="e.g. Start at Ankrahmun depot, head south through desert..."></textarea>
+              </div>
+              <div class="ed-field">
+                <label>Your Character Name (for credit)</label>
+                <input type="text" id="edAuthor" placeholder="e.g. Bubble Knight">
+              </div>
+              <div class="ed-actions">
+                <button class="btn-s" onclick="editorPreview()">Preview Route</button>
+                <button class="btn-s btn-g" onclick="editorSubmit()">Submit to Review</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ed-status" id="edStatus"></div>
+        </div><!-- /htab-editor -->
       </section>
 
       <!-- EQUIPMENT -->
@@ -244,89 +338,6 @@
           <span><span class="ld ld-blue"></span> Cities</span>
           <span><span class="ld ld-gold"></span> Hunting Spots</span>
         </div>
-      </section>
-
-      <!-- ROUTE EDITOR -->
-      <section class="panel" id="p-editor">
-        <div class="ph"><h2>Route Editor</h2><p>Create or fix hunting spot routes — help the community!</p><div class="ph-line"></div></div>
-        <div class="ed-toolbar">
-          <button class="btn-s btn-g ed-mode-btn active" data-mode="new" onclick="editorSetMode('new',this)">New Spot</button>
-          <button class="btn-s ed-mode-btn" data-mode="fix" onclick="editorSetMode('fix',this)">Fix Existing</button>
-          <select id="edFixSpot" class="ed-spot-select" style="display:none" onchange="editorLoadSpot(+this.value)">
-            <option value="-1">— Select spot to fix —</option>
-          </select>
-          <div style="margin-left:auto;display:flex;gap:6px">
-            <button class="btn-s" onclick="editorUndo()" title="Undo last waypoint">Undo</button>
-            <button class="btn-s" onclick="editorClear()" title="Clear all">Clear All</button>
-          </div>
-        </div>
-        <div class="ed-layout">
-          <div class="ed-map-wrap">
-            <div id="editorMap" class="ed-map"></div>
-            <div class="ed-map-ctrl">
-              <button class="btn-s" onclick="editorFloor(-1)" title="Go up">▲</button>
-              <span id="edFloorLabel">Ground (7)</span>
-              <button class="btn-s" onclick="editorFloor(1)" title="Go down">▼</button>
-              <span id="edMapCoords" style="margin-left:12px;color:var(--gold);font-size:11px"></span>
-            </div>
-          </div>
-          <div class="ed-sidebar">
-            <div class="ed-wp-header">
-              <h4>Waypoints</h4>
-              <span class="ed-wp-count" id="edWpCount">0 steps</span>
-            </div>
-            <div class="ed-wp-list" id="edWpList">
-              <div class="ed-wp-empty">Click on the map to add waypoints</div>
-            </div>
-            <div class="ed-form">
-              <h4>Spot Details</h4>
-              <div class="ed-field">
-                <label>Spot Name</label>
-                <input type="text" id="edName" placeholder="e.g. Asura Palace">
-              </div>
-              <div class="ed-field">
-                <label>Nearest City</label>
-                <select id="edCity"></select>
-              </div>
-              <div class="ed-field-row">
-                <div class="ed-field">
-                  <label>Min Level</label>
-                  <input type="number" id="edLvlMin" placeholder="130" min="1" max="9999">
-                </div>
-                <div class="ed-field">
-                  <label>Max Level</label>
-                  <input type="number" id="edLvlMax" placeholder="400" min="1" max="9999">
-                </div>
-              </div>
-              <div class="ed-field">
-                <label>Vocations</label>
-                <div class="ed-vocs">
-                  <label><input type="checkbox" value="knight" checked> EK</label>
-                  <label><input type="checkbox" value="paladin" checked> RP</label>
-                  <label><input type="checkbox" value="sorcerer" checked> MS</label>
-                  <label><input type="checkbox" value="druid" checked> ED</label>
-                </div>
-              </div>
-              <div class="ed-field">
-                <label>Access / Quest Requirements</label>
-                <textarea id="edAccess" rows="2" placeholder="e.g. Free access, no quest needed"></textarea>
-              </div>
-              <div class="ed-field">
-                <label>Route Description</label>
-                <textarea id="edRoute" rows="3" placeholder="e.g. Start at Ankrahmun depot, head south through desert..."></textarea>
-              </div>
-              <div class="ed-field">
-                <label>Your Character Name (for credit)</label>
-                <input type="text" id="edAuthor" placeholder="e.g. Bubble Knight">
-              </div>
-              <div class="ed-actions">
-                <button class="btn-s" onclick="editorPreview()">Preview Route</button>
-                <button class="btn-s btn-g" onclick="editorSubmit()">Submit to Review</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="ed-status" id="edStatus"></div>
       </section>
 
       <!-- CHARACTER -->
