@@ -407,15 +407,12 @@ function initHuntingPanel() {
       const nameInput = document.getElementById('myCharName');
       if (nameInput && b.name) nameInput.value = b.name;
       if (b.name) {
+        // Show cached data immediately (instant, no flicker)
         const savedCh = { name: b.name, world: b.world, vocation: b.voc, level: b.level, guild: { name: b.guild }, achievement_points: b.achiev, last_login: b.lastLogin, account_status: b.acctStatus, residence: b.residence, sex: b.sex };
         const savedAcct = { created: b.acctCreated, loyalty_title: b.loyalty };
         updateBuildCharInfo(savedCh, savedAcct, null);
-        // Re-fetch world data in background for live player count
-        if (b.world) {
-          fetch(`${API}/world/${encodeURIComponent(b.world)}`).then(r=>r.json()).then(j=>{
-            if(j?.world) updateBuildCharInfo(savedCh, savedAcct, j.world);
-          }).catch(()=>{});
-        }
+        // Auto-refresh with live API data in background
+        lookupMyBuild();
       }
     } catch(e) {}
   }
@@ -468,6 +465,9 @@ function hwSave() {
   if (w) w.style.display = 'none';
 
   renderHunting();
+
+  // Auto-lookup if name was entered
+  if (name) lookupMyBuild();
 }
 
 function hwSkip() {
