@@ -1,16 +1,78 @@
 // ================================================================
 // TibiaVault — Game Data
-// Wiki image helper: all creature/item images from TibiaWiki
+// Wiki image helper: direct CDN URLs (bypasses Cloudflare)
 // ================================================================
-const WIKI_IMG = name => `https://tibia.fandom.com/wiki/Special:Redirect/file/${encodeURIComponent(name.replace(/ /g,'_'))}.gif`;
+const _WIKI_CDN = 'https://static.wikia.nocookie.net/tibia/images/';
+const _WIKI_HASH = {
+  // Creatures
+  'Werebear.gif':'d/d9','Werewolf.gif':'6/66','Werefox.gif':'c/cf','Werebadger.gif':'d/dd','Werehyaena.gif':'2/28','Werehyaena Shaman.gif':'d/de',
+  'Dragon.gif':'e/e0','Dragon Hatchling.gif':'b/ba','Frost Dragon.gif':'b/b2','Ghastly Dragon.gif':'f/f6',
+  'Lizard High Guard.gif':'0/03','Lizard Legionnaire.gif':'5/52','Lizard Dragon Priest.gif':'3/3e',
+  'Minotaur.gif':'9/95','Minotaur Amazon.gif':'0/02','Minotaur Hunter.gif':'d/df','Minotaur Guard.gif':'e/e9','Minotaur Archer.gif':'9/9d','Minotaur Mage.gif':'f/f6',
+  'Execowtioner.gif':'e/ef',"Mooh'tah Warrior.gif":'d/df','Glooth Bandit.gif':'3/39',
+  'Dawnfire Asura.gif':'b/ba','Midnight Asura.gif':'b/b4','True Midnight Asura.gif':'a/a6',
+  'Draken Spellweaver.gif':'4/4a','Draken Elite.gif':'4/48','Draken Abomination.gif':'4/40',
+  'Guzzlemaw.gif':'7/72','Frazzlemaw.gif':'5/53','Silencer.gif':'d/dd',
+  'Falcon Knight.gif':'1/19','Falcon Paladin.gif':'6/63',
+  'Burning Book.gif':'f/f5','Icecold Book.gif':'3/3d','Energized Raging Mage.gif':'7/74',
+  'Cobra Assassin.gif':'6/63','Cobra Scout.gif':'b/b9','Cobra Vizier.gif':'4/43',
+  'Pixie.gif':'1/1c','Faun.gif':'a/a6','Swan Maiden.gif':'0/03','Boar Man.gif':'a/af','Dark Faun.gif':'3/3c',
+  'Pirat Cutthroat.gif':'7/76','Pirat Bombardier.gif':'7/70','Pirat Scoundrel.gif':'c/c2','Pirat Mate.gif':'d/df',
+  'Flimsy Lost Soul.gif':'4/49','Mean Lost Soul.gif':'5/5f','Freakish Lost Soul.gif':'2/2f',
+  'Hellflayer.gif':'2/2a','Vexclaw.gif':'e/ed','Grimeleech.gif':'b/bd',
+  'Hero.gif':'6/6f','Vile Grandmaster.gif':'a/a9','Wyvern.gif':'b/bf',
+  'Corym Vanguard.gif':'d/db','Corym Skirmisher.gif':'b/b6',
+  'Ogre Brute.gif':'9/94','Ogre Savage.gif':'4/4b','Ogre Shaman.gif':'6/68',
+  'Demon.gif':'7/75','Dark Torturer.gif':'b/b5','Brachiodemon.gif':'0/02',
+  'Capricious Phantom.gif':'6/6b','Turbulent Elemental.gif':'f/f7',
+  'Amazon.gif':'9/9c','Valkyrie.gif':'f/f5','Witch.gif':'a/ae',
+  'Cyclops.gif':'9/99','Cyclops Smith.gif':'1/1d','Cyclops Drone.gif':'e/e9',
+  'Larva.gif':'4/4f','Scarab.gif':'e/e7','Ancient Scarab.gif':'2/2c',
+  'Orc Leader.gif':'0/0e','Orc Berserker.gif':'1/16','Orc Warlord.gif':'4/44',
+  'Giant Spider.gif':'9/99','Crystal Spider.gif':'3/37',
+  'Mutated Human.gif':'7/73','Mutated Rat.gif':'c/c4','Mutated Tiger.gif':'b/b8',
+  'Wyrm.gif':'3/39','Elder Wyrm.gif':'6/63',
+  'Crystalcrusher.gif':'a/a4','Deepworm.gif':'b/b1','Diremaw.gif':'a/ac',
+  'Medusa.gif':'6/60','Serpent Spawn.gif':'4/4d','Hydra.gif':'1/19',
+  'Nightmare.gif':'e/e9','Nightmare Scion.gif':'9/90','Plaguesmith.gif':'d/d3',
+  'Carnivostrich.gif':'7/73','Sabretooth.gif':'d/dd',
+  'Crazed Winter Rearguard.gif':'2/2b','Crazed Winter Vanguard.gif':'9/99',
+  'Arachnophobica.gif':'2/21',
+  'Usurper Archer.gif':'8/86','Usurper Knight.gif':'0/0d','Usurper Warlock.gif':'4/4e',
+  'Retching Horror.gif':'7/70','Meandering Mushroom.gif':'0/09','Branchy Crawler.gif':'c/cc',
+  'Hellfire Fighter.gif':'e/e9','Magma Crawler.gif':'a/a5',
+  // Outfits
+  'Outfit Citizen Male.gif':'e/e4','Outfit Hunter Male.gif':'5/5c','Outfit Knight Male.gif':'d/d6',
+  'Outfit Mage Male.gif':'6/63','Outfit Summoner Male.gif':'5/5e','Outfit Monk Male.gif':'9/92',
+  // Items
+  'Gold Coin.gif':'b/b0','Magic Plate Armor.gif':'3/31','Amulet of Loss.gif':'1/13',
+  'Book (Brown).gif':'c/c0','Strong Health Potion.gif':'7/78','Imbuing Shrine.gif':'b/b8',
+  'Vampire Teeth.gif':'f/f1','Rope Belt.gif':'6/69','Damselfly Wing.gif':'8/84',
+  'Tibia Coins.gif':'1/1a','Sword.gif':'1/1f','Treasure Chest.gif':'6/67',
+  'Spellbook.gif':'7/7e','Globe.gif':'6/6f','Crystal Coin.gif':'5/55',
+  'Royal Crossbow.gif':'8/8d','Wand of Inferno.gif':'0/0e','Hailstorm Rod.gif':'1/1f',
+  // Charms (PNG)
+  'Wound.png':'a/a4','Freeze.png':'0/00','Zap.png':'0/0b','Enflame.png':'c/c0',
+  'Curse (Charm).png':'4/4f','Divine Wrath.png':'3/38','Poison.png':'0/05',
+  'Dodge.png':'b/b2','Parry.png':'4/44','Low Blow.png':'9/97','Cripple.png':'8/86',
+  'Gut.png':'4/4a','Adrenaline Burst.png':'1/11','Numb.png':'9/9f',
+  'Cleanse.png':'9/95','Bless.png':'5/51'
+};
+function _wikiCdn(fn) {
+  const h = _WIKI_HASH[fn];
+  if (h) return _WIKI_CDN + h + '/' + encodeURIComponent(fn) + '/revision/latest?path-prefix=en';
+  return `https://tibia.fandom.com/wiki/Special:Redirect/file/${encodeURIComponent(fn)}`;
+}
+const WIKI_IMG = name => _wikiCdn(name.replace(/ /g, '_') + '.gif');
+const WIKI_IMG_PNG = name => _wikiCdn(name.replace(/ /g, '_') + '.png');
 const TIBIA_IMG = race => `https://static.tibia.com/images/library/${encodeURIComponent(race)}.gif`;
 const CHARM_IMG = key => {
   const map = {wound:'Wound',freeze:'Freeze',zap:'Zap',enflame:'Enflame',curse:'Curse_(Charm)',divine_wrath:'Divine_Wrath',poison:'Poison',dodge:'Dodge',parry:'Parry',low_blow:'Low_Blow',cripple:'Cripple',gut:'Gut',adrenaline_burst:'Adrenaline_Burst',numb:'Numb',cleanse:'Cleanse',bless:'Bless',wound_or_zap:'Wound'};
-  return `https://tibia.fandom.com/wiki/Special:Redirect/file/${map[key] || 'Wound'}.png`;
+  return WIKI_IMG_PNG(map[key] || 'Wound');
 };
 const VOC_OUTFIT = key => {
   const map = {knight:'Outfit_Knight_Male',paladin:'Outfit_Hunter_Male',sorcerer:'Outfit_Mage_Male',druid:'Outfit_Summoner_Male',monk:'Outfit_Monk_Male'};
-  return `https://tibia.fandom.com/wiki/Special:Redirect/file/${map[key] || map.knight}.gif`;
+  return WIKI_IMG(map[key] || map.knight);
 };
 
 // Element definitions
