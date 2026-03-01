@@ -410,7 +410,7 @@ function initHuntingPanel() {
         // Show cached data immediately (instant, no flicker)
         const savedCh = { name: b.name, world: b.world, vocation: b.voc, level: b.level, guild: { name: b.guild }, achievement_points: b.achiev, last_login: b.lastLogin, account_status: b.acctStatus, residence: b.residence, sex: b.sex };
         const savedAcct = { created: b.acctCreated, loyalty_title: b.loyalty };
-        updateBuildCharInfo(savedCh, savedAcct, null);
+        updateBuildCharInfo(savedCh, savedAcct, null, b.otherChars || []);
         // Auto-refresh with live API data in background
         lookupMyBuild();
       }
@@ -518,7 +518,8 @@ async function lookupMyBuild() {
     });
 
     const acct = data?.character?.account_information;
-    localStorage.setItem('tv_build', JSON.stringify({ name: ch.name, level, voc, world: ch.world, guild: ch.guild?.name, achiev: ch.achievement_points, lastLogin: ch.last_login, acctCreated: acct?.created, loyalty: acct?.loyalty_title, acctStatus: ch.account_status, residence: ch.residence, sex: ch.sex }));
+    const otherChars = data?.character?.other_characters || [];
+    localStorage.setItem('tv_build', JSON.stringify({ name: ch.name, level, voc, world: ch.world, guild: ch.guild?.name, achiev: ch.achievement_points, lastLogin: ch.last_login, acctCreated: acct?.created, loyalty: acct?.loyalty_title, acctStatus: ch.account_status, residence: ch.residence, sex: ch.sex, otherChars }));
     // Fetch world data in background
     let worldData = null;
     try {
@@ -526,7 +527,7 @@ async function lookupMyBuild() {
       const wJson = await wRes.json();
       worldData = wJson?.world;
     } catch(e) {}
-    updateBuildCharInfo(ch, acct, worldData);
+    updateBuildCharInfo(ch, acct, worldData, otherChars);
     nameInput.style.borderColor = '#22c55e';
     setTimeout(() => nameInput.style.borderColor = '', 1500);
     renderHunting();
@@ -553,7 +554,7 @@ function getVocItemUrl(voc) {
   return `https://tibia.fandom.com/wiki/Special:Redirect/file/${file}`;
 }
 
-function updateBuildCharInfo(ch, acct, worldData) {
+function updateBuildCharInfo(ch, acct, worldData, otherChars) {
   const el = document.getElementById('biChar');
   if (!el) return;
   // Show the info panel
@@ -580,6 +581,15 @@ function updateBuildCharInfo(ch, acct, worldData) {
     <div class="bi-char-field"><span class="bi-fl">Last Login</span><span class="bi-fv">${login}</span></div>
     <div class="bi-char-field"><span class="bi-fl">Sex</span><span class="bi-fv">${esc(ch.sex || '?')}</span></div>
   </div>`;
+  // Other characters (compact chips)
+  const others = (otherChars || []).filter(c => c.name !== ch.name && !c.deleted);
+  if (others.length > 0) {
+    html += `<div class="bi-divider"></div>
+    <div class="bi-section-label">Other Characters (${others.length})</div>
+    <div class="bi-alts">${others.map(c =>
+      `<span class="bi-alt${c.status === 'online' ? ' bi-alt-on' : ''}" title="${esc(c.world)}">${esc(c.name)} <span class="bi-alt-w">${esc(c.world)}</span></span>`
+    ).join('')}</div>`;
+  }
   if (worldData) {
     const w = worldData;
     html += `<div class="bi-divider"></div>
