@@ -555,10 +555,8 @@ function renderHunting() {
           <div class="hunt-sec-title"><img src="${WIKI_IMG('Map_(Item)')}" onerror="this.style.display='none'"> Route & Access</div>
           <div class="hunt-route">
             <div class="hunt-minimap" id="minimap-${idx}"></div>
-            <div>
-              <div class="hunt-route-text">${esc(s.route || '')}</div>
-              ${s.access ? `<div class="hunt-access"><strong>Access:</strong> ${esc(s.access)}</div>` : ''}
-            </div>
+            ${s.waypoints && s.waypoints.some(wp => wp[2]) ? `<div class="route-steps">${s.waypoints.filter(wp => wp[2]).map((wp, i) => `<div class="route-step"><span class="rs-num">${i + 1}</span>${esc(wp[2])}</div>`).join('')}</div>` : `<div class="hunt-route-text">${esc(s.route || '')}</div>`}
+            ${s.access ? `<div class="hunt-access" style="margin-top:8px"><strong>Access:</strong> ${esc(s.access)}</div>` : ''}
           </div>
         </div>
 
@@ -630,54 +628,101 @@ function initSpotMiniMap(el, spot) {
   const miniMap = L.map(el, {
     crs: L.CRS.Simple,
     minZoom: -1,
-    maxZoom: 2,
-    zoomControl: false,
+    maxZoom: 3,
+    zoomControl: true,
     attributionControl: false,
     dragging: true,
-    scrollWheelZoom: false
+    scrollWheelZoom: true
   });
   L.imageOverlay(MAP_URL(7), bounds).addTo(miniMap);
 
   const [spotLat, spotLng] = tibiaToLeaflet(spot.cx, spot.cy);
+  const allPoints = [];
 
-  // City marker
+  // City marker — step 1
   const city = CITIES.find(c => c.name === spot.city);
   if (city) {
     const [cityLat, cityLng] = tibiaToLeaflet(city.cx, city.cy);
-    L.circleMarker([cityLat, cityLng], { radius: 6, color: '#3b82f6', fillColor: '#3b82f6', fillOpacity: 0.9, weight: 2 })
-      .bindTooltip(city.name, { permanent: true, direction: 'top', className: 'map-tip', offset: [0, -8] })
-      .addTo(miniMap);
+    allPoints.push([cityLat, cityLng]);
 
-    // Draw step-by-step route using waypoints
+    // Draw step-by-step route
     if (spot.waypoints && spot.waypoints.length > 1) {
-      const routePoints = spot.waypoints.map(wp => tibiaToLeaflet(wp[0], wp[1]));
-      // Dashed route line through all waypoints
-      L.polyline(routePoints, {
-        color: '#d4a537', weight: 3, opacity: 0.85, dashArray: '8,5'
+      const routeLatLngs = spot.waypoints.map(wp => tibiaToLeaflet(wp[0], wp[1]));
+      // Solid route line
+      L.polyline(routeLatLngs, {
+        color: '#d4a537', weight: 3, opacity: 0.9
       }).addTo(miniMap);
-      // Small dots at each waypoint (except first=city and last=spot)
-      for (let i = 1; i < routePoints.length - 1; i++) {
-        L.circleMarker(routePoints[i], {
-          radius: 3, color: '#d4a537', fillColor: '#f0d68a', fillOpacity: 0.8, weight: 1
-        }).addTo(miniMap);
-      }
-      // Fit all waypoints
-      miniMap.fitBounds(routePoints, { padding: [25, 25] });
+      // Outer glow line
+      L.polyline(routeLatLngs, {
+        color: '#d4a537', weight: 7, opacity: 0.15
+      }).addTo(miniMap);
+
+      // Numbered step markers at each waypoint
+      spot.waypoints.forEach((wp, i) => {
+        const [lat, lng] = tibiaToLeaflet(wp[0], wp[1]);
+        allPoints.push([lat, lng]);
+        const stepNum = i + 1;
+        const label = wp[2] || '';
+        const isFirst = i === 0;
+        const isLast = i === spot.waypoints.length - 1;
+        const cls = isFirst ? 'step-marker step-marker-start' : isLast ? 'step-marker step-marker-end' : 'step-marker';
+        const icon = L.divIcon({
+          className: '',
+          html: `<div class="${cls}">${stepNum}</div>`,
+          iconSize: [22, 22],
+          iconAnchor: [11, 11]
+        });
+        const marker = L.marker([lat, lng], { icon });
+        if (label) {
+          marker.bindTooltip(`<b>${stepNum}.</b> ${label}`, {
+            direction: 'top', className: 'map-tip', offset: [0, -14]
+          });
+        }
+        marker.addTo(miniMap);
+      });
+
+      miniMap.fitBounds(allPoints, { padding: [40, 40] });
     } else {
       // Fallback: straight line city→spot
       L.polyline([[cityLat, cityLng], [spotLat, spotLng]], {
-        color: '#d4a537', weight: 3, opacity: 0.85, dashArray: '8,5'
+        color: '#d4a537', weight: 3, opacity: 0.9
       }).addTo(miniMap);
-      miniMap.fitBounds([[cityLat, cityLng], [spotLat, spotLng]], { padding: [25, 25] });
+
+      // City marker
+      const cityIcon = L.divIcon({
+        className: '',
+        html: '<div class="step-marker step-marker-start">1</div>',
+        iconSize: [22, 22], iconAnchor: [11, 11]
+      });
+      L.marker([cityLat, cityLng], { icon: cityIcon })
+        .bindTooltip(city.name + ' (start)', { direction: 'top', className: 'map-tip', offset: [0, -14] })
+        .addTo(miniMap);
+
+      // Spot marker
+      const spotIcon = L.divIcon({
+        className: '',
+        html: '<div class="step-marker step-marker-end">2</div>',
+        iconSize: [22, 22], iconAnchor: [11, 11]
+      });
+      L.marker([spotLat, spotLng], { icon: spotIcon })
+        .bindTooltip(spot.name, { direction: 'top', className: 'map-tip', offset: [0, -14] })
+        .addTo(miniMap);
+
+      allPoints.push([spotLat, spotLng]);
+      miniMap.fitBounds(allPoints, { padding: [40, 40] });
     }
   } else {
+    // No city — just show spot
+    const spotIcon = L.divIcon({
+      className: '',
+      html: '<div class="step-marker step-marker-end">★</div>',
+      iconSize: [22, 22], iconAnchor: [11, 11]
+    });
+    L.marker([spotLat, spotLng], { icon: spotIcon })
+      .bindTooltip(spot.name, { permanent: true, direction: 'top', className: 'map-tip', offset: [0, -14] })
+      .addTo(miniMap);
     miniMap.setView([spotLat, spotLng], 1);
   }
-
-  // Spot marker (larger, with pulsing effect via className)
-  L.circleMarker([spotLat, spotLng], { radius: 8, color: '#d4a537', fillColor: '#d4a537', fillOpacity: 1, weight: 2 })
-    .bindTooltip(spot.name, { permanent: true, direction: 'top', className: 'map-tip', offset: [0, -10] })
-    .addTo(miniMap);
 }
 
 function viewSpotCreatures(names) {
