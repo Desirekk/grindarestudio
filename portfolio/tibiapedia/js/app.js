@@ -6,7 +6,7 @@ const API = 'https://api.tibiadata.com/v4';
 const WIKI_API = 'https://tibiawiki.dev/api';
 const MAP_URL = f => `https://tibiamaps.github.io/tibia-map-data/floor-${String(f).padStart(2,'0')}-map.png`;
 const MAP_W = 2560, MAP_H = 2048;
-const MAP_X0 = 31744, MAP_X1 = 34560, MAP_Y0 = 30720, MAP_Y1 = 33920;
+const MAP_X0 = 31744, MAP_X1 = 34304, MAP_Y0 = 30976, MAP_Y1 = 33024;
 const PER_PAGE = 60;
 
 // Caches
@@ -527,22 +527,19 @@ function renderHunting() {
   }).join('') + '</div>' : '<div class="empty">No spots match your filters.</div>';
 
   // Init mini maps for open cards
-  initHuntMiniMaps();
+  initHuntMiniMaps(filtered);
 }
 
-function initHuntMiniMaps() {
-  // Use MutationObserver-like approach: init minimap when card opens
+function initHuntMiniMaps(spots) {
   document.querySelectorAll('.hunt-card').forEach((card, idx) => {
     const head = card.querySelector('.hunt-head');
     if (!head) return;
-    // Override onclick to also init minimap
-    const origClick = head.onclick;
     head.onclick = function() {
       card.classList.toggle('open');
       if (card.classList.contains('open')) {
         const mapEl = card.querySelector('.hunt-minimap');
         if (mapEl && !mapEl._leaflet_id) {
-          const s = HUNTING_SPOTS[idx];
+          const s = spots[idx];
           if (s && s.cx && s.cy && typeof L !== 'undefined') {
             setTimeout(() => initSpotMiniMap(mapEl, s), 50);
           }
