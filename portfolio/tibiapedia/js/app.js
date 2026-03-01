@@ -492,6 +492,18 @@ function getSpotRating(name) {
 }
 function setSpotRating(name, rating) {
   localStorage.setItem('tp_rate_' + name.replace(/\W/g, '_'), rating);
+  // Update stars in modal if open
+  const modalContent = document.getElementById('huntModalContent');
+  if (modalContent) {
+    const ratingContainer = modalContent.querySelector('.spot-rating');
+    if (ratingContainer) {
+      const stars = ratingContainer.querySelectorAll('.rate-star');
+      stars.forEach((star, i) => star.classList.toggle('filled', i < rating));
+      const label = ratingContainer.querySelector('.rate-label');
+      if (label) label.textContent = rating ? rating + '/10' : 'Rate';
+    }
+  }
+  // Also re-render the grid cards to update their star displays
   renderHunting();
 }
 function renderStars(name) {
@@ -504,6 +516,8 @@ function renderStars(name) {
   html += `<span class="rate-label">${current ? current + '/10' : 'Rate'}</span></div>`;
   return html;
 }
+
+let _filteredSpots = [];
 
 function renderHunting() {
   const container = document.getElementById('huntingGrid');
@@ -520,237 +534,291 @@ function renderHunting() {
     return true;
   });
 
+  _filteredSpots = filtered;
   document.getElementById('huntCount').textContent = `${filtered.length} spots`;
 
-  container.innerHTML = filtered.length ? '<div class="hunt-list">' + filtered.map((s, idx) => {
+  container.innerHTML = filtered.length ? '<div class="hunt-grid">' + filtered.map((s, idx) => {
     const vocBadges = s.voc.map(v => `<span class="hunt-voc">${v.substring(0,2).toUpperCase()}</span>`).join('');
-    const charmElement = ch => {
-      const charm = CHARMS[ch];
-      if (!charm) return 'physical';
-      return charm.element || 'null';
-    };
-
-    // Creature cards
-    const creatureCards = s.creatures.map(c => {
-      const cname = typeof c === 'string' ? c : c.name;
-      const hp = c.hp || '?';
-      const xp = c.xp || '?';
-      const charmId = c.charm || 'wound';
-      const charm = CHARMS[charmId] || CHARMS.wound;
-      const charmPts = c.charmPts || 0;
-      const elem = charm.element || 'null';
-      return `<div class="hc-card">
-        <div class="hc-sprite"><img src="${WIKI_IMG(cname)}" alt="${esc(cname)}" onerror="this.src='${TIBIA_IMG(cname)}'"></div>
-        <div class="hc-info">
-          <div class="hc-name">${esc(cname)}</div>
-          <div class="hc-stats">
-            <span>HP: <b class="hcs-val">${typeof hp === 'number' ? hp.toLocaleString() : hp}</b></span>
-            <span>XP: <b class="hcs-val">${typeof xp === 'number' ? xp.toLocaleString() : xp}</b></span>
-            ${charmPts ? `<span>Charm: <b class="hcs-val">${charmPts} pts</b></span>` : ''}
-          </div>
-          <span class="hc-charm charm-${elem}"><img class="charm-icon" src="${CHARM_IMG(charmId)}" alt="${esc(charm.name)}" onerror="this.style.display='none'">${esc(charm.name)}</span>
-        </div>
-      </div>`;
-    }).join('');
-
-    // Imbuements — with icons
-    const imbuIcons = {Vampirism:'Vampire Teeth',Void:'Rope Belt',Strike:'Swamp Grass',Bash:'Cyclops Toe',Chop:'Piece of Scarab Shell',Slash:'Lion\'s Mane',Epiphany:'Strand of Medusa Hair',Lich:'Flask of Embalming Fluid',Reap:'Piece of Dead Brain',Swiftness:'Damselfly Wing',Vibrancy:'Wereboar Hooves',Scorch:'Fiery Heart',Frost:'Frosty Heart',Electrify:'Rorc Feather',Venom:'Swamp Grass'};
-    const imbuHtml = (s.imbuements || []).map(i => {
-      const imbuName = i.replace(/^\d+x?\s*/i, '');
-      const mainWord = imbuName.split(/[\s(]/)[0];
-      const icon = imbuIcons[mainWord] || '';
-      return `<span class="imbu-chip">${icon ? `<img src="${WIKI_IMG(icon)}" onerror="this.style.display='none'">` : ''}${esc(i)}</span>`;
-    }).join('');
-
-    // Supplies — filtered to player's vocation
-    const myVoc = state.hunting.myVoc;
-    const myLevel = state.hunting.myLevel;
-    let suppliesHtml = '';
-    if (s.supplies) {
-      const vocIcons = {knight:'Knight',paladin:'Paladin',sorcerer:'Sorcerer',druid:'Druid'};
-      const mySupplies = s.supplies[myVoc] || (myVoc === 'monk' ? s.supplies.knight : null);
-      if (mySupplies) {
-        const vocImg = vocIcons[myVoc] ? `<img src="${WIKI_IMG(vocIcons[myVoc])}" onerror="this.style.display='none'">` : '';
-        const itemsHtml = mySupplies.map(i => {
-          const itemName = i.replace(/^\d+\s*x?\s*/i, '').replace(/^\d+\s+/, '');
-          return `<li><img src="${WIKI_IMG(itemName)}" onerror="this.style.display='none'">${esc(i)}</li>`;
-        }).join('');
-        suppliesHtml = `<div class="supply-voc supply-active"><h6>${vocImg}${esc(myVoc)}</h6><ul>${itemsHtml}</ul></div>`;
-      } else {
-        suppliesHtml = '<span style="font-size:12px;color:var(--parch-dim)">No supply data for your vocation at this spot.</span>';
-      }
-    }
-
-    // Trinket
-    const trinketHtml = s.trinket ? `<div class="hunt-trinket"><img src="${WIKI_IMG(s.trinket)}" alt="${esc(s.trinket)}" onerror="this.style.display='none'"><span>${esc(s.trinket)}</span></div>` : '<span style="font-size:11px;color:var(--parch-dim)">None recommended</span>';
-
-    // Drops — visual grid with item icons
-    const dropsHtml = (s.drops || []).map(d => `<div class="drop-item"><img src="${WIKI_IMG(d)}" alt="${esc(d)}" onerror="this.style.display='none'"><span class="drop-name">${esc(d)}</span></div>`).join('');
-
-    // Gear — personalized per vocation + level
-    let gearHtml = '';
-    const tier = getGearForVocLevel(myVoc, myLevel);
-    if (tier) {
-      const vocLabel = myVoc.charAt(0).toUpperCase() + myVoc.slice(1);
-      const chips = tier.items.map(i => `<span class="gear-item"><img src="${WIKI_IMG(i)}" alt="${esc(i)}" onerror="this.style.display='none'">${esc(i)}</span>`).join('');
-      gearHtml = `<div class="gear-bracket gear-active"><h6><img src="${WIKI_IMG(vocLabel)}" onerror="this.style.display='none'" style="width:20px;height:20px"> ${esc(vocLabel)} — Level ${myLevel}</h6><div class="gear-items">${chips}</div></div>`;
-      // Add element protection suggestions
-      if (s.prot && s.prot.length) {
-        const protChips = s.prot.map(el => {
-          const p = ELEMENT_PROT[el];
-          if (!p) return '';
-          return `<span class="gear-item gear-prot elem-bg-${el}"><img src="${WIKI_IMG(p.amulet)}" alt="${esc(p.desc)}" onerror="this.style.display='none'">${esc(p.desc)}: ${esc(p.amulet)}</span>`;
-        }).filter(Boolean).join('');
-        if (protChips) gearHtml += `<div class="gear-bracket gear-prot-section"><h6>Recommended Protection</h6><div class="gear-items">${protChips}</div></div>`;
-      }
-    }
-
     const mainCreature = s.creatures[0] ? (typeof s.creatures[0]==='string'?s.creatures[0]:s.creatures[0].name) : '';
+    const rating = getSpotRating(s.name);
+    const jsName = s.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
 
-    return `<div class="hunt-card" id="hunt-${idx}">
-      ${mainCreature ? `<img class="hunt-bg" src="${WIKI_IMG(mainCreature)}" alt="" onerror="this.style.display='none'">` : ''}
-      <div class="hunt-head" onclick="this.parentElement.classList.toggle('open')">
-        <span class="hunt-arrow">&#9654;</span>
-        <span class="hunt-title">${esc(s.name)}</span>
-        <span class="hunt-header-creatures">${s.creatures.slice(0,5).map(c=>{const cn=typeof c==='string'?c:c.name;return`<img src="${WIKI_IMG(cn)}" alt="${esc(cn)}" title="${esc(cn)}" onerror="this.style.display='none'">`}).join('')}</span>
-        ${renderStars(s.name)}
-        <div class="hunt-badges">
-          ${s.verified ? '<span class="hunt-verified verified" title="Community verified route">&#10003; Verified</span>' : '<span class="hunt-verified unverified" title="Route not yet verified by community">&#9888; Unverified</span>'}
-          <button class="hunt-fix-btn" onclick="event.stopPropagation();editorFixSpot(${s._origIdx})" title="Help fix this route">${s.verified ? 'Improve' : 'Fix Route'}</button>
+    // Stars (non-interactive on card, just display)
+    let starsHtml = '<div class="spot-rating">';
+    for (let i = 1; i <= 10; i++) starsHtml += `<span class="rate-star ${i <= rating ? 'filled' : ''}">★</span>`;
+    starsHtml += `<span class="rate-label">${rating ? rating + '/10' : ''}</span></div>`;
+
+    return `<div class="hunt-card" onclick="openHuntModal(${idx})">
+      <div class="hunt-card-header">
+        ${mainCreature ? `<img src="${WIKI_IMG(mainCreature)}" alt="${esc(mainCreature)}" onerror="this.style.display='none'">` : ''}
+        <div class="hunt-card-hinfo">
+          <div class="hc-name">${esc(s.name)}</div>
+          <div class="hc-city">${esc(s.city || '')}</div>
+        </div>
+      </div>
+      <div class="hunt-card-meta">
+        <div class="hunt-vocs">${vocBadges}</div>
+        <span class="hunt-lvl">${s.level[0]}-${s.level[1]}</span>
+        <span class="hunt-team">${s.team || 'solo'}</span>
+        ${s.verified ? '<span class="hunt-verified verified">✓ Verified</span>' : '<span class="hunt-verified unverified">⚠ Unverified</span>'}
+      </div>
+      <div class="hunt-card-stats">
+        <div class="hunt-card-stat"><span class="hcs-val">${s.expH || '?'}</span><span class="hcs-label">EXP/h</span></div>
+        <div class="hunt-card-stat"><span class="hcs-val">${s.profitH || '?'}</span><span class="hcs-label">Profit/h</span></div>
+      </div>
+      <div class="hunt-card-creatures">${s.creatures.slice(0,5).map(c=>{const cn=typeof c==='string'?c:c.name;return`<img src="${WIKI_IMG(cn)}" alt="${esc(cn)}" title="${esc(cn)}" onerror="this.style.display='none'">`}).join('')}${s.creatures.length > 5 ? `<span class="hcc-more">+${s.creatures.length-5}</span>` : ''}</div>
+      <div class="hunt-card-rating">${starsHtml}</div>
+    </div>`;
+  }).join('') + '</div>' : '<div class="empty">No spots match your filters.</div>';
+}
+
+// ================================================================
+// HUNT MODAL — Full detail popup
+// ================================================================
+function openHuntModal(idx) {
+  const s = _filteredSpots[idx];
+  if (!s) return;
+  const myVoc = state.hunting.myVoc;
+  const myLevel = state.hunting.myLevel;
+
+  // Creature cards
+  const creatureCards = s.creatures.map(c => {
+    const cname = typeof c === 'string' ? c : c.name;
+    const hp = c.hp || '?';
+    const xp = c.xp || '?';
+    const charmId = c.charm || 'wound';
+    const charm = CHARMS[charmId] || CHARMS.wound;
+    const charmPts = c.charmPts || 0;
+    const elem = charm.element || 'null';
+    return `<div class="hc-card">
+      <div class="hc-sprite"><img src="${WIKI_IMG(cname)}" alt="${esc(cname)}" onerror="this.src='${TIBIA_IMG(cname)}'"></div>
+      <div class="hc-info">
+        <div class="hc-name">${esc(cname)}</div>
+        <div class="hc-stats">
+          <span>HP: <b class="hcs-val">${typeof hp === 'number' ? hp.toLocaleString() : hp}</b></span>
+          <span>XP: <b class="hcs-val">${typeof xp === 'number' ? xp.toLocaleString() : xp}</b></span>
+          ${charmPts ? `<span>Charm: <b class="hcs-val">${charmPts} pts</b></span>` : ''}
+        </div>
+        <span class="hc-charm charm-${elem}"><img class="charm-icon" src="${CHARM_IMG(charmId)}" alt="${esc(charm.name)}" onerror="this.style.display='none'">${esc(charm.name)}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Imbuements
+  const imbuIcons = {Vampirism:'Vampire Teeth',Void:'Rope Belt',Strike:'Swamp Grass',Bash:'Cyclops Toe',Chop:'Piece of Scarab Shell',Slash:'Lion\'s Mane',Epiphany:'Strand of Medusa Hair',Lich:'Flask of Embalming Fluid',Reap:'Piece of Dead Brain',Swiftness:'Damselfly Wing',Vibrancy:'Wereboar Hooves',Scorch:'Fiery Heart',Frost:'Frosty Heart',Electrify:'Rorc Feather',Venom:'Swamp Grass'};
+  const imbuHtml = (s.imbuements || []).map(i => {
+    const imbuName = i.replace(/^\d+x?\s*/i, '');
+    const mainWord = imbuName.split(/[\s(]/)[0];
+    const icon = imbuIcons[mainWord] || '';
+    return `<span class="imbu-chip">${icon ? `<img src="${WIKI_IMG(icon)}" onerror="this.style.display='none'">` : ''}${esc(i)}</span>`;
+  }).join('');
+
+  // Supplies
+  let suppliesHtml = '';
+  if (s.supplies) {
+    const vocIcons = {knight:'Knight',paladin:'Paladin',sorcerer:'Sorcerer',druid:'Druid'};
+    const mySupplies = s.supplies[myVoc] || (myVoc === 'monk' ? s.supplies.knight : null);
+    if (mySupplies) {
+      const vocImg = vocIcons[myVoc] ? `<img src="${WIKI_IMG(vocIcons[myVoc])}" onerror="this.style.display='none'">` : '';
+      const itemsHtml = mySupplies.map(i => {
+        const itemName = i.replace(/^\d+\s*x?\s*/i, '').replace(/^\d+\s+/, '');
+        return `<li><img src="${WIKI_IMG(itemName)}" onerror="this.style.display='none'">${esc(i)}</li>`;
+      }).join('');
+      suppliesHtml = `<div class="supply-voc supply-active"><h6>${vocImg}${esc(myVoc)}</h6><ul>${itemsHtml}</ul></div>`;
+    } else {
+      suppliesHtml = '<span style="font-size:12px;color:var(--parch-dim)">No supply data for your vocation at this spot.</span>';
+    }
+  }
+
+  // Trinket
+  const trinketHtml = s.trinket ? `<div class="hunt-trinket"><img src="${WIKI_IMG(s.trinket)}" alt="${esc(s.trinket)}" onerror="this.style.display='none'"><span>${esc(s.trinket)}</span></div>` : '<span style="font-size:11px;color:var(--parch-dim)">None recommended</span>';
+
+  // Drops
+  const dropsHtml = (s.drops || []).map(d => `<div class="drop-item"><img src="${WIKI_IMG(d)}" alt="${esc(d)}" onerror="this.style.display='none'"><span class="drop-name">${esc(d)}</span></div>`).join('');
+
+  // Gear
+  let gearHtml = '';
+  const tier = getGearForVocLevel(myVoc, myLevel);
+  if (tier) {
+    const vocLabel = myVoc.charAt(0).toUpperCase() + myVoc.slice(1);
+    const chips = tier.items.map(i => `<span class="gear-item"><img src="${WIKI_IMG(i)}" alt="${esc(i)}" onerror="this.style.display='none'">${esc(i)}</span>`).join('');
+    gearHtml = `<div class="gear-bracket gear-active"><h6><img src="${WIKI_IMG(vocLabel)}" onerror="this.style.display='none'" style="width:20px;height:20px"> ${esc(vocLabel)} — Level ${myLevel}</h6><div class="gear-items">${chips}</div></div>`;
+    if (s.prot && s.prot.length) {
+      const protChips = s.prot.map(el => {
+        const p = ELEMENT_PROT[el];
+        if (!p) return '';
+        return `<span class="gear-item gear-prot elem-bg-${el}"><img src="${WIKI_IMG(p.amulet)}" alt="${esc(p.desc)}" onerror="this.style.display='none'">${esc(p.desc)}: ${esc(p.amulet)}</span>`;
+      }).filter(Boolean).join('');
+      if (protChips) gearHtml += `<div class="gear-bracket gear-prot-section"><h6>Recommended Protection</h6><div class="gear-items">${protChips}</div></div>`;
+    }
+  }
+
+  // Stars (interactive)
+  const mainCreature = s.creatures[0] ? (typeof s.creatures[0]==='string'?s.creatures[0]:s.creatures[0].name) : '';
+  const vocBadges = s.voc.map(v => `<span class="hunt-voc">${v.substring(0,2).toUpperCase()}</span>`).join('');
+
+  let html = `
+    <div class="hunt-modal-hero">
+      ${mainCreature ? `<img src="${WIKI_IMG(mainCreature)}" alt="${esc(mainCreature)}" onerror="this.style.display='none'">` : ''}
+      <div class="hunt-modal-hero-info">
+        <h3>${esc(s.name)}</h3>
+        <div class="hm-badges">
           <div class="hunt-vocs">${vocBadges}</div>
           <span class="hunt-lvl">${s.level[0]}-${s.level[1]}</span>
           <span class="hunt-team">${s.team || 'solo'}</span>
+          ${s.verified ? '<span class="hunt-verified verified">✓ Verified</span>' : '<span class="hunt-verified unverified">⚠ Unverified</span>'}
+          ${renderStars(s.name)}
         </div>
       </div>
-      <div class="hunt-metrics">
-        <div class="hunt-metric"><div class="hm-val">${s.level[0]}+</div><div class="hm-label">Rec. Level</div></div>
-        <div class="hunt-metric"><div class="hm-val">${s.expH || '?'}</div><div class="hm-label">Raw EXP/h</div></div>
-        <div class="hunt-metric"><div class="hm-val">${s.profitH || '?'}</div><div class="hm-label">Profit/h</div></div>
-        <div class="hunt-metric"><div class="hm-val">${s.premium ? 'Yes' : 'No'}</div><div class="hm-label">Premium</div></div>
+    </div>
+    <div class="hunt-modal-metrics">
+      <div class="hunt-metric"><div class="hm-val">${s.level[0]}+</div><div class="hm-label">Rec. Level</div></div>
+      <div class="hunt-metric"><div class="hm-val">${s.expH || '?'}</div><div class="hm-label">Raw EXP/h</div></div>
+      <div class="hunt-metric"><div class="hm-val">${s.profitH || '?'}</div><div class="hm-label">Profit/h</div></div>
+      <div class="hunt-metric"><div class="hm-val">${s.premium ? 'Yes' : 'No'}</div><div class="hm-label">Premium</div></div>
+    </div>
+
+    <div class="hunt-sec">
+      <div class="hunt-sec-title"><img src="${WIKI_IMG('Map_(Item)')}" onerror="this.style.display='none'"> Route & Access</div>
+      <div class="hunt-route">
+        ${s.waypoints && s.waypoints.length > 0 ? `
+        <div class="hunt-minimap" id="modal-minimap"></div>
+        ${s.waypoints.some(wp => wp[2]) ? `<div class="route-steps">${s.waypoints.filter(wp => wp[2]).map((wp, i) => {
+          const floor = wp[3] || 7;
+          const floorBadge = floor !== 7 ? ' <span class="rs-floor">Floor ' + (floor > 7 ? '-' + (floor - 7) : '+' + (7 - floor)) + '</span>' : '';
+          return '<div class="route-step' + (floor !== 7 ? ' rs-underground' : '') + '"><span class="rs-num">' + (i + 1) + '</span>' + esc(wp[2]) + floorBadge + '</div>';
+        }).join('')}</div>` : ''}` : `
+        <div class="hunt-no-route">
+          <p>No community route yet — be the first to add one!</p>
+          <button class="btn-s btn-g" onclick="closeHuntModal();editorFixSpot(${s._origIdx})">Create Route</button>
+        </div>`}
+        ${s.route ? `<div class="hunt-route-text">${esc(s.route)}</div>` : ''}
+        ${s.access ? `<div class="hunt-access" style="margin-top:8px"><strong>Access:</strong> ${esc(s.access)}</div>` : ''}
       </div>
-      <div class="hunt-body">
+    </div>
 
-        <div class="hunt-sec">
-          <div class="hunt-sec-title"><img src="${WIKI_IMG('Map_(Item)')}" onerror="this.style.display='none'"> Route & Access</div>
-          <div class="hunt-route">
-            ${s.waypoints && s.waypoints.length > 0 ? `
-            <div class="hunt-minimap" id="minimap-${idx}"></div>
-            ${s.waypoints.some(wp => wp[2]) ? `<div class="route-steps">${s.waypoints.filter(wp => wp[2]).map((wp, i) => {
-              const floor = wp[3] || 7;
-              const floorBadge = floor !== 7 ? ' <span class="rs-floor">Floor ' + (floor > 7 ? '-' + (floor - 7) : '+' + (7 - floor)) + '</span>' : '';
-              return '<div class="route-step' + (floor !== 7 ? ' rs-underground' : '') + '"><span class="rs-num">' + (i + 1) + '</span>' + esc(wp[2]) + floorBadge + '</div>';
-            }).join('')}</div>` : ''}` : `
-            <div class="hunt-no-route">
-              <p>No community route yet — be the first to add one!</p>
-              <button class="btn-s btn-g" onclick="editorFixSpot(${s._origIdx})">Create Route</button>
-            </div>`}
-            ${s.route ? `<div class="hunt-route-text">${esc(s.route)}</div>` : ''}
-            ${s.access ? `<div class="hunt-access" style="margin-top:8px"><strong>Access:</strong> ${esc(s.access)}</div>` : ''}
-          </div>
+    <div class="hunt-sec">
+      <div class="hunt-sec-title"><img src="${WIKI_IMG('Creature_Products')}" onerror="this.style.display='none'"> Creatures & Charms</div>
+      <div class="hunt-creatures">${creatureCards}</div>
+    </div>
+
+    <div class="hunt-sec">
+      <div class="hunt-sec-title"><img src="${WIKI_IMG('Imbuing_Shrine')}" onerror="this.style.display='none'"> Imbuements</div>
+      <div class="hunt-imbu">${imbuHtml || '<span style="font-size:11px;color:var(--parch-dim)">None specified</span>'}</div>
+    </div>
+
+    <div class="hunt-sec">
+      <div class="hunt-sec-title"><img src="${WIKI_IMG('Strong_Health_Potion')}" onerror="this.style.display='none'"> Supplies — ${esc(myVoc.charAt(0).toUpperCase()+myVoc.slice(1))}</div>
+      <div class="hunt-supplies">${suppliesHtml}</div>
+    </div>
+
+    <div class="hunt-sec">
+      <div class="hunt-sec-title"><img src="${WIKI_IMG('Amulet_of_Loss')}" onerror="this.style.display='none'"> Trinket</div>
+      ${trinketHtml}
+    </div>
+
+    <div class="hunt-sec">
+      <div class="hunt-sec-title"><img src="${WIKI_IMG('Gold_Coin')}" onerror="this.style.display='none'"> Valuable Drops</div>
+      <div class="hunt-drops">${dropsHtml}</div>
+    </div>
+
+    <div class="hunt-sec">
+      <div class="hunt-sec-title"><img src="${WIKI_IMG('Magic_Plate_Armor')}" onerror="this.style.display='none'"> Your Gear — ${esc(myVoc.charAt(0).toUpperCase()+myVoc.slice(1))} Lv ${myLevel}</div>
+      <div class="hunt-gear">${gearHtml}</div>
+    </div>
+
+    ${s.tips ? `<div class="hunt-sec"><div class="hunt-sec-title"><img src="${WIKI_IMG('Book_(Brown)')}" onerror="this.style.display='none'"> Tips</div><div class="hunt-tips">${esc(s.tips)}</div></div>` : ''}
+
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      ${s.cx ? `<button class="btn-s btn-g" onclick="closeHuntModal();showOnMap(${s.cx},${s.cy},'${esc(s.name).replace(/'/g,"\\'")}')">Show on World Map</button>` : ''}
+      <button class="btn-s" onclick="closeHuntModal();viewSpotCreatures([${s.creatures.map(c => `'${esc(typeof c === 'string' ? c : c.name).replace(/'/g,"\\'")}'`).join(',')}])">View in Bestiary</button>
+      <button class="btn-s" onclick="closeHuntModal();editorFixSpot(${s._origIdx})">Edit Route</button>
+      <button class="btn-s" onclick="toggleFeedback(this)" style="margin-left:auto">Suggest Changes</button>
+    </div>
+    <div class="spot-feedback" style="display:none;margin-top:14px;padding:16px;background:var(--bg-darker);border:1px solid var(--border-h);border-radius:var(--rl)">
+      <div style="font-family:Cinzel,serif;font-size:14px;color:var(--gold);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">Suggest Changes to This Spot</div>
+      <div class="fb-sections">
+        <div class="fb-sec">
+          <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="creatures"> <img src="${WIKI_IMG('Creature_Products')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Creatures</label>
+          <textarea class="fb-field" data-cat="creatures" rows="2" placeholder="Which creatures should be added/removed?"></textarea>
         </div>
-
-        <div class="hunt-sec">
-          <div class="hunt-sec-title"><img src="${WIKI_IMG('Creature_Products')}" onerror="this.style.display='none'"> Creatures & Charms</div>
-          <div class="hunt-creatures">${creatureCards}</div>
+        <div class="fb-sec">
+          <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="imbuements"> <img src="${WIKI_IMG('Imbuing_Shrine')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Imbuements</label>
+          <textarea class="fb-field" data-cat="imbuements" rows="2" placeholder="What imbuements should be used?"></textarea>
         </div>
-
-        <div class="hunt-sec">
-          <div class="hunt-sec-title"><img src="${WIKI_IMG('Imbuing_Shrine')}" onerror="this.style.display='none'"> Imbuements</div>
-          <div class="hunt-imbu">${imbuHtml || '<span style="font-size:11px;color:var(--parch-dim)">None specified</span>'}</div>
+        <div class="fb-sec">
+          <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="gear"> <img src="${WIKI_IMG('Magic_Plate_Armor')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Best Equipment</label>
+          <textarea class="fb-field" data-cat="gear" rows="2" placeholder="Best gear for this spot?"></textarea>
         </div>
-
-        <div class="hunt-sec">
-          <div class="hunt-sec-title"><img src="${WIKI_IMG('Strong_Health_Potion')}" onerror="this.style.display='none'"> Supplies — ${esc(myVoc.charAt(0).toUpperCase()+myVoc.slice(1))}</div>
-          <div class="hunt-supplies">${suppliesHtml}</div>
+        <div class="fb-sec">
+          <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="supplies"> <img src="${WIKI_IMG('Strong_Health_Potion')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Supplies</label>
+          <textarea class="fb-field" data-cat="supplies" rows="2" placeholder="Supplies needed?"></textarea>
         </div>
-
-        <div class="hunt-sec">
-          <div class="hunt-sec-title"><img src="${WIKI_IMG('Amulet_of_Loss')}" onerror="this.style.display='none'"> Trinket</div>
-          ${trinketHtml}
+        <div class="fb-sec">
+          <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="loot"> <img src="${WIKI_IMG('Gold_Coin')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Loot / Drops</label>
+          <textarea class="fb-field" data-cat="loot" rows="2" placeholder="Valuable drops to add/fix?"></textarea>
         </div>
-
-        <div class="hunt-sec">
-          <div class="hunt-sec-title"><img src="${WIKI_IMG('Gold_Coin')}" onerror="this.style.display='none'"> Valuable Drops</div>
-          <div class="hunt-drops">${dropsHtml}</div>
+        <div class="fb-sec">
+          <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="tips"> <img src="${WIKI_IMG('Book_(Brown)')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Tips / Strategy</label>
+          <textarea class="fb-field" data-cat="tips" rows="2" placeholder="Hunting tips?"></textarea>
         </div>
-
-        <div class="hunt-sec">
-          <div class="hunt-sec-title"><img src="${WIKI_IMG('Magic_Plate_Armor')}" onerror="this.style.display='none'"> Your Gear — ${esc(myVoc.charAt(0).toUpperCase()+myVoc.slice(1))} Lv ${myLevel}</div>
-          <div class="hunt-gear">${gearHtml}</div>
-        </div>
-
-        ${s.tips ? `<div class="hunt-sec"><div class="hunt-sec-title"><img src="${WIKI_IMG('Book_(Brown)')}" onerror="this.style.display='none'"> Tips</div><div class="hunt-tips">${esc(s.tips)}</div></div>` : ''}
-
-        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-          ${s.cx ? `<button class="btn-s btn-g" onclick="showOnMap(${s.cx},${s.cy},'${esc(s.name).replace(/'/g,"\\'")}')">Show on World Map</button>` : ''}
-          <button class="btn-s" onclick="viewSpotCreatures([${s.creatures.map(c => `'${esc(typeof c === 'string' ? c : c.name).replace(/'/g,"\\'")}'`).join(',')}])">View in Bestiary</button>
-          <button class="btn-s" onclick="editorFixSpot(${s._origIdx})">Edit Route</button>
-          <button class="btn-s" onclick="toggleFeedback(this)" style="margin-left:auto">Suggest Changes</button>
-        </div>
-        <div class="spot-feedback" style="display:none;margin-top:14px;padding:16px;background:var(--bg-darker);border:1px solid var(--border-h);border-radius:var(--rl)">
-          <div style="font-family:Cinzel,serif;font-size:14px;color:var(--gold);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">Suggest Changes to This Spot</div>
-          <div class="fb-sections">
-            <div class="fb-sec">
-              <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="creatures"> <img src="${WIKI_IMG('Creature_Products')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Creatures</label>
-              <textarea class="fb-field" data-cat="creatures" rows="2" placeholder="Which creatures should be added/removed? e.g. 'Add Demon Outcast, remove Ghoul'"></textarea>
-            </div>
-            <div class="fb-sec">
-              <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="imbuements"> <img src="${WIKI_IMG('Imbuing_Shrine')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Imbuements</label>
-              <textarea class="fb-field" data-cat="imbuements" rows="2" placeholder="What imbuements should be used? e.g. 'T3 Vampirism + T3 Void + T2 Fire Strike'"></textarea>
-            </div>
-            <div class="fb-sec">
-              <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="gear"> <img src="${WIKI_IMG('Magic_Plate_Armor')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Best Equipment</label>
-              <textarea class="fb-field" data-cat="gear" rows="2" placeholder="Best gear for this spot? e.g. 'EK 300+: Falcon Plate, Soulbastion, Gnome Helmet...'"></textarea>
-            </div>
-            <div class="fb-sec">
-              <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="supplies"> <img src="${WIKI_IMG('Strong_Health_Potion')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Supplies</label>
-              <textarea class="fb-field" data-cat="supplies" rows="2" placeholder="Supplies needed? e.g. 'EK: 200 supreme health, 50 mana, 10 spirit potions'"></textarea>
-            </div>
-            <div class="fb-sec">
-              <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="loot"> <img src="${WIKI_IMG('Gold_Coin')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Loot / Drops</label>
-              <textarea class="fb-field" data-cat="loot" rows="2" placeholder="Valuable drops to add/fix? e.g. 'Add Falcon Longsword (very rare), Gold Token (rare)'"></textarea>
-            </div>
-            <div class="fb-sec">
-              <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="tips"> <img src="${WIKI_IMG('Book_(Brown)')}" onerror="this.style.display='none'" style="width:18px;height:18px"> Tips / Strategy</label>
-              <textarea class="fb-field" data-cat="tips" rows="2" placeholder="Hunting tips? e.g. 'Pull 3-4 at a time, use fire wall to split packs...'"></textarea>
-            </div>
-            <div class="fb-sec">
-              <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="other"> Other</label>
-              <textarea class="fb-field" data-cat="other" rows="2" placeholder="Any other changes needed..."></textarea>
-            </div>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:12px;align-items:center;padding-top:10px;border-top:1px solid var(--border)">
-            <input type="text" class="fb-author" placeholder="Your character name" style="flex:1;font-size:12px">
-            <button class="btn-s btn-g" onclick="submitFeedback(this,${s._origIdx})">Send Feedback</button>
-          </div>
-          <div class="fb-status" style="margin-top:6px;font-size:12px"></div>
+        <div class="fb-sec">
+          <label class="fb-sec-label"><input type="checkbox" class="fb-cat" value="other"> Other</label>
+          <textarea class="fb-field" data-cat="other" rows="2" placeholder="Any other changes needed..."></textarea>
         </div>
       </div>
+      <div style="display:flex;gap:8px;margin-top:12px;align-items:center;padding-top:10px;border-top:1px solid var(--border)">
+        <input type="text" class="fb-author" placeholder="Your character name" style="flex:1;font-size:12px">
+        <button class="btn-s btn-g" onclick="submitFeedback(this,${s._origIdx})">Send Feedback</button>
+      </div>
+      <div class="fb-status" style="margin-top:6px;font-size:12px"></div>
     </div>`;
-  }).join('') + '</div>' : '<div class="empty">No spots match your filters.</div>';
 
-  // Init mini maps for open cards
-  initHuntMiniMaps(filtered);
+  const overlay = document.getElementById('huntModal');
+  const content = document.getElementById('huntModalContent');
+  content.innerHTML = html;
+  overlay.style.display = '';
+  document.body.style.overflow = 'hidden';
+
+  // Lazy-load minimap
+  const mapEl = content.querySelector('#modal-minimap');
+  if (mapEl && s.cx && s.cy && typeof L !== 'undefined') {
+    setTimeout(() => {
+      initSpotMiniMap(mapEl, s);
+    }, 100);
+  }
 }
 
-function initHuntMiniMaps(spots) {
-  document.querySelectorAll('.hunt-card').forEach((card, idx) => {
-    const head = card.querySelector('.hunt-head');
-    if (!head) return;
-    head.onclick = function() {
-      card.classList.toggle('open');
-      if (card.classList.contains('open')) {
-        const mapEl = card.querySelector('.hunt-minimap');
-        if (mapEl && !mapEl._leaflet_id) {
-          const s = spots[idx];
-          if (s && s.cx && s.cy && typeof L !== 'undefined') {
-            setTimeout(() => initSpotMiniMap(mapEl, s), 50);
-          }
-        }
-      }
-    };
-  });
+function closeHuntModal() {
+  const overlay = document.getElementById('huntModal');
+  if (!overlay) return;
+  overlay.style.display = 'none';
+  document.body.style.overflow = '';
+  // Destroy Leaflet map to prevent memory leak
+  const mapEl = document.getElementById('modal-minimap');
+  if (mapEl && mapEl._leafletMap) {
+    mapEl._leafletMap.remove();
+    mapEl._leafletMap = null;
+  }
+  document.getElementById('huntModalContent').innerHTML = '';
 }
+
+// Close modal on backdrop click
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.classList.contains('hunt-modal-overlay')) {
+    closeHuntModal();
+  }
+});
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const overlay = document.getElementById('huntModal');
+    if (overlay && overlay.style.display !== 'none') {
+      closeHuntModal();
+    }
+  }
+});
 
 function initSpotMiniMap(el, spot) {
   const bounds = [[0, 0], [MAP_H, MAP_W]];
@@ -771,6 +839,7 @@ function initSpotMiniMap(el, spot) {
     maxBounds: [[-200, -200], [MAP_H + 200, MAP_W + 200]],
     maxBoundsViscosity: 0.8
   });
+  el._leafletMap = miniMap;
   L.control.zoom({ position: 'topright' }).addTo(miniMap);
 
   let overlay = L.imageOverlay(MAP_URL(curFloor), bounds).addTo(miniMap);
@@ -1921,7 +1990,7 @@ function editorSetStatus(msg, type) {
 
 // Toggle feedback form on hunt cards
 function toggleFeedback(btn) {
-  const fb = btn.closest('.hunt-body').querySelector('.spot-feedback');
+  const fb = (btn.closest('.hunt-modal-content') || btn.closest('.hunt-body'))?.querySelector('.spot-feedback');
   if (fb) fb.style.display = fb.style.display === 'none' ? 'block' : 'none';
   // Attach toggle listeners for checkbox → textarea visibility (fallback for :has())
   if (fb) {
