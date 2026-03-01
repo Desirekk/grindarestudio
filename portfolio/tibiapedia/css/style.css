@@ -217,6 +217,7 @@ tr:hover td{background:rgba(212,165,55,.03)}
 /* Route info — tibiaroute.com style */
 .hunt-route{display:flex;flex-direction:column;gap:12px}
 .hunt-minimap{width:100%;height:450px;border:2px solid var(--border-h);border-radius:var(--rl);overflow:hidden;background:var(--bg-darker);box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.leaflet-image-layer{image-rendering:pixelated;image-rendering:-moz-crisp-edges;image-rendering:crisp-edges}
 .hunt-route-text{font-size:14px;color:var(--parch-dim);line-height:1.7;padding:12px 16px;background:var(--bg-darker);border-radius:var(--r);border-left:3px solid var(--gold-dark)}
 .hunt-access{margin-top:6px;font-size:11px;color:var(--parch-dim)}
 .hunt-access strong{color:var(--parchment)}

@@ -636,12 +636,15 @@ function initSpotMiniMap(el, spot) {
     spot.waypoints.forEach(wp => floors.add(wp[3] || 7));
   } else { floors.add(7); }
   const floorList = Array.from(floors).sort((a, b) => a - b);
-  let curFloor = 7; // start on surface
+  let curFloor = 7;
+  let isFirstDraw = true;
 
   const miniMap = L.map(el, {
-    crs: L.CRS.Simple, minZoom: -1, maxZoom: 4,
+    crs: L.CRS.Simple, minZoom: -1, maxZoom: 5,
     zoomControl: false, attributionControl: false,
-    dragging: true, scrollWheelZoom: true
+    dragging: true, scrollWheelZoom: true,
+    maxBounds: [[-200, -200], [MAP_H + 200, MAP_W + 200]],
+    maxBoundsViscosity: 0.8
   });
   L.control.zoom({ position: 'topright' }).addTo(miniMap);
 
@@ -650,7 +653,7 @@ function initSpotMiniMap(el, spot) {
 
   const displayFloor = f => { const d = 7 - f; return d === 0 ? '0' : d > 0 ? '+' + d : String(d); };
 
-  // Floor switching control — tibiaroute.com style
+  // Floor switching control
   if (floorList.length > 1) {
     const FC = L.Control.extend({
       options: { position: 'topleft' },
@@ -664,13 +667,12 @@ function initSpotMiniMap(el, spot) {
             const dir = btn.dataset.dir;
             const newFloor = dir === 'up' ? curFloor - 1 : curFloor + 1;
             if (newFloor < 0 || newFloor > 15) return;
-            // Check if this floor has waypoints or is adjacent to a floor that does
             if (!floorList.includes(newFloor)) return;
             curFloor = newFloor;
             miniMap.removeLayer(overlay);
             overlay = L.imageOverlay(MAP_URL(curFloor), bounds).addTo(miniMap);
             overlay.bringToBack();
-            drawRoute();
+            drawRoute(true);
             div.querySelector('.fc-lbl').textContent = displayFloor(curFloor);
           });
         });
@@ -680,10 +682,9 @@ function initSpotMiniMap(el, spot) {
     new FC().addTo(miniMap);
   }
 
-  function drawRoute() {
+  function drawRoute(isFloorSwitch) {
     routeGroup.clearLayers();
     if (!spot.waypoints || !spot.waypoints.length) {
-      // No waypoints — city→spot line
       const city = CITIES.find(c => c.name === spot.city);
       if (curFloor !== 7) return;
       const [sLat, sLng] = tibiaToLeaflet(spot.cx, spot.cy);
@@ -698,6 +699,10 @@ function initSpotMiniMap(el, spot) {
       }
       return;
     }
+
+    // Collect points on current floor
+    const floorPts = [];
+    spot.waypoints.forEach(wp => { if ((wp[3] || 7) === curFloor) floorPts.push(tibiaToLeaflet(wp[0], wp[1])); });
 
     // Draw route segments for current floor
     let seg = [];
@@ -757,12 +762,19 @@ function initSpotMiniMap(el, spot) {
       routeGroup.addLayer(marker);
     });
 
-    // Fit to points on this floor
-    const pts = [];
-    spot.waypoints.forEach(wp => { if ((wp[3] || 7) === curFloor) pts.push(tibiaToLeaflet(wp[0], wp[1])); });
-    if (pts.length > 1) miniMap.fitBounds(pts, { padding: [40, 40] });
-    else if (pts.length === 1) miniMap.setView(pts[0], 2);
-    else miniMap.setView(tibiaToLeaflet(spot.cx, spot.cy), 0);
+    // Only fit bounds on first draw; on floor switch keep zoom and pan to center of new floor's points
+    if (isFirstDraw) {
+      // Fit to ALL waypoints (all floors) for initial overview
+      const allPts = spot.waypoints.map(wp => tibiaToLeaflet(wp[0], wp[1]));
+      if (allPts.length > 1) miniMap.fitBounds(allPts, { padding: [30, 30], maxZoom: 3 });
+      else miniMap.setView(allPts[0], 2);
+      isFirstDraw = false;
+    } else if (isFloorSwitch && floorPts.length > 0) {
+      // On floor switch: pan to center of this floor's points but keep current zoom
+      const cLat = floorPts.reduce((s, p) => s + p[0], 0) / floorPts.length;
+      const cLng = floorPts.reduce((s, p) => s + p[1], 0) / floorPts.length;
+      miniMap.panTo([cLat, cLng], { animate: true, duration: 0.3 });
+    }
   }
 
   function flushSeg(pts) {
@@ -777,7 +789,7 @@ function initSpotMiniMap(el, spot) {
     return L.divIcon({ className: '', html: '<div class="' + cls + '">' + label + '</div>', iconSize: [22, 22], iconAnchor: [11, 11] });
   }
 
-  drawRoute();
+  drawRoute(false);
 }
 
 function viewSpotCreatures(names) {
@@ -924,15 +936,18 @@ function initMap() {
   state.map = L.map('tibiaMap', {
     crs: L.CRS.Simple,
     minZoom: -2,
-    maxZoom: 3,
-    maxBounds: bounds,
-    maxBoundsViscosity: 1.0
+    maxZoom: 5,
+    maxBounds: [[-100, -100], [MAP_H + 100, MAP_W + 100]],
+    maxBoundsViscosity: 0.9
   });
 
   const imgOverlay = L.imageOverlay(MAP_URL(state.mapFloor), bounds);
   imgOverlay.addTo(state.map);
   state.map.fitBounds(bounds);
   state.mapOverlay = imgOverlay;
+
+  // Surface markers group (visible only on floor 7)
+  state.mapMarkers = L.layerGroup().addTo(state.map);
 
   // City markers
   CITIES.forEach(c => {
@@ -944,7 +959,7 @@ function initMap() {
         iconSize: [80, 16],
         iconAnchor: [40, 8]
       })
-    }).addTo(state.map);
+    }).addTo(state.mapMarkers);
   });
 
   // Hunting spot markers
@@ -957,14 +972,16 @@ function initMap() {
       fillColor: '#d4a537',
       fillOpacity: 0.8,
       weight: 1
-    }).bindTooltip(`<b>${s.name}</b><br>Level ${s.level[0]}-${s.level[1]}`, { className: 'map-tip' }).addTo(state.map);
+    }).bindTooltip(`<b>${s.name}</b><br>Level ${s.level[0]}-${s.level[1]}`, { className: 'map-tip' }).addTo(state.mapMarkers);
   });
 
   // Click for coords
   state.map.on('click', e => {
     const cx = Math.round(MAP_X0 + (e.latlng.lng / MAP_W) * (MAP_X1 - MAP_X0));
     const cy = Math.round(MAP_Y0 + ((MAP_H - e.latlng.lat) / MAP_H) * (MAP_Y1 - MAP_Y0));
-    document.getElementById('mapCoords').textContent = `X: ${cx}, Y: ${cy}, Z: ${state.mapFloor}`;
+    const df = 7 - state.mapFloor;
+    const floorStr = df === 0 ? '0' : df > 0 ? '+' + df : String(df);
+    document.getElementById('mapCoords').textContent = `X: ${cx}, Y: ${cy}, Floor: ${floorStr}`;
   });
 }
 
@@ -979,13 +996,21 @@ function changeFloor(floor) {
   if (state.map && state.mapOverlay) {
     state.mapOverlay.setUrl(MAP_URL(floor));
   }
-  document.getElementById('floorLabel').textContent = `Floor ${floor}`;
+  // Show/hide surface markers based on floor
+  if (state.mapMarkers) {
+    if (floor === 7) state.map.addLayer(state.mapMarkers);
+    else state.map.removeLayer(state.mapMarkers);
+  }
+  const df = 7 - floor;
+  const label = df === 0 ? 'Ground' : df > 0 ? '+' + df : String(df);
+  document.getElementById('floorLabel').textContent = label;
 }
 
 function showOnMap(cx, cy, name) {
   showPanel('map');
   setTimeout(() => {
     if (!state.map) initMap();
+    if (state.mapFloor !== 7) changeFloor(7);
     const [lat, lng] = tibiaToLeaflet(cx, cy);
     state.map.setView([lat, lng], 2);
     L.popup().setLatLng([lat, lng]).setContent(`<b>${name}</b>`).openOn(state.map);
