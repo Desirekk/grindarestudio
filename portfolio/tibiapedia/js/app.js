@@ -343,20 +343,20 @@ function renderLoot(w) {
     'very rare': 'very-rare', 'very_rare': 'very-rare'
   };
 
-  let html = '<div class="cd-sec"><h4>Loot</h4><table class="lt"><thead><tr><th></th><th>Item</th><th>Amount</th><th>Rarity</th></tr></thead><tbody>';
+  let html = '<div class="cd-sec"><h4>Loot</h4><div class="loot-grid">';
   loot.forEach(item => {
     const name = item.itemName || item.name || item.item || 'Unknown';
     const amount = item.amount || '';
     const rarity = item.rarity || 'common';
     const rcls = rarityMap[rarity.toLowerCase()] || 'common';
-    html += `<tr>
-      <td><img src="${WIKI_IMG(name)}" alt="${esc(name)}" class="loot-img" onerror="this.style.display='none'"></td>
-      <td>${esc(name)}</td>
-      <td>${amount}</td>
-      <td><span class="lr lr-${rcls}">${esc(rarity)}</span></td>
-    </tr>`;
+    html += `<div class="loot-card loot-${rcls}">
+      <img src="${WIKI_IMG(name)}" alt="${esc(name)}" onerror="this.style.display='none'">
+      <span class="loot-name">${esc(name)}</span>
+      ${amount ? `<span class="loot-amount">×${amount}</span>` : ''}
+      <span class="lr lr-${rcls}">${esc(rarity)}</span>
+    </div>`;
   });
-  html += '</tbody></table></div>';
+  html += '</div></div>';
   return html;
 }
 
@@ -418,6 +418,7 @@ function renderHunting() {
       const charm = CHARMS[charmId] || CHARMS.wound;
       const charmPts = c.charmPts || 0;
       const elem = charm.element || 'null';
+      const charmAbbr = {fire:'F',ice:'I',energy:'E',earth:'Ea',holy:'H',death:'D',physical:'P',null:'★'}[elem] || '★';
       return `<div class="hc-card">
         <div class="hc-sprite"><img src="${WIKI_IMG(cname)}" alt="${esc(cname)}" onerror="this.src='${TIBIA_IMG(cname)}'"></div>
         <div class="hc-info">
@@ -427,34 +428,48 @@ function renderHunting() {
             <span>XP: <b class="hcs-val">${typeof xp === 'number' ? xp.toLocaleString() : xp}</b></span>
             ${charmPts ? `<span>Charm: <b class="hcs-val">${charmPts} pts</b></span>` : ''}
           </div>
-          <span class="hc-charm charm-${elem}">${esc(charm.name)}</span>
+          <span class="hc-charm charm-${elem}"><span class="charm-icon">${charmAbbr}</span>${esc(charm.name)}</span>
         </div>
       </div>`;
     }).join('');
 
-    // Imbuements
-    const imbuHtml = (s.imbuements || []).map(i => `<span class="imbu-chip">${esc(i)}</span>`).join('');
+    // Imbuements — with icons
+    const imbuIcons = {Vampirism:'Vampire Teeth',Void:'Rope Belt',Strike:'Swamp Grass',Bash:'Cyclops Toe',Chop:'Piece of Scarab Shell',Slash:'Lion\'s Mane',Epiphany:'Strand of Medusa Hair',Lich:'Flask of Embalming Fluid',Reap:'Piece of Dead Brain',Swiftness:'Damselfly Wing',Vibrancy:'Wereboar Hooves',Scorch:'Fiery Heart',Frost:'Frosty Heart',Electrify:'Rorc Feather',Venom:'Swamp Grass'};
+    const imbuHtml = (s.imbuements || []).map(i => {
+      const imbuName = i.replace(/^\d+x?\s*/i, '');
+      const mainWord = imbuName.split(/[\s(]/)[0];
+      const icon = imbuIcons[mainWord] || '';
+      return `<span class="imbu-chip">${icon ? `<img src="${WIKI_IMG(icon)}" onerror="this.style.display='none'">` : ''}${esc(i)}</span>`;
+    }).join('');
 
-    // Supplies per vocation
+    // Supplies per vocation — with item icons
     let suppliesHtml = '';
     if (s.supplies) {
-      suppliesHtml = Object.entries(s.supplies).map(([v, items]) =>
-        `<div class="supply-voc"><h6>${esc(v)}</h6><ul>${items.map(i => `<li>${esc(i)}</li>`).join('')}</ul></div>`
-      ).join('');
+      const vocIcons = {knight:'Knight',paladin:'Paladin',sorcerer:'Sorcerer',druid:'Druid'};
+      suppliesHtml = Object.entries(s.supplies).map(([v, items]) => {
+        const vocImg = vocIcons[v] ? `<img src="${WIKI_IMG(vocIcons[v])}" onerror="this.style.display='none'">` : '';
+        const itemsHtml = items.map(i => {
+          const itemName = i.replace(/^\d+\s*x?\s*/i, '').replace(/^\d+\s+/, '');
+          return `<li><img src="${WIKI_IMG(itemName)}" onerror="this.style.display='none'">${esc(i)}</li>`;
+        }).join('');
+        return `<div class="supply-voc"><h6>${vocImg}${esc(v)}</h6><ul>${itemsHtml}</ul></div>`;
+      }).join('');
     }
 
     // Trinket
     const trinketHtml = s.trinket ? `<div class="hunt-trinket"><img src="${WIKI_IMG(s.trinket)}" alt="${esc(s.trinket)}" onerror="this.style.display='none'"><span>${esc(s.trinket)}</span></div>` : '<span style="font-size:11px;color:var(--parch-dim)">None recommended</span>';
 
-    // Drops
-    const dropsHtml = (s.drops || []).map(d => `<span class="drop-chip"><img src="${WIKI_IMG(d)}" alt="${esc(d)}" onerror="this.style.display='none'">${esc(d)}</span>`).join('');
+    // Drops — visual grid with item icons
+    const dropsHtml = (s.drops || []).map(d => `<div class="drop-item"><img src="${WIKI_IMG(d)}" alt="${esc(d)}" onerror="this.style.display='none'"><span class="drop-name">${esc(d)}</span></div>`).join('');
 
-    // Gear per bracket
+    // Gear per bracket — visual item chips
     let gearHtml = '';
     if (s.gear && typeof s.gear === 'object') {
-      gearHtml = Object.entries(s.gear).map(([bracket, items]) =>
-        `<div class="gear-bracket"><h6>Level ${bracket}</h6><p>${esc(items)}</p></div>`
-      ).join('');
+      gearHtml = Object.entries(s.gear).map(([bracket, items]) => {
+        const itemList = items.split(',').map(i => i.trim()).filter(Boolean);
+        const chips = itemList.map(i => `<span class="gear-item"><img src="${WIKI_IMG(i)}" alt="${esc(i)}" onerror="this.style.display='none'">${esc(i)}</span>`).join('');
+        return `<div class="gear-bracket"><h6>Level ${bracket}</h6><div class="gear-items">${chips}</div></div>`;
+      }).join('');
     }
 
     return `<div class="hunt-card" id="hunt-${idx}">
