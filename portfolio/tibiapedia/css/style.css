@@ -233,7 +233,9 @@ tr:hover td{background:rgba(212,165,55,.03)}
 .step-marker{background:var(--gold);color:var(--bg);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;font-family:'Cinzel',serif;border:2px solid #f0d68a;box-shadow:0 2px 6px rgba(0,0,0,.5)}
 .step-marker-start{background:#3b82f6;border-color:#93bbfd}
 .step-marker-end{background:#ef4444;border-color:#fca5a5}
-.step-marker-stairs{background:#a855f7;border-color:#d8b4fe;font-size:13px}
+.step-marker-stairs{background:#a855f7;border-color:#d8b4fe;font-size:13px;cursor:pointer}
+.step-marker-npc{background:#22c55e;border-color:#86efac;font-size:12px}
+.step-marker-teleport{background:#3b82f6;border-color:#93bbfd;font-size:12px;cursor:pointer}
 .map-tip{font-family:'Cinzel',serif!important;font-size:11px!important;font-weight:600!important;background:rgba(13,11,10,.92)!important;color:var(--gold-light)!important;border:1px solid var(--border-h)!important;border-radius:4px!important;padding:3px 8px!important;box-shadow:0 4px 12px rgba(0,0,0,.5)!important}
 .map-tip::before{border-top-color:rgba(13,11,10,.92)!important}
 /* Floor control — tibiaroute.com style */
@@ -446,14 +448,45 @@ tr:hover td{background:rgba(212,165,55,.03)}
 .hunt-tab:hover{color:var(--parchment);background:var(--bg-card)}
 .hunt-tab.active{color:var(--gold);background:var(--bg-card);border-color:var(--border-h);box-shadow:0 -2px 8px rgba(212,165,55,.08)}
 .hunt-tab-content{display:none}.hunt-tab-content.active{display:block}
-/* Community CTA Banner */
-.hunt-cta{display:flex;align-items:center;gap:16px;padding:14px 20px;margin-bottom:16px;background:linear-gradient(135deg,rgba(212,165,55,.08) 0%,rgba(212,165,55,.03) 100%);border:1px solid rgba(212,165,55,.2);border-radius:var(--rl);animation:ctaPulse 3s ease-in-out infinite}
-@keyframes ctaPulse{0%,100%{border-color:rgba(212,165,55,.2)}50%{border-color:rgba(212,165,55,.4)}}
-.hunt-cta-icon{font-size:28px;flex-shrink:0;filter:grayscale(20%)}
-.hunt-cta-text{flex:1}
-.hunt-cta-text strong{display:block;font-family:'Cinzel',serif;font-size:14px;color:var(--gold-light);margin-bottom:2px}
-.hunt-cta-text span{font-size:12px;color:var(--parch-dim);line-height:1.5}
-.hunt-cta-text b{color:var(--gold)}
+/* Welcome/Onboarding Modal */
+.hw-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.75);z-index:999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.hw-box{background:var(--bg-card);border:2px solid var(--border-h);border-radius:16px;padding:28px 32px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.7)}
+.hw-header{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.hw-header .hw-avatar{width:48px;height:48px;image-rendering:auto}
+.hw-header h3{font-family:'Cinzel',serif;font-size:18px;color:var(--gold-light);margin-bottom:2px}
+.hw-header p{font-size:13px;color:var(--parch-dim)}
+.hw-fields{display:flex;flex-direction:column;gap:14px;margin-bottom:20px}
+.hw-field label{display:block;font-family:'Cinzel',serif;font-size:11px;color:var(--gold);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.hw-field input{width:100%;font-size:14px;padding:9px 12px}
+.hw-vocs{display:flex;gap:6px;flex-wrap:wrap}
+.hw-voc{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 12px;border-radius:var(--r);border:2px solid var(--border);background:var(--bg-darker);cursor:pointer;transition:all .15s;min-width:64px}
+.hw-voc img{width:40px;height:40px;image-rendering:auto}
+.hw-voc span{font-size:10px;font-family:'Cinzel',serif;font-weight:700;color:var(--parch-dim)}
+.hw-voc:hover{border-color:var(--border-h)}
+.hw-voc.active{border-color:var(--gold);background:var(--gold-dim);box-shadow:0 0 12px rgba(212,165,55,.2)}
+.hw-voc.active span{color:var(--gold)}
+.hw-actions{display:flex;gap:10px;align-items:center}
+.hw-go{flex:1;padding:12px 20px!important;font-size:14px!important;font-weight:700}
+.hw-skip{font-size:12px;color:var(--parch-dim);padding:8px 16px!important}
+
+/* Big Community CTA Banner */
+.hunt-cta-big{position:relative;display:flex;align-items:center;gap:20px;padding:20px 24px;margin-bottom:18px;background:linear-gradient(135deg,rgba(212,165,55,.12) 0%,rgba(139,105,20,.06) 50%,rgba(212,165,55,.08) 100%);border:2px solid rgba(212,165,55,.3);border-radius:var(--rl);animation:ctaPulse 3s ease-in-out infinite;overflow:hidden}
+.hunt-cta-big::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:url('https://tibia.fandom.com/wiki/Special:Redirect/file/Gold_Coin.gif') repeat;opacity:.03;pointer-events:none}
+@keyframes ctaPulse{0%,100%{border-color:rgba(212,165,55,.3)}50%{border-color:rgba(212,165,55,.5)}}
+.cta-close{position:absolute;top:8px;right:10px;font-size:22px;color:var(--parch-dim);cursor:pointer;background:none;border:none;z-index:1;transition:color .12s;line-height:1;padding:4px}
+.cta-close:hover{color:var(--gold)}
+.cta-coins{flex-shrink:0;position:relative;z-index:1}
+.cta-coins img{width:64px;height:64px;image-rendering:auto;filter:drop-shadow(0 4px 12px rgba(212,165,55,.4));animation:coinBounce 2s ease-in-out infinite}
+@keyframes coinBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.cta-content{flex:1;position:relative;z-index:1}
+.cta-headline{font-family:'Cinzel',serif;font-size:18px;color:var(--gold-light);font-weight:700;margin-bottom:6px;text-shadow:0 1px 4px rgba(0,0,0,.3)}
+.cta-body{font-size:13px;color:var(--parch-dim);line-height:1.6}
+.cta-body ul{list-style:none;padding:4px 0;margin:0}
+.cta-body ul li{padding:2px 0}
+.cta-body ul li::before{content:'★ ';color:var(--gold)}
+.cta-body b{color:var(--gold)}
+.cta-buttons{display:flex;gap:8px;margin-top:10px}
+.cta-buttons .btn-s{padding:8px 18px;font-size:12px}
 /* No-route placeholder */
 .hunt-no-route{padding:20px;text-align:center;background:var(--bg-darker);border:2px dashed var(--border);border-radius:var(--rl);margin-top:8px}
 .hunt-no-route p{color:var(--parch-dim);font-size:13px;margin-bottom:10px}

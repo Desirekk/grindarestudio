@@ -26,7 +26,7 @@
     <header class="topbar">
       <div class="tb-logo">
         <img src="images/ideogram-v3.0_TibiaPedia_medieval_fantasy_logo_ornate_golden_text_on_transparent_dark_backgrou-0.jpg" alt="TibiaVault">
-        <span><b>Tibia</b>Forge</span>
+        <span><b>Tibia</b>Vault</span>
       </div>
       <div class="tb-search">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -130,19 +130,70 @@
       <!-- HUNTING SYSTEM -->
       <section class="panel" id="p-hunting">
         <div class="ph"><h2>Hunting System</h2><p>Community-driven hunting spots, routes, and the route editor</p><div class="ph-line"></div></div>
+
+        <!-- Welcome/Onboarding Modal (first visit) -->
+        <div class="hw-overlay" id="huntWelcome" style="display:none">
+          <div class="hw-box">
+            <div class="hw-header">
+              <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Citizen_Male.gif" onerror="this.style.display='none'" class="hw-avatar">
+              <div>
+                <h3>Welcome, Adventurer!</h3>
+                <p>Set up your character to see personalized hunting spots</p>
+              </div>
+            </div>
+            <div class="hw-fields">
+              <div class="hw-field">
+                <label>Character Name <span style="color:var(--parch-dim)">(optional)</span></label>
+                <input type="text" id="hwName" placeholder="e.g. Bubble Knight">
+              </div>
+              <div class="hw-field">
+                <label>Level</label>
+                <input type="number" id="hwLevel" value="150" min="8" max="9999">
+              </div>
+              <div class="hw-field">
+                <label>Vocation</label>
+                <div class="hw-vocs">
+                  <button class="hw-voc active" data-voc="knight" onclick="hwPickVoc(this)"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Knight_Male.gif" onerror="this.style.display='none'"><span>Knight</span></button>
+                  <button class="hw-voc" data-voc="paladin" onclick="hwPickVoc(this)"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Hunter_Male.gif" onerror="this.style.display='none'"><span>Paladin</span></button>
+                  <button class="hw-voc" data-voc="sorcerer" onclick="hwPickVoc(this)"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Mage_Male.gif" onerror="this.style.display='none'"><span>Sorcerer</span></button>
+                  <button class="hw-voc" data-voc="druid" onclick="hwPickVoc(this)"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Summoner_Male.gif" onerror="this.style.display='none'"><span>Druid</span></button>
+                  <button class="hw-voc" data-voc="monk" onclick="hwPickVoc(this)"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Monk_Male.gif" onerror="this.style.display='none'"><span>Monk</span></button>
+                </div>
+              </div>
+            </div>
+            <div class="hw-actions">
+              <button class="btn-s btn-g hw-go" onclick="hwSave()">Find My Hunting Spots</button>
+              <button class="btn-s hw-skip" onclick="hwSkip()">Skip for now</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Big Community CTA Banner -->
+        <div class="hunt-cta-big" id="huntCta">
+          <button class="cta-close" onclick="this.parentElement.style.display='none';localStorage.setItem('tv_cta_closed','1')" title="Close">&times;</button>
+          <div class="cta-coins">
+            <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Tibia_Coins.gif" alt="Tibia Coins" onerror="this.style.display='none'">
+          </div>
+          <div class="cta-content">
+            <div class="cta-headline">Help Build the Best Route Database!</div>
+            <div class="cta-body">
+              Create or fix hunting spot routes and get rewarded:
+              <ul>
+                <li><b>Route Verified</b> — special Discord role for approved routes</li>
+                <li><b>250 Tibia Coins</b> — monthly giveaway for top contributors</li>
+              </ul>
+            </div>
+            <div class="cta-buttons">
+              <button class="btn-s btn-g" onclick="switchHuntTab('editor',document.querySelector('.hunt-tab:last-child'))">Open Route Editor</button>
+              <a href="https://discord.gg/tibiavault" target="_blank" class="btn-s" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px">Join Discord</a>
+            </div>
+          </div>
+        </div>
+
         <!-- Sub-tabs -->
         <div class="hunt-tabs">
           <button class="hunt-tab active" onclick="switchHuntTab('browse',this)">Browse Spots</button>
           <button class="hunt-tab" onclick="switchHuntTab('editor',this)">Route Editor</button>
-        </div>
-        <!-- Community CTA Banner -->
-        <div class="hunt-cta" id="huntCta">
-          <div class="hunt-cta-icon">&#9878;</div>
-          <div class="hunt-cta-text">
-            <strong>Help build the best route database!</strong>
-            <span>Create or fix routes using the Route Editor. Approved contributors get a special Discord role + a chance to win <b>250 Tibia Coins</b> every month!</span>
-          </div>
-          <button class="btn-s btn-g" onclick="switchHuntTab('editor',document.querySelector('.hunt-tab:last-child'))">Open Route Editor</button>
         </div>
         <!-- TAB: Browse Spots -->
         <div class="hunt-tab-content active" id="htab-browse">

@@ -47,7 +47,7 @@ function showPanel(id) {
   document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.panel === id));
   document.querySelectorAll('.panel').forEach(el => el.classList.toggle('active', el.id === 'p-' + id));
   const loaders = {
-    news: loadNews, bestiary: loadBestiary, hunting: () => { renderHunting(); },
+    news: loadNews, bestiary: loadBestiary, hunting: initHuntingPanel,
     equipment: renderEquipment, quests: renderQuests, spells: loadSpells,
     map: initMap, character: () => {}, worlds: loadWorlds, calculators: initCalcs
   };
@@ -384,6 +384,83 @@ async function fetchWikiCreature(name) {
       return res2;
     } catch (e2) { return {}; }
   }
+}
+
+// ================================================================
+// HUNTING SYSTEM — Panel Init & Welcome
+// ================================================================
+function initHuntingPanel() {
+  // Load saved build from localStorage
+  const saved = localStorage.getItem('tv_build');
+  if (saved) {
+    try {
+      const b = JSON.parse(saved);
+      if (b.voc) state.hunting.myVoc = b.voc;
+      if (b.level) state.hunting.myLevel = b.level;
+      // Update UI to match saved build
+      document.querySelectorAll('.my-build .bv').forEach(btn => {
+        const voc = btn.getAttribute('onclick')?.match(/'(\w+)'/)?.[1];
+        btn.classList.toggle('active', voc === state.hunting.myVoc);
+      });
+      const lvlInput = document.getElementById('myLevel');
+      if (lvlInput) lvlInput.value = state.hunting.myLevel;
+    } catch(e) {}
+  }
+
+  // Check if CTA was closed
+  if (localStorage.getItem('tv_cta_closed') === '1') {
+    const cta = document.getElementById('huntCta');
+    if (cta) cta.style.display = 'none';
+  }
+
+  // Show welcome modal if first visit
+  if (!localStorage.getItem('tv_build')) {
+    const w = document.getElementById('huntWelcome');
+    if (w) w.style.display = 'flex';
+  }
+
+  renderHunting();
+}
+
+function hwPickVoc(btn) {
+  document.querySelectorAll('.hw-voc').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function hwSave() {
+  const name = document.getElementById('hwName')?.value.trim() || '';
+  const level = parseInt(document.getElementById('hwLevel')?.value) || 150;
+  const vocBtn = document.querySelector('.hw-voc.active');
+  const voc = vocBtn ? vocBtn.dataset.voc : 'knight';
+
+  // Save to localStorage
+  localStorage.setItem('tv_build', JSON.stringify({ name, level, voc }));
+
+  // Apply to state
+  state.hunting.myVoc = voc;
+  state.hunting.myLevel = level;
+
+  // Update My Build bar
+  document.querySelectorAll('.my-build .bv').forEach(btn => {
+    const v = btn.getAttribute('onclick')?.match(/'(\w+)'/)?.[1];
+    btn.classList.toggle('active', v === voc);
+  });
+  const lvlInput = document.getElementById('myLevel');
+  if (lvlInput) lvlInput.value = level;
+
+  // Hide welcome
+  const w = document.getElementById('huntWelcome');
+  if (w) w.style.display = 'none';
+
+  renderHunting();
+}
+
+function hwSkip() {
+  // Save default so modal doesn't show again
+  localStorage.setItem('tv_build', JSON.stringify({ name: '', level: 150, voc: 'knight' }));
+  const w = document.getElementById('huntWelcome');
+  if (w) w.style.display = 'none';
+  renderHunting();
 }
 
 // ================================================================
@@ -769,7 +846,8 @@ function initSpotMiniMap(el, spot) {
       const f = wp[3] || 7;
       if (f !== curFloor) return;
       const [lat, lng] = tibiaToLeaflet(wp[0], wp[1]);
-      const label = wp[2] || '';
+      const label = (wp[2] || '').toLowerCase();
+      const labelRaw = wp[2] || '';
       const num = i + 1;
       const isFirst = i === 0;
       const isLast = i === spot.waypoints.length - 1;
@@ -779,6 +857,12 @@ function initSpotMiniMap(el, spot) {
       const goUp = nextF < curFloor && nextF !== curFloor;
       const cameFrom = prevF !== curFloor;
 
+      // Detect special waypoint types from description
+      const isNPC = label.includes('npc') || label.includes('talk') || label.includes('ask');
+      const isTeleport = label.includes('teleport') || label.includes('portal') || label.includes('tp');
+      const isStairsWp = goDown || goUp || cameFrom;
+      const targetFloor = goDown ? nextF : goUp ? nextF : cameFrom ? prevF : null;
+
       let cls = 'step-marker';
       let ml = String(num);
       if (isFirst && !cameFrom) cls += ' step-marker-start';
@@ -786,12 +870,31 @@ function initSpotMiniMap(el, spot) {
       else if (goDown) { cls += ' step-marker-stairs'; ml = '↓'; }
       else if (goUp) { cls += ' step-marker-stairs'; ml = '↑'; }
       else if (cameFrom) { cls += ' step-marker-stairs'; ml = prevF > curFloor ? '↑' : '↓'; }
+      else if (isTeleport) { cls += ' step-marker-teleport'; ml = '⚡'; }
+      else if (isNPC) { cls += ' step-marker-npc'; ml = '💬'; }
 
       const marker = L.marker([lat, lng], { icon: stepIcon(ml, cls) });
-      let tip = '<b>' + num + '.</b> ' + label;
+      let tip = '<b>' + num + '.</b> ' + esc(labelRaw);
       if (goDown) tip += ' ⬇ go down';
       if (goUp) tip += ' ⬆ go up';
-      if (label) marker.bindTooltip(tip, tipOpts);
+      if (isNPC) tip += ' 💬 NPC';
+      if (isTeleport) tip += ' ⚡ Teleport';
+      if (isStairsWp || isTeleport) tip += '<br><span style="font-size:10px;color:var(--gold)">Click to switch floor</span>';
+      if (labelRaw) marker.bindTooltip(tip, tipOpts);
+
+      // Click stairs/teleport markers to switch floor
+      if ((isStairsWp || isTeleport) && targetFloor !== null) {
+        marker.on('click', function() {
+          curFloor = targetFloor;
+          miniMap.removeLayer(overlay);
+          overlay = L.imageOverlay(MAP_URL(curFloor), bounds).addTo(miniMap);
+          overlay.bringToBack();
+          drawRoute(true);
+          // Update floor control label inside the minimap
+          const ctrl = miniMap.getContainer().querySelector('.fc-lbl');
+          if (ctrl) ctrl.textContent = displayFloor(curFloor);
+        });
+      }
       routeGroup.addLayer(marker);
     });
 
@@ -1008,6 +1111,29 @@ function initMap() {
     }).bindTooltip(`<b>${s.name}</b><br>Level ${s.level[0]}-${s.level[1]}`, { className: 'map-tip' }).addTo(state.mapMarkers);
   });
 
+  // Floor control ON the map (custom Leaflet control)
+  const FloorControl = L.Control.extend({
+    options: { position: 'topleft' },
+    onAdd: function() {
+      const div = L.DomUtil.create('div', 'floor-ctrl');
+      const displayFloor = f => { const d = 7 - f; return d === 0 ? '0' : d > 0 ? '+' + d : String(d); };
+      div.innerHTML = '<button class="fc-btn" data-dir="up" title="Go up a floor">▲</button><span class="fc-lbl">' + displayFloor(state.mapFloor) + '</span><button class="fc-btn" data-dir="down" title="Go down a floor">▼</button>';
+      L.DomEvent.disableClickPropagation(div);
+      L.DomEvent.disableScrollPropagation(div);
+      div.querySelectorAll('.fc-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const newFloor = btn.dataset.dir === 'up' ? state.mapFloor - 1 : state.mapFloor + 1;
+          if (newFloor < 0 || newFloor > 15) return;
+          changeFloor(newFloor);
+          div.querySelector('.fc-lbl').textContent = displayFloor(newFloor);
+        });
+      });
+      state._mapFloorCtrl = div;
+      return div;
+    }
+  });
+  new FloorControl().addTo(state.map);
+
   // Click for coords
   state.map.on('click', e => {
     const cx = Math.round(MAP_X0 + (e.latlng.lng / MAP_W) * (MAP_X1 - MAP_X0));
@@ -1038,6 +1164,11 @@ function changeFloor(floor) {
   const df = 7 - floor;
   const flName = df === 0 ? 'Ground' : df > 0 ? '+' + df : String(df);
   document.getElementById('floorLabel').textContent = flName + ' (' + floor + ')';
+  // Sync on-map floor control label
+  if (state._mapFloorCtrl) {
+    const lbl = state._mapFloorCtrl.querySelector('.fc-lbl');
+    if (lbl) lbl.textContent = df === 0 ? '0' : df > 0 ? '+' + df : String(df);
+  }
 }
 
 function showOnMap(cx, cy, name) {
