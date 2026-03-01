@@ -418,7 +418,6 @@ function renderHunting() {
       const charm = CHARMS[charmId] || CHARMS.wound;
       const charmPts = c.charmPts || 0;
       const elem = charm.element || 'null';
-      const charmAbbr = {fire:'F',ice:'I',energy:'E',earth:'Ea',holy:'H',death:'D',physical:'P',null:'★'}[elem] || '★';
       return `<div class="hc-card">
         <div class="hc-sprite"><img src="${WIKI_IMG(cname)}" alt="${esc(cname)}" onerror="this.src='${TIBIA_IMG(cname)}'"></div>
         <div class="hc-info">
@@ -428,7 +427,7 @@ function renderHunting() {
             <span>XP: <b class="hcs-val">${typeof xp === 'number' ? xp.toLocaleString() : xp}</b></span>
             ${charmPts ? `<span>Charm: <b class="hcs-val">${charmPts} pts</b></span>` : ''}
           </div>
-          <span class="hc-charm charm-${elem}"><span class="charm-icon">${charmAbbr}</span>${esc(charm.name)}</span>
+          <span class="hc-charm charm-${elem}"><img class="charm-icon" src="${CHARM_IMG(charmId)}" alt="${esc(charm.name)}" onerror="this.style.display='none'">${esc(charm.name)}</span>
         </div>
       </div>`;
     }).join('');
@@ -583,22 +582,39 @@ function initSpotMiniMap(el, spot) {
   const city = CITIES.find(c => c.name === spot.city);
   if (city) {
     const [cityLat, cityLng] = tibiaToLeaflet(city.cx, city.cy);
-    L.circleMarker([cityLat, cityLng], { radius: 5, color: '#3b82f6', fillColor: '#3b82f6', fillOpacity: 0.9, weight: 1 })
-      .bindTooltip(city.name, { permanent: true, direction: 'top', className: 'map-tip', offset: [0, -6] })
+    L.circleMarker([cityLat, cityLng], { radius: 6, color: '#3b82f6', fillColor: '#3b82f6', fillOpacity: 0.9, weight: 2 })
+      .bindTooltip(city.name, { permanent: true, direction: 'top', className: 'map-tip', offset: [0, -8] })
       .addTo(miniMap);
-    // Draw route line
-    L.polyline([[cityLat, cityLng], [spotLat, spotLng]], {
-      color: '#d4a537', weight: 2, opacity: 0.7, dashArray: '6,4'
-    }).addTo(miniMap);
-    // Fit both points
-    miniMap.fitBounds([[cityLat, cityLng], [spotLat, spotLng]], { padding: [20, 20] });
+
+    // Draw step-by-step route using waypoints
+    if (spot.waypoints && spot.waypoints.length > 1) {
+      const routePoints = spot.waypoints.map(wp => tibiaToLeaflet(wp[0], wp[1]));
+      // Dashed route line through all waypoints
+      L.polyline(routePoints, {
+        color: '#d4a537', weight: 3, opacity: 0.85, dashArray: '8,5'
+      }).addTo(miniMap);
+      // Small dots at each waypoint (except first=city and last=spot)
+      for (let i = 1; i < routePoints.length - 1; i++) {
+        L.circleMarker(routePoints[i], {
+          radius: 3, color: '#d4a537', fillColor: '#f0d68a', fillOpacity: 0.8, weight: 1
+        }).addTo(miniMap);
+      }
+      // Fit all waypoints
+      miniMap.fitBounds(routePoints, { padding: [25, 25] });
+    } else {
+      // Fallback: straight line city→spot
+      L.polyline([[cityLat, cityLng], [spotLat, spotLng]], {
+        color: '#d4a537', weight: 3, opacity: 0.85, dashArray: '8,5'
+      }).addTo(miniMap);
+      miniMap.fitBounds([[cityLat, cityLng], [spotLat, spotLng]], { padding: [25, 25] });
+    }
   } else {
     miniMap.setView([spotLat, spotLng], 1);
   }
 
-  // Spot marker
-  L.circleMarker([spotLat, spotLng], { radius: 6, color: '#d4a537', fillColor: '#d4a537', fillOpacity: 1, weight: 2 })
-    .bindTooltip(spot.name, { permanent: true, direction: 'top', className: 'map-tip', offset: [0, -8] })
+  // Spot marker (larger, with pulsing effect via className)
+  L.circleMarker([spotLat, spotLng], { radius: 8, color: '#d4a537', fillColor: '#d4a537', fillOpacity: 1, weight: 2 })
+    .bindTooltip(spot.name, { permanent: true, direction: 'top', className: 'map-tip', offset: [0, -10] })
     .addTo(miniMap);
 }
 

@@ -4,6 +4,10 @@
 // ================================================================
 const WIKI_IMG = name => `https://tibia.fandom.com/wiki/Special:Redirect/file/${encodeURIComponent(name.replace(/ /g,'_'))}.gif`;
 const TIBIA_IMG = race => `https://static.tibia.com/images/library/${encodeURIComponent(race)}.gif`;
+const CHARM_IMG = key => {
+  const map = {wound:'Wound',freeze:'Freeze',zap:'Zap',enflame:'Enflame',curse:'Curse_(Charm)',divine_wrath:'Divine_Wrath',poison:'Poison',dodge:'Dodge',parry:'Parry',low_blow:'Low_Blow',cripple:'Cripple',gut:'Gut',adrenaline_burst:'Adrenaline_Burst',numb:'Numb',cleanse:'Cleanse',bless:'Bless',wound_or_zap:'Wound'};
+  return `https://tibia.fandom.com/wiki/Special:Redirect/file/${map[key] || 'Wound'}.png`;
+};
 
 // Element definitions
 const ELEMENTS = [
@@ -56,7 +60,8 @@ const CITIES = [
   {name:"Svargrond",cx:32267,cy:31131},{name:"Yalahar",cx:32792,cy:31274},
   {name:"Rathleton",cx:33594,cy:31899},{name:"Roshamuul",cx:33513,cy:32363},
   {name:"Issavi",cx:33921,cy:31428},{name:"Feyrist",cx:33558,cy:32224},
-  {name:"Rookgaard",cx:32097,cy:32205},{name:"Dawnport",cx:32070,cy:31932}
+  {name:"Rookgaard",cx:32097,cy:31895},{name:"Dawnport",cx:32070,cy:31932},
+  {name:"Zao",cx:33290,cy:31500}
 ];
 
 // ================================================================
@@ -67,8 +72,9 @@ const HUNTING_SPOTS = [
   name:"Edron Werecreatures",
   city:"Edron",level:[80,150],voc:["knight","paladin","sorcerer","druid"],
   team:"solo",expH:"800k-1.5kk",profitH:"200k-500k",
-  cx:33510,cy:31660,
+  cx:33333,cy:31690,
   route:"From Edron depot go east across the bridge. Continue east past the academy. Enter Grimvale cave entrance near the mountain.",
+  waypoints:[[33217,31814],[33250,31800],[33280,31770],[33310,31730],[33333,31690]],
   access:"Grimvale Quest (short access). Only during full moon phase!",
   premium:true,
   creatures:[
@@ -97,8 +103,9 @@ const HUNTING_SPOTS = [
   name:"Darashia Dragon Lair",
   city:"Darashia",level:[40,80],voc:["knight","paladin"],
   team:"solo",expH:"200k-400k",profitH:"30k-80k",
-  cx:33210,cy:32490,
+  cx:33264,cy:32277,
   route:"From Darashia depot head north-east. Follow the sand path past the gardens. Enter the dragon cave opening in the mountain.",
+  waypoints:[[33224,32432],[33230,32400],[33240,32360],[33255,32320],[33264,32277]],
   access:"None — free access.",
   premium:false,
   creatures:[
@@ -122,8 +129,9 @@ const HUNTING_SPOTS = [
   name:"Ghastly Dragons — Zao",
   city:"Zao",level:[130,200],voc:["knight","paladin"],
   team:"solo",expH:"1kk-1.8kk",profitH:"150k-350k",
-  cx:33290,cy:31150,
+  cx:33450,cy:31580,
   route:"From Zao outpost use the steamship or walk south-east into the steppe. Enter the underground dragon tunnels heading deep.",
+  waypoints:[[33290,31500],[33320,31510],[33360,31530],[33410,31560],[33450,31580]],
   access:"The New Frontier + Children of the Revolution quests required.",
   premium:true,
   creatures:[
@@ -146,8 +154,9 @@ const HUNTING_SPOTS = [
   name:"Lizard City — Zao",
   city:"Zao",level:[100,150],voc:["knight","paladin","sorcerer","druid"],
   team:"solo",expH:"600k-1.2kk",profitH:"100k-250k",
-  cx:33300,cy:31200,
+  cx:33316,cy:31558,
   route:"From Zao outpost head south through the steppe into the city ruins. Cross the bridge and enter the main area.",
+  waypoints:[[33290,31500],[33300,31520],[33310,31540],[33316,31558]],
   access:"The New Frontier + Children of the Revolution quests.",
   premium:true,
   creatures:[
@@ -176,6 +185,7 @@ const HUNTING_SPOTS = [
   team:"team",expH:"3kk-6kk",profitH:"500k-1.5kk",
   cx:33650,cy:31910,
   route:"From Rathleton depot take the underground steam system south. Follow tunnels to the Oramond entrance, then navigate to the Minotaur area.",
+  waypoints:[[33594,31899],[33610,31900],[33630,31905],[33650,31910]],
   access:"Oramond Quest — need 40 daily task completions (voting + tasks). This takes ~2 weeks!",
   premium:true,
   creatures:[
@@ -205,6 +215,7 @@ const HUNTING_SPOTS = [
   team:"solo",expH:"1kk-2kk",profitH:"300k-700k",
   cx:33660,cy:31900,
   route:"From Rathleton depot head to the Oramond underground system. Glooth Bandits area is in the first section — easier access than Minos.",
+  waypoints:[[33594,31899],[33620,31900],[33640,31900],[33660,31900]],
   access:"Oramond Quest — basic access (fewer tasks than Minos, ~1 week).",
   premium:true,
   creatures:[
@@ -229,8 +240,9 @@ const HUNTING_SPOTS = [
   name:"Asura Palace",
   city:"Port Hope",level:[150,250],voc:["knight","paladin","sorcerer","druid"],
   team:"solo",expH:"1.5kk-3kk",profitH:"200k-600k",
-  cx:32620,cy:32760,
-  route:"From Port Hope depot head south into the jungle. Navigate the jungle paths south-east. The palace entrance is underground — look for the stone stairs.",
+  cx:32953,cy:32685,
+  route:"From Port Hope depot head east through the jungle. Navigate the mountain paths north-east. The palace entrance is underground in the Kha'zeel mountains.",
+  waypoints:[[32623,32753],[32680,32740],[32750,32720],[32820,32710],[32900,32695],[32953,32685]],
   access:"Short access quest from Port Hope NPCs (Jakundaf Desert Library access).",
   premium:true,
   creatures:[
@@ -257,8 +269,9 @@ const HUNTING_SPOTS = [
   name:"Frost Dragons",
   city:"Svargrond",level:[80,140],voc:["knight","paladin"],
   team:"solo",expH:"400k-800k",profitH:"80k-200k",
-  cx:32350,cy:31050,
+  cx:32230,cy:31412,
   route:"From Svargrond take the boat to Okolnir island. Walk north across the ice to the cave entrance. Go down into the frost dragon tunnels.",
+  waypoints:[[32267,31131],[32260,31200],[32250,31280],[32240,31350],[32230,31412]],
   access:"The Ice Islands Quest required for Okolnir boat access.",
   premium:true,
   creatures:[
@@ -281,8 +294,9 @@ const HUNTING_SPOTS = [
   name:"Draken Walls — Zao",
   city:"Zao",level:[130,200],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"2kk-4kk",profitH:"200k-500k",
-  cx:33340,cy:31230,
-  route:"From Zao outpost navigate through deeper dragon areas south. Cross the lava rivers and follow signs to the Draken fortress entrance.",
+  cx:33350,cy:31700,
+  route:"From Zao outpost navigate south through the steppe, past Zzaion. Cross the lava rivers south to the Draken fortress entrance.",
+  waypoints:[[33290,31500],[33300,31540],[33316,31558],[33330,31600],[33340,31650],[33350,31700]],
   access:"Wrath of the Emperor Quest required.",
   premium:true,
   creatures:[
@@ -311,6 +325,7 @@ const HUNTING_SPOTS = [
   team:"team",expH:"4kk-8kk",profitH:"300k-800k",
   cx:33530,cy:32400,
   route:"From Roshamuul dock navigate the dangerous terrain south-west. Cross the bridge to the prison island entrance. Be careful of surface Guzzlemaws!",
+  waypoints:[[33513,32363],[33520,32370],[33525,32385],[33530,32400]],
   access:"Roshamuul Quest required.",
   premium:true,
   creatures:[
@@ -337,8 +352,9 @@ const HUNTING_SPOTS = [
   name:"Falcon Bastion",
   city:"Edron",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"5kk-10kk",profitH:"500k-2kk",
-  cx:33330,cy:31700,
-  route:"From Edron depot go east across the bridges. Continue far east past the Stonehome area. Enter the Falcon Bastion fortress.",
+  cx:33362,cy:31343,
+  route:"From Edron depot go east across the bridges. Take the boat north-east to Stonehome. Head north into the Falcon Bastion fortress.",
+  waypoints:[[33217,31814],[33250,31780],[33280,31720],[33310,31600],[33330,31500],[33350,31400],[33362,31343]],
   access:"Grave Danger Quest required.",
   premium:true,
   creatures:[
@@ -364,8 +380,9 @@ const HUNTING_SPOTS = [
   name:"Secret Library",
   city:"Edron",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"8kk-15kk",profitH:"200k-600k",
-  cx:32760,cy:32750,
-  route:"Access through portals after completing the Secret Library Quest. Different wings accessible from different portal locations.",
+  cx:32177,cy:31927,
+  route:"Access through portals in north-western Tiquanda after completing the Secret Library Quest. Different wings accessible from different portal locations.",
+  waypoints:[[32369,32241],[32300,32150],[32250,32050],[32200,31980],[32177,31927]],
   access:"Secret Library Quest required.",
   premium:true,
   creatures:[
@@ -389,11 +406,12 @@ const HUNTING_SPOTS = [
   }
 },
 {
-  name:"Cobras — Issavi",
-  city:"Issavi",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
+  name:"Cobras — Cobra Bastion",
+  city:"Ankrahmun",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"5kk-9kk",profitH:"400k-1.2kk",
-  cx:33910,cy:31440,
-  route:"Travel to Issavi on the Kilmaresh continent via boat. The Cobra Bastion is north-east of the city across the desert.",
+  cx:33301,cy:32647,
+  route:"Travel to Cobra Bastion north-east of Ankrahmun. Take the steamship or walk through the desert to reach the bastion entrance.",
+  waypoints:[[33162,32688],[33200,32680],[33250,32660],[33301,32647]],
   access:"Cobra Bastion Quest required (Kilmaresh access first).",
   premium:true,
   creatures:[
@@ -422,6 +440,7 @@ const HUNTING_SPOTS = [
   team:"solo",expH:"1.5kk-3kk",profitH:"150k-400k",
   cx:33560,cy:32220,
   route:"Enter Feyrist through the fairy portal near Carlin or Ab'Dendriel. The portals appear randomly — check TibiaBosses for locations.",
+  waypoints:[[33558,32224],[33560,32220]],
   access:"A Threatened Dream Quest required.",
   premium:true,
   creatures:[
@@ -451,6 +470,7 @@ const HUNTING_SPOTS = [
   city:"Rathleton",level:[200,300],voc:["knight","paladin","sorcerer","druid"],
   team:"solo",expH:"2kk-4kk",profitH:"300k-800k",
   cx:33620,cy:31850,
+  waypoints:[[33594,31899],[33600,31890],[33610,31870],[33620,31850]],
   route:"From Rathleton use the underground tunnel system east. Navigate through the sewer-like passages to reach the pirate hideout.",
   access:"Oramond access required. Short mission.",
   premium:true,
@@ -477,10 +497,11 @@ const HUNTING_SPOTS = [
 },
 {
   name:"Flimsy Lost Souls",
-  city:"Darashia",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
+  city:"Thais",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"6kk-12kk",profitH:"400k-1kk",
-  cx:33200,cy:32450,
-  route:"From Darashia depot head to the underground soul spawns. Access through the questline portal south of the city.",
+  cx:31965,cy:32328,
+  route:"Access through the Brain Grounds portal west of Venore. Requires Soul War Quest access.",
+  waypoints:[[32369,32241],[32250,32260],[32100,32290],[31965,32328]],
   access:"Feaster of Souls Quest required.",
   premium:true,
   creatures:[
@@ -505,10 +526,11 @@ const HUNTING_SPOTS = [
 },
 {
   name:"Ferumbras Tower",
-  city:"Edron",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
+  city:"Liberty Bay",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"5kk-10kk",profitH:"400k-1.5kk",
-  cx:33280,cy:31720,
-  route:"From Edron depot head far east. Enter the Ferumbras Ascendant tower after completing the quest.",
+  cx:32121,cy:32688,
+  route:"From Liberty Bay take the boat to Kharos island. Enter the Ferumbras Citadel after completing the quest.",
+  waypoints:[[32317,32826],[32250,32800],[32200,32750],[32150,32710],[32121,32688]],
   access:"Ferumbras' Ascension Quest required.",
   premium:true,
   creatures:[
@@ -535,7 +557,8 @@ const HUNTING_SPOTS = [
   name:"Edron Hero Cave",
   city:"Edron",level:[60,100],voc:["knight","paladin"],
   team:"solo",expH:"300k-500k",profitH:"50k-120k",
-  cx:33260,cy:31700,
+  cx:33179,cy:31922,
+  waypoints:[[33217,31814],[33210,31840],[33200,31870],[33190,31900],[33179,31922]],
   route:"From Edron depot go south past the academy building. Continue south-east towards the mountain. The cave entrance is at the base of the hill.",
   access:"None — free access.",
   premium:false,
@@ -561,6 +584,7 @@ const HUNTING_SPOTS = [
   city:"Kazordoon",level:[50,80],voc:["knight","druid"],
   team:"solo",expH:"200k-350k",profitH:"30k-60k",
   cx:32580,cy:31900,
+  waypoints:[[32631,31925],[32610,31915],[32595,31908],[32580,31900]],
   route:"From Kazordoon depot take the mine cart system down. Follow signs to the Spike entrance in the lower levels of the city.",
   access:"Spike Tasks Quest — talk to Gnome NPCs in Kazordoon.",
   premium:true,
@@ -587,6 +611,7 @@ const HUNTING_SPOTS = [
   city:"Edron",level:[60,100],voc:["knight","paladin","druid"],
   team:"solo",expH:"350k-600k",profitH:"40k-100k",
   cx:33540,cy:31610,
+  waypoints:[[33594,31899],[33580,31850],[33570,31780],[33560,31700],[33550,31650],[33540,31610]],
   route:"From Edron take the boat/teleport to Krailos. The steppe hunting grounds are on the surface — head north from the arrival point.",
   access:"None after reaching Krailos.",
   premium:true,
@@ -613,7 +638,8 @@ const HUNTING_SPOTS = [
   name:"Demon Forge — Goroma",
   city:"Liberty Bay",level:[200,350],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"3kk-5kk",profitH:"200k-500k",
-  cx:32350,cy:32530,
+  cx:32095,cy:32583,
+  waypoints:[[32317,32826],[32280,32800],[32220,32750],[32170,32700],[32130,32650],[32095,32583]],
   route:"From Liberty Bay take the boat to Goroma island. Navigate through the volcanic terrain south to the demon forge entrance.",
   access:"None after reaching Goroma.",
   premium:true,
@@ -638,9 +664,10 @@ const HUNTING_SPOTS = [
 },
 {
   name:"Soul War — Zarganash",
-  city:"Feyrist",level:[300,999],voc:["knight","paladin","sorcerer","druid"],
+  city:"Rathleton",level:[300,999],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"10kk-20kk",profitH:"500k-2kk",
-  cx:33560,cy:32230,
+  cx:33604,cy:31495,
+  waypoints:[[33594,31899],[33580,31800],[33570,31700],[33560,31600],[33580,31550],[33604,31495]],
   route:"Enter Zarganash through the Feyrist portal. Navigate through soul planes — different taint levels unlock different areas.",
   access:"Soul War Quest required (many prerequisites, months of preparation).",
   premium:true,
