@@ -8,13 +8,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="css/style.css?v=1.0.2">
+  <link rel="stylesheet" href="css/style.css?v=1.0.3">
   <style>
     .map-tip{background:var(--bg-card)!important;border:1px solid var(--border)!important;color:var(--parchment)!important;font-family:'Crimson Text',serif!important;font-size:12px!important;padding:6px 10px!important;border-radius:var(--r)!important;box-shadow:0 4px 12px rgba(0,0,0,.5)!important}
     .map-tip::before{border-top-color:var(--bg-card)!important}
     .map-city-label{background:none!important;border:none!important}
     .leaflet-control-zoom a{background:var(--bg-card)!important;color:var(--gold)!important;border-color:var(--border)!important}
-    .hunt-card-creatures img,.hunt-card-creatures .hcc-icon{display:inline-block!important;width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;object-fit:fill!important;image-rendering:pixelated;border-radius:4px;background:var(--bg-input);border:1px solid var(--border)}
+    .hcc-wrap{width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0;border-radius:4px;background:var(--bg-input);border:1px solid var(--border)}
+    .hcc-wrap img,.hunt-card-creatures img{width:100%!important;height:100%!important;image-rendering:pixelated}
     .leaflet-popup-content-wrapper{background:var(--bg-card)!important;color:var(--parchment)!important;border:1px solid var(--border)!important;border-radius:var(--r)!important}
     .leaflet-popup-tip{background:var(--bg-card)!important}
     .leaflet-popup-close-button{color:var(--gold)!important}
@@ -96,7 +97,7 @@
       </div>
       <div class="sidebar-footer">
         Created by <a href="https://grindarestudio.com" target="_blank">Grindare Studio</a>
-        <div style="font-size:9px;color:rgba(212,165,55,.3);margin-top:4px" id="tv-ver">v1.0.2</div>
+        <div style="font-size:9px;color:rgba(212,165,55,.3);margin-top:4px" id="tv-ver">v1.0.3</div>
       </div>
     </nav>
 
@@ -227,7 +228,10 @@
             <div class="bi-stat"><span class="bi-num" id="biVerified">—</span><span class="bi-lbl">Verified Routes</span></div>
             <div class="bi-stat bi-stat-hl"><span class="bi-num" id="biVocMatch">—</span><span class="bi-lbl">For Your Vocation</span></div>
           </div>
-          <div class="bi-char" id="biChar"></div>
+          <div class="bi-char-row">
+            <div class="bi-char" id="biChar"></div>
+            <div class="bi-alts-panel" id="biAlts"></div>
+          </div>
         </div>
         <div class="filters">
           <div class="fg">
@@ -563,8 +567,8 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/data.js?v=1.0.2"></script>
-  <script src="js/app.js?v=1.0.2"></script>
+  <script src="js/data.js?v=1.0.3"></script>
+  <script src="js/app.js?v=1.0.3"></script>
   <script>
     // Filter helpers for inline onclick handlers
     function setHuntVoc(btn, voc) {

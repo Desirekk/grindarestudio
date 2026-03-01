@@ -589,16 +589,6 @@ function updateBuildCharInfo(ch, acct, worldData, otherChars) {
     <div class="bi-char-field"><span class="bi-fl">Last Login</span><span class="bi-fv">${login}</span></div>
     <div class="bi-char-field"><span class="bi-fl">Sex</span><span class="bi-fv">${esc(ch.sex || '?')}</span></div>
   </div>`;
-  // Other characters (compact chips)
-  const others = (otherChars || []).filter(c => c.name !== ch.name && !c.deleted);
-  if (others.length > 0) {
-    html += `<div class="bi-divider"></div>
-    <div class="bi-section-label">Other Characters (${others.length}) <span style="font-family:'Crimson Text',serif;font-weight:400;font-size:9px;color:var(--parch-dim);letter-spacing:0;text-transform:none">· hidden characters are not shown</span></div>
-    <div class="bi-alts">${others.map(c => {
-      const n = esc(c.name).replace(/'/g,"\\'");
-      return `<span class="bi-alt${c.status === 'online' ? ' bi-alt-on' : ''}" title="${esc(c.world)} — click to switch" onclick="switchToAlt('${n}')">${esc(c.name)} <span class="bi-alt-w">${esc(c.world)}</span></span>`;
-    }).join('')}</div>`;
-  }
   if (worldData) {
     const w = worldData;
     html += `<div class="bi-divider"></div>
@@ -613,6 +603,22 @@ function updateBuildCharInfo(ch, acct, worldData, otherChars) {
     </div>`;
   }
   el.innerHTML = html;
+  // Other Characters — separate panel
+  const altsEl = document.getElementById('biAlts');
+  if (altsEl) {
+    const others = (otherChars || []).filter(c => c.name !== ch.name && !c.deleted);
+    if (others.length > 0) {
+      altsEl.innerHTML = `<div class="bi-section-label">Other Characters (${others.length}) <span style="font-family:'Crimson Text',serif;font-weight:400;font-size:9px;color:var(--parch-dim);letter-spacing:0;text-transform:none">· hidden not shown</span></div>
+      <div class="bi-alts">${others.map(c => {
+        const n = esc(c.name).replace(/'/g,"\\'");
+        return `<span class="bi-alt${c.status === 'online' ? ' bi-alt-on' : ''}" title="${esc(c.world)} — click to switch" onclick="switchToAlt('${n}')">${esc(c.name)} <span class="bi-alt-w">${esc(c.world)}</span></span>`;
+      }).join('')}</div>`;
+      altsEl.style.display = '';
+    } else {
+      altsEl.innerHTML = '';
+      altsEl.style.display = 'none';
+    }
+  }
 }
 
 function updateBuildStats() {
@@ -743,7 +749,7 @@ function renderHunting() {
         <div class="hunt-card-stat"><span class="hcs-val">${s.expH || '?'}</span><span class="hcs-label">EXP/h</span></div>
         <div class="hunt-card-stat"><span class="hcs-val">${s.profitH || '?'}</span><span class="hcs-label">Profit/h</span></div>
       </div>
-      <div class="hunt-card-creatures">${s.creatures.slice(0,5).map(c=>{const cn=typeof c==='string'?c:c.name;return`<img src="${WIKI_IMG(cn)}" alt="${esc(cn)}" title="${esc(cn)}" width="40" height="40" style="display:block;width:40px;height:40px;object-fit:fill;image-rendering:pixelated;border-radius:4px;background:#1a1510;border:1px solid rgba(212,165,55,.15)" onerror="this.style.display='none'">`}).join('')}${s.creatures.length > 5 ? `<span class="hcc-more">+${s.creatures.length-5}</span>` : ''}</div>
+      <div class="hunt-card-creatures">${s.creatures.slice(0,5).map(c=>{const cn=typeof c==='string'?c:c.name;return`<div class="hcc-wrap" title="${esc(cn)}"><img src="${WIKI_IMG(cn)}" alt="${esc(cn)}" onerror="this.parentElement.style.display='none'"></div>`}).join('')}${s.creatures.length > 5 ? `<span class="hcc-more">+${s.creatures.length-5}</span>` : ''}</div>
       <div class="hunt-card-rating">${starsHtml}</div>
     </div>`;
   }).join('') + '</div>' : '<div class="empty">No spots match your filters.</div>';
