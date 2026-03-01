@@ -8,6 +8,8 @@ const MAP_URL = f => `https://tibiamaps.github.io/tibia-map-data/floor-${String(
 const MAP_W = 2560, MAP_H = 2048;
 const MAP_X0 = 31744, MAP_X1 = 34304, MAP_Y0 = 30976, MAP_Y1 = 33024;
 const PER_PAGE = 60;
+const VOC_SHORT = {knight:'EK',paladin:'RP',sorcerer:'MS',druid:'ED',monk:'MO'};
+const vocAbbr = v => VOC_SHORT[v] || v.substring(0,2).toUpperCase();
 
 // Caches
 const cache = { creatures: null, creatureDetail: {}, wikiDetail: {}, spells: null, worlds: null, news: null };
@@ -711,7 +713,7 @@ function renderHunting() {
   updateBuildStats();
 
   container.innerHTML = filtered.length ? '<div class="hunt-grid">' + filtered.map((s, idx) => {
-    const vocBadges = s.voc.map(v => `<span class="hunt-voc">${v.substring(0,2).toUpperCase()}</span>`).join('');
+    const vocBadges = s.voc.map(v => `<span class="hunt-voc">${vocAbbr(v)}</span>`).join('');
     const mainCreature = s.creatures[0] ? (typeof s.creatures[0]==='string'?s.creatures[0]:s.creatures[0].name) : '';
     const rating = getSpotRating(s.name);
     const jsName = s.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
@@ -830,7 +832,7 @@ function openHuntModal(idx) {
 
   // Stars (interactive)
   const mainCreature = s.creatures[0] ? (typeof s.creatures[0]==='string'?s.creatures[0]:s.creatures[0].name) : '';
-  const vocBadges = s.voc.map(v => `<span class="hunt-voc">${v.substring(0,2).toUpperCase()}</span>`).join('');
+  const vocBadges = s.voc.map(v => `<span class="hunt-voc">${vocAbbr(v)}</span>`).join('');
 
   // Build hunt mode badges with level ranges for modal
   const modalModeBadges = ['solo','duo','team'].filter(m => s.huntModes?.[m]).map(m => {
@@ -1311,7 +1313,8 @@ function filterSpells() {
   const body = document.getElementById('spellsBody');
   body.innerHTML = filtered.length ? filtered.map(s => {
     const vocs = (s.vocations || []).map(v => {
-      const short = v.replace('Elder ', 'E').replace('Royal ', 'R').substring(0, 2).toUpperCase();
+      const base = v.toLowerCase().replace('elite ','').replace('royal ','').replace('master ','').replace('elder ','');
+      const short = vocAbbr(base);
       return `<span class="badge bg-gold" style="font-size:8px;padding:1px 4px">${short}</span>`;
     }).join(' ');
     const formula = s.spell_id || s.formula || '';
@@ -2103,7 +2106,7 @@ function editorSubmit() {
     { name: 'Spot', value: name, inline: true },
     { name: 'City', value: city, inline: true },
     { name: 'Level', value: lvlMin && lvlMax ? `${lvlMin}-${lvlMax}` : 'Not specified', inline: true },
-    { name: 'Vocations', value: vocs.length ? vocs.map(v => v.substring(0, 2).toUpperCase()).join(', ') : 'All', inline: true }
+    { name: 'Vocations', value: vocs.length ? vocs.map(v => vocAbbr(v)).join(', ') : 'All', inline: true }
   ];
 
   if (editor.waypoints.length > 0) {

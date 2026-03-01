@@ -250,8 +250,8 @@ tr:hover td{background:rgba(212,165,55,.03)}
 .hunt-card-stat .hcs-val{font-family:'Cinzel',serif;font-size:15px;color:var(--gold-light);font-weight:700;display:block}
 .hunt-card-stat .hcs-label{font-size:9px;color:var(--parch-dim);text-transform:uppercase;letter-spacing:.4px}
 /* Card creatures row */
-.hunt-card-creatures{display:flex;gap:4px;padding:8px 14px 4px;align-items:center}
-.hunt-card-creatures img{width:28px;height:28px;image-rendering:auto;border-radius:4px;background:rgba(0,0,0,.2);padding:1px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
+.hunt-card-creatures{display:flex;gap:6px;padding:8px 14px 4px;align-items:center;flex-wrap:wrap}
+.hunt-card-creatures img{width:40px;height:40px;image-rendering:auto;border-radius:var(--r);background:var(--bg-input);border:1px solid var(--border);padding:2px;object-fit:contain;filter:drop-shadow(0 1px 4px rgba(0,0,0,.4))}
 .hunt-card-creatures .hcc-more{font-size:10px;color:var(--parch-dim);margin-left:2px}
 /* Card rating */
 .hunt-card-rating{padding:4px 14px 12px}
