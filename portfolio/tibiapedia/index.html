@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="css/style.css?v=5">
+  <link rel="stylesheet" href="css/style.css?v=6">
   <style>
     .map-tip{background:var(--bg-card)!important;border:1px solid var(--border)!important;color:var(--parchment)!important;font-family:'Crimson Text',serif!important;font-size:12px!important;padding:6px 10px!important;border-radius:var(--r)!important;box-shadow:0 4px 12px rgba(0,0,0,.5)!important}
     .map-tip::before{border-top-color:var(--bg-card)!important}
@@ -183,14 +183,10 @@
           <div class="cta-content">
             <div class="cta-headline">Help Build the Best Route Database!</div>
             <div class="cta-body">
-              Create or fix hunting spot guides and get rewarded:
-              <ul>
-                <li><b>Route Creator</b> — submit full hunting guides, win <b>250 TC/week</b></li>
-                <li><b>Spot Editor</b> — fix creatures, gear, imbuements, win <b>50 TC/week</b></li>
-              </ul>
+              Submit new guides to enter the <b>250 TC weekly draw</b> · Fix spots to enter the <b>50 TC weekly draw</b>
             </div>
             <div class="cta-buttons">
-              <button class="btn-s btn-g" onclick="switchHuntTab('editor',document.querySelector('.hunt-tab:last-child'))">Open Route Editor</button>
+              <button class="btn-s btn-g" onclick="switchHuntTab('editor',document.querySelector('.hunt-tab-create'))">Open Route Editor</button>
               <a href="https://discord.gg/dknTHjkYCg" target="_blank" class="btn-s" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px">Join Discord</a>
             </div>
           </div>
@@ -198,8 +194,10 @@
 
         <!-- Sub-tabs -->
         <div class="hunt-tabs">
-          <button class="hunt-tab active" onclick="switchHuntTab('browse',this)">Browse Spots</button>
-          <button class="hunt-tab" onclick="switchHuntTab('editor',this)">Route Editor</button>
+          <button class="hunt-tab active" onclick="switchHuntTab('browse',this,'solo')">Solo Hunts</button>
+          <button class="hunt-tab" onclick="switchHuntTab('browse',this,'duo')">Duo Hunts</button>
+          <button class="hunt-tab" onclick="switchHuntTab('browse',this,'team')">Team Hunts</button>
+          <button class="hunt-tab hunt-tab-create" onclick="switchHuntTab('editor',this)">+ Create Route</button>
         </div>
         <!-- TAB: Browse Spots -->
         <div class="hunt-tab-content active" id="htab-browse">
@@ -299,6 +297,38 @@
                 </div>
               </div>
               <div class="ed-field">
+                <label>Hunt Modes</label>
+                <div class="ed-hunt-modes">
+                  <div class="ed-hm-row">
+                    <label class="ed-hm-check"><input type="checkbox" id="edHmSolo" value="solo" checked> Solo</label>
+                    <label class="ed-hm-range-toggle"><input type="checkbox" id="edHmSoloSame" checked> Same as spot range</label>
+                    <div class="ed-hm-range" id="edHmSoloRange" style="display:none">
+                      <input type="number" id="edHmSoloMin" placeholder="Min" min="1" max="9999" style="width:70px">
+                      <span>–</span>
+                      <input type="number" id="edHmSoloMax" placeholder="Max" min="1" max="9999" style="width:70px">
+                    </div>
+                  </div>
+                  <div class="ed-hm-row">
+                    <label class="ed-hm-check"><input type="checkbox" id="edHmDuo" value="duo"> Duo</label>
+                    <label class="ed-hm-range-toggle"><input type="checkbox" id="edHmDuoSame" checked> Same as spot range</label>
+                    <div class="ed-hm-range" id="edHmDuoRange" style="display:none">
+                      <input type="number" id="edHmDuoMin" placeholder="Min" min="1" max="9999" style="width:70px">
+                      <span>–</span>
+                      <input type="number" id="edHmDuoMax" placeholder="Max" min="1" max="9999" style="width:70px">
+                    </div>
+                  </div>
+                  <div class="ed-hm-row">
+                    <label class="ed-hm-check"><input type="checkbox" id="edHmTeam" value="team"> Team</label>
+                    <label class="ed-hm-range-toggle"><input type="checkbox" id="edHmTeamSame" checked> Same as spot range</label>
+                    <div class="ed-hm-range" id="edHmTeamRange" style="display:none">
+                      <input type="number" id="edHmTeamMin" placeholder="Min" min="1" max="9999" style="width:70px">
+                      <span>–</span>
+                      <input type="number" id="edHmTeamMax" placeholder="Max" min="1" max="9999" style="width:70px">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="ed-field">
                 <label>Access / Quest Requirements</label>
                 <textarea id="edAccess" rows="2" placeholder="e.g. Free access, no quest needed"></textarea>
               </div>
@@ -349,8 +379,8 @@
               </div>
               <div class="ed-reward-info" style="padding:10px 12px;background:rgba(212,165,55,.06);border:1px solid rgba(212,165,55,.15);border-radius:var(--r);font-size:11px;color:var(--parch-dim);line-height:1.6;margin-bottom:10px">
                 <b style="color:var(--gold)">Rewards:</b><br>
-                ★ <b>New full spot</b> = Route Creator role + 250 TC weekly giveaway<br>
-                ★ <b>Edit existing spot</b> = Spot Editor role + 50 TC weekly giveaway
+                ★ <b>New full spot</b> = Route Creator role + entry into 250 TC weekly giveaway draw<br>
+                ★ <b>Edit existing spot</b> = Spot Editor role + entry into 50 TC weekly giveaway draw
               </div>
               <div class="ed-actions">
                 <button class="btn-s" onclick="editorPreview()">Preview Route</button>
@@ -543,9 +573,17 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/data.js?v=5"></script>
-  <script src="js/app.js?v=5"></script>
+  <script src="js/data.js?v=6"></script>
+  <script src="js/app.js?v=6"></script>
   <script>
+    // Hunt mode range toggles
+    document.querySelectorAll('.ed-hm-range-toggle input').forEach(cb => {
+      cb.addEventListener('change', function() {
+        const mode = this.id.replace('edHm','').replace('Same','').toLowerCase();
+        const rangeEl = document.getElementById('edHm' + mode.charAt(0).toUpperCase() + mode.slice(1) + 'Range');
+        if (rangeEl) rangeEl.style.display = this.checked ? 'none' : 'flex';
+      });
+    });
     // Filter helpers for inline onclick handlers
     function setHuntVoc(btn, voc) {
       btn.parentElement.querySelectorAll('.fb').forEach(b => b.classList.remove('active'));

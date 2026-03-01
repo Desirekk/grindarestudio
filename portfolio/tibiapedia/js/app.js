@@ -15,7 +15,7 @@ const cache = { creatures: null, creatureDetail: {}, wikiDetail: {}, spells: nul
 // State
 const state = {
   panel: 'news', bestiary: { list: [], filtered: [], page: 0, search: '', detail: null },
-  hunting: { voc: 'all', levelMin: 0, levelMax: 9999, myVoc: 'knight', myLevel: 150 },
+  hunting: { voc: 'all', levelMin: 0, levelMax: 9999, myVoc: 'knight', myLevel: 150, huntMode: 'solo' },
   equip: { voc: 'knight', bracket: '8-30' },
   quests: { search: '', level: 0, premium: 'all' },
   spells: { voc: 'all', type: 'all', search: '' },
@@ -578,15 +578,19 @@ let _filteredSpots = [];
 function renderHunting() {
   const container = document.getElementById('huntingGrid');
   if (!container) return;
-  const { voc, levelMin, levelMax, myLevel } = state.hunting;
+  const { voc, levelMin, levelMax, myLevel, huntMode } = state.hunting;
   const filtered = HUNTING_SPOTS.map((s, origIdx) => ({ ...s, _origIdx: origIdx })).filter(s => {
+    // Hunt mode filter
+    const modeRange = getHuntModeRange(s, huntMode);
+    if (!modeRange) return false;
     if (voc !== 'all') {
       let matchVoc = s.voc.includes(voc);
       if (!matchVoc && voc === 'monk') matchVoc = s.voc.includes('knight');
       if (!matchVoc) return false;
     }
-    if (s.level[0] > levelMax || s.level[1] < levelMin) return false;
-    if (myLevel > 0 && (myLevel < s.level[0] - 20 || myLevel > s.level[1] + 50)) return false;
+    // Use mode-specific range for level filtering
+    if (modeRange[0] > levelMax || modeRange[1] < levelMin) return false;
+    if (myLevel > 0 && (myLevel < modeRange[0] - 20 || myLevel > modeRange[1] + 50)) return false;
     return true;
   });
 
@@ -597,7 +601,15 @@ function renderHunting() {
     const vocBadges = s.voc.map(v => `<span class="hunt-voc">${v.substring(0,2).toUpperCase()}</span>`).join('');
     const mainCreature = s.creatures[0] ? (typeof s.creatures[0]==='string'?s.creatures[0]:s.creatures[0].name) : '';
     const rating = getSpotRating(s.name);
-    const jsName = s.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+
+    // Mode-specific level range
+    const modeRange = getHuntModeRange(s, huntMode);
+    const lvlLabel = modeRange ? `${modeRange[0]}-${modeRange[1]}` : `${s.level[0]}-${s.level[1]}`;
+
+    // Hunt mode badges for all modes this spot supports
+    const modeBadges = ['solo','duo','team'].filter(m => getHuntModeRange(s, m)).map(m =>
+      `<span class="hunt-mode-badge hunt-mode-${m}">${m}</span>`
+    ).join('');
 
     // Stars (non-interactive on card, just display)
     let starsHtml = '<div class="spot-rating">';
@@ -614,8 +626,8 @@ function renderHunting() {
       </div>
       <div class="hunt-card-meta">
         <div class="hunt-vocs">${vocBadges}</div>
-        <span class="hunt-lvl">${s.level[0]}-${s.level[1]}</span>
-        <span class="hunt-team">${s.team || 'solo'}</span>
+        <span class="hunt-lvl">${lvlLabel}</span>
+        ${modeBadges}
         ${s.verified ? '<span class="hunt-verified verified">✓ Verified</span>' : '<span class="hunt-verified unverified">⚠ Unverified</span>'}
       </div>
       <div class="hunt-card-stats">
@@ -713,6 +725,13 @@ function openHuntModal(idx) {
   const mainCreature = s.creatures[0] ? (typeof s.creatures[0]==='string'?s.creatures[0]:s.creatures[0].name) : '';
   const vocBadges = s.voc.map(v => `<span class="hunt-voc">${v.substring(0,2).toUpperCase()}</span>`).join('');
 
+  // Hunt mode badges with level ranges for modal
+  const modalModeBadges = ['solo','duo','team'].map(m => {
+    const r = getHuntModeRange(s, m);
+    if (!r) return '';
+    return `<span class="hunt-mode-badge hunt-mode-${m}">${m} ${r[0]}-${r[1]}</span>`;
+  }).filter(Boolean).join('');
+
   let html = `
     <div class="hunt-modal-hero">
       ${mainCreature ? `<img src="${WIKI_IMG(mainCreature)}" alt="${esc(mainCreature)}" onerror="this.style.display='none'">` : ''}
@@ -721,7 +740,7 @@ function openHuntModal(idx) {
         <div class="hm-badges">
           <div class="hunt-vocs">${vocBadges}</div>
           <span class="hunt-lvl">${s.level[0]}-${s.level[1]}</span>
-          <span class="hunt-team">${s.team || 'solo'}</span>
+          ${modalModeBadges}
           ${s.verified ? '<span class="hunt-verified verified">✓ Verified</span>' : '<span class="hunt-verified unverified">⚠ Unverified</span>'}
           ${renderStars(s.name)}
         </div>
@@ -1663,6 +1682,17 @@ function editorClear() {
   const citySelect = document.getElementById('edCity');
   if (citySelect) citySelect.value = '';
   document.querySelectorAll('.ed-vocs input').forEach(cb => cb.checked = true);
+  // Reset hunt mode fields
+  ['solo','duo','team'].forEach(m => {
+    const cap = m.charAt(0).toUpperCase() + m.slice(1);
+    const cb = document.getElementById('edHm' + cap);
+    if (cb) cb.checked = m === 'solo';
+    const sameCb = document.getElementById('edHm' + cap + 'Same');
+    if (sameCb) sameCb.checked = true;
+    const rangeEl = document.getElementById('edHm' + cap + 'Range');
+    if (rangeEl) rangeEl.style.display = 'none';
+    ['Min','Max'].forEach(s => { const el = document.getElementById('edHm' + cap + s); if (el) el.value = ''; });
+  });
 
   editorSetStatus('');
 }
@@ -1836,6 +1866,29 @@ function editorLoadSpot(idx) {
     cb.checked = spot.voc.includes(cb.value);
   });
 
+  // Hunt modes
+  ['solo','duo','team'].forEach(m => {
+    const cap = m.charAt(0).toUpperCase() + m.slice(1);
+    const cb = document.getElementById('edHm' + cap);
+    const sameCb = document.getElementById('edHm' + cap + 'Same');
+    const rangeEl = document.getElementById('edHm' + cap + 'Range');
+    const minEl = document.getElementById('edHm' + cap + 'Min');
+    const maxEl = document.getElementById('edHm' + cap + 'Max');
+    const val = spot.huntModes?.[m];
+    if (cb) cb.checked = !!val;
+    if (val && val !== true && Array.isArray(val)) {
+      if (sameCb) sameCb.checked = false;
+      if (rangeEl) rangeEl.style.display = 'flex';
+      if (minEl) minEl.value = val[0];
+      if (maxEl) maxEl.value = val[1];
+    } else {
+      if (sameCb) sameCb.checked = true;
+      if (rangeEl) rangeEl.style.display = 'none';
+      if (minEl) minEl.value = '';
+      if (maxEl) maxEl.value = '';
+    }
+  });
+
   // Load existing waypoints
   if (spot.waypoints && spot.waypoints.length > 0) {
     spot.waypoints.forEach(wp => {
@@ -1896,6 +1949,23 @@ function editorSubmit() {
   const vocs = [];
   document.querySelectorAll('.ed-vocs input:checked').forEach(cb => vocs.push(cb.value));
 
+  // Collect hunt modes
+  const huntModes = {};
+  ['solo','duo','team'].forEach(m => {
+    const cap = m.charAt(0).toUpperCase() + m.slice(1);
+    const cb = document.getElementById('edHm' + cap);
+    if (cb && cb.checked) {
+      const sameCb = document.getElementById('edHm' + cap + 'Same');
+      if (sameCb && sameCb.checked) {
+        huntModes[m] = true;
+      } else {
+        const min = parseInt(document.getElementById('edHm' + cap + 'Min')?.value) || 0;
+        const max = parseInt(document.getElementById('edHm' + cap + 'Max')?.value) || 0;
+        huntModes[m] = min && max ? [min, max] : true;
+      }
+    }
+  });
+
   // Validation
   if (!author) { editorSetStatus('Character name is required for Tibia Coins rewards.', 'error'); return; }
   if (!name) { editorSetStatus('Please enter a spot name.', 'error'); return; }
@@ -1936,6 +2006,7 @@ function editorSubmit() {
     name, city,
     level: [lvlMin, lvlMax],
     voc: vocs,
+    huntModes,
     access, route,
     waypoints: waypointsData,
     creatures, imbuements, supplies, equipment, drops, tips,
@@ -2128,12 +2199,16 @@ function submitFeedback(btn, spotIdx) {
 }
 
 // Sub-tab switching for Hunting System
-function switchHuntTab(tab, btn) {
+function switchHuntTab(tab, btn, mode) {
   document.querySelectorAll('.hunt-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.hunt-tab-content').forEach(t => t.classList.remove('active'));
   if (btn) btn.classList.add('active');
   const tabEl = document.getElementById('htab-' + tab);
   if (tabEl) tabEl.classList.add('active');
+  if (tab === 'browse' && mode) {
+    state.hunting.huntMode = mode;
+    renderHunting();
+  }
   if (tab === 'editor') initEditor();
 }
 
@@ -2141,7 +2216,7 @@ function switchHuntTab(tab, btn) {
 function editorFixSpot(idx) {
   showPanel('hunting');
   setTimeout(() => {
-    switchHuntTab('editor', document.querySelector('.hunt-tab:last-child'));
+    switchHuntTab('editor', document.querySelector('.hunt-tab-create'));
     const fixBtn = document.querySelector('.ed-mode-btn[data-mode="fix"]');
     if (fixBtn) editorSetMode('fix', fixBtn);
     document.getElementById('edFixSpot').value = idx;

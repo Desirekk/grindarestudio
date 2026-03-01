@@ -131,6 +131,7 @@ const HUNTING_SPOTS = [
   name:"Edron Werecreatures",
   city:"Edron",level:[80,150],voc:["knight","paladin","sorcerer","druid"],
   team:"solo",expH:"800k-1.5kk",profitH:"200k-500k",
+  huntModes:{solo:[100,150],duo:[80,100]},
   prot:["physical","death"],
   cx:33304,cy:31720,
   route:"From Edron take the boat NE to Stonehome island. The ferryman Cornell takes you to Grimvale. Enter the cave during full moon.",
@@ -247,6 +248,7 @@ const HUNTING_SPOTS = [
   name:"Oramond Minos",
   city:"Rathleton",level:[200,350],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"3kk-6kk",profitH:"500k-1.5kk",
+  huntModes:{team:[200,300],duo:[300,350]},
   prot:["physical","fire"],
   cx:33651,cy:31942,
   route:"From Rathleton depot head east through the city. Cross over the hill to reach the Oramond Eastern Plains. The Minotaur Camp is on the surface with 3 sub-areas: East Plains, North Plains, and Hills.",
@@ -306,6 +308,7 @@ const HUNTING_SPOTS = [
   name:"Asura Palace",
   city:"Port Hope",level:[150,250],voc:["knight","paladin","sorcerer","druid"],
   team:"solo",expH:"1.5kk-3kk",profitH:"200k-600k",
+  huntModes:{solo:[200,250],duo:[150,200]},
   prot:["fire","energy"],
   cx:32953,cy:32685,
   route:"From Port Hope depot head east through the Tiquanda jungle. Climb into the Kha'zeel mountains heading NE. The palace entrance is in the mountain pass — go down stairs into the underground palace.",
@@ -362,6 +365,7 @@ const HUNTING_SPOTS = [
   name:"Draken Walls — Zao",
   city:"Zao",level:[130,200],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"2kk-4kk",profitH:"200k-500k",
+  huntModes:{team:[130,170],duo:[170,200]},
   prot:["fire","energy"],
   cx:33350,cy:31700,
   route:"From Zao outpost navigate south through the steppe, past Zzaion. Cross the lava rivers south to the Draken fortress entrance.",
@@ -392,6 +396,7 @@ const HUNTING_SPOTS = [
   name:"Roshamuul Prison",
   city:"Roshamuul",level:[200,350],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"4kk-8kk",profitH:"300k-800k",
+  huntModes:{team:[200,300],duo:[300,350]},
   prot:["physical","death"],
   cx:33588,cy:32433,
   route:"From Roshamuul temple head south through dangerous terrain. Cross bridge to the prison entrance. Be careful of surface Guzzlemaws!",
@@ -1230,6 +1235,19 @@ const HUNTING_SPOTS = [
   gear:{"250-300":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers","300+"   :"Soulmantle, Soulstrider, Soulbastion, Dreamwalkers"}
 }
 ];
+
+// Backward-compatible migration: team → huntModes
+HUNTING_SPOTS.forEach(s => {
+  if (s.huntModes) return;
+  s.huntModes = s.team === 'team' ? { team: true } : { solo: true };
+});
+
+// Helper: resolve hunt mode range (true → use spot.level, array → use it)
+function getHuntModeRange(spot, mode) {
+  const val = spot.huntModes?.[mode];
+  if (!val) return null;
+  return val === true ? spot.level : val;
+}
 
 // ================================================================
 // EQUIPMENT DATA (with wiki image names)
