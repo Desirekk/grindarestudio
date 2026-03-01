@@ -1,5 +1,5 @@
 // ================================================================
-// TibiaPedia v3 — Game Data
+// TibiaVault — Game Data
 // Wiki image helper: all creature/item images from TibiaWiki
 // ================================================================
 const WIKI_IMG = name => `https://tibia.fandom.com/wiki/Special:Redirect/file/${encodeURIComponent(name.replace(/ /g,'_'))}.gif`;

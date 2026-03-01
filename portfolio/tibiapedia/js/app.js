@@ -1,5 +1,5 @@
 // ================================================================
-// TibiaPedia v3 — Application Logic
+// TibiaVault — Application Logic
 // Dual API: TibiaData (live) + TibiaWiki (rich creature data)
 // ================================================================
 const API = 'https://api.tibiadata.com/v4';
@@ -49,7 +49,7 @@ function showPanel(id) {
   const loaders = {
     news: loadNews, bestiary: loadBestiary, hunting: renderHunting,
     equipment: renderEquipment, quests: renderQuests, spells: loadSpells,
-    map: initMap, character: () => {}, worlds: loadWorlds, calculators: initCalcs
+    map: initMap, editor: initEditor, character: () => {}, worlds: loadWorlds, calculators: initCalcs
   };
   if (loaders[id]) loaders[id]();
 }
@@ -432,7 +432,7 @@ function renderHunting() {
   const container = document.getElementById('huntingGrid');
   if (!container) return;
   const { voc, levelMin, levelMax, myLevel } = state.hunting;
-  const filtered = HUNTING_SPOTS.filter(s => {
+  const filtered = HUNTING_SPOTS.map((s, origIdx) => ({ ...s, _origIdx: origIdx })).filter(s => {
     if (voc !== 'all') {
       let matchVoc = s.voc.includes(voc);
       if (!matchVoc && voc === 'monk') matchVoc = s.voc.includes('knight');
@@ -538,6 +538,8 @@ function renderHunting() {
         <span class="hunt-header-creatures">${s.creatures.slice(0,5).map(c=>{const cn=typeof c==='string'?c:c.name;return`<img src="${WIKI_IMG(cn)}" alt="${esc(cn)}" title="${esc(cn)}" onerror="this.style.display='none'">`}).join('')}</span>
         ${renderStars(s.name)}
         <div class="hunt-badges">
+          ${s.verified ? '<span class="hunt-verified verified" title="Community verified route">&#10003; Verified</span>' : '<span class="hunt-verified unverified" title="Route not yet verified by community">&#9888; Unverified</span>'}
+          <button class="hunt-fix-btn" onclick="event.stopPropagation();editorFixSpot(${s._origIdx})" title="Help fix this route">${s.verified ? 'Improve' : 'Fix Route'}</button>
           <div class="hunt-vocs">${vocBadges}</div>
           <span class="hunt-lvl">${s.level[0]}-${s.level[1]}</span>
           <span class="hunt-team">${s.team || 'solo'}</span>
@@ -1188,4 +1190,482 @@ function esc(str) {
 function formatNum(n) {
   if (n === '?' || n === undefined || n === null) return '?';
   return Number(n).toLocaleString();
+}
+
+// ================================================================
+// ROUTE EDITOR — Community-driven route creation
+// ================================================================
+const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1477661574675300374/4-dtExiQuOKR0nzocTksc9hat3LoTWUrJcFtyEerHwDqRh_A1FP_mylXrMvBLgTfmbou';
+
+const editor = {
+  map: null,
+  overlay: null,
+  floor: 7,
+  waypoints: [],      // [{cx, cy, floor, desc, marker}]
+  routeLayer: null,
+  mode: 'new',        // 'new' or 'fix'
+  fixSpotIdx: -1,
+  initialized: false
+};
+
+function initEditor() {
+  if (editor.initialized) {
+    if (editor.map) editor.map.invalidateSize();
+    return;
+  }
+  editor.initialized = true;
+
+  // Populate city dropdown
+  const citySelect = document.getElementById('edCity');
+  citySelect.innerHTML = '<option value="">— Select city —</option>' +
+    CITIES.map(c => `<option value="${esc(c.name)}">${esc(c.name)}</option>`).join('');
+
+  // Populate fix-existing dropdown
+  const fixSelect = document.getElementById('edFixSpot');
+  fixSelect.innerHTML = '<option value="-1">— Select spot to fix —</option>' +
+    HUNTING_SPOTS.map((s, i) => `<option value="${i}">${esc(s.name)} (${esc(s.city)})</option>`).join('');
+
+  // Initialize Leaflet map
+  const mapEl = document.getElementById('editorMap');
+  if (!mapEl || typeof L === 'undefined') return;
+
+  const bounds = [[0, 0], [MAP_H, MAP_W]];
+  editor.map = L.map('editorMap', {
+    crs: L.CRS.Simple,
+    minZoom: -2,
+    maxZoom: 5,
+    maxBounds: [[-100, -100], [MAP_H + 100, MAP_W + 100]],
+    maxBoundsViscosity: 0.9
+  });
+
+  editor.overlay = L.imageOverlay(MAP_URL(editor.floor), bounds).addTo(editor.map);
+  editor.map.fitBounds(bounds);
+  editor.routeLayer = L.layerGroup().addTo(editor.map);
+
+  // Add city labels for reference
+  CITIES.forEach(c => {
+    const [lat, lng] = tibiaToLeaflet(c.cx, c.cy);
+    L.marker([lat, lng], {
+      icon: L.divIcon({
+        className: 'map-city-label',
+        html: `<span style="color:#3b82f6;font-family:Cinzel,serif;font-size:10px;font-weight:700;text-shadow:0 0 4px #000,0 0 2px #000">${esc(c.name)}</span>`,
+        iconSize: [80, 14],
+        iconAnchor: [40, 7]
+      }),
+      interactive: false
+    }).addTo(editor.map);
+  });
+
+  // Click to add waypoint
+  editor.map.on('click', function(e) {
+    const cx = Math.round(MAP_X0 + (e.latlng.lng / MAP_W) * (MAP_X1 - MAP_X0));
+    const cy = Math.round(MAP_Y0 + ((MAP_H - e.latlng.lat) / MAP_H) * (MAP_Y1 - MAP_Y0));
+    editorAddWaypoint(cx, cy, editor.floor, 'Step ' + (editor.waypoints.length + 1));
+  });
+
+  // Show coords on mouse move
+  editor.map.on('mousemove', function(e) {
+    const cx = Math.round(MAP_X0 + (e.latlng.lng / MAP_W) * (MAP_X1 - MAP_X0));
+    const cy = Math.round(MAP_Y0 + ((MAP_H - e.latlng.lat) / MAP_H) * (MAP_Y1 - MAP_Y0));
+    const coordsEl = document.getElementById('edMapCoords');
+    if (coordsEl) coordsEl.textContent = `X: ${cx}, Y: ${cy}, Z: ${editor.floor}`;
+  });
+
+  editorUpdateFloorLabel();
+}
+
+function editorSetMode(mode, btn) {
+  editor.mode = mode;
+  document.querySelectorAll('.ed-mode-btn').forEach(b => b.classList.toggle('active', b === btn));
+  const fixSelect = document.getElementById('edFixSpot');
+  fixSelect.style.display = mode === 'fix' ? '' : 'none';
+  if (mode === 'new') {
+    editorClear();
+    fixSelect.value = '-1';
+  }
+}
+
+function editorFloor(dir) {
+  const newFloor = editor.floor + dir;
+  if (newFloor < 0 || newFloor > 15) return;
+  editor.floor = newFloor;
+  if (editor.map && editor.overlay) {
+    editor.overlay.setUrl(MAP_URL(newFloor));
+  }
+  editorUpdateFloorLabel();
+  editorDrawRoute();
+}
+
+function editorUpdateFloorLabel() {
+  const df = 7 - editor.floor;
+  const label = df === 0 ? 'Ground' : df > 0 ? '+' + df : String(df);
+  const el = document.getElementById('edFloorLabel');
+  if (el) el.textContent = label + ' (' + editor.floor + ')';
+}
+
+function editorAddWaypoint(cx, cy, floor, desc) {
+  const [lat, lng] = tibiaToLeaflet(cx, cy);
+  const idx = editor.waypoints.length;
+  const isStairs = idx > 0 && editor.waypoints[idx - 1].floor !== floor;
+
+  const marker = L.marker([lat, lng], {
+    icon: L.divIcon({
+      className: '',
+      html: `<div class="step-marker ${isStairs ? 'step-marker-stairs' : ''}" style="width:22px;height:22px">${isStairs ? (floor > editor.waypoints[idx - 1].floor ? '↓' : '↑') : (idx + 1)}</div>`,
+      iconSize: [22, 22],
+      iconAnchor: [11, 11]
+    })
+  });
+
+  const wp = { cx, cy, floor, desc, marker };
+  editor.waypoints.push(wp);
+
+  // Add marker only if on current floor
+  if (floor === editor.floor) {
+    marker.addTo(editor.routeLayer);
+  }
+
+  editorDrawRoute();
+  editorRenderList();
+}
+
+function editorRemoveWaypoint(idx) {
+  if (idx < 0 || idx >= editor.waypoints.length) return;
+  const wp = editor.waypoints[idx];
+  if (editor.routeLayer.hasLayer(wp.marker)) {
+    editor.routeLayer.removeLayer(wp.marker);
+  }
+  editor.waypoints.splice(idx, 1);
+  editorDrawRoute();
+  editorRenderList();
+}
+
+function editorUndo() {
+  if (editor.waypoints.length === 0) return;
+  editorRemoveWaypoint(editor.waypoints.length - 1);
+}
+
+function editorClear() {
+  editor.waypoints.forEach(wp => {
+    if (editor.routeLayer && editor.routeLayer.hasLayer(wp.marker)) {
+      editor.routeLayer.removeLayer(wp.marker);
+    }
+  });
+  editor.waypoints = [];
+  if (editor.routeLayer) editor.routeLayer.clearLayers();
+  editorRenderList();
+
+  // Clear form
+  const fields = ['edName', 'edLvlMin', 'edLvlMax', 'edAccess', 'edRoute', 'edAuthor'];
+  fields.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  const citySelect = document.getElementById('edCity');
+  if (citySelect) citySelect.value = '';
+  document.querySelectorAll('.ed-vocs input').forEach(cb => cb.checked = true);
+
+  editorSetStatus('');
+}
+
+function editorDrawRoute() {
+  if (!editor.routeLayer) return;
+
+  // Clear only polylines (keep markers)
+  editor.routeLayer.eachLayer(layer => {
+    if (layer instanceof L.Polyline && !(layer instanceof L.Marker)) {
+      editor.routeLayer.removeLayer(layer);
+    }
+  });
+
+  // Re-add all markers for current floor and draw lines
+  const currentFloorWps = [];
+  editor.waypoints.forEach((wp, i) => {
+    // Remove and re-add marker with correct number
+    if (editor.routeLayer.hasLayer(wp.marker)) {
+      editor.routeLayer.removeLayer(wp.marker);
+    }
+    const isStairs = i > 0 && editor.waypoints[i - 1].floor !== wp.floor;
+    const [lat, lng] = tibiaToLeaflet(wp.cx, wp.cy);
+    wp.marker = L.marker([lat, lng], {
+      icon: L.divIcon({
+        className: '',
+        html: `<div class="step-marker ${isStairs ? 'step-marker-stairs' : ''} ${i === 0 ? 'step-marker-start' : ''} ${i === editor.waypoints.length - 1 ? 'step-marker-end' : ''}">${isStairs ? (wp.floor > editor.waypoints[i - 1].floor ? '↓' : '↑') : (i + 1)}</div>`,
+        iconSize: [22, 22],
+        iconAnchor: [11, 11]
+      })
+    }).bindTooltip(wp.desc, { className: 'map-tip', direction: 'top', offset: [0, -12] });
+
+    if (wp.floor === editor.floor) {
+      wp.marker.addTo(editor.routeLayer);
+      currentFloorWps.push([lat, lng]);
+    }
+  });
+
+  // Draw polyline for current floor segments
+  if (currentFloorWps.length > 1) {
+    L.polyline(currentFloorWps, {
+      color: '#d4a537',
+      weight: 3,
+      opacity: 0.8,
+      dashArray: '8 4'
+    }).addTo(editor.routeLayer);
+  }
+}
+
+function editorRenderList() {
+  const list = document.getElementById('edWpList');
+  const count = document.getElementById('edWpCount');
+  if (!list) return;
+  if (count) count.textContent = editor.waypoints.length + ' steps';
+
+  if (editor.waypoints.length === 0) {
+    list.innerHTML = '<div class="ed-wp-empty">Click on the map to add waypoints</div>';
+    return;
+  }
+
+  list.innerHTML = editor.waypoints.map((wp, i) => {
+    const df = 7 - wp.floor;
+    const floorLabel = df === 0 ? 'Ground' : df > 0 ? '+' + df : String(df);
+    const isStairs = i > 0 && editor.waypoints[i - 1].floor !== wp.floor;
+    return `<div class="ed-wp-item" data-idx="${i}" onclick="editorFocusWp(${i})">
+      <div class="ed-wp-num ${isStairs ? 'stairs' : ''}">${isStairs ? (wp.floor > editor.waypoints[i - 1].floor ? '↓' : '↑') : (i + 1)}</div>
+      <div class="ed-wp-info">
+        <input type="text" class="ed-wp-desc" value="${esc(wp.desc)}" onchange="editorUpdateDesc(${i},this.value)" onclick="event.stopPropagation()">
+        <div class="ed-wp-floor">${floorLabel} (${wp.floor}) — X:${wp.cx} Y:${wp.cy}</div>
+      </div>
+      <button class="ed-wp-del" onclick="event.stopPropagation();editorRemoveWaypoint(${i})" title="Remove">✕</button>
+    </div>`;
+  }).join('');
+
+  // Scroll to bottom
+  list.scrollTop = list.scrollHeight;
+}
+
+function editorUpdateDesc(idx, desc) {
+  if (idx < 0 || idx >= editor.waypoints.length) return;
+  editor.waypoints[idx].desc = desc;
+  // Update tooltip
+  if (editor.waypoints[idx].marker) {
+    editor.waypoints[idx].marker.unbindTooltip();
+    editor.waypoints[idx].marker.bindTooltip(desc, { className: 'map-tip', direction: 'top', offset: [0, -12] });
+  }
+}
+
+function editorFocusWp(idx) {
+  if (idx < 0 || idx >= editor.waypoints.length) return;
+  const wp = editor.waypoints[idx];
+
+  // Switch floor if needed
+  if (wp.floor !== editor.floor) {
+    editor.floor = wp.floor;
+    if (editor.overlay) editor.overlay.setUrl(MAP_URL(wp.floor));
+    editorUpdateFloorLabel();
+    editorDrawRoute();
+  }
+
+  // Pan to waypoint
+  const [lat, lng] = tibiaToLeaflet(wp.cx, wp.cy);
+  editor.map.setView([lat, lng], 2);
+
+  // Highlight in list
+  document.querySelectorAll('.ed-wp-item').forEach(el => el.classList.remove('active'));
+  const item = document.querySelector(`.ed-wp-item[data-idx="${idx}"]`);
+  if (item) item.classList.add('active');
+}
+
+function editorLoadSpot(idx) {
+  if (idx < 0 || idx >= HUNTING_SPOTS.length) return;
+  editorClear();
+
+  const spot = HUNTING_SPOTS[idx];
+  editor.fixSpotIdx = idx;
+
+  // Fill form
+  document.getElementById('edName').value = spot.name;
+  document.getElementById('edCity').value = spot.city;
+  document.getElementById('edLvlMin').value = spot.level[0];
+  document.getElementById('edLvlMax').value = spot.level[1];
+  document.getElementById('edAccess').value = spot.access || '';
+  document.getElementById('edRoute').value = spot.route || '';
+
+  // Vocations
+  document.querySelectorAll('.ed-vocs input').forEach(cb => {
+    cb.checked = spot.voc.includes(cb.value);
+  });
+
+  // Load existing waypoints
+  if (spot.waypoints && spot.waypoints.length > 0) {
+    spot.waypoints.forEach(wp => {
+      const cx = wp[0], cy = wp[1], desc = wp[2] || '', floor = wp[3] || 7;
+      editorAddWaypoint(cx, cy, floor, desc);
+    });
+
+    // Center map on first waypoint
+    const first = spot.waypoints[0];
+    const [lat, lng] = tibiaToLeaflet(first[0], first[1]);
+    editor.map.setView([lat, lng], 1);
+  } else {
+    // Center on city
+    const city = CITIES.find(c => c.name === spot.city);
+    if (city) {
+      const [lat, lng] = tibiaToLeaflet(city.cx, city.cy);
+      editor.map.setView([lat, lng], 1);
+    }
+  }
+}
+
+function editorPreview() {
+  if (editor.waypoints.length < 2) {
+    editorSetStatus('Add at least 2 waypoints to preview.', 'error');
+    return;
+  }
+
+  // Fit map to all waypoints
+  const latlngs = editor.waypoints.map(wp => tibiaToLeaflet(wp.cx, wp.cy));
+  editor.map.fitBounds(latlngs, { padding: [30, 30] });
+
+  // Show floor of first waypoint
+  editor.floor = editor.waypoints[0].floor;
+  if (editor.overlay) editor.overlay.setUrl(MAP_URL(editor.floor));
+  editorUpdateFloorLabel();
+  editorDrawRoute();
+
+  editorSetStatus('Route preview updated. Review your waypoints on the map.', 'info');
+}
+
+function editorSubmit() {
+  // Validate
+  const name = document.getElementById('edName').value.trim();
+  const city = document.getElementById('edCity').value;
+  const lvlMin = parseInt(document.getElementById('edLvlMin').value) || 0;
+  const lvlMax = parseInt(document.getElementById('edLvlMax').value) || 0;
+  const access = document.getElementById('edAccess').value.trim();
+  const route = document.getElementById('edRoute').value.trim();
+  const author = document.getElementById('edAuthor').value.trim();
+  const vocs = [];
+  document.querySelectorAll('.ed-vocs input:checked').forEach(cb => vocs.push(cb.value));
+
+  if (!name) { editorSetStatus('Please enter a spot name.', 'error'); return; }
+  if (!city) { editorSetStatus('Please select a city.', 'error'); return; }
+  if (editor.waypoints.length < 2) { editorSetStatus('Add at least 2 waypoints.', 'error'); return; }
+  if (!route) { editorSetStatus('Please add a route description.', 'error'); return; }
+
+  // Rate limiting
+  const lastSubmit = localStorage.getItem('tp_last_submit');
+  if (lastSubmit && Date.now() - parseInt(lastSubmit) < 300000) {
+    const remaining = Math.ceil((300000 - (Date.now() - parseInt(lastSubmit))) / 60000);
+    editorSetStatus(`Please wait ${remaining} minute(s) before submitting again.`, 'error');
+    return;
+  }
+
+  // Build waypoints array (data.js format)
+  const waypointsData = editor.waypoints.map(wp => {
+    const arr = [wp.cx, wp.cy, wp.desc];
+    if (wp.floor !== 7) arr.push(wp.floor);
+    return arr;
+  });
+
+  const submissionType = editor.mode === 'fix' ? 'Route Fix' : 'New Spot';
+  const spotData = {
+    type: submissionType,
+    name,
+    city,
+    level: [lvlMin, lvlMax],
+    voc: vocs,
+    access,
+    route,
+    waypoints: waypointsData,
+    author: author || 'Anonymous',
+    timestamp: new Date().toISOString()
+  };
+
+  if (editor.mode === 'fix' && editor.fixSpotIdx >= 0) {
+    spotData.fixingSpot = HUNTING_SPOTS[editor.fixSpotIdx].name;
+  }
+
+  // Build Discord embed
+  const floorsUsed = [...new Set(editor.waypoints.map(wp => wp.floor))].sort();
+  const floorLabels = floorsUsed.map(f => {
+    const df = 7 - f;
+    return df === 0 ? 'Ground' : df > 0 ? '+' + df : String(df);
+  });
+
+  const embed = {
+    title: submissionType === 'Route Fix' ? 'Route Fix Submission' : 'New Hunting Spot Submission',
+    color: 0xd4a537,
+    fields: [
+      { name: 'Type', value: submissionType, inline: true },
+      { name: 'Spot', value: name, inline: true },
+      { name: 'Submitter', value: author || 'Anonymous', inline: true },
+      { name: 'City', value: city, inline: true },
+      { name: 'Level', value: `${lvlMin}-${lvlMax}`, inline: true },
+      { name: 'Vocations', value: vocs.map(v => v.substring(0, 2).toUpperCase()).join(', '), inline: true },
+      { name: 'Waypoints', value: `${editor.waypoints.length} steps, floors: ${floorLabels.join(', ')}` },
+      { name: 'Route', value: route.substring(0, 1000) },
+      { name: 'Access', value: access || 'None specified' }
+    ],
+    timestamp: new Date().toISOString()
+  };
+
+  const jsonBlob = JSON.stringify(spotData, null, 2);
+
+  // Try Discord webhook
+  if (DISCORD_WEBHOOK && DISCORD_WEBHOOK !== 'YOUR_WEBHOOK_URL_HERE') {
+    const payload = {
+      embeds: [embed],
+      content: '```json\n' + jsonBlob + '\n```'
+    };
+
+    fetch(DISCORD_WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(res => {
+      if (res.ok) {
+        localStorage.setItem('tp_last_submit', String(Date.now()));
+        editorSetStatus('Route submitted successfully! Thank you for contributing. Your submission will be reviewed.', 'success');
+      } else {
+        throw new Error('Webhook returned ' + res.status);
+      }
+    })
+    .catch(() => {
+      // Fallback: copy to clipboard
+      editorCopyFallback(jsonBlob);
+    });
+  } else {
+    // No webhook configured — clipboard fallback
+    editorCopyFallback(jsonBlob);
+  }
+}
+
+function editorCopyFallback(jsonBlob) {
+  navigator.clipboard.writeText(jsonBlob).then(() => {
+    localStorage.setItem('tp_last_submit', String(Date.now()));
+    editorSetStatus('Route data copied to clipboard! Paste it in our Discord channel or send to the admin for review.', 'info');
+  }).catch(() => {
+    // Final fallback: show in a textarea
+    editorSetStatus('Could not copy automatically. Please copy the data below manually:', 'info');
+    const statusEl = document.getElementById('edStatus');
+    statusEl.innerHTML += '<textarea style="width:100%;height:120px;margin-top:8px;background:var(--bg-input);color:var(--parchment);border:1px solid var(--border);border-radius:var(--r);padding:8px;font-family:monospace;font-size:11px" readonly>' + esc(jsonBlob) + '</textarea>';
+  });
+}
+
+function editorSetStatus(msg, type) {
+  const el = document.getElementById('edStatus');
+  if (!el) return;
+  el.className = 'ed-status';
+  if (msg && type) {
+    el.classList.add(type);
+    el.textContent = msg;
+  }
+}
+
+// Open editor pre-filled with a spot (called from hunt cards)
+function editorFixSpot(idx) {
+  showPanel('editor');
+  setTimeout(() => {
+    const fixBtn = document.querySelector('.ed-mode-btn[data-mode="fix"]');
+    if (fixBtn) editorSetMode('fix', fixBtn);
+    document.getElementById('edFixSpot').value = idx;
+    editorLoadSpot(idx);
+  }, 200);
 }

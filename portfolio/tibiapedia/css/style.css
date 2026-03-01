@@ -1,5 +1,5 @@
 /* ================================================================
-   TibiaPedia v3 — Dark Medieval Tibia Theme
+   TibiaVault — Dark Medieval Tibia Theme
    Desktop-only, sidebar SPA layout
    ================================================================ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -391,3 +391,52 @@ tr:hover td{background:rgba(212,165,55,.03)}
 .calc .cr{margin-top:12px;padding:10px;background:var(--bg-darker);border-radius:var(--r)}
 .calc .crv{font-family:'Cinzel',serif;font-size:18px;color:var(--gold-light)}
 .calc .crl{font-size:10px;color:var(--parch-dim)}
+
+/* ===== ROUTE EDITOR ===== */
+.ed-toolbar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.ed-mode-btn.active{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.ed-spot-select{min-width:220px;font-size:12px}
+.ed-layout{display:flex;gap:14px;height:calc(100vh - 220px);min-height:500px}
+.ed-map-wrap{flex:3;display:flex;flex-direction:column;min-width:0}
+.ed-map{flex:1;border:2px solid var(--border-h);border-radius:var(--rl);overflow:hidden;background:var(--bg-darker)}
+.ed-map-ctrl{display:flex;gap:8px;align-items:center;padding:8px 0;font-size:12px;color:var(--parch-dim)}
+.ed-sidebar{flex:2;display:flex;flex-direction:column;min-width:280px;max-width:420px}
+.ed-wp-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.ed-wp-header h4{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin:0}
+.ed-wp-count{font-size:11px;color:var(--parch-dim)}
+.ed-wp-list{flex:1;overflow-y:auto;border:1px solid var(--border);border-radius:var(--r);background:var(--bg-darker);margin-bottom:10px;min-height:120px;max-height:250px}
+.ed-wp-empty{padding:20px;text-align:center;color:var(--parch-dim);font-size:13px;font-style:italic}
+.ed-wp-item{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-bottom:1px solid var(--border);transition:background .1s;cursor:pointer}
+.ed-wp-item:hover{background:rgba(212,165,55,.05)}
+.ed-wp-item.active{background:rgba(212,165,55,.08);border-left:3px solid var(--gold)}
+.ed-wp-num{width:22px;height:22px;border-radius:50%;background:var(--gold);color:var(--bg);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Cinzel',serif}
+.ed-wp-num.stairs{background:#a855f7}
+.ed-wp-info{flex:1;min-width:0}
+.ed-wp-desc{font-size:12px;color:var(--parchment);display:block;width:100%;background:none;border:none;border-bottom:1px solid transparent;padding:0 0 2px;font-family:'Crimson Text',serif;outline:none;transition:border-color .12s}
+.ed-wp-desc:focus{border-bottom-color:var(--gold);color:var(--gold-light)}
+.ed-wp-floor{font-size:10px;color:var(--parch-dim);margin-top:2px}
+.ed-wp-del{width:20px;height:20px;border-radius:4px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--parch-dim);cursor:pointer;flex-shrink:0;transition:all .12s;background:none}
+.ed-wp-del:hover{border-color:var(--fire);color:var(--fire);background:rgba(239,68,68,.08)}
+.ed-form{overflow-y:auto;padding:2px 0}
+.ed-form h4{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)}
+.ed-field{margin-bottom:8px}
+.ed-field label{display:block;font-size:11px;color:var(--parch-dim);margin-bottom:3px}
+.ed-field input,.ed-field select,.ed-field textarea{width:100%;font-size:13px}
+.ed-field textarea{resize:vertical;background:var(--bg-input);color:var(--parchment);border:1px solid var(--border);border-radius:var(--r);padding:7px;font-family:'Crimson Text',serif;font-size:13px}
+.ed-field-row{display:flex;gap:8px}
+.ed-field-row .ed-field{flex:1}
+.ed-vocs{display:flex;gap:10px;font-size:12px}
+.ed-vocs label{display:flex;align-items:center;gap:4px;cursor:pointer;color:var(--parchment)}
+.ed-vocs input[type="checkbox"]{accent-color:var(--gold)}
+.ed-actions{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.ed-actions .btn-s{flex:1;text-align:center;padding:8px}
+.ed-status{margin-top:10px;padding:10px 14px;border-radius:var(--r);font-size:13px;display:none}
+.ed-status.success{display:block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--common)}
+.ed-status.error{display:block;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--fire)}
+.ed-status.info{display:block;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);color:var(--ice)}
+/* Verified/unverified badges on hunt cards */
+.hunt-verified{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700;font-family:'Cinzel',serif}
+.hunt-verified.verified{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--common)}
+.hunt-verified.unverified{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);color:#f59e0b}
+.hunt-fix-btn{font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);color:var(--parch-dim);cursor:pointer;transition:all .12s;background:none;font-family:'Cinzel',serif;font-weight:600}
+.hunt-fix-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}

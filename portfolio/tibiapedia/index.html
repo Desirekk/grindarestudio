@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=1200">
-  <title>TibiaPedia — Tibia Companion Guide</title>
-  <meta name="description" content="TibiaPedia: Comprehensive Tibia MMORPG companion — Bestiary, Hunting Spots, Equipment, Quests, Spells, Interactive Map, Character Lookup, and more.">
+  <title>TibiaVault — Tibia Companion Guide</title>
+  <meta name="description" content="TibiaVault: Comprehensive Tibia MMORPG companion — Bestiary, Hunting Spots, Equipment, Quests, Spells, Interactive Map, Character Lookup, and more.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -25,8 +25,8 @@
     <!-- ===== TOPBAR ===== -->
     <header class="topbar">
       <div class="tb-logo">
-        <img src="images/ideogram-v3.0_TibiaPedia_medieval_fantasy_logo_ornate_golden_text_on_transparent_dark_backgrou-0.jpg" alt="TibiaPedia">
-        <span><b>Tibia</b>Pedia</span>
+        <img src="images/ideogram-v3.0_TibiaPedia_medieval_fantasy_logo_ornate_golden_text_on_transparent_dark_backgrou-0.jpg" alt="TibiaVault">
+        <span><b>Tibia</b>Forge</span>
       </div>
       <div class="tb-search">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -73,6 +73,10 @@
         <div class="nav-item" data-panel="map">
           <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Map_(Item).gif" alt="" class="ni-icon" onerror="this.style.display='none'">
           <span>World Map</span>
+        </div>
+        <div class="nav-item" data-panel="editor">
+          <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Sextant.gif" alt="" class="ni-icon" onerror="this.style.display='none'">
+          <span>Route Editor</span>
         </div>
         <div class="nav-item" data-panel="character">
           <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Citizen_Male.gif" alt="" class="ni-icon" onerror="this.style.display='none'">
@@ -240,6 +244,89 @@
           <span><span class="ld ld-blue"></span> Cities</span>
           <span><span class="ld ld-gold"></span> Hunting Spots</span>
         </div>
+      </section>
+
+      <!-- ROUTE EDITOR -->
+      <section class="panel" id="p-editor">
+        <div class="ph"><h2>Route Editor</h2><p>Create or fix hunting spot routes — help the community!</p><div class="ph-line"></div></div>
+        <div class="ed-toolbar">
+          <button class="btn-s btn-g ed-mode-btn active" data-mode="new" onclick="editorSetMode('new',this)">New Spot</button>
+          <button class="btn-s ed-mode-btn" data-mode="fix" onclick="editorSetMode('fix',this)">Fix Existing</button>
+          <select id="edFixSpot" class="ed-spot-select" style="display:none" onchange="editorLoadSpot(+this.value)">
+            <option value="-1">— Select spot to fix —</option>
+          </select>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <button class="btn-s" onclick="editorUndo()" title="Undo last waypoint">Undo</button>
+            <button class="btn-s" onclick="editorClear()" title="Clear all">Clear All</button>
+          </div>
+        </div>
+        <div class="ed-layout">
+          <div class="ed-map-wrap">
+            <div id="editorMap" class="ed-map"></div>
+            <div class="ed-map-ctrl">
+              <button class="btn-s" onclick="editorFloor(-1)" title="Go up">▲</button>
+              <span id="edFloorLabel">Ground (7)</span>
+              <button class="btn-s" onclick="editorFloor(1)" title="Go down">▼</button>
+              <span id="edMapCoords" style="margin-left:12px;color:var(--gold);font-size:11px"></span>
+            </div>
+          </div>
+          <div class="ed-sidebar">
+            <div class="ed-wp-header">
+              <h4>Waypoints</h4>
+              <span class="ed-wp-count" id="edWpCount">0 steps</span>
+            </div>
+            <div class="ed-wp-list" id="edWpList">
+              <div class="ed-wp-empty">Click on the map to add waypoints</div>
+            </div>
+            <div class="ed-form">
+              <h4>Spot Details</h4>
+              <div class="ed-field">
+                <label>Spot Name</label>
+                <input type="text" id="edName" placeholder="e.g. Asura Palace">
+              </div>
+              <div class="ed-field">
+                <label>Nearest City</label>
+                <select id="edCity"></select>
+              </div>
+              <div class="ed-field-row">
+                <div class="ed-field">
+                  <label>Min Level</label>
+                  <input type="number" id="edLvlMin" placeholder="130" min="1" max="9999">
+                </div>
+                <div class="ed-field">
+                  <label>Max Level</label>
+                  <input type="number" id="edLvlMax" placeholder="400" min="1" max="9999">
+                </div>
+              </div>
+              <div class="ed-field">
+                <label>Vocations</label>
+                <div class="ed-vocs">
+                  <label><input type="checkbox" value="knight" checked> EK</label>
+                  <label><input type="checkbox" value="paladin" checked> RP</label>
+                  <label><input type="checkbox" value="sorcerer" checked> MS</label>
+                  <label><input type="checkbox" value="druid" checked> ED</label>
+                </div>
+              </div>
+              <div class="ed-field">
+                <label>Access / Quest Requirements</label>
+                <textarea id="edAccess" rows="2" placeholder="e.g. Free access, no quest needed"></textarea>
+              </div>
+              <div class="ed-field">
+                <label>Route Description</label>
+                <textarea id="edRoute" rows="3" placeholder="e.g. Start at Ankrahmun depot, head south through desert..."></textarea>
+              </div>
+              <div class="ed-field">
+                <label>Your Character Name (for credit)</label>
+                <input type="text" id="edAuthor" placeholder="e.g. Bubble Knight">
+              </div>
+              <div class="ed-actions">
+                <button class="btn-s" onclick="editorPreview()">Preview Route</button>
+                <button class="btn-s btn-g" onclick="editorSubmit()">Submit to Review</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ed-status" id="edStatus"></div>
       </section>
 
       <!-- CHARACTER -->
