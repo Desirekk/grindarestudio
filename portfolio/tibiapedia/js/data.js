@@ -5,7 +5,7 @@
 const WIKI_IMG = name => `https://tibia.fandom.com/wiki/Special:Redirect/file/${encodeURIComponent(name.replace(/ /g,'_'))}.gif`;
 const TIBIA_IMG = race => `https://static.tibia.com/images/library/${encodeURIComponent(race)}.gif`;
 
-// Element definitions with Tibia-style display
+// Element definitions
 const ELEMENTS = [
   {key:'physical',name:'Physical',abbr:'Phy',css:'physical'},
   {key:'fire',name:'Fire',abbr:'Fir',css:'fire'},
@@ -19,7 +19,7 @@ const ELEMENTS = [
   {key:'heal',name:'Heal',abbr:'Hea',css:'manadrain'}
 ];
 
-// Slot icons (wiki item names for images)
+// Slot icons
 const SLOT_META = {
   helmet:{label:'Helmet',img:'Helmet_Slot'},
   armor:{label:'Armor',img:'Armor_Slot'},
@@ -29,6 +29,21 @@ const SLOT_META = {
   weapon:{label:'Weapon',img:'Weapon_Slot'},
   ring:{label:'Ring',img:'Ring_Slot'},
   amulet:{label:'Amulet',img:'Amulet_Slot'}
+};
+
+// Charms reference
+const CHARMS = {
+  wound:{name:'Wound',element:'physical',desc:'5% creature HP as Physical DMG'},
+  poison:{name:'Poison',element:'earth',desc:'5% creature HP as Earth DMG'},
+  freeze:{name:'Freeze',element:'ice',desc:'5% creature HP as Ice DMG'},
+  zap:{name:'Zap',element:'energy',desc:'5% creature HP as Energy DMG'},
+  enflame:{name:'Enflame',element:'fire',desc:'5% creature HP as Fire DMG'},
+  curse:{name:'Curse',element:'death',desc:'5% creature HP as Death DMG'},
+  divine_wrath:{name:'Divine Wrath',element:'holy',desc:'5% creature HP as Holy DMG'},
+  dodge:{name:'Dodge',element:null,desc:'Chance to dodge attack completely'},
+  parry:{name:'Parry',element:null,desc:'Reflects incoming damage back'},
+  low_blow:{name:'Low Blow',element:null,desc:'+8% critical hit chance'},
+  wound_or_zap:{name:'Wound / Zap',element:'physical',desc:'Wound or Zap depending on weakness'}
 };
 
 // Cities for map
@@ -45,187 +60,614 @@ const CITIES = [
 ];
 
 // ================================================================
-// HUNTING SPOTS (expanded with routes, access, recommended gear)
+// HUNTING SPOTS — Expanded tibiaroute.com style
 // ================================================================
 const HUNTING_SPOTS = [
-{name:"Rotworm Caves",city:"Darashia",level:[8,25],voc:["knight","paladin","sorcerer","druid"],exp:3,loot:2,
-  creatures:["Rotworm","Carrion Worm"],cx:33220,cy:32430,
-  route:"From Darashia depot, head west past the magic carpet. Go south into the desert. Find the hole and rope down.",
+{
+  name:"Edron Werecreatures",
+  city:"Edron",level:[80,150],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"800k-1.5kk",profitH:"200k-500k",
+  cx:33510,cy:31660,
+  route:"From Edron depot go east across the bridge. Continue east past the academy. Enter Grimvale cave entrance near the mountain.",
+  access:"Grimvale Quest (short access). Only during full moon phase!",
+  premium:true,
+  creatures:[
+    {name:"Werebear",hp:2400,xp:2000,charm:"zap",charmPts:25},
+    {name:"Werewolf",hp:1955,xp:1600,charm:"zap",charmPts:15},
+    {name:"Werefox",hp:1500,xp:1200,charm:"zap",charmPts:15},
+    {name:"Werebadger",hp:1650,xp:1400,charm:"zap",charmPts:15},
+    {name:"Werehyaena",hp:2200,xp:1800,charm:"zap",charmPts:25}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Strike"],
+  supplies:{
+    knight:["200 Strong Health Potion","50 Strong Mana Potion","10 Great Spirit Potion"],
+    paladin:["200 Great Spirit Potion","100 Crystalline Arrow","20 Avalanche Rune"],
+    sorcerer:["300 Strong Mana Potion","50 Sudden Death Rune","20 Avalanche Rune"],
+    druid:["300 Strong Mana Potion","20 Avalanche Rune","10 Wild Growth Rune"]
+  },
+  trinket:"Foxtail Amulet",
+  drops:["Werewolf Helmet","Dreaded Cleaver","Foxtail Amulet","Werewolf Amulet","Werebear Fur"],
+  tips:"Only accessible during full moon. Best loot from Foxtail Amulets (100k+ each). Zap charm on all — they're all weak to Energy. Knights should use Dodge as defensive charm.",
+  gear:{
+    "80-130":"Zaoan Helmet, Prismatic Armor, Zaoan Legs, Guardian Boots, Shiny Blade",
+    "130+"  :"Cobra Hood, Ornate Legs, Falcon Plate, Pair of Dreamwalkers"
+  }
+},
+{
+  name:"Darashia Dragon Lair",
+  city:"Darashia",level:[40,80],voc:["knight","paladin"],
+  team:"solo",expH:"200k-400k",profitH:"30k-80k",
+  cx:33210,cy:32490,
+  route:"From Darashia depot head north-east. Follow the sand path past the gardens. Enter the dragon cave opening in the mountain.",
   access:"None — free access.",
-  gear:"Plate Armor, Plate Legs, any weapon. Bring rope and shovel.",
-  tips:"Great for new players. Rotworms drop gold and maces regularly."},
-{name:"Tarantula Caves",city:"Port Hope",level:[15,35],voc:["knight","paladin"],exp:3,loot:3,
-  creatures:["Tarantula"],cx:32600,cy:32740,
-  route:"From Port Hope depot, go east over the bridge, then south into the jungle. The cave entrance is on the eastern side.",
-  access:"None — free access.",
-  gear:"Steel Helmet, Plate Armor. Bring health potions.",
-  tips:"Good early profit from spider silk. Knights can solo easily."},
-{name:"Cyclopolis",city:"Edron",level:[25,45],voc:["knight","paladin","sorcerer","druid"],exp:3,loot:3,
-  creatures:["Cyclops","Cyclops Smith","Cyclops Drone"],cx:33290,cy:31710,
-  route:"From Edron depot, head north past the castle. Cross the bridge east and follow the path to the mountain cave.",
-  access:"None — free access.",
-  gear:"Royal Helmet, Plate Armor or better. Knights: sword/axe with good defense shield.",
-  tips:"Cyclops Smiths drop heavy items worth good gold. Bring a shovel."},
-{name:"Amazon Camp",city:"Venore",level:[15,30],voc:["knight","paladin","sorcerer","druid"],exp:2,loot:3,
-  creatures:["Amazon","Valkyrie","Witch"],cx:32820,cy:32620,
-  route:"From Venore depot, head south through the swamp. Cross the bridge and continue south to the camp.",
-  access:"None — free access.",
-  gear:"Scale Armor, basic weapon. Bring antidote potions.",
-  tips:"Great loot for low levels — protective charms and small valuables."},
-{name:"Mintwallin",city:"Thais",level:[8,20],voc:["knight","paladin","sorcerer","druid"],exp:2,loot:2,
-  creatures:["Minotaur","Minotaur Archer","Minotaur Guard"],cx:32400,cy:32100,
-  route:"From Thais depot, go north through the city gate. Follow the road north and find the sewer entrance or go to the cave system.",
-  access:"None — free access.",
-  gear:"Chain Armor, basic weapon.",
-  tips:"Classic early game spot. Guards can hit hard — be careful at low level."},
-{name:"Dragon Lair",city:"Darashia",level:[45,70],voc:["knight","paladin"],exp:4,loot:4,
-  creatures:["Dragon"],cx:33190,cy:32410,
-  route:"From Darashia depot, head north to the mountain. Rope up the cliff and find the cave entrance on the plateau.",
-  access:"None — bring rope and be prepared for fire damage.",
-  gear:"Crown/Royal Helmet, Magic Plate Armor, fire protection shield. Fire resistance equipment highly recommended.",
-  tips:"Dragons drop Dragon Hammers and Shields worth 4-8k each. Bring fire walls for mages. Knights should have 70+ skills."},
-{name:"Wyrm Mountain",city:"Liberty Bay",level:[80,120],voc:["knight","paladin","sorcerer","druid"],exp:4,loot:3,
-  creatures:["Wyrm","Elder Wyrm"],cx:32330,cy:32860,
-  route:"From Liberty Bay, take the boat to the islands. Head to the wyrm mountain on the main island.",
-  access:"None — boat ticket required.",
-  gear:"Zaoan Helmet, Prismatic Armor, physical protection.",
-  tips:"Elder Wyrms hit harder but give much better XP. Good for bestiary."},
-{name:"Drefia Grim Reapers",city:"Darashia",level:[120,200],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:4,
-  creatures:["Grim Reaper","Nightmare"],cx:33160,cy:32490,
-  route:"From Darashia, head south to Drefia. Navigate the underground corridors to the Grim Reaper area.",
-  access:"Drefia access — need to complete a short mission series.",
-  gear:"Death protection equipment (Foxtail Amulet, physical protection set).",
-  tips:"One of the best solo spots for paladins 130-200. Use energy walls."},
-{name:"Edron Hero Cave",city:"Edron",level:[70,100],voc:["knight","paladin"],exp:4,loot:3,
-  creatures:["Hero","Vile Grandmaster"],cx:33260,cy:31700,
-  route:"From Edron depot, head far south past the academy. The cave entrance is in the mountain.",
-  access:"None — free access.",
-  gear:"Magic Plate Armor, Boots of Haste, fire/energy protection.",
-  tips:"Heroes can combo hard. Approach carefully and use full HP."},
-{name:"Upper Spike",city:"Kazordoon",level:[50,80],voc:["knight","druid"],exp:3,loot:3,
-  creatures:["Wyvern","Corym Vanguard","Corym Skirmisher"],cx:32580,cy:31900,
-  route:"From Kazordoon depot, take the mine cart system down. Follow signs to the Spike entrance.",
-  access:"Spike Tasks Quest — talk to gnome NPCs in Kazordoon.",
-  gear:"Physical protection set, Fire Axe/Bright Sword.",
-  tips:"Good team spot. Druids heal knight, knight blocks coryms."},
-{name:"Krailos Steppe",city:"Edron",level:[60,100],voc:["knight","paladin","druid"],exp:4,loot:3,
-  creatures:["Ogre Brute","Ogre Savage","Ogre Shaman"],cx:33540,cy:31610,
-  route:"From Edron, take the boat/teleport to Krailos. The steppe is on the surface.",
-  access:"None after reaching Krailos.",
-  gear:"Physical protection, good armor.",
-  tips:"Ogres have high physical damage. Earth protection helps for shamans."},
-{name:"Werehyaena Caves",city:"Edron",level:[80,130],voc:["knight","paladin","sorcerer","druid"],exp:4,loot:4,
-  creatures:["Werehyaena","Werehyaena Shaman"],cx:33500,cy:31650,
-  route:"From Edron, travel east to Grimvale. The werehyaena caves are in the northern part.",
-  access:"Grimvale access — short mission from Edron NPCs.",
-  gear:"Physical protection, Silver Token equipment.",
-  tips:"Only accessible during full moon phases. Amazing loot (Foxtail Amulets)."},
-{name:"Ghastly Dragons",city:"Zao",level:[130,200],voc:["knight","paladin"],exp:5,loot:4,
-  creatures:["Ghastly Dragon"],cx:33290,cy:31150,
-  route:"From Zao outpost, head deep into the steppe. Enter the underground and follow the dragon tunnels.",
+  premium:false,
+  creatures:[
+    {name:"Dragon",hp:1000,xp:700,charm:"freeze",charmPts:15},
+    {name:"Dragon Hatchling",hp:380,xp:185,charm:"freeze",charmPts:5}
+  ],
+  imbuements:["1x Vampirism","1x Void"],
+  supplies:{
+    knight:["150 Strong Health Potion","30 Mana Potion"],
+    paladin:["100 Great Spirit Potion","200 Royal Star"]
+  },
+  trinket:null,
+  drops:["Dragon Scale Mail","Dragon Shield","Small Diamond","Dragon Ham"],
+  tips:"Classic hunting spot for beginners. Dragons are weak to Ice — use Freeze charm. Bring fire protection (Dwarven Ring or Fire Resistance equipment).",
+  gear:{
+    "40-60":"Soldier Helmet, Blue Robe, Crown Legs, Boots of Haste, Bright Sword",
+    "60-80":"Royal Helmet, Magic Plate Armor, Golden Legs, Boots of Haste"
+  }
+},
+{
+  name:"Ghastly Dragons — Zao",
+  city:"Zao",level:[130,200],voc:["knight","paladin"],
+  team:"solo",expH:"1kk-1.8kk",profitH:"150k-350k",
+  cx:33290,cy:31150,
+  route:"From Zao outpost use the steamship or walk south-east into the steppe. Enter the underground dragon tunnels heading deep.",
   access:"The New Frontier + Children of the Revolution quests required.",
-  gear:"Death protection (Foxtail Amulet), Zaoan equipment, Terra Boots.",
-  tips:"One of the best solo spots for knights 130-180. Very profitable."},
-{name:"Lizard City",city:"Zao",level:[100,150],voc:["knight","paladin","sorcerer","druid"],exp:4,loot:4,
-  creatures:["Lizard High Guard","Lizard Legionnaire","Lizard Dragon Priest"],cx:33300,cy:31200,
-  route:"From Zao outpost, head south through the steppe into the city ruins.",
+  premium:true,
+  creatures:[
+    {name:"Ghastly Dragon",hp:7800,xp:4600,charm:"zap",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Bash/Chop/Slash"],
+  supplies:{
+    knight:["300 Strong Health Potion","100 Strong Mana Potion","10 Ultimate Health Potion"],
+    paladin:["200 Great Spirit Potion","300 Crystalline Arrow"]
+  },
+  trinket:"Foxtail Amulet",
+  drops:["Zaoan Helmet","Zaoan Armor","Zaoan Legs","Ghastly Dragon Head","Focus Cape"],
+  tips:"One of the best solo knight spots 130-180. Death protection is essential — Foxtail Amulet + Terra Boots recommended. Ghastly Dragons are weak to Energy (Zap) and Earth (Poison).",
+  gear:{
+    "130-150":"Zaoan Helmet, Prismatic Armor, Zaoan Legs, Guardian Boots, Shiny Blade",
+    "150-200":"Cobra Hood, Prismatic Armor, Ornate Legs, Dreamwalkers, Blade of Destruction"
+  }
+},
+{
+  name:"Lizard City — Zao",
+  city:"Zao",level:[100,150],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"600k-1.2kk",profitH:"100k-250k",
+  cx:33300,cy:31200,
+  route:"From Zao outpost head south through the steppe into the city ruins. Cross the bridge and enter the main area.",
   access:"The New Frontier + Children of the Revolution quests.",
-  gear:"Zaoan Helmet, Zaoan Legs, fire protection for Dragon Priests.",
-  tips:"Dragon Priests heal others — target them first. Great XP and gold."},
-{name:"Oramond Minos",city:"Rathleton",level:[180,300],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,
-  creatures:["Minotaur Amazon","Minotaur Hunter","Execowtioner","Mooh'tah Warrior"],cx:33650,cy:31910,
-  route:"From Rathleton depot, take the underground system south to Oramond. Enter the Minotaur area.",
-  access:"Oramond Quest — need 40 daily task completions (voting/tasks) to unlock Mino area!",
-  gear:"Prismatic Armor, Zaoan Helmet, physical protection, fire protection for Execowtioners.",
-  tips:"THE BEST PROFIT in the game for 200-300 range. Worth grinding 40 tasks to unlock. Expect 500k-1kk+ gold/hour."},
-{name:"Glooth Bandits",city:"Rathleton",level:[150,250],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,
-  creatures:["Glooth Bandit"],cx:33660,cy:31900,
-  route:"From Rathleton, head to the Oramond underground. Glooth Bandits area is before the Minos.",
-  access:"Oramond Quest — basic access (fewer tasks than Minos).",
-  gear:"Physical protection set, good weapon.",
-  tips:"Very good profit and XP. Easier access than Minos."},
-{name:"Asura Palace",city:"Port Hope",level:[150,250],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,
-  creatures:["Asura","Dawnfire Asura","Midnight Asura","True Midnight Asura"],cx:32620,cy:32760,
-  route:"From Port Hope, head south into the jungle. Navigate to the underground palace entrance.",
-  access:"Short access quest from Port Hope NPCs.",
-  gear:"Energy protection for Midnight Asuras, fire protection for Dawnfire.",
-  tips:"Excellent loot and XP. Midnight Asuras drop valuable items. Very popular spot."},
-{name:"Frost Dragons",city:"Svargrond",level:[80,130],voc:["knight","paladin"],exp:4,loot:4,
-  creatures:["Frost Dragon"],cx:32350,cy:31050,
-  route:"From Svargrond, take the boat to Okolnir island. The frost dragons are in the ice caves.",
-  access:"The Ice Islands Quest required for Okolnir access.",
-  gear:"Energy protection ring, fire weapon for damage bonus. Ice protection armor.",
-  tips:"Great solo spot for knights 90-130. Frost Dragons drop valuable items."},
-{name:"Draken Walls",city:"Zao",level:[130,200],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:4,
-  creatures:["Draken Spellweaver","Draken Elite","Draken Abomination"],cx:33340,cy:31230,
-  route:"From Zao, navigate through the deeper dragon areas to reach the Draken fortress.",
+  premium:true,
+  creatures:[
+    {name:"Lizard High Guard",hp:2200,xp:1450,charm:"freeze",charmPts:25},
+    {name:"Lizard Legionnaire",hp:1600,xp:1100,charm:"freeze",charmPts:15},
+    {name:"Lizard Dragon Priest",hp:1450,xp:1320,charm:"freeze",charmPts:25}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Strike"],
+  supplies:{
+    knight:["200 Strong Health Potion","60 Strong Mana Potion"],
+    paladin:["200 Great Spirit Potion","200 Crystalline Arrow"],
+    sorcerer:["400 Strong Mana Potion","50 Sudden Death Rune"],
+    druid:["400 Strong Mana Potion","20 Wild Growth Rune"]
+  },
+  trinket:null,
+  drops:["Zaoan Armor","Zaoan Helmet","Zaoan Legs","Zaoan Shoes","Tower Shield"],
+  tips:"Dragon Priests heal others — target them first. Great for Zaoan equipment farming. All lizards weak to Ice — use Freeze. Fire protection for Dragon Priests.",
+  gear:{
+    "100-130":"Zaoan Helmet, Prismatic Armor, Zaoan Legs, Guardian Boots",
+    "130-150":"Cobra Hood, Prismatic Armor, Ornate Legs, Dreamwalkers"
+  }
+},
+{
+  name:"Oramond Minos",
+  city:"Rathleton",level:[200,350],voc:["knight","paladin","sorcerer","druid"],
+  team:"team",expH:"3kk-6kk",profitH:"500k-1.5kk",
+  cx:33650,cy:31910,
+  route:"From Rathleton depot take the underground steam system south. Follow tunnels to the Oramond entrance, then navigate to the Minotaur area.",
+  access:"Oramond Quest — need 40 daily task completions (voting + tasks). This takes ~2 weeks!",
+  premium:true,
+  creatures:[
+    {name:"Minotaur Amazon",hp:3500,xp:2600,charm:"wound",charmPts:25},
+    {name:"Minotaur Hunter",hp:2800,xp:2200,charm:"wound",charmPts:25},
+    {name:"Execowtioner",hp:6000,xp:3800,charm:"freeze",charmPts:50},
+    {name:"Mooh'tah Warrior",hp:3200,xp:2500,charm:"wound",charmPts:25}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Bash/Chop/Slash"],
+  supplies:{
+    knight:["400 Ultimate Health Potion","200 Strong Mana Potion","50 Ultimate Spirit Potion"],
+    paladin:["300 Great Spirit Potion","400 Spectral Bolt","50 Ultimate Spirit Potion"],
+    sorcerer:["600 Strong Mana Potion","100 Sudden Death Rune","30 Avalanche Rune"],
+    druid:["600 Strong Mana Potion","30 Wild Growth Rune","30 Avalanche Rune"]
+  },
+  trinket:"Scarab Amulet",
+  drops:["Execowtioner's Axe","Minotaur Leather","Gold Ingot","Yellow Gem","Blue Gem"],
+  tips:"THE BEST PROFIT in the game for 200-300 range. Worth grinding the 40 daily tasks. Expect 500k-1.5kk gold/hour. Physical protection essential. Execowtioners hit VERY hard with fire — bring fire protection ring for emergencies.",
+  gear:{
+    "200-250":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers, Falcon Battleaxe",
+    "250+"   :"Falcon Coif, Soulmantle, Soulstrider, Dreamwalkers, Soulcutter"
+  }
+},
+{
+  name:"Glooth Bandits",
+  city:"Rathleton",level:[150,250],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"1kk-2kk",profitH:"300k-700k",
+  cx:33660,cy:31900,
+  route:"From Rathleton depot head to the Oramond underground system. Glooth Bandits area is in the first section — easier access than Minos.",
+  access:"Oramond Quest — basic access (fewer tasks than Minos, ~1 week).",
+  premium:true,
+  creatures:[
+    {name:"Glooth Bandit",hp:5400,xp:3200,charm:"wound",charmPts:25}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Bash/Chop/Slash"],
+  supplies:{
+    knight:["300 Strong Health Potion","100 Strong Mana Potion","30 Ultimate Health Potion"],
+    paladin:["250 Great Spirit Potion","300 Crystalline Arrow"],
+    sorcerer:["500 Strong Mana Potion","50 Sudden Death Rune"],
+    druid:["500 Strong Mana Potion","30 Wild Growth Rune"]
+  },
+  trinket:null,
+  drops:["Glooth Amulet","Glooth Blade","Glooth Cape","Glooth Club","Gold Ingot"],
+  tips:"Very good solo profit and XP. Physical protection set recommended. Easier access than Oramond Minos but still very profitable.",
+  gear:{
+    "150-200":"Cobra Hood, Prismatic Armor, Ornate Legs, Dreamwalkers",
+    "200+"   :"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers"
+  }
+},
+{
+  name:"Asura Palace",
+  city:"Port Hope",level:[150,250],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"1.5kk-3kk",profitH:"200k-600k",
+  cx:32620,cy:32760,
+  route:"From Port Hope depot head south into the jungle. Navigate the jungle paths south-east. The palace entrance is underground — look for the stone stairs.",
+  access:"Short access quest from Port Hope NPCs (Jakundaf Desert Library access).",
+  premium:true,
+  creatures:[
+    {name:"Dawnfire Asura",hp:2700,xp:2000,charm:"freeze",charmPts:25},
+    {name:"Midnight Asura",hp:2700,xp:2000,charm:"enflame",charmPts:25},
+    {name:"True Midnight Asura",hp:4200,xp:3100,charm:"enflame",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Strike"],
+  supplies:{
+    knight:["300 Strong Health Potion","100 Strong Mana Potion","20 Ultimate Health Potion"],
+    paladin:["250 Great Spirit Potion","300 Crystalline Arrow"],
+    sorcerer:["500 Strong Mana Potion","50 Sudden Death Rune"],
+    druid:["500 Strong Mana Potion","30 Wild Growth Rune"]
+  },
+  trinket:"Lit Moon Mirror",
+  drops:["Midnight Shard","Dawnfire Shimmering Dye","Mystic Turban","Enchanted Theurgic Amulet"],
+  tips:"Energy protection for Midnight Asuras, fire protection for Dawnfire. Rotate protections. Very popular spot — may be contested. Midnight Asuras drop very valuable items.",
+  gear:{
+    "150-200":"Cobra Hood, Prismatic Armor, Ornate Legs, Dreamwalkers, Wand/Rod of Destruction",
+    "200-250":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers"
+  }
+},
+{
+  name:"Frost Dragons",
+  city:"Svargrond",level:[80,140],voc:["knight","paladin"],
+  team:"solo",expH:"400k-800k",profitH:"80k-200k",
+  cx:32350,cy:31050,
+  route:"From Svargrond take the boat to Okolnir island. Walk north across the ice to the cave entrance. Go down into the frost dragon tunnels.",
+  access:"The Ice Islands Quest required for Okolnir boat access.",
+  premium:true,
+  creatures:[
+    {name:"Frost Dragon",hp:1800,xp:2100,charm:"zap",charmPts:25}
+  ],
+  imbuements:["1x Vampirism","1x Void"],
+  supplies:{
+    knight:["200 Strong Health Potion","50 Strong Mana Potion"],
+    paladin:["200 Great Spirit Potion","200 Crystalline Arrow"]
+  },
+  trinket:"Energy Ring",
+  drops:["Ice Dragon Claw","Dragon Scale Mail","Golden Armor","Small Diamond"],
+  tips:"Great solo knight spot 90-130. Frost Dragons weak to Energy — use Zap charm. Bring energy protection ring. Fire weapons deal bonus damage.",
+  gear:{
+    "80-100":"Royal Helmet, Magic Plate Armor, Golden Legs, Boots of Haste",
+    "100-140":"Zaoan Helmet, Prismatic Armor, Zaoan Legs, Guardian Boots"
+  }
+},
+{
+  name:"Draken Walls — Zao",
+  city:"Zao",level:[130,200],voc:["knight","paladin","sorcerer","druid"],
+  team:"team",expH:"2kk-4kk",profitH:"200k-500k",
+  cx:33340,cy:31230,
+  route:"From Zao outpost navigate through deeper dragon areas south. Cross the lava rivers and follow signs to the Draken fortress entrance.",
   access:"Wrath of the Emperor Quest required.",
-  gear:"Fire protection (Draken Spellweavers), physical protection set.",
-  tips:"One of the best team hunting spots for 150-200. Amazing XP."},
-{name:"Roshamuul Prison",city:"Roshamuul",level:[200,300],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,
-  creatures:["Guzzlemaw","Frazzlemaw","Silencer"],cx:33530,cy:32400,
-  route:"From Roshamuul dock, navigate the demon-infested terrain to the prison entrance.",
+  premium:true,
+  creatures:[
+    {name:"Draken Spellweaver",hp:5000,xp:3100,charm:"freeze",charmPts:50},
+    {name:"Draken Elite",hp:5550,xp:3200,charm:"freeze",charmPts:50},
+    {name:"Draken Abomination",hp:6500,xp:3800,charm:"freeze",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Strike"],
+  supplies:{
+    knight:["400 Strong Health Potion","150 Strong Mana Potion","30 Ultimate Health Potion"],
+    paladin:["300 Great Spirit Potion","400 Crystalline Arrow"],
+    sorcerer:["500 Strong Mana Potion","80 Sudden Death Rune"],
+    druid:["500 Strong Mana Potion","30 Wild Growth Rune","30 Avalanche Rune"]
+  },
+  trinket:"Foxtail Amulet",
+  drops:["Draken Trophy","Elite Draken Mail","Sai","Twiceslicer","Cobra Crown"],
+  tips:"One of the best team spots for 150-200. Draken Spellweavers deal massive fire damage — fire protection mandatory. Freeze charm on everything — all weak to Ice.",
+  gear:{
+    "130-160":"Zaoan Helmet, Prismatic Armor, Zaoan Legs, Guardian Boots",
+    "160-200":"Cobra Hood, Prismatic Armor, Ornate Legs, Dreamwalkers"
+  }
+},
+{
+  name:"Roshamuul Prison",
+  city:"Roshamuul",level:[200,350],voc:["knight","paladin","sorcerer","druid"],
+  team:"team",expH:"4kk-8kk",profitH:"300k-800k",
+  cx:33530,cy:32400,
+  route:"From Roshamuul dock navigate the dangerous terrain south-west. Cross the bridge to the prison island entrance. Be careful of surface Guzzlemaws!",
   access:"Roshamuul Quest required.",
-  gear:"Physical protection, death protection, energy protection.",
-  tips:"Top-tier XP for teams 250+. Guzzlemaws hit extremely hard."},
-{name:"Falcon Bastion",city:"Edron",level:[250,400],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,
-  creatures:["Falcon Knight","Falcon Paladin"],cx:33330,cy:31700,
-  route:"From Edron, head to the Falcon area east of the city. Enter the bastion.",
+  premium:true,
+  creatures:[
+    {name:"Guzzlemaw",hp:8500,xp:6200,charm:"wound",charmPts:50},
+    {name:"Frazzlemaw",hp:6800,xp:5400,charm:"wound",charmPts:50},
+    {name:"Silencer",hp:7500,xp:5100,charm:"curse",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Bash/Chop/Slash"],
+  supplies:{
+    knight:["600 Ultimate Health Potion","200 Strong Mana Potion","50 Ultimate Spirit Potion"],
+    paladin:["400 Great Spirit Potion","600 Spectral Bolt","50 Ultimate Spirit Potion"],
+    sorcerer:["800 Strong Mana Potion","100 Sudden Death Rune"],
+    druid:["800 Strong Mana Potion","50 Wild Growth Rune","50 Avalanche Rune"]
+  },
+  trinket:"Foxtail Amulet",
+  drops:["Soulfire Rune","Guzzlemaw Body","Frazzle Skin","Silencer Resonating Chamber"],
+  tips:"Top-tier XP for teams 250+. Guzzlemaws hit EXTREMELY hard physically — full physical protection. Wound charm on Guzzle/Frazzle (neutral to most elements), Curse on Silencers (weak to Death). Knight must be experienced blocker.",
+  gear:{
+    "200-300":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers",
+    "300+"   :"Soulmantle, Soulstrider, Soulbastion, Dreamwalkers"
+  }
+},
+{
+  name:"Falcon Bastion",
+  city:"Edron",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
+  team:"team",expH:"5kk-10kk",profitH:"500k-2kk",
+  cx:33330,cy:31700,
+  route:"From Edron depot go east across the bridges. Continue far east past the Stonehome area. Enter the Falcon Bastion fortress.",
   access:"Grave Danger Quest required.",
-  gear:"Falcon equipment (if available), physical protection, fire protection.",
-  tips:"Drops Falcon equipment — second-best tier in game. Very profitable for 300+ teams."},
-{name:"Cobra Bastion",city:"Issavi",level:[250,400],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,
-  creatures:["Cobra Assassin","Cobra Scout","Cobra Vizier"],cx:33910,cy:31440,
-  route:"Travel to Issavi on the Kilmaresh continent. The bastion is northeast of the city.",
-  access:"Cobra Bastion Quest required (Kilmaresh access).",
-  gear:"Cobra Hood, physical protection, earth protection.",
-  tips:"Drops Cobra equipment including the coveted Cobra Hood (ML +2)."},
-{name:"Secret Library",city:"Various",level:[250,400],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,
-  creatures:["Burning Book","Icecold Book","Energized Raging Mage"],cx:32760,cy:32750,
-  route:"Access through various portals after completing the Secret Library Quest.",
+  premium:true,
+  creatures:[
+    {name:"Falcon Knight",hp:9500,xp:6544,charm:"wound",charmPts:50},
+    {name:"Falcon Paladin",hp:8200,xp:5765,charm:"wound",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Bash/Chop/Slash"],
+  supplies:{
+    knight:["600 Ultimate Health Potion","300 Strong Mana Potion","50 Ultimate Spirit Potion"],
+    paladin:["500 Great Spirit Potion","600 Spectral Bolt"],
+    sorcerer:["800 Strong Mana Potion","150 Sudden Death Rune"],
+    druid:["800 Strong Mana Potion","50 Wild Growth Rune"]
+  },
+  trinket:"Enchanted Theurgic Amulet",
+  drops:["Falcon Battleaxe","Falcon Bow","Falcon Coif","Falcon Escutcheon","Falcon Plate","Falcon Rod","Falcon Shield","Falcon Wand"],
+  tips:"Drops Falcon equipment — second-best tier in game. Extremely profitable for 300+ teams. Physical protection mandatory. Wound charm (neutral to most elements). Falcon Knights combo very hard.",
+  gear:{
+    "250-300":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers",
+    "300+"   :"Soulmantle, Soulstrider, Soulbastion, Dreamwalkers"
+  }
+},
+{
+  name:"Secret Library",
+  city:"Edron",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
+  team:"team",expH:"8kk-15kk",profitH:"200k-600k",
+  cx:32760,cy:32750,
+  route:"Access through portals after completing the Secret Library Quest. Different wings accessible from different portal locations.",
   access:"Secret Library Quest required.",
-  gear:"Rotation of fire/ice/energy protection depending on wing.",
-  tips:"Best XP/h in the game for 300+. Drops Fabulous Legs (Speed +12)."},
-{name:"Flimsy Lost Souls",city:"Darashia",level:[250,400],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,
-  creatures:["Flimsy Lost Soul","Mean Lost Soul","Freakish Lost Soul"],cx:33200,cy:32450,
-  route:"From Darashia, access the soul spawns underground.",
+  premium:true,
+  creatures:[
+    {name:"Burning Book",hp:6000,xp:5890,charm:"freeze",charmPts:50},
+    {name:"Icecold Book",hp:6200,xp:5890,charm:"enflame",charmPts:50},
+    {name:"Energized Raging Mage",hp:7500,xp:6400,charm:"poison",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Strike"],
+  supplies:{
+    knight:["600 Ultimate Health Potion","300 Strong Mana Potion"],
+    paladin:["500 Great Spirit Potion","600 Spectral Bolt"],
+    sorcerer:["800 Strong Mana Potion","100 Sudden Death Rune"],
+    druid:["800 Strong Mana Potion","50 Wild Growth Rune"]
+  },
+  trinket:null,
+  drops:["Fabulous Legs","Book Page","Enchanted Theurgic Amulet"],
+  tips:"BEST XP/h in the game for 300+. Different wings need different element protection — fire wing (ice prot), ice wing (fire prot), energy wing (earth prot). Rotate charms per wing. Fabulous Legs drop is extremely valuable.",
+  gear:{
+    "250-300":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers",
+    "300+"   :"Soulmantle, Soulstrider, Soulbastion, Dreamwalkers"
+  }
+},
+{
+  name:"Cobras — Issavi",
+  city:"Issavi",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
+  team:"team",expH:"5kk-9kk",profitH:"400k-1.2kk",
+  cx:33910,cy:31440,
+  route:"Travel to Issavi on the Kilmaresh continent via boat. The Cobra Bastion is north-east of the city across the desert.",
+  access:"Cobra Bastion Quest required (Kilmaresh access first).",
+  premium:true,
+  creatures:[
+    {name:"Cobra Assassin",hp:8000,xp:6200,charm:"wound",charmPts:50},
+    {name:"Cobra Scout",hp:6000,xp:4800,charm:"wound",charmPts:50},
+    {name:"Cobra Vizier",hp:8800,xp:6300,charm:"wound",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Bash/Chop/Slash"],
+  supplies:{
+    knight:["600 Ultimate Health Potion","300 Strong Mana Potion"],
+    paladin:["500 Great Spirit Potion","600 Spectral Bolt"],
+    sorcerer:["800 Strong Mana Potion","100 Sudden Death Rune"],
+    druid:["800 Strong Mana Potion","50 Wild Growth Rune"]
+  },
+  trinket:"Enchanted Theurgic Amulet",
+  drops:["Cobra Club","Cobra Sword","Cobra Axe","Cobra Hood","Cobra Crossbow","Cobra Wand","Cobra Rod"],
+  tips:"Drops Cobra equipment — Cobra Hood is best-in-slot helmet for mages 150-250. Physical protection + earth protection recommended. Wound charm on all (neutral to most elements).",
+  gear:{
+    "250-300":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers",
+    "300+"   :"Soulmantle, Soulstrider, Soulbastion, Dreamwalkers"
+  }
+},
+{
+  name:"Summer/Winter Court — Feyrist",
+  city:"Feyrist",level:[150,250],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"1.5kk-3kk",profitH:"150k-400k",
+  cx:33560,cy:32220,
+  route:"Enter Feyrist through the fairy portal near Carlin or Ab'Dendriel. The portals appear randomly — check TibiaBosses for locations.",
+  access:"A Threatened Dream Quest required.",
+  premium:true,
+  creatures:[
+    {name:"Pixie",hp:1550,xp:1000,charm:"curse",charmPts:15},
+    {name:"Faun",hp:1800,xp:1200,charm:"curse",charmPts:15},
+    {name:"Swan Maiden",hp:2200,xp:1500,charm:"curse",charmPts:25},
+    {name:"Boar Man",hp:3000,xp:2000,charm:"wound",charmPts:25},
+    {name:"Dark Faun",hp:2700,xp:1800,charm:"wound",charmPts:25}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Strike"],
+  supplies:{
+    knight:["250 Strong Health Potion","80 Strong Mana Potion"],
+    paladin:["200 Great Spirit Potion","300 Crystalline Arrow"],
+    sorcerer:["400 Strong Mana Potion","50 Sudden Death Rune"],
+    druid:["400 Strong Mana Potion","30 Wild Growth Rune"]
+  },
+  trinket:null,
+  drops:["Dream Warden Mask","Feyrist equipment","Sun Catcher","Moon Catcher"],
+  tips:"Beautiful area with great XP for 150-250. Summer Court creatures (Pixie, Faun) weak to Death — Curse charm. Winter Court creatures (Boar Man, Dark Faun) — Wound charm. Can heal each other, focus fire.",
+  gear:{
+    "150-200":"Cobra Hood, Prismatic Armor, Ornate Legs, Dreamwalkers",
+    "200-250":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers"
+  }
+},
+{
+  name:"Pirats — Rathleton",
+  city:"Rathleton",level:[200,300],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"2kk-4kk",profitH:"300k-800k",
+  cx:33620,cy:31850,
+  route:"From Rathleton use the underground tunnel system east. Navigate through the sewer-like passages to reach the pirate hideout.",
+  access:"Oramond access required. Short mission.",
+  premium:true,
+  creatures:[
+    {name:"Pirat Cutthroat",hp:5500,xp:4100,charm:"wound",charmPts:50},
+    {name:"Pirat Bombardier",hp:4800,xp:3800,charm:"wound",charmPts:50},
+    {name:"Pirat Scoundrel",hp:6200,xp:4500,charm:"wound",charmPts:50},
+    {name:"Pirat Mate",hp:7000,xp:5000,charm:"wound",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Bash/Chop/Slash"],
+  supplies:{
+    knight:["500 Ultimate Health Potion","200 Strong Mana Potion"],
+    paladin:["400 Great Spirit Potion","500 Spectral Bolt"],
+    sorcerer:["700 Strong Mana Potion","80 Sudden Death Rune"],
+    druid:["700 Strong Mana Potion","40 Wild Growth Rune"]
+  },
+  trinket:"Foxtail Amulet",
+  drops:["Pirate Treasure","Gold Ingot","Pirat Outfit"],
+  tips:"Amazing solo profit for 200-300 range. Physical protection mandatory. Wound charm on all. Pirats deal heavy physical + some fire/energy. Fast kills = fast profit.",
+  gear:{
+    "200-250":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers",
+    "250-300":"Soulmantle, Soulstrider, Dreamwalkers"
+  }
+},
+{
+  name:"Flimsy Lost Souls",
+  city:"Darashia",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
+  team:"team",expH:"6kk-12kk",profitH:"400k-1kk",
+  cx:33200,cy:32450,
+  route:"From Darashia depot head to the underground soul spawns. Access through the questline portal south of the city.",
   access:"Feaster of Souls Quest required.",
-  gear:"Physical protection, death protection (rotation).",
-  tips:"Top-tier XP and profit for 300+ characters."},
-{name:"Summer Court",city:"Feyrist",level:[150,250],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:4,
-  creatures:["Pixie","Faun","Swan Maiden","Nymph"],cx:33560,cy:32220,
-  route:"Enter Feyrist through the fairy portal near Carlin/Ab'Dendriel.",
-  access:"A Threatened Dream Quest required.",
-  gear:"Physical protection, holy protection for some creatures.",
-  tips:"Beautiful area with good XP. Feyrist creatures can heal each other."},
-{name:"Winter Court",city:"Feyrist",level:[150,250],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:4,
-  creatures:["Boar Man","Dark Faun","Twisted Pooka"],cx:33570,cy:32230,
-  route:"From Summer Court, navigate to the Winter section of Feyrist.",
-  access:"A Threatened Dream Quest required.",
-  gear:"Physical protection, ice protection for some creatures.",
-  tips:"Harder than Summer Court but better XP. Watch for Boar Man combos."},
-{name:"Grimvale Full Were",city:"Edron",level:[130,200],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,
-  creatures:["Wereboar","Werebadger","Werefox","Werewolf","Werebear"],cx:33510,cy:31660,
-  route:"From Edron, head east to Grimvale. Deep floors have all were-creatures.",
-  access:"Grimvale access + full moon phase.",
-  gear:"Silver Token equipment, physical protection.",
-  tips:"Only during full moon. Best loot from were-creatures — Foxtail Amulets, Werewolf Helmets."},
-{name:"Demon Forge",city:"Goroma",level:[200,350],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,
-  creatures:["Demon","Fire Devil","Dark Torturer"],cx:32350,cy:32530,
-  route:"Travel to Goroma island by boat. Navigate through the volcanic terrain.",
-  access:"None after reaching Goroma.",
-  gear:"Fire protection essential, physical protection.",
-  tips:"Classic demon hunting spot. Demons can combo very hard."},
-{name:"Ferumbras' Ascendant Tower",city:"Edron",level:[250,400],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,
-  creatures:["Hellflayer","Vexclaw","Grimeleech"],cx:33280,cy:31720,
-  route:"From Edron, enter the tower area accessible after the quest.",
+  premium:true,
+  creatures:[
+    {name:"Flimsy Lost Soul",hp:5000,xp:5800,charm:"divine_wrath",charmPts:50},
+    {name:"Mean Lost Soul",hp:6200,xp:6200,charm:"divine_wrath",charmPts:50},
+    {name:"Freakish Lost Soul",hp:7500,xp:7000,charm:"divine_wrath",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Bash/Chop/Slash"],
+  supplies:{
+    knight:["600 Ultimate Health Potion","300 Strong Mana Potion","50 Ultimate Spirit Potion"],
+    paladin:["500 Great Spirit Potion","600 Spectral Bolt"],
+    sorcerer:["800 Strong Mana Potion","100 Sudden Death Rune"],
+    druid:["800 Strong Mana Potion","50 Wild Growth Rune"]
+  },
+  trinket:"Enchanted Theurgic Amulet",
+  drops:["Soul Orb","Lost Soul","Brain Head"],
+  tips:"Top-tier XP and profit for 300+. Souls are weak to Holy — Divine Wrath is the best charm here. Physical + death protection rotation. Very aggressive creatures, full team needed.",
+  gear:{
+    "250-300":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers",
+    "300+"   :"Soulmantle, Soulstrider, Soulbastion, Dreamwalkers"
+  }
+},
+{
+  name:"Ferumbras Tower",
+  city:"Edron",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
+  team:"team",expH:"5kk-10kk",profitH:"400k-1.5kk",
+  cx:33280,cy:31720,
+  route:"From Edron depot head far east. Enter the Ferumbras Ascendant tower after completing the quest.",
   access:"Ferumbras' Ascension Quest required.",
-  gear:"Rotation of protections for different creature types.",
-  tips:"Drops destruction-tier weapons. One of the hardest regular spawns."}
+  premium:true,
+  creatures:[
+    {name:"Hellflayer",hp:14000,xp:9800,charm:"divine_wrath",charmPts:50},
+    {name:"Vexclaw",hp:12000,xp:8800,charm:"freeze",charmPts:50},
+    {name:"Grimeleech",hp:11500,xp:8600,charm:"enflame",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Bash/Chop/Slash"],
+  supplies:{
+    knight:["800 Ultimate Health Potion","400 Strong Mana Potion","100 Ultimate Spirit Potion"],
+    paladin:["600 Great Spirit Potion","800 Spectral Bolt"],
+    sorcerer:["1000 Strong Mana Potion","200 Sudden Death Rune"],
+    druid:["1000 Strong Mana Potion","80 Wild Growth Rune"]
+  },
+  trinket:"Enchanted Theurgic Amulet",
+  drops:["Blade of Destruction","Bow of Destruction","Wand of Destruction","Rod of Destruction"],
+  tips:"One of the hardest regular spawns. Drops Destruction-tier weapons. Different element protection for each creature: Holy for Hellflayers (demon type), Ice for Vexclaws, Fire for Grimeleeches. Massive supplies needed.",
+  gear:{
+    "250-300":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers",
+    "300+"   :"Soulmantle, Soulstrider, Soulbastion, Dreamwalkers"
+  }
+},
+{
+  name:"Edron Hero Cave",
+  city:"Edron",level:[60,100],voc:["knight","paladin"],
+  team:"solo",expH:"300k-500k",profitH:"50k-120k",
+  cx:33260,cy:31700,
+  route:"From Edron depot go south past the academy building. Continue south-east towards the mountain. The cave entrance is at the base of the hill.",
+  access:"None — free access.",
+  premium:false,
+  creatures:[
+    {name:"Hero",hp:1400,xp:1200,charm:"wound",charmPts:15},
+    {name:"Vile Grandmaster",hp:1700,xp:1400,charm:"wound",charmPts:15}
+  ],
+  imbuements:["1x Vampirism","1x Void"],
+  supplies:{
+    knight:["200 Strong Health Potion","50 Strong Mana Potion"],
+    paladin:["150 Great Spirit Potion","200 Crystalline Arrow"]
+  },
+  trinket:null,
+  drops:["Crown Armor","Crown Legs","Crown Shield","Great Health Potion"],
+  tips:"Classic spot for knights 60-100. Heroes can combo hard — approach carefully. Wound charm (physical weakness). Use full HP approach. Crown equipment drops are decent early game profit.",
+  gear:{
+    "60-80":"Royal Helmet, Magic Plate Armor, Crown Legs, Boots of Haste",
+    "80-100":"Zaoan Helmet, Magic Plate Armor, Golden Legs, Boots of Haste"
+  }
+},
+{
+  name:"Upper Spike",
+  city:"Kazordoon",level:[50,80],voc:["knight","druid"],
+  team:"solo",expH:"200k-350k",profitH:"30k-60k",
+  cx:32580,cy:31900,
+  route:"From Kazordoon depot take the mine cart system down. Follow signs to the Spike entrance in the lower levels of the city.",
+  access:"Spike Tasks Quest — talk to Gnome NPCs in Kazordoon.",
+  premium:true,
+  creatures:[
+    {name:"Wyvern",hp:1550,xp:515,charm:"enflame",charmPts:15},
+    {name:"Corym Vanguard",hp:700,xp:490,charm:"wound",charmPts:5},
+    {name:"Corym Skirmisher",hp:530,xp:260,charm:"wound",charmPts:5}
+  ],
+  imbuements:["1x Vampirism"],
+  supplies:{
+    knight:["150 Strong Health Potion","30 Mana Potion"],
+    druid:["200 Strong Mana Potion","20 Avalanche Rune"]
+  },
+  trinket:null,
+  drops:["Wyvern Talisman","Corym Bag","Small Ruby"],
+  tips:"Good team spot. Druids heal knight, knight blocks groups. Wyverns weak to Fire — Enflame charm. Coryms weak to Physical — Wound.",
+  gear:{
+    "50-70":"Soldier Helmet, Blue Robe, Crown Legs, Boots of Haste",
+    "70-80":"Royal Helmet, Magic Plate Armor, Crown Legs, Boots of Haste"
+  }
+},
+{
+  name:"Krailos Steppe",
+  city:"Edron",level:[60,100],voc:["knight","paladin","druid"],
+  team:"solo",expH:"350k-600k",profitH:"40k-100k",
+  cx:33540,cy:31610,
+  route:"From Edron take the boat/teleport to Krailos. The steppe hunting grounds are on the surface — head north from the arrival point.",
+  access:"None after reaching Krailos.",
+  premium:true,
+  creatures:[
+    {name:"Ogre Brute",hp:2400,xp:800,charm:"wound",charmPts:15},
+    {name:"Ogre Savage",hp:2600,xp:900,charm:"wound",charmPts:15},
+    {name:"Ogre Shaman",hp:1800,xp:700,charm:"wound",charmPts:15}
+  ],
+  imbuements:["1x Vampirism","1x Void"],
+  supplies:{
+    knight:["200 Strong Health Potion","50 Strong Mana Potion"],
+    paladin:["150 Great Spirit Potion","200 Crystalline Arrow"],
+    druid:["300 Strong Mana Potion","20 Avalanche Rune"]
+  },
+  trinket:null,
+  drops:["Ogre Ear Stud","Ogre Nose Ring","Crown Armor"],
+  tips:"Ogres have high physical damage. Earth protection helps against Shamans. Wound charm (neutral to most). Good spot for leveling 60-100.",
+  gear:{
+    "60-80":"Royal Helmet, Magic Plate Armor, Crown Legs, Boots of Haste",
+    "80-100":"Zaoan Helmet, Prismatic Armor, Zaoan Legs, Guardian Boots"
+  }
+},
+{
+  name:"Demon Forge — Goroma",
+  city:"Liberty Bay",level:[200,350],voc:["knight","paladin","sorcerer","druid"],
+  team:"team",expH:"3kk-5kk",profitH:"200k-500k",
+  cx:32350,cy:32530,
+  route:"From Liberty Bay take the boat to Goroma island. Navigate through the volcanic terrain south to the demon forge entrance.",
+  access:"None after reaching Goroma.",
+  premium:true,
+  creatures:[
+    {name:"Demon",hp:8200,xp:6000,charm:"divine_wrath",charmPts:50},
+    {name:"Dark Torturer",hp:7350,xp:4650,charm:"divine_wrath",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Bash/Chop/Slash"],
+  supplies:{
+    knight:["500 Ultimate Health Potion","200 Strong Mana Potion"],
+    paladin:["400 Great Spirit Potion","500 Spectral Bolt"],
+    sorcerer:["700 Strong Mana Potion","100 Sudden Death Rune"],
+    druid:["700 Strong Mana Potion","40 Wild Growth Rune"]
+  },
+  trinket:"Enchanted Theurgic Amulet",
+  drops:["Demon Horn","Demonrage Sword","Magic Plate Armor","Demon Legs","Fire Axe"],
+  tips:"Classic demon hunting. Fire protection ESSENTIAL — Demons deal massive fire damage. Divine Wrath charm (demons weak to Holy). Demons can combo very hard — knight must be experienced.",
+  gear:{
+    "200-250":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers",
+    "250+"   :"Soulmantle, Soulstrider, Dreamwalkers"
+  }
+},
+{
+  name:"Soul War — Zarganash",
+  city:"Feyrist",level:[300,999],voc:["knight","paladin","sorcerer","druid"],
+  team:"team",expH:"10kk-20kk",profitH:"500k-2kk",
+  cx:33560,cy:32230,
+  route:"Enter Zarganash through the Feyrist portal. Navigate through soul planes — different taint levels unlock different areas.",
+  access:"Soul War Quest required (many prerequisites, months of preparation).",
+  premium:true,
+  creatures:[
+    {name:"Brachiodemon",hp:21000,xp:17500,charm:"divine_wrath",charmPts:50},
+    {name:"Capricious Phantom",hp:18000,xp:15000,charm:"wound",charmPts:50},
+    {name:"Turbulent Elemental",hp:16500,xp:14000,charm:"wound",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Bash/Chop/Slash"],
+  supplies:{
+    knight:["1000 Ultimate Health Potion","500 Strong Mana Potion","200 Ultimate Spirit Potion"],
+    paladin:["800 Great Spirit Potion","1000 Spectral Bolt","100 Ultimate Spirit Potion"],
+    sorcerer:["1500 Strong Mana Potion","200 Sudden Death Rune"],
+    druid:["1500 Strong Mana Potion","100 Wild Growth Rune"]
+  },
+  trinket:"Enchanted Theurgic Amulet",
+  drops:["Soulmantle","Soulstrider","Soulbastion","Soulcutter","Soulpiercer","Soultainter","Soulbleeder"],
+  tips:"THE endgame of Tibia. Best-in-slot Soul equipment drops here. Requires a dedicated team of 30+. Massive supplies. Each boss requires perfect teamwork and different protection rotations.",
+  gear:{
+    "300-400":"Falcon full set, Dreamwalkers",
+    "400+"   :"Soul equipment (from this very spawn)"
+  }
+}
 ];
 
 // ================================================================
-// EQUIPMENT DATA (with wiki image names for item graphics)
+// EQUIPMENT DATA (with wiki image names)
 // ================================================================
 const EQUIPMENT = {
 knight:{
@@ -267,9 +709,7 @@ druid:{
 };
 
 // ================================================================
-// QUESTS DATA (abbreviated - full walkthroughs in previous version preserved)
-// The quest data structure stays the same as in the embedded version
-// but we keep it in this separate file for maintainability
+// QUESTS DATA
 // ================================================================
 const QUESTS = [
 {name:"The Desert Dungeon Quest",level:0,premium:false,location:"Ankrahmun",npc:"—",desc:"Explore the crypt systems beneath Ankrahmun's desert sands. Multiple treasure rooms with decent loot for free account players.",requirements:["Rope","Shovel"],steps:["Travel to Ankrahmun, head east into the desert.","Find the hole in the sand, use shovel to dig down.","Navigate underground tunnels heading south.","Use rope to cross gaps and reach treasure rooms.","Open chests to collect rewards."],rewards:["Silver Brooch","Green Gem","150 gold"],dangers:["Skeleton","Ghoul","Mummy"],tips:"Bring health potions. Watch for poison fields."},
@@ -284,12 +724,12 @@ const QUESTS = [
 {name:"Ferumbras' Ascension Quest",level:250,premium:true,location:"Edron",npc:"Mazarius",desc:"Stop Ferumbras from ascending. Hardest bosses in classic Tibia. Drops Destruction-tier weapons.",requirements:["Level 250+","Large team (20+)"],steps:["Talk to Mazarius in Edron.","Clear the Ascendant Tower entrance.","Complete 3 mini-boss rooms.","Fight through Hellflayers, Vexclaws, Grimeleeches.","Defeat Ferumbras Mortal Shell (main boss).","Access reward room, choose weapon."],rewards:["Blade/Bow/Wand/Rod of Destruction"],dangers:["Hellflayer","Vexclaw","Grimeleech","Ferumbras Mortal Shell"],tips:"Destruction weapons are best until Falcon/Soul tier. Massive supplies needed."},
 {name:"Secret Library Quest",level:250,premium:true,location:"Multiple",npc:"Spectulus",desc:"Explore hidden library dimensions. Unlocks one of the best XP hunting areas in the game.",requirements:["Level 250+","Team for bosses"],steps:["Talk to Spectulus in Edron.","Complete access missions for each wing.","Clear Fire Wing (Burning Books, fire enemies).","Clear Ice Wing (Icecold Books, frost enemies).","Clear Energy Wing (Energized Raging Mages).","Defeat each wing boss.","Access final reward room."],rewards:["Fabulous Legs (Arm 10, Speed +12)","Library hunting access"],dangers:["Burning Book","Icecold Book","Energized Raging Mage"],tips:"Library = best XP/h for 300+. Fabulous Legs are excellent for all vocations."},
 {name:"Soul War Quest",level:250,premium:true,location:"Feyrist / Zarganash",npc:"Spectulus",desc:"THE pinnacle of Tibia endgame. Enter the realm between life and death. Best-in-slot equipment for all vocations.",requirements:["Level 250+","Team of 30+","Many prerequisite quests"],steps:["Complete all prerequisite quests.","Enter Zarganash through Feyrist portal.","Navigate soul planes fighting powerful enemies.","Complete 5 tainting levels for boss access.","Boss 1: Goshnar's Cruelty — all protections.","Boss 2: Goshnar's Hatred — coordinate positions.","Boss 3: Goshnar's Malice — DPS race.","Boss 4: Goshnar's Spite — heal through AoE.","Boss 5: Goshnar's Megalomania — final boss, perfect teamwork.","Collect soul tokens, exchange for equipment."],rewards:["Soulmantle (Arm 18)","Soulstrider (Speed +15)","Soulbastion (Def 42)","Soulcutter/Soulpiercer/Soultainter"],dangers:["Goshnar's Cruelty","Goshnar's Megalomania"],tips:"Soul = best-in-slot for ALL vocations. Requires months of preparation and a dedicated team."},
-{name:"Grave Danger Quest",level:250,premium:true,location:"Multiple",npc:"Investigator",desc:"Investigate undead lords. Unlocks Falcon equipment — second-best tier in game. Falcon Bastion is top hunting spot.",requirements:["Level 250+","Team of 15+"],steps:["Talk to Investigator to start questline.","Investigate 4 undead activity locations.","Fight through Falcon Knights and Paladins.","Defeat King Zelos and lieutenants.","Defeat Grand Master Oberon (final boss).","Collect Falcon equipment from drops."],rewards:["Falcon equipment access","Falcon Bastion hunting"],dangers:["Falcon Knight","Falcon Paladin","Grand Master Oberon"],tips:"Falcon equipment = second-best tier. Bastion is excellent hunting 300+."},
-{name:"Killing in the Name of...",level:0,premium:true,location:"Port Hope",npc:"Grizzly Adams",desc:"Repeatable hunting task system. Hunt creatures for points and unlock rewards. Best daily income system.",requirements:["Varies by task"],steps:["Talk to Grizzly Adams in Port Hope.","Choose creature task from available options.","Hunt required number (300-6000 creatures).","Return to turn in task.","Accumulate points for rewards and boss access."],rewards:["Task points","Outfit addons","Boss access"],dangers:["Varies"],tips:"Overlap tasks with normal hunting for efficiency."},
-{name:"Oramond Quest",level:80,premium:true,location:"Rathleton",npc:"Jondrin",desc:"Unlock Oramond hunting grounds including the BEST PROFIT spot in the game — Oramond Minos.",requirements:["Level 80+ (200+ for Minos)"],steps:["Sail to Rathleton, talk to Jondrin.","Complete tasks to earn reputation.","Unlock hunting ground access.","Complete 40 daily tasks for Mino access.","Optional: Unlock Glooth Bandit area."],rewards:["Oramond access","Mino hunting (BEST profit)"],dangers:["Glooth creatures","Minotaur Amazons"],tips:"40 daily tasks for Minos is 100% worth it. Best gold/hour in game at 200+."},
-{name:"A Threatened Dream Quest",level:150,premium:true,location:"Feyrist",npc:"Fauns",desc:"Enter Feyrist dream realm. Unlocks beautiful hunting areas for 150-250 range. Prerequisite for Dream Courts.",requirements:["Level 150+"],steps:["Find Feyrist portal near Carlin/Ab'Dendriel.","Talk to Faun guardian.","Complete 3 purification rituals.","Fight corrupted Dream creatures.","Defeat Dream Court bosses."],rewards:["Feyrist access","Dream equipment"],dangers:["Boar Man","Dark Faun","Twisted Pooka"],tips:"Feyrist = best hunting for 150-250. Dream equipment is excellent."},
-{name:"The Dream Courts Quest",level:200,premium:true,location:"Feyrist",npc:"Court NPCs",desc:"Challenge dream rulers for the coveted Pair of Dreamwalkers — best-in-slot boots for most vocations.",requirements:["Level 200+","A Threatened Dream completed","Team of 10+"],steps:["Enter Dream Courts through Feyrist.","Complete Summer and Winter Court trials.","Defeat Dream Court bosses.","Challenge Maxxenius (ultimate dream boss).","Collect tokens for Dreamwalker boots."],rewards:["Pair of Dreamwalkers (Speed +10)"],dangers:["Court bosses","Maxxenius"],tips:"Dreamwalkers = best-in-slot boots at high levels."},
-{name:"Cobra Bastion Quest",level:250,premium:true,location:"Issavi",npc:"Scarlett Etzel",desc:"Infiltrate the Cobra Bastion. Drops Cobra Hood — best-in-slot helmet for mages 150-250.",requirements:["Level 250+","Team of 10+","Kilmaresh access"],steps:["Travel to Issavi.","Talk to Scarlett Etzel.","Navigate Cobra Bastion's 3 levels.","Defeat Cobra commanders.","Face final boss."],rewards:["Cobra Hood (Arm 10, ML +2)","Cobra equipment"],dangers:["Cobra Assassin","Cobra Scout","Cobra Vizier"],tips:"Cobra Hood = best helmet for mages 150-250."},
-{name:"Roshamuul Quest",level:200,premium:true,location:"Roshamuul",npc:"A Bloodbeast",desc:"Access demon-infested prison island. Unlocks Guzzlemaw Valley — top-tier XP for 250+ teams.",requirements:["Level 200+"],steps:["Sail to Roshamuul.","Navigate dangerous terrain.","Complete access missions.","Clear first prison level.","Unlock Guzzlemaw Valley."],rewards:["Roshamuul access","Guzzlemaw Valley"],dangers:["Guzzlemaw","Frazzlemaw","Silencer"],tips:"Guzzlemaw Valley = top XP for 250+ teams."},
-{name:"Adventurer's Guild Quest",level:0,premium:false,location:"Thais",npc:"Guild NPCs",desc:"Join the Adventurer's Guild for daily reward shrine access. Do this ASAP — daily rewards accumulate and are very valuable.",requirements:["None"],steps:["Find Adventurer's Guild in south Thais.","Talk to guild leader.","Complete simple initiation.","Use daily reward shrines worldwide."],rewards:["Daily reward shrine access"],dangers:["None"],tips:"Do this IMMEDIATELY on any new character. Daily rewards stack up."}
+{name:"Grave Danger Quest",level:250,premium:true,location:"Multiple",npc:"Investigator",desc:"Investigate undead lords. Unlocks Falcon equipment — second-best tier in game.",requirements:["Level 250+","Team of 15+"],steps:["Talk to Investigator to start questline.","Investigate 4 undead activity locations.","Fight through Falcon Knights and Paladins.","Defeat King Zelos and lieutenants.","Defeat Grand Master Oberon (final boss).","Collect Falcon equipment from drops."],rewards:["Falcon equipment access","Falcon Bastion hunting"],dangers:["Falcon Knight","Falcon Paladin","Grand Master Oberon"],tips:"Falcon equipment = second-best tier. Bastion is excellent hunting 300+."},
+{name:"Killing in the Name of...",level:0,premium:true,location:"Port Hope",npc:"Grizzly Adams",desc:"Repeatable hunting task system. Hunt creatures for points and unlock rewards.",requirements:["Varies by task"],steps:["Talk to Grizzly Adams in Port Hope.","Choose creature task from available options.","Hunt required number (300-6000 creatures).","Return to turn in task.","Accumulate points for rewards and boss access."],rewards:["Task points","Outfit addons","Boss access"],dangers:["Varies"],tips:"Overlap tasks with normal hunting for efficiency."},
+{name:"Oramond Quest",level:80,premium:true,location:"Rathleton",npc:"Jondrin",desc:"Unlock Oramond hunting grounds including the BEST PROFIT spot — Oramond Minos.",requirements:["Level 80+ (200+ for Minos)"],steps:["Sail to Rathleton, talk to Jondrin.","Complete tasks to earn reputation.","Unlock hunting ground access.","Complete 40 daily tasks for Mino access.","Optional: Unlock Glooth Bandit area."],rewards:["Oramond access","Mino hunting (BEST profit)"],dangers:["Glooth creatures","Minotaur Amazons"],tips:"40 daily tasks for Minos is 100% worth it. Best gold/hour in game at 200+."},
+{name:"A Threatened Dream Quest",level:150,premium:true,location:"Feyrist",npc:"Fauns",desc:"Enter Feyrist dream realm. Unlocks beautiful hunting areas for 150-250 range.",requirements:["Level 150+"],steps:["Find Feyrist portal near Carlin/Ab'Dendriel.","Talk to Faun guardian.","Complete 3 purification rituals.","Fight corrupted Dream creatures.","Defeat Dream Court bosses."],rewards:["Feyrist access","Dream equipment"],dangers:["Boar Man","Dark Faun","Twisted Pooka"],tips:"Feyrist = best hunting for 150-250. Dream equipment is excellent."},
+{name:"The Dream Courts Quest",level:200,premium:true,location:"Feyrist",npc:"Court NPCs",desc:"Challenge dream rulers for Pair of Dreamwalkers — best-in-slot boots.",requirements:["Level 200+","A Threatened Dream completed","Team of 10+"],steps:["Enter Dream Courts through Feyrist.","Complete Summer and Winter Court trials.","Defeat Dream Court bosses.","Challenge Maxxenius (ultimate dream boss).","Collect tokens for Dreamwalker boots."],rewards:["Pair of Dreamwalkers (Speed +10)"],dangers:["Court bosses","Maxxenius"],tips:"Dreamwalkers = best-in-slot boots at high levels."},
+{name:"Cobra Bastion Quest",level:250,premium:true,location:"Issavi",npc:"Scarlett Etzel",desc:"Infiltrate the Cobra Bastion. Drops Cobra Hood — best helmet for mages.",requirements:["Level 250+","Team of 10+","Kilmaresh access"],steps:["Travel to Issavi.","Talk to Scarlett Etzel.","Navigate Cobra Bastion's 3 levels.","Defeat Cobra commanders.","Face final boss."],rewards:["Cobra Hood (Arm 10, ML +2)","Cobra equipment"],dangers:["Cobra Assassin","Cobra Scout","Cobra Vizier"],tips:"Cobra Hood = best helmet for mages 150-250."},
+{name:"Roshamuul Quest",level:200,premium:true,location:"Roshamuul",npc:"A Bloodbeast",desc:"Access demon-infested prison island. Unlocks top-tier hunting for 250+.",requirements:["Level 200+"],steps:["Sail to Roshamuul.","Navigate dangerous terrain.","Complete access missions.","Clear first prison level.","Unlock Guzzlemaw Valley."],rewards:["Roshamuul access","Guzzlemaw Valley"],dangers:["Guzzlemaw","Frazzlemaw","Silencer"],tips:"Guzzlemaw Valley = top XP for 250+ teams."},
+{name:"Adventurer's Guild Quest",level:0,premium:false,location:"Thais",npc:"Guild NPCs",desc:"Join the Adventurer's Guild for daily reward shrine access. Do this ASAP!",requirements:["None"],steps:["Find Adventurer's Guild in south Thais.","Talk to guild leader.","Complete simple initiation.","Use daily reward shrines worldwide."],rewards:["Daily reward shrine access"],dangers:["None"],tips:"Do this IMMEDIATELY on any new character. Daily rewards stack up."}
 ];

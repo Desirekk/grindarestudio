@@ -387,7 +387,7 @@ async function fetchWikiCreature(name) {
 }
 
 // ================================================================
-// HUNTING SPOTS
+// HUNTING SPOTS — tibiaroute.com style
 // ================================================================
 function renderHunting() {
   const container = document.getElementById('huntingGrid');
@@ -399,34 +399,201 @@ function renderHunting() {
     return true;
   });
 
-  container.innerHTML = filtered.length ? filtered.map(s => {
-    const stars = (n, max = 5) => Array.from({ length: max }, (_, i) => `<span class="star${i < n ? '' : ' off'}">&#9733;</span>`).join('');
-    const vocIcons = s.voc.map(v => `<span class="badge bg-gold" style="font-size:9px">${v.substring(0, 2).toUpperCase()}</span>`).join(' ');
-    const creatures = s.creatures.map(c => `<span class="sc-chip"><img src="${WIKI_IMG(c)}" alt="${esc(c)}" onerror="this.style.display='none'">${esc(c)}</span>`).join('');
-    return `<div class="card sc">
-      <div class="sh"><span class="sn">${esc(s.name)}</span><span class="sl">${s.level[0]}-${s.level[1]}</span></div>
-      <div class="sm">
-        <span>${vocIcons}</span>
-        <span>XP: ${stars(s.exp)}</span>
-        <span>Loot: ${stars(s.loot)}</span>
+  document.getElementById('huntCount').textContent = `${filtered.length} spots`;
+
+  container.innerHTML = filtered.length ? '<div class="hunt-list">' + filtered.map((s, idx) => {
+    const vocBadges = s.voc.map(v => `<span class="hunt-voc">${v.substring(0,2).toUpperCase()}</span>`).join('');
+    const charmElement = ch => {
+      const charm = CHARMS[ch];
+      if (!charm) return 'physical';
+      return charm.element || 'null';
+    };
+
+    // Creature cards
+    const creatureCards = s.creatures.map(c => {
+      const cname = typeof c === 'string' ? c : c.name;
+      const hp = c.hp || '?';
+      const xp = c.xp || '?';
+      const charmId = c.charm || 'wound';
+      const charm = CHARMS[charmId] || CHARMS.wound;
+      const charmPts = c.charmPts || 0;
+      const elem = charm.element || 'null';
+      return `<div class="hc-card">
+        <div class="hc-sprite"><img src="${WIKI_IMG(cname)}" alt="${esc(cname)}" onerror="this.src='${TIBIA_IMG(cname)}'"></div>
+        <div class="hc-info">
+          <div class="hc-name">${esc(cname)}</div>
+          <div class="hc-stats">
+            <span>HP: <b class="hcs-val">${typeof hp === 'number' ? hp.toLocaleString() : hp}</b></span>
+            <span>XP: <b class="hcs-val">${typeof xp === 'number' ? xp.toLocaleString() : xp}</b></span>
+            ${charmPts ? `<span>Charm: <b class="hcs-val">${charmPts} pts</b></span>` : ''}
+          </div>
+          <span class="hc-charm charm-${elem}">${esc(charm.name)}</span>
+        </div>
+      </div>`;
+    }).join('');
+
+    // Imbuements
+    const imbuHtml = (s.imbuements || []).map(i => `<span class="imbu-chip">${esc(i)}</span>`).join('');
+
+    // Supplies per vocation
+    let suppliesHtml = '';
+    if (s.supplies) {
+      suppliesHtml = Object.entries(s.supplies).map(([v, items]) =>
+        `<div class="supply-voc"><h6>${esc(v)}</h6><ul>${items.map(i => `<li>${esc(i)}</li>`).join('')}</ul></div>`
+      ).join('');
+    }
+
+    // Trinket
+    const trinketHtml = s.trinket ? `<div class="hunt-trinket"><img src="${WIKI_IMG(s.trinket)}" alt="${esc(s.trinket)}" onerror="this.style.display='none'"><span>${esc(s.trinket)}</span></div>` : '<span style="font-size:11px;color:var(--parch-dim)">None recommended</span>';
+
+    // Drops
+    const dropsHtml = (s.drops || []).map(d => `<span class="drop-chip"><img src="${WIKI_IMG(d)}" alt="${esc(d)}" onerror="this.style.display='none'">${esc(d)}</span>`).join('');
+
+    // Gear per bracket
+    let gearHtml = '';
+    if (s.gear && typeof s.gear === 'object') {
+      gearHtml = Object.entries(s.gear).map(([bracket, items]) =>
+        `<div class="gear-bracket"><h6>Level ${bracket}</h6><p>${esc(items)}</p></div>`
+      ).join('');
+    }
+
+    return `<div class="hunt-card" id="hunt-${idx}">
+      <div class="hunt-head" onclick="this.parentElement.classList.toggle('open')">
+        <span class="hunt-arrow">&#9654;</span>
+        <span class="hunt-title">${esc(s.name)}</span>
+        <div class="hunt-badges">
+          <div class="hunt-vocs">${vocBadges}</div>
+          <span class="hunt-lvl">${s.level[0]}-${s.level[1]}</span>
+          <span class="hunt-team">${s.team || 'solo'}</span>
+        </div>
       </div>
-      <div class="screatures">${creatures}</div>
-      ${s.route ? `<div class="s-route">${esc(s.route)}</div>` : ''}
-      ${s.access ? `<div class="s-access"><strong>Access:</strong> ${esc(s.access)}</div>` : ''}
-      ${s.gear ? `<div class="s-access"><strong>Gear:</strong> ${esc(s.gear)}</div>` : ''}
-      ${s.tips ? `<div class="s-access" style="margin-top:4px"><strong>Tips:</strong> ${esc(s.tips)}</div>` : ''}
-      <div style="margin-top:8px;display:flex;gap:6px">
-        ${s.cx ? `<button class="btn-s btn-g" onclick="showOnMap(${s.cx},${s.cy},'${esc(s.name)}')">Show on Map</button>` : ''}
-        <button class="btn-s" onclick="showCreaturesFromSpot(this, [${s.creatures.map(c => `'${esc(c)}'`).join(',')}])">View Creatures</button>
+      <div class="hunt-metrics">
+        <div class="hunt-metric"><div class="hm-val">${s.level[0]}+</div><div class="hm-label">Rec. Level</div></div>
+        <div class="hunt-metric"><div class="hm-val">${s.expH || '?'}</div><div class="hm-label">Raw EXP/h</div></div>
+        <div class="hunt-metric"><div class="hm-val">${s.profitH || '?'}</div><div class="hm-label">Profit/h</div></div>
+        <div class="hunt-metric"><div class="hm-val">${s.premium ? 'Yes' : 'No'}</div><div class="hm-label">Premium</div></div>
+      </div>
+      <div class="hunt-body">
+
+        <div class="hunt-sec">
+          <div class="hunt-sec-title"><img src="${WIKI_IMG('Map_(Item)')}" onerror="this.style.display='none'"> Route & Access</div>
+          <div class="hunt-route">
+            <div class="hunt-minimap" id="minimap-${idx}"></div>
+            <div>
+              <div class="hunt-route-text">${esc(s.route || '')}</div>
+              ${s.access ? `<div class="hunt-access"><strong>Access:</strong> ${esc(s.access)}</div>` : ''}
+            </div>
+          </div>
+        </div>
+
+        <div class="hunt-sec">
+          <div class="hunt-sec-title"><img src="${WIKI_IMG('Creature_Products')}" onerror="this.style.display='none'"> Creatures & Charms</div>
+          <div class="hunt-creatures">${creatureCards}</div>
+        </div>
+
+        <div class="hunt-sec">
+          <div class="hunt-sec-title"><img src="${WIKI_IMG('Imbuing_Shrine')}" onerror="this.style.display='none'"> Imbuements</div>
+          <div class="hunt-imbu">${imbuHtml || '<span style="font-size:11px;color:var(--parch-dim)">None specified</span>'}</div>
+        </div>
+
+        <div class="hunt-sec">
+          <div class="hunt-sec-title"><img src="${WIKI_IMG('Strong_Health_Potion')}" onerror="this.style.display='none'"> Supplies</div>
+          <div class="hunt-supplies">${suppliesHtml}</div>
+        </div>
+
+        <div class="hunt-sec">
+          <div class="hunt-sec-title"><img src="${WIKI_IMG('Amulet_of_Loss')}" onerror="this.style.display='none'"> Trinket</div>
+          ${trinketHtml}
+        </div>
+
+        <div class="hunt-sec">
+          <div class="hunt-sec-title"><img src="${WIKI_IMG('Gold_Coin')}" onerror="this.style.display='none'"> Valuable Drops</div>
+          <div class="hunt-drops">${dropsHtml}</div>
+        </div>
+
+        <div class="hunt-sec">
+          <div class="hunt-sec-title"><img src="${WIKI_IMG('Magic_Plate_Armor')}" onerror="this.style.display='none'"> Recommended Gear</div>
+          <div class="hunt-gear">${gearHtml}</div>
+        </div>
+
+        ${s.tips ? `<div class="hunt-sec"><div class="hunt-sec-title"><img src="${WIKI_IMG('Book_(Brown)')}" onerror="this.style.display='none'"> Tips</div><div class="hunt-tips">${esc(s.tips)}</div></div>` : ''}
+
+        <div style="margin-top:12px;display:flex;gap:8px">
+          ${s.cx ? `<button class="btn-s btn-g" onclick="showOnMap(${s.cx},${s.cy},'${esc(s.name).replace(/'/g,"\\'")}')">Show on World Map</button>` : ''}
+          <button class="btn-s" onclick="viewSpotCreatures([${s.creatures.map(c => `'${esc(typeof c === 'string' ? c : c.name).replace(/'/g,"\\'")}'`).join(',')}])">View in Bestiary</button>
+        </div>
       </div>
     </div>`;
-  }).join('') : '<div class="empty">No spots match your filters.</div>';
+  }).join('') + '</div>' : '<div class="empty">No spots match your filters.</div>';
+
+  // Init mini maps for open cards
+  initHuntMiniMaps();
 }
 
-function showCreaturesFromSpot(btn, creatures) {
+function initHuntMiniMaps() {
+  // Use MutationObserver-like approach: init minimap when card opens
+  document.querySelectorAll('.hunt-card').forEach((card, idx) => {
+    const head = card.querySelector('.hunt-head');
+    if (!head) return;
+    // Override onclick to also init minimap
+    const origClick = head.onclick;
+    head.onclick = function() {
+      card.classList.toggle('open');
+      if (card.classList.contains('open')) {
+        const mapEl = card.querySelector('.hunt-minimap');
+        if (mapEl && !mapEl._leaflet_id) {
+          const s = HUNTING_SPOTS[idx];
+          if (s && s.cx && s.cy && typeof L !== 'undefined') {
+            setTimeout(() => initSpotMiniMap(mapEl, s), 50);
+          }
+        }
+      }
+    };
+  });
+}
+
+function initSpotMiniMap(el, spot) {
+  const bounds = [[0, 0], [MAP_H, MAP_W]];
+  const miniMap = L.map(el, {
+    crs: L.CRS.Simple,
+    minZoom: -1,
+    maxZoom: 2,
+    zoomControl: false,
+    attributionControl: false,
+    dragging: true,
+    scrollWheelZoom: false
+  });
+  L.imageOverlay(MAP_URL(7), bounds).addTo(miniMap);
+
+  const [spotLat, spotLng] = tibiaToLeaflet(spot.cx, spot.cy);
+
+  // City marker
+  const city = CITIES.find(c => c.name === spot.city);
+  if (city) {
+    const [cityLat, cityLng] = tibiaToLeaflet(city.cx, city.cy);
+    L.circleMarker([cityLat, cityLng], { radius: 5, color: '#3b82f6', fillColor: '#3b82f6', fillOpacity: 0.9, weight: 1 })
+      .bindTooltip(city.name, { permanent: true, direction: 'top', className: 'map-tip', offset: [0, -6] })
+      .addTo(miniMap);
+    // Draw route line
+    L.polyline([[cityLat, cityLng], [spotLat, spotLng]], {
+      color: '#d4a537', weight: 2, opacity: 0.7, dashArray: '6,4'
+    }).addTo(miniMap);
+    // Fit both points
+    miniMap.fitBounds([[cityLat, cityLng], [spotLat, spotLng]], { padding: [20, 20] });
+  } else {
+    miniMap.setView([spotLat, spotLng], 1);
+  }
+
+  // Spot marker
+  L.circleMarker([spotLat, spotLng], { radius: 6, color: '#d4a537', fillColor: '#d4a537', fillOpacity: 1, weight: 2 })
+    .bindTooltip(spot.name, { permanent: true, direction: 'top', className: 'map-tip', offset: [0, -8] })
+    .addTo(miniMap);
+}
+
+function viewSpotCreatures(names) {
   showPanel('bestiary');
   setTimeout(() => {
-    if (creatures.length === 1) showCreatureDetail(creatures[0]);
+    if (names.length === 1) showCreatureDetail(names[0]);
   }, 400);
 }
 

@@ -159,21 +159,84 @@ tr:hover td{background:rgba(212,165,55,.03)}
 .lt .lr{font-weight:700;text-transform:uppercase;font-size:10px}
 .lr-common{color:var(--common)}.lr-uncommon{color:var(--uncommon)}.lr-semi-rare{color:var(--semi-rare)}.lr-rare{color:var(--rare)}.lr-very-rare{color:var(--very-rare)}
 
-/* ===== HUNTING SPOTS ===== */
-.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:12px}
-.sc .sh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
-.sc .sn{font-family:'Cinzel',serif;font-size:14px;color:var(--gold-light)}
-.sc .sl{font-size:10px;padding:2px 8px;border-radius:8px;background:var(--gold-dim);color:var(--gold);font-weight:600;white-space:nowrap}
-.sc .sm{display:flex;gap:12px;margin-bottom:6px;font-size:11px;color:var(--parch-dim)}
-.sc .sm span{display:flex;align-items:center;gap:3px}
-.star{color:var(--gold);font-size:9px}.star.off{opacity:.15}
-.sc .screatures{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
-.screatures .sc-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 6px;background:var(--bg-darker);border:1px solid var(--border);border-radius:4px;font-size:10px}
-.screatures .sc-chip img{width:20px;height:20px}
-.sc .s-route{font-size:11px;color:var(--parch-dim);margin-bottom:6px;line-height:1.5;padding:6px;background:var(--bg-darker);border-radius:var(--r);border-left:2px solid var(--gold-dark)}
-.sc .s-access{font-size:10px;color:var(--parch-dim);margin-bottom:8px}
-.sc .s-access strong{color:var(--parchment)}
-.btn-s{padding:4px 10px;border-radius:var(--r);font-size:10px;font-weight:600;border:1px solid var(--border);transition:all .12s}
+/* ===== HUNTING SPOTS — tibiaroute.com style ===== */
+.hunt-list{display:flex;flex-direction:column;gap:10px}
+.hunt-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;transition:border-color .15s}
+.hunt-card:hover{border-color:var(--border-h)}
+.hunt-head{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;transition:background .12s}
+.hunt-head:hover{background:var(--bg-card-hover)}
+.hunt-arrow{color:var(--gold);transition:transform .2s;font-size:12px;flex-shrink:0}
+.hunt-card.open .hunt-arrow{transform:rotate(90deg)}
+.hunt-title{font-family:'Cinzel',serif;font-size:15px;color:var(--gold-light);flex:1}
+.hunt-badges{display:flex;gap:6px;align-items:center;flex-shrink:0}
+.hunt-lvl{font-size:10px;padding:3px 10px;border-radius:10px;background:var(--gold-dim);color:var(--gold);font-weight:700;font-family:'Cinzel',serif}
+.hunt-team{font-size:9px;padding:2px 6px;border-radius:6px;border:1px solid var(--border);color:var(--parch-dim);font-weight:600;text-transform:uppercase}
+.hunt-vocs{display:flex;gap:2px}
+.hunt-voc{font-size:8px;padding:2px 5px;border-radius:4px;background:rgba(212,165,55,.08);color:var(--gold);font-weight:700}
+/* Hunt metrics bar */
+.hunt-metrics{display:flex;gap:2px;padding:0 16px 12px;flex-wrap:wrap}
+.hunt-metric{flex:1;min-width:100px;background:var(--bg-darker);border:1px solid var(--border);border-radius:var(--r);padding:8px 12px;text-align:center}
+.hunt-metric .hm-val{font-family:'Cinzel',serif;font-size:16px;color:var(--gold-light);font-weight:700}
+.hunt-metric .hm-label{font-size:9px;color:var(--parch-dim);text-transform:uppercase;letter-spacing:.5px}
+/* Hunt detail body */
+.hunt-body{display:none;padding:0 16px 16px;border-top:1px solid var(--border)}
+.hunt-card.open .hunt-body{display:block}
+.hunt-sec{margin-top:14px}
+.hunt-sec-title{font-family:'Cinzel',serif;font-size:12px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
+.hunt-sec-title img{width:18px;height:18px}
+/* Route info */
+.hunt-route{display:flex;gap:12px;align-items:flex-start}
+.hunt-minimap{width:200px;height:150px;border:1px solid var(--border);border-radius:var(--r);flex-shrink:0;overflow:hidden;background:var(--bg-darker)}
+.hunt-route-text{flex:1;font-size:12px;color:var(--parch-dim);line-height:1.6;padding:8px 10px;background:var(--bg-darker);border-radius:var(--r);border-left:3px solid var(--gold-dark)}
+.hunt-access{margin-top:6px;font-size:11px;color:var(--parch-dim)}
+.hunt-access strong{color:var(--parchment)}
+/* Creature cards */
+.hunt-creatures{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
+.hc-card{background:var(--bg-darker);border:1px solid var(--border);border-radius:var(--r);padding:10px;display:flex;gap:10px;align-items:flex-start;transition:border-color .12s}
+.hc-card:hover{border-color:var(--border-h)}
+.hc-sprite{width:64px;height:64px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r)}
+.hc-sprite img{max-width:56px;max-height:56px;image-rendering:auto}
+.hc-info{flex:1;min-width:0}
+.hc-name{font-family:'Cinzel',serif;font-size:13px;color:var(--gold-light);margin-bottom:4px}
+.hc-stats{display:flex;gap:8px;font-size:10px;color:var(--parch-dim);margin-bottom:6px;flex-wrap:wrap}
+.hc-stats span{display:flex;align-items:center;gap:2px}
+.hc-stats .hcs-val{color:var(--parchment);font-weight:600}
+.hc-charm{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.hc-charm.charm-fire{background:rgba(239,68,68,.15);color:var(--fire);border:1px solid rgba(239,68,68,.25)}
+.hc-charm.charm-ice{background:rgba(59,130,246,.15);color:var(--ice);border:1px solid rgba(59,130,246,.25)}
+.hc-charm.charm-energy{background:rgba(168,85,247,.15);color:var(--energy);border:1px solid rgba(168,85,247,.25)}
+.hc-charm.charm-earth{background:rgba(34,197,94,.15);color:var(--earth);border:1px solid rgba(34,197,94,.25)}
+.hc-charm.charm-holy{background:rgba(250,204,21,.15);color:var(--holy);border:1px solid rgba(250,204,21,.25)}
+.hc-charm.charm-death{background:rgba(107,114,128,.15);color:var(--death);border:1px solid rgba(107,114,128,.25)}
+.hc-charm.charm-physical{background:rgba(201,169,110,.15);color:var(--physical);border:1px solid rgba(201,169,110,.25)}
+.hc-charm.charm-null{background:rgba(212,165,55,.08);color:var(--gold);border:1px solid var(--border)}
+/* Imbuements row */
+.hunt-imbu{display:flex;gap:6px;flex-wrap:wrap}
+.imbu-chip{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;background:var(--bg-darker);border:1px solid var(--border);border-radius:var(--r);font-size:11px;font-weight:600;color:var(--parchment)}
+.imbu-chip img{width:20px;height:20px}
+/* Supplies */
+.hunt-supplies{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.supply-voc{background:var(--bg-darker);border:1px solid var(--border);border-radius:var(--r);padding:8px 10px}
+.supply-voc h6{font-family:'Cinzel',serif;font-size:10px;color:var(--gold);text-transform:uppercase;margin-bottom:5px}
+.supply-voc ul{list-style:none;padding:0;font-size:11px;color:var(--parch-dim);line-height:1.8}
+.supply-voc ul li::before{content:'▸ ';color:var(--gold-dark)}
+/* Trinket */
+.hunt-trinket{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg-darker);border:1px solid var(--border);border-radius:var(--r)}
+.hunt-trinket img{width:28px;height:28px}
+.hunt-trinket span{font-size:12px;color:var(--gold-light);font-weight:600}
+/* Drops grid */
+.hunt-drops{display:flex;flex-wrap:wrap;gap:6px}
+.drop-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;background:var(--bg-darker);border:1px solid var(--border);border-radius:var(--r);font-size:11px;color:var(--parchment)}
+.drop-chip img{width:22px;height:22px}
+/* Gear recommendation */
+.hunt-gear{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px}
+.gear-bracket{background:var(--bg-darker);border:1px solid var(--border);border-radius:var(--r);padding:8px 10px}
+.gear-bracket h6{font-family:'Cinzel',serif;font-size:10px;color:var(--gold);margin-bottom:3px}
+.gear-bracket p{font-size:11px;color:var(--parch-dim);line-height:1.5}
+/* Tips */
+.hunt-tips{padding:10px 12px;background:rgba(212,165,55,.04);border:1px solid rgba(212,165,55,.12);border-radius:var(--r);font-size:12px;color:var(--gold-light);line-height:1.6}
+/* Buttons */
+.btn-s{padding:5px 12px;border-radius:var(--r);font-size:11px;font-weight:600;border:1px solid var(--border);transition:all .12s;font-family:'Cinzel',serif}
 .btn-s:hover{border-color:var(--gold);color:var(--gold)}
 .btn-g{background:var(--gold);color:var(--bg);border-color:var(--gold)}.btn-g:hover{background:var(--gold-light);color:var(--bg)}
 

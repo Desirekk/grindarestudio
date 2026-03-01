@@ -129,7 +129,7 @@
 
       <!-- HUNTING SPOTS -->
       <section class="panel" id="p-hunting">
-        <div class="ph"><h2>Hunting Spots</h2><p>Find the best hunting grounds for your level and vocation</p><div class="ph-line"></div></div>
+        <div class="ph"><h2>Hunting Spots</h2><p>Find the best hunting grounds — routes, charms, supplies, equipment</p><div class="ph-line"></div></div>
         <div class="filters">
           <div class="fg">
             <button class="fb active" onclick="setHuntVoc(this,'all')">All</button>
@@ -140,8 +140,9 @@
           </div>
           <input type="number" placeholder="Min level" style="width:90px" oninput="state.hunting.levelMin=+this.value||0;renderHunting()">
           <input type="number" placeholder="Max level" style="width:90px" oninput="state.hunting.levelMax=+this.value||9999;renderHunting()">
+          <span class="rcount" id="huntCount" style="margin-left:auto"></span>
         </div>
-        <div class="sg" id="huntingGrid"></div>
+        <div id="huntingGrid"></div>
       </section>
 
       <!-- EQUIPMENT -->
