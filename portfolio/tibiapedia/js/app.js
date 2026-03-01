@@ -665,10 +665,15 @@ function initSpotMiniMap(el, spot) {
         div.querySelectorAll('.fc-btn').forEach(btn => {
           btn.addEventListener('click', () => {
             const dir = btn.dataset.dir;
-            const newFloor = dir === 'up' ? curFloor - 1 : curFloor + 1;
-            if (newFloor < 0 || newFloor > 15) return;
-            if (!floorList.includes(newFloor)) return;
-            curFloor = newFloor;
+            const curIdx = floorList.indexOf(curFloor);
+            let nextIdx;
+            if (dir === 'up') {
+              nextIdx = curIdx - 1;
+            } else {
+              nextIdx = curIdx + 1;
+            }
+            if (nextIdx < 0 || nextIdx >= floorList.length) return;
+            curFloor = floorList[nextIdx];
             miniMap.removeLayer(overlay);
             overlay = L.imageOverlay(MAP_URL(curFloor), bounds).addTo(miniMap);
             overlay.bringToBack();
@@ -993,15 +998,18 @@ function changeFloor(floor) {
   state.mapFloor = floor;
   if (state.map && state.mapOverlay) {
     state.mapOverlay.setUrl(MAP_URL(floor));
-  }
-  // Show/hide surface markers based on floor
-  if (state.mapMarkers) {
-    if (floor === 7) state.map.addLayer(state.mapMarkers);
-    else state.map.removeLayer(state.mapMarkers);
+    // Show/hide surface markers based on floor
+    if (state.mapMarkers) {
+      if (floor === 7 && !state.map.hasLayer(state.mapMarkers)) {
+        state.map.addLayer(state.mapMarkers);
+      } else if (floor !== 7 && state.map.hasLayer(state.mapMarkers)) {
+        state.map.removeLayer(state.mapMarkers);
+      }
+    }
   }
   const df = 7 - floor;
-  const name = df === 0 ? 'Ground' : df > 0 ? '+' + df : String(df);
-  document.getElementById('floorLabel').textContent = `${name} (${floor})`;
+  const flName = df === 0 ? 'Ground' : df > 0 ? '+' + df : String(df);
+  document.getElementById('floorLabel').textContent = flName + ' (' + floor + ')';
 }
 
 function showOnMap(cx, cy, name) {
