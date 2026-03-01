@@ -130,13 +130,26 @@
       <!-- HUNTING SPOTS -->
       <section class="panel" id="p-hunting">
         <div class="ph"><h2>Hunting Spots</h2><p>Find the best hunting grounds — routes, charms, supplies, equipment</p><div class="ph-line"></div></div>
+        <div class="my-build">
+          <div class="build-label"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Citizen_Male.gif" onerror="this.style.display='none'" style="width:28px;height:28px"> My Build</div>
+          <div class="build-vocs">
+            <button class="bv active" onclick="setMyVoc(this,'knight')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Knight.gif" onerror="this.style.display='none'"> Knight</button>
+            <button class="bv" onclick="setMyVoc(this,'paladin')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Paladin.gif" onerror="this.style.display='none'"> Paladin</button>
+            <button class="bv" onclick="setMyVoc(this,'sorcerer')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Sorcerer.gif" onerror="this.style.display='none'"> Sorcerer</button>
+            <button class="bv" onclick="setMyVoc(this,'druid')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Druid.gif" onerror="this.style.display='none'"> Druid</button>
+          </div>
+          <div class="build-level">
+            <label>Level</label>
+            <input type="number" id="myLevel" value="150" min="8" max="999" style="width:80px" oninput="state.hunting.myLevel=+this.value||150;renderHunting()">
+          </div>
+        </div>
         <div class="filters">
           <div class="fg">
-            <button class="fb active" onclick="setHuntVoc(this,'all')">All</button>
-            <button class="fb" onclick="setHuntVoc(this,'knight')">Knight</button>
-            <button class="fb" onclick="setHuntVoc(this,'paladin')">Paladin</button>
-            <button class="fb" onclick="setHuntVoc(this,'sorcerer')">Sorcerer</button>
-            <button class="fb" onclick="setHuntVoc(this,'druid')">Druid</button>
+            <button class="fb active" onclick="setHuntVoc(this,'all')">All Vocations</button>
+            <button class="fb" onclick="setHuntVoc(this,'knight')">EK</button>
+            <button class="fb" onclick="setHuntVoc(this,'paladin')">RP</button>
+            <button class="fb" onclick="setHuntVoc(this,'sorcerer')">MS</button>
+            <button class="fb" onclick="setHuntVoc(this,'druid')">ED</button>
           </div>
           <input type="number" placeholder="Min level" style="width:90px" oninput="state.hunting.levelMin=+this.value||0;renderHunting()">
           <input type="number" placeholder="Max level" style="width:90px" oninput="state.hunting.levelMax=+this.value||9999;renderHunting()">

@@ -167,6 +167,18 @@ tr:hover td{background:rgba(212,165,55,.03)}
 .loot-very-rare{border-bottom:2px solid rgba(239,68,68,.3)}.loot-very-rare:hover{border-color:var(--very-rare);box-shadow:0 0 10px rgba(239,68,68,.15)}
 .lr-common{color:var(--common)}.lr-uncommon{color:var(--uncommon)}.lr-semi-rare{color:var(--semi-rare)}.lr-rare{color:var(--rare)}.lr-very-rare{color:var(--very-rare)}
 
+/* ===== MY BUILD BAR ===== */
+.my-build{display:flex;align-items:center;gap:16px;padding:12px 16px;background:linear-gradient(135deg,rgba(212,165,55,.06) 0%,rgba(212,165,55,.02) 100%);border:1px solid var(--border-h);border-radius:var(--rl);margin-bottom:14px}
+.build-label{display:flex;align-items:center;gap:8px;font-family:'Cinzel',serif;font-size:14px;color:var(--gold);font-weight:700;flex-shrink:0}
+.build-vocs{display:flex;gap:4px}
+.bv{display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:var(--r);font-size:12px;font-weight:700;border:1px solid var(--border);transition:all .12s;font-family:'Cinzel',serif;color:var(--parch-dim)}
+.bv img{width:22px;height:22px;image-rendering:auto}
+.bv:hover{border-color:var(--border-h);color:var(--parchment)}
+.bv.active{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);box-shadow:0 0 10px rgba(212,165,55,.15)}
+.build-level{display:flex;align-items:center;gap:6px;margin-left:auto}
+.build-level label{font-family:'Cinzel',serif;font-size:12px;color:var(--gold);font-weight:600}
+.build-level input{width:80px;text-align:center;font-family:'Cinzel',serif;font-weight:700;font-size:14px;color:var(--gold-light)}
+
 /* ===== HUNTING SPOTS — tibiaroute.com style ===== */
 .hunt-list{display:flex;flex-direction:column;gap:10px}
 .hunt-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;transition:border-color .15s}
@@ -254,7 +266,12 @@ tr:hover td{background:rgba(212,165,55,.03)}
 /* Gear recommendation */
 .hunt-gear{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px}
 .gear-bracket{background:var(--bg-darker);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px}
-.gear-bracket h6{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin-bottom:8px}
+.gear-bracket h6{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.gear-active{border-color:var(--border-h);background:linear-gradient(135deg,rgba(212,165,55,.04) 0%,var(--bg-darker) 100%)}
+.gear-prot-section{margin-top:8px}
+.gear-prot{border-color:rgba(239,68,68,.2)}
+.elem-bg-fire{border-left:3px solid var(--fire)}.elem-bg-ice{border-left:3px solid var(--ice)}.elem-bg-energy{border-left:3px solid var(--energy)}.elem-bg-earth{border-left:3px solid var(--earth)}.elem-bg-death{border-left:3px solid var(--death)}.elem-bg-holy{border-left:3px solid var(--holy)}.elem-bg-physical{border-left:3px solid var(--physical)}
+.supply-active{border-color:var(--border-h);background:linear-gradient(135deg,rgba(212,165,55,.04) 0%,var(--bg-darker) 100%)}
 .gear-bracket .gear-items{display:flex;flex-wrap:wrap;gap:6px}
 .gear-bracket .gear-item{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);font-size:12px;color:var(--parchment);transition:border-color .12s}
 .gear-bracket .gear-item:hover{border-color:var(--border-h)}

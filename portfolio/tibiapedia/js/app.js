@@ -15,7 +15,7 @@ const cache = { creatures: null, creatureDetail: {}, wikiDetail: {}, spells: nul
 // State
 const state = {
   panel: 'news', bestiary: { list: [], filtered: [], page: 0, search: '', detail: null },
-  hunting: { voc: 'all', levelMin: 0, levelMax: 9999 },
+  hunting: { voc: 'all', levelMin: 0, levelMax: 9999, myVoc: 'knight', myLevel: 150 },
   equip: { voc: 'knight', bracket: '8-30' },
   quests: { search: '', level: 0, premium: 'all' },
   spells: { voc: 'all', type: 'all', search: '' },
@@ -389,6 +389,26 @@ async function fetchWikiCreature(name) {
 // ================================================================
 // HUNTING SPOTS — tibiaroute.com style
 // ================================================================
+function setMyVoc(btn, voc) {
+  state.hunting.myVoc = voc;
+  btn.parentElement.querySelectorAll('.bv').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHunting();
+}
+
+function setHuntVoc(btn, voc) {
+  state.hunting.voc = voc;
+  btn.parentElement.querySelectorAll('.fb').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHunting();
+}
+
+function getGearForVocLevel(voc, level) {
+  const tiers = VOCATION_GEAR[voc];
+  if (!tiers) return null;
+  return tiers.find(t => level >= t.min && level <= t.max) || tiers[tiers.length - 1];
+}
+
 function renderHunting() {
   const container = document.getElementById('huntingGrid');
   if (!container) return;
@@ -441,18 +461,23 @@ function renderHunting() {
       return `<span class="imbu-chip">${icon ? `<img src="${WIKI_IMG(icon)}" onerror="this.style.display='none'">` : ''}${esc(i)}</span>`;
     }).join('');
 
-    // Supplies per vocation — with item icons
+    // Supplies — filtered to player's vocation
+    const myVoc = state.hunting.myVoc;
+    const myLevel = state.hunting.myLevel;
     let suppliesHtml = '';
     if (s.supplies) {
       const vocIcons = {knight:'Knight',paladin:'Paladin',sorcerer:'Sorcerer',druid:'Druid'};
-      suppliesHtml = Object.entries(s.supplies).map(([v, items]) => {
-        const vocImg = vocIcons[v] ? `<img src="${WIKI_IMG(vocIcons[v])}" onerror="this.style.display='none'">` : '';
-        const itemsHtml = items.map(i => {
+      const mySupplies = s.supplies[myVoc];
+      if (mySupplies) {
+        const vocImg = vocIcons[myVoc] ? `<img src="${WIKI_IMG(vocIcons[myVoc])}" onerror="this.style.display='none'">` : '';
+        const itemsHtml = mySupplies.map(i => {
           const itemName = i.replace(/^\d+\s*x?\s*/i, '').replace(/^\d+\s+/, '');
           return `<li><img src="${WIKI_IMG(itemName)}" onerror="this.style.display='none'">${esc(i)}</li>`;
         }).join('');
-        return `<div class="supply-voc"><h6>${vocImg}${esc(v)}</h6><ul>${itemsHtml}</ul></div>`;
-      }).join('');
+        suppliesHtml = `<div class="supply-voc supply-active"><h6>${vocImg}${esc(myVoc)}</h6><ul>${itemsHtml}</ul></div>`;
+      } else {
+        suppliesHtml = '<span style="font-size:12px;color:var(--parch-dim)">No supply data for your vocation at this spot.</span>';
+      }
     }
 
     // Trinket
@@ -461,14 +486,22 @@ function renderHunting() {
     // Drops — visual grid with item icons
     const dropsHtml = (s.drops || []).map(d => `<div class="drop-item"><img src="${WIKI_IMG(d)}" alt="${esc(d)}" onerror="this.style.display='none'"><span class="drop-name">${esc(d)}</span></div>`).join('');
 
-    // Gear per bracket — visual item chips
+    // Gear — personalized per vocation + level
     let gearHtml = '';
-    if (s.gear && typeof s.gear === 'object') {
-      gearHtml = Object.entries(s.gear).map(([bracket, items]) => {
-        const itemList = items.split(',').map(i => i.trim()).filter(Boolean);
-        const chips = itemList.map(i => `<span class="gear-item"><img src="${WIKI_IMG(i)}" alt="${esc(i)}" onerror="this.style.display='none'">${esc(i)}</span>`).join('');
-        return `<div class="gear-bracket"><h6>Level ${bracket}</h6><div class="gear-items">${chips}</div></div>`;
-      }).join('');
+    const tier = getGearForVocLevel(myVoc, myLevel);
+    if (tier) {
+      const vocLabel = myVoc.charAt(0).toUpperCase() + myVoc.slice(1);
+      const chips = tier.items.map(i => `<span class="gear-item"><img src="${WIKI_IMG(i)}" alt="${esc(i)}" onerror="this.style.display='none'">${esc(i)}</span>`).join('');
+      gearHtml = `<div class="gear-bracket gear-active"><h6><img src="${WIKI_IMG(vocLabel)}" onerror="this.style.display='none'" style="width:20px;height:20px"> ${esc(vocLabel)} — Level ${myLevel}</h6><div class="gear-items">${chips}</div></div>`;
+      // Add element protection suggestions
+      if (s.prot && s.prot.length) {
+        const protChips = s.prot.map(el => {
+          const p = ELEMENT_PROT[el];
+          if (!p) return '';
+          return `<span class="gear-item gear-prot elem-bg-${el}"><img src="${WIKI_IMG(p.amulet)}" alt="${esc(p.desc)}" onerror="this.style.display='none'">${esc(p.desc)}: ${esc(p.amulet)}</span>`;
+        }).filter(Boolean).join('');
+        if (protChips) gearHtml += `<div class="gear-bracket gear-prot-section"><h6>Recommended Protection</h6><div class="gear-items">${protChips}</div></div>`;
+      }
     }
 
     return `<div class="hunt-card" id="hunt-${idx}">
@@ -511,7 +544,7 @@ function renderHunting() {
         </div>
 
         <div class="hunt-sec">
-          <div class="hunt-sec-title"><img src="${WIKI_IMG('Strong_Health_Potion')}" onerror="this.style.display='none'"> Supplies</div>
+          <div class="hunt-sec-title"><img src="${WIKI_IMG('Strong_Health_Potion')}" onerror="this.style.display='none'"> Supplies — ${esc(myVoc.charAt(0).toUpperCase()+myVoc.slice(1))}</div>
           <div class="hunt-supplies">${suppliesHtml}</div>
         </div>
 
@@ -526,7 +559,7 @@ function renderHunting() {
         </div>
 
         <div class="hunt-sec">
-          <div class="hunt-sec-title"><img src="${WIKI_IMG('Magic_Plate_Armor')}" onerror="this.style.display='none'"> Recommended Gear</div>
+          <div class="hunt-sec-title"><img src="${WIKI_IMG('Magic_Plate_Armor')}" onerror="this.style.display='none'"> Your Gear — ${esc(myVoc.charAt(0).toUpperCase()+myVoc.slice(1))} Lv ${myLevel}</div>
           <div class="hunt-gear">${gearHtml}</div>
         </div>
 

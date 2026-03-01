@@ -50,6 +50,53 @@ const CHARMS = {
   wound_or_zap:{name:'Wound / Zap',element:'physical',desc:'Wound or Zap depending on weakness'}
 };
 
+// Vocation-specific gear per level tier (base sets — spots add element protection)
+const VOCATION_GEAR = {
+  knight:[
+    {min:8,max:59,items:["Soldier Helmet","Noble Armor","Crown Legs","Leather Boots","Bright Sword","Demon Shield"]},
+    {min:60,max:99,items:["Royal Helmet","Magic Plate Armor","Golden Legs","Boots of Haste","Shiny Blade","Shield of Honour"]},
+    {min:100,max:149,items:["Zaoan Helmet","Prismatic Armor","Zaoan Legs","Guardian Boots","Shiny Blade","Prismatic Shield"]},
+    {min:150,max:199,items:["Cobra Hood","Prismatic Armor","Ornate Legs","Pair of Dreamwalkers","Blade of Destruction","Gnome Shield"]},
+    {min:200,max:299,items:["Falcon Coif","Falcon Plate","Fabulous Legs","Pair of Dreamwalkers","Falcon Battleaxe","Falcon Escutcheon"]},
+    {min:300,max:999,items:["Soulbastion","Soulmantle","Soulstrider","Pair of Dreamwalkers","Soulcutter","Soul Shield"]}
+  ],
+  paladin:[
+    {min:8,max:59,items:["Soldier Helmet","Scale Armor","Crown Legs","Leather Boots","Arbalest","Crystalline Arrow"]},
+    {min:60,max:99,items:["Royal Helmet","Paladin Armor","Golden Legs","Boots of Haste","Warsinger Bow","Crystalline Arrow"]},
+    {min:100,max:149,items:["Zaoan Helmet","Prismatic Armor","Zaoan Legs","Guardian Boots","Mycological Bow","Crystalline Arrow"]},
+    {min:150,max:199,items:["Cobra Hood","Prismatic Armor","Ornate Legs","Pair of Dreamwalkers","Rift Bow","Diamond Arrow"]},
+    {min:200,max:299,items:["Falcon Coif","Falcon Plate","Fabulous Legs","Pair of Dreamwalkers","Falcon Bow","Diamond Arrow"]},
+    {min:300,max:999,items:["Soulmantle","Soulstrider","Pair of Dreamwalkers","Soulpiercer","Spectral Bolt"]}
+  ],
+  sorcerer:[
+    {min:8,max:59,items:["Magician's Hat","Blue Robe","Plate Legs","Leather Boots","Wand of Dragonbreath","Spellbook"]},
+    {min:60,max:99,items:["Yalahari Mask","Blue Robe","Golden Legs","Boots of Haste","Hailstorm Rod","Spellbook of Mind Stone"]},
+    {min:100,max:149,items:["Zaoan Helmet","Gill Coat","Zaoan Legs","Guardian Boots","Wand of Defiance","Spellbook of Dark Mysteries"]},
+    {min:150,max:199,items:["Cobra Hood","Prismatic Armor","Ornate Legs","Pair of Dreamwalkers","Wand of Destruction","Spellbook of Dark Mysteries"]},
+    {min:200,max:299,items:["Falcon Coif","Falcon Plate","Fabulous Legs","Pair of Dreamwalkers","Falcon Wand","Falcon Escutcheon"]},
+    {min:300,max:999,items:["Soulmantle","Soulstrider","Pair of Dreamwalkers","Soulhexer"]}
+  ],
+  druid:[
+    {min:8,max:59,items:["Magician's Hat","Blue Robe","Plate Legs","Leather Boots","Snakebite Rod","Spellbook"]},
+    {min:60,max:99,items:["Yalahari Mask","Blue Robe","Golden Legs","Boots of Haste","Springsprout Rod","Spellbook of Mind Stone"]},
+    {min:100,max:149,items:["Zaoan Helmet","Gill Coat","Zaoan Legs","Guardian Boots","Rod of Destruction","Spellbook of Dark Mysteries"]},
+    {min:150,max:199,items:["Cobra Hood","Prismatic Armor","Ornate Legs","Pair of Dreamwalkers","Rod of Destruction","Spellbook of Dark Mysteries"]},
+    {min:200,max:299,items:["Falcon Coif","Falcon Plate","Fabulous Legs","Pair of Dreamwalkers","Falcon Rod","Falcon Escutcheon"]},
+    {min:300,max:999,items:["Soulmantle","Soulstrider","Pair of Dreamwalkers","Soultainter"]}
+  ]
+};
+
+// Element protection items — suggested when creatures deal that element
+const ELEMENT_PROT = {
+  fire:{ring:"Dwarven Ring",amulet:"Magma Amulet",desc:"Fire Protection"},
+  ice:{ring:"Glacier Amulet",amulet:"Glacier Amulet",desc:"Ice Protection"},
+  energy:{ring:"Energy Ring",amulet:"Lightning Pendant",desc:"Energy Protection"},
+  earth:{ring:"Terra Amulet",amulet:"Terra Amulet",desc:"Earth Protection"},
+  death:{ring:"Ring of Souls",amulet:"Foxtail Amulet",desc:"Death Protection"},
+  holy:{ring:"Might Ring",amulet:"Platinum Amulet",desc:"Holy Protection"},
+  physical:{ring:"Prismatic Ring",amulet:"Enchanted Theurgic Amulet",desc:"Physical Protection"}
+};
+
 // Cities for map
 const CITIES = [
   {name:"Thais",cx:32369,cy:32241},{name:"Carlin",cx:32360,cy:31782},
@@ -72,6 +119,7 @@ const HUNTING_SPOTS = [
   name:"Edron Werecreatures",
   city:"Edron",level:[80,150],voc:["knight","paladin","sorcerer","druid"],
   team:"solo",expH:"800k-1.5kk",profitH:"200k-500k",
+  prot:["physical","death"],
   cx:33333,cy:31690,
   route:"From Edron depot go east across the bridge. Continue east past the academy. Enter Grimvale cave entrance near the mountain.",
   waypoints:[[33217,31814],[33250,31800],[33280,31770],[33310,31730],[33333,31690]],
@@ -103,6 +151,7 @@ const HUNTING_SPOTS = [
   name:"Darashia Dragon Lair",
   city:"Darashia",level:[40,80],voc:["knight","paladin"],
   team:"solo",expH:"200k-400k",profitH:"30k-80k",
+  prot:["fire"],
   cx:33264,cy:32277,
   route:"From Darashia depot head north-east. Follow the sand path past the gardens. Enter the dragon cave opening in the mountain.",
   waypoints:[[33224,32432],[33230,32400],[33240,32360],[33255,32320],[33264,32277]],
@@ -129,6 +178,7 @@ const HUNTING_SPOTS = [
   name:"Ghastly Dragons — Zao",
   city:"Zao",level:[130,200],voc:["knight","paladin"],
   team:"solo",expH:"1kk-1.8kk",profitH:"150k-350k",
+  prot:["death","earth"],
   cx:33450,cy:31580,
   route:"From Zao outpost use the steamship or walk south-east into the steppe. Enter the underground dragon tunnels heading deep.",
   waypoints:[[33290,31500],[33320,31510],[33360,31530],[33410,31560],[33450,31580]],
@@ -154,6 +204,7 @@ const HUNTING_SPOTS = [
   name:"Lizard City — Zao",
   city:"Zao",level:[100,150],voc:["knight","paladin","sorcerer","druid"],
   team:"solo",expH:"600k-1.2kk",profitH:"100k-250k",
+  prot:["fire","energy"],
   cx:33316,cy:31558,
   route:"From Zao outpost head south through the steppe into the city ruins. Cross the bridge and enter the main area.",
   waypoints:[[33290,31500],[33300,31520],[33310,31540],[33316,31558]],
@@ -183,6 +234,7 @@ const HUNTING_SPOTS = [
   name:"Oramond Minos",
   city:"Rathleton",level:[200,350],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"3kk-6kk",profitH:"500k-1.5kk",
+  prot:["physical","fire"],
   cx:33650,cy:31910,
   route:"From Rathleton depot take the underground steam system south. Follow tunnels to the Oramond entrance, then navigate to the Minotaur area.",
   waypoints:[[33594,31899],[33610,31900],[33630,31905],[33650,31910]],
@@ -213,6 +265,7 @@ const HUNTING_SPOTS = [
   name:"Glooth Bandits",
   city:"Rathleton",level:[150,250],voc:["knight","paladin","sorcerer","druid"],
   team:"solo",expH:"1kk-2kk",profitH:"300k-700k",
+  prot:["physical"],
   cx:33660,cy:31900,
   route:"From Rathleton depot head to the Oramond underground system. Glooth Bandits area is in the first section — easier access than Minos.",
   waypoints:[[33594,31899],[33620,31900],[33640,31900],[33660,31900]],
@@ -240,6 +293,7 @@ const HUNTING_SPOTS = [
   name:"Asura Palace",
   city:"Port Hope",level:[150,250],voc:["knight","paladin","sorcerer","druid"],
   team:"solo",expH:"1.5kk-3kk",profitH:"200k-600k",
+  prot:["fire","energy"],
   cx:32953,cy:32685,
   route:"From Port Hope depot head east through the jungle. Navigate the mountain paths north-east. The palace entrance is underground in the Kha'zeel mountains.",
   waypoints:[[32623,32753],[32680,32740],[32750,32720],[32820,32710],[32900,32695],[32953,32685]],
@@ -269,6 +323,7 @@ const HUNTING_SPOTS = [
   name:"Frost Dragons",
   city:"Svargrond",level:[80,140],voc:["knight","paladin"],
   team:"solo",expH:"400k-800k",profitH:"80k-200k",
+  prot:["ice"],
   cx:32230,cy:31412,
   route:"From Svargrond take the boat to Okolnir island. Walk north across the ice to the cave entrance. Go down into the frost dragon tunnels.",
   waypoints:[[32267,31131],[32260,31200],[32250,31280],[32240,31350],[32230,31412]],
@@ -294,6 +349,7 @@ const HUNTING_SPOTS = [
   name:"Draken Walls — Zao",
   city:"Zao",level:[130,200],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"2kk-4kk",profitH:"200k-500k",
+  prot:["fire","energy"],
   cx:33350,cy:31700,
   route:"From Zao outpost navigate south through the steppe, past Zzaion. Cross the lava rivers south to the Draken fortress entrance.",
   waypoints:[[33290,31500],[33300,31540],[33316,31558],[33330,31600],[33340,31650],[33350,31700]],
@@ -323,6 +379,7 @@ const HUNTING_SPOTS = [
   name:"Roshamuul Prison",
   city:"Roshamuul",level:[200,350],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"4kk-8kk",profitH:"300k-800k",
+  prot:["physical","death"],
   cx:33530,cy:32400,
   route:"From Roshamuul dock navigate the dangerous terrain south-west. Cross the bridge to the prison island entrance. Be careful of surface Guzzlemaws!",
   waypoints:[[33513,32363],[33520,32370],[33525,32385],[33530,32400]],
@@ -352,6 +409,7 @@ const HUNTING_SPOTS = [
   name:"Falcon Bastion",
   city:"Edron",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"5kk-10kk",profitH:"500k-2kk",
+  prot:["physical","holy"],
   cx:33362,cy:31343,
   route:"From Edron depot go east across the bridges. Take the boat north-east to Stonehome. Head north into the Falcon Bastion fortress.",
   waypoints:[[33217,31814],[33250,31780],[33280,31720],[33310,31600],[33330,31500],[33350,31400],[33362,31343]],
@@ -380,6 +438,7 @@ const HUNTING_SPOTS = [
   name:"Secret Library",
   city:"Edron",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"8kk-15kk",profitH:"200k-600k",
+  prot:["fire","ice","energy"],
   cx:32177,cy:31927,
   route:"Access through portals in north-western Tiquanda after completing the Secret Library Quest. Different wings accessible from different portal locations.",
   waypoints:[[32369,32241],[32300,32150],[32250,32050],[32200,31980],[32177,31927]],
@@ -407,6 +466,7 @@ const HUNTING_SPOTS = [
 },
 {
   name:"Cobras — Cobra Bastion",
+  prot:["physical","earth"],
   city:"Ankrahmun",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"5kk-9kk",profitH:"400k-1.2kk",
   cx:33301,cy:32647,
@@ -438,6 +498,7 @@ const HUNTING_SPOTS = [
   name:"Summer/Winter Court — Feyrist",
   city:"Feyrist",level:[150,250],voc:["knight","paladin","sorcerer","druid"],
   team:"solo",expH:"1.5kk-3kk",profitH:"150k-400k",
+  prot:["holy","death"],
   cx:33560,cy:32220,
   route:"Enter Feyrist through the fairy portal near Carlin or Ab'Dendriel. The portals appear randomly — check TibiaBosses for locations.",
   waypoints:[[33558,32224],[33560,32220]],
@@ -467,6 +528,7 @@ const HUNTING_SPOTS = [
 },
 {
   name:"Pirats — Rathleton",
+  prot:["physical"],
   city:"Rathleton",level:[200,300],voc:["knight","paladin","sorcerer","druid"],
   team:"solo",expH:"2kk-4kk",profitH:"300k-800k",
   cx:33620,cy:31850,
@@ -497,6 +559,7 @@ const HUNTING_SPOTS = [
 },
 {
   name:"Flimsy Lost Souls",
+  prot:["death","ice"],
   city:"Thais",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"6kk-12kk",profitH:"400k-1kk",
   cx:31965,cy:32328,
@@ -526,6 +589,7 @@ const HUNTING_SPOTS = [
 },
 {
   name:"Ferumbras Tower",
+  prot:["fire","death","energy"],
   city:"Liberty Bay",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"5kk-10kk",profitH:"400k-1.5kk",
   cx:32121,cy:32688,
@@ -555,6 +619,7 @@ const HUNTING_SPOTS = [
 },
 {
   name:"Edron Hero Cave",
+  prot:["physical"],
   city:"Edron",level:[60,100],voc:["knight","paladin"],
   team:"solo",expH:"300k-500k",profitH:"50k-120k",
   cx:33179,cy:31922,
@@ -581,6 +646,7 @@ const HUNTING_SPOTS = [
 },
 {
   name:"Upper Spike",
+  prot:["earth","physical"],
   city:"Kazordoon",level:[50,80],voc:["knight","druid"],
   team:"solo",expH:"200k-350k",profitH:"30k-60k",
   cx:32580,cy:31900,
@@ -608,6 +674,7 @@ const HUNTING_SPOTS = [
 },
 {
   name:"Krailos Steppe",
+  prot:["physical","earth"],
   city:"Edron",level:[60,100],voc:["knight","paladin","druid"],
   team:"solo",expH:"350k-600k",profitH:"40k-100k",
   cx:33540,cy:31610,
@@ -636,6 +703,7 @@ const HUNTING_SPOTS = [
 },
 {
   name:"Demon Forge — Goroma",
+  prot:["fire","death","energy"],
   city:"Liberty Bay",level:[200,350],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"3kk-5kk",profitH:"200k-500k",
   cx:32095,cy:32583,
@@ -664,6 +732,7 @@ const HUNTING_SPOTS = [
 },
 {
   name:"Soul War — Zarganash",
+  prot:["death","fire","physical"],
   city:"Rathleton",level:[300,999],voc:["knight","paladin","sorcerer","druid"],
   team:"team",expH:"10kk-20kk",profitH:"500k-2kk",
   cx:33604,cy:31495,
