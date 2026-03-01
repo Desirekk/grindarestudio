@@ -540,6 +540,12 @@ async function lookupMyBuild() {
   }
 }
 
+function switchToAlt(name) {
+  const input = document.getElementById('myCharName');
+  if (input) input.value = name;
+  lookupMyBuild();
+}
+
 function getVocItemUrl(voc) {
   const items = {
     knight: 'Magic_Plate_Armor.gif',
@@ -586,9 +592,10 @@ function updateBuildCharInfo(ch, acct, worldData, otherChars) {
   if (others.length > 0) {
     html += `<div class="bi-divider"></div>
     <div class="bi-section-label">Other Characters (${others.length})</div>
-    <div class="bi-alts">${others.map(c =>
-      `<span class="bi-alt${c.status === 'online' ? ' bi-alt-on' : ''}" title="${esc(c.world)}">${esc(c.name)} <span class="bi-alt-w">${esc(c.world)}</span></span>`
-    ).join('')}</div>`;
+    <div class="bi-alts">${others.map(c => {
+      const n = esc(c.name).replace(/'/g,"\\'");
+      return `<span class="bi-alt${c.status === 'online' ? ' bi-alt-on' : ''}" title="${esc(c.world)} — click to switch" onclick="switchToAlt('${n}')">${esc(c.name)} <span class="bi-alt-w">${esc(c.world)}</span></span>`;
+    }).join('')}</div>`;
   }
   if (worldData) {
     const w = worldData;
