@@ -629,111 +629,155 @@ function initHuntMiniMaps(spots) {
 
 function initSpotMiniMap(el, spot) {
   const bounds = [[0, 0], [MAP_H, MAP_W]];
-  const miniMap = L.map(el, {
-    crs: L.CRS.Simple,
-    minZoom: -1,
-    maxZoom: 3,
-    zoomControl: true,
-    attributionControl: false,
-    dragging: true,
-    scrollWheelZoom: true
-  });
-  L.imageOverlay(MAP_URL(7), bounds).addTo(miniMap);
 
-  const surfacePoints = []; // only floor-7 points for fitBounds
-
+  // Determine which floors this spot uses
+  const floors = new Set();
   if (spot.waypoints && spot.waypoints.length > 0) {
-    // Waypoint format: [x, y, "label", floor]  (floor defaults to 7)
-    // Draw route segments between consecutive same-floor waypoints
-    let segmentPts = [];
-    spot.waypoints.forEach((wp, i) => {
-      const floor = wp[3] || 7;
-      const [lat, lng] = tibiaToLeaflet(wp[0], wp[1]);
-      if (floor === 7) {
-        segmentPts.push([lat, lng]);
-        surfacePoints.push([lat, lng]);
-      } else {
-        // Floor changed — flush current segment
-        if (segmentPts.length > 1) {
-          L.polyline(segmentPts, { color: '#d4a537', weight: 3, opacity: 0.9 }).addTo(miniMap);
-          L.polyline(segmentPts, { color: '#d4a537', weight: 7, opacity: 0.15 }).addTo(miniMap);
-        }
-        segmentPts = [];
+    spot.waypoints.forEach(wp => floors.add(wp[3] || 7));
+  } else { floors.add(7); }
+  const floorList = Array.from(floors).sort((a, b) => a - b);
+  let curFloor = 7; // start on surface
+
+  const miniMap = L.map(el, {
+    crs: L.CRS.Simple, minZoom: -1, maxZoom: 4,
+    zoomControl: false, attributionControl: false,
+    dragging: true, scrollWheelZoom: true
+  });
+  L.control.zoom({ position: 'topright' }).addTo(miniMap);
+
+  let overlay = L.imageOverlay(MAP_URL(curFloor), bounds).addTo(miniMap);
+  let routeGroup = L.layerGroup().addTo(miniMap);
+
+  const displayFloor = f => { const d = 7 - f; return d === 0 ? '0' : d > 0 ? '+' + d : String(d); };
+
+  // Floor switching control — tibiaroute.com style
+  if (floorList.length > 1) {
+    const FC = L.Control.extend({
+      options: { position: 'topleft' },
+      onAdd: function() {
+        const div = L.DomUtil.create('div', 'floor-ctrl');
+        div.innerHTML = '<button class="fc-btn" data-dir="up">▲</button><span class="fc-lbl">' + displayFloor(curFloor) + '</span><button class="fc-btn" data-dir="down">▼</button>';
+        L.DomEvent.disableClickPropagation(div);
+        L.DomEvent.disableScrollPropagation(div);
+        div.querySelectorAll('.fc-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const dir = btn.dataset.dir;
+            const newFloor = dir === 'up' ? curFloor - 1 : curFloor + 1;
+            if (newFloor < 0 || newFloor > 15) return;
+            // Check if this floor has waypoints or is adjacent to a floor that does
+            if (!floorList.includes(newFloor)) return;
+            curFloor = newFloor;
+            miniMap.removeLayer(overlay);
+            overlay = L.imageOverlay(MAP_URL(curFloor), bounds).addTo(miniMap);
+            overlay.bringToBack();
+            drawRoute();
+            div.querySelector('.fc-lbl').textContent = displayFloor(curFloor);
+          });
+        });
+        return div;
       }
     });
-    // Flush last segment
-    if (segmentPts.length > 1) {
-      L.polyline(segmentPts, { color: '#d4a537', weight: 3, opacity: 0.9 }).addTo(miniMap);
-      L.polyline(segmentPts, { color: '#d4a537', weight: 7, opacity: 0.15 }).addTo(miniMap);
+    new FC().addTo(miniMap);
+  }
+
+  function drawRoute() {
+    routeGroup.clearLayers();
+    if (!spot.waypoints || !spot.waypoints.length) {
+      // No waypoints — city→spot line
+      const city = CITIES.find(c => c.name === spot.city);
+      if (curFloor !== 7) return;
+      const [sLat, sLng] = tibiaToLeaflet(spot.cx, spot.cy);
+      if (city) {
+        const [cLat, cLng] = tibiaToLeaflet(city.cx, city.cy);
+        routeGroup.addLayer(L.polyline([[cLat, cLng], [sLat, sLng]], { color: '#d4a537', weight: 3, opacity: .9 }));
+        routeGroup.addLayer(L.marker([cLat, cLng], { icon: stepIcon(1, 'step-marker step-marker-start') }).bindTooltip(city.name, tipOpts));
+        routeGroup.addLayer(L.marker([sLat, sLng], { icon: stepIcon(2, 'step-marker step-marker-end') }).bindTooltip(spot.name, tipOpts));
+        miniMap.fitBounds([[cLat, cLng], [sLat, sLng]], { padding: [40, 40] });
+      } else {
+        miniMap.setView([sLat, sLng], 1);
+      }
+      return;
     }
 
-    // Numbered step markers
+    // Draw route segments for current floor
+    let seg = [];
     spot.waypoints.forEach((wp, i) => {
-      const floor = wp[3] || 7;
+      const f = wp[3] || 7;
+      if (f === curFloor) {
+        seg.push(tibiaToLeaflet(wp[0], wp[1]));
+      } else {
+        flushSeg(seg);
+        seg = [];
+      }
+    });
+    flushSeg(seg);
+
+    // Direction arrows between consecutive same-floor waypoints
+    for (let i = 0; i < spot.waypoints.length - 1; i++) {
+      const w1 = spot.waypoints[i], w2 = spot.waypoints[i + 1];
+      if ((w1[3] || 7) !== curFloor || (w2[3] || 7) !== curFloor) continue;
+      const [lat1, lng1] = tibiaToLeaflet(w1[0], w1[1]);
+      const [lat2, lng2] = tibiaToLeaflet(w2[0], w2[1]);
+      const mLat = (lat1 + lat2) / 2, mLng = (lng1 + lng2) / 2;
+      const angle = Math.atan2(lng2 - lng1, lat2 - lat1) * 180 / Math.PI;
+      routeGroup.addLayer(L.marker([mLat, mLng], {
+        icon: L.divIcon({ className: '', html: '<div class="route-arrow" style="transform:rotate(' + (90 - angle) + 'deg)">▸</div>', iconSize: [14, 14], iconAnchor: [7, 7] }),
+        interactive: false
+      }));
+    }
+
+    // Step markers for current floor
+    spot.waypoints.forEach((wp, i) => {
+      const f = wp[3] || 7;
+      if (f !== curFloor) return;
+      const [lat, lng] = tibiaToLeaflet(wp[0], wp[1]);
       const label = wp[2] || '';
-      const stepNum = i + 1;
+      const num = i + 1;
       const isFirst = i === 0;
       const isLast = i === spot.waypoints.length - 1;
-
-      if (floor !== 7) {
-        // Underground/above — don't show on map, steps list handles it
-        return;
-      }
-
-      const [lat, lng] = tibiaToLeaflet(wp[0], wp[1]);
-      // Detect floor change: next or prev step is on different floor
-      const prevFloor = i > 0 ? (spot.waypoints[i-1][3] || 7) : 7;
-      const nextFloor = i < spot.waypoints.length-1 ? (spot.waypoints[i+1][3] || 7) : 7;
-      const isFloorChange = nextFloor !== 7 || prevFloor !== 7;
+      const nextF = i < spot.waypoints.length - 1 ? (spot.waypoints[i + 1][3] || 7) : curFloor;
+      const prevF = i > 0 ? (spot.waypoints[i - 1][3] || 7) : curFloor;
+      const goDown = nextF > curFloor;
+      const goUp = nextF < curFloor && nextF !== curFloor;
+      const cameFrom = prevF !== curFloor;
 
       let cls = 'step-marker';
-      let markerLabel = String(stepNum);
-      if (isFirst) cls = 'step-marker step-marker-start';
-      else if (isLast) cls = 'step-marker step-marker-end';
-      else if (isFloorChange) { cls = 'step-marker step-marker-stairs'; markerLabel = '↓'; }
+      let ml = String(num);
+      if (isFirst && !cameFrom) cls += ' step-marker-start';
+      else if (isLast && !goDown && !goUp) cls += ' step-marker-end';
+      else if (goDown) { cls += ' step-marker-stairs'; ml = '↓'; }
+      else if (goUp) { cls += ' step-marker-stairs'; ml = '↑'; }
+      else if (cameFrom) { cls += ' step-marker-stairs'; ml = prevF > curFloor ? '↑' : '↓'; }
 
-      const icon = L.divIcon({
-        className: '',
-        html: `<div class="${cls}">${markerLabel}</div>`,
-        iconSize: [22, 22],
-        iconAnchor: [11, 11]
-      });
-      const marker = L.marker([lat, lng], { icon });
-      const floorInfo = isFloorChange ? ' ⬇ floor change' : '';
-      if (label) {
-        marker.bindTooltip(`<b>${stepNum}.</b> ${label}${floorInfo}`, {
-          direction: 'top', className: 'map-tip', offset: [0, -14]
-        });
-      }
-      marker.addTo(miniMap);
+      const marker = L.marker([lat, lng], { icon: stepIcon(ml, cls) });
+      let tip = '<b>' + num + '.</b> ' + label;
+      if (goDown) tip += ' ⬇ go down';
+      if (goUp) tip += ' ⬆ go up';
+      if (label) marker.bindTooltip(tip, tipOpts);
+      routeGroup.addLayer(marker);
     });
 
-    if (surfacePoints.length > 1) {
-      miniMap.fitBounds(surfacePoints, { padding: [40, 40] });
-    } else if (surfacePoints.length === 1) {
-      miniMap.setView(surfacePoints[0], 1);
-    } else {
-      // All underground — zoom to spot coords anyway
-      miniMap.setView(tibiaToLeaflet(spot.cx, spot.cy), 0);
-    }
-  } else {
-    // No waypoints — show city→spot
-    const city = CITIES.find(c => c.name === spot.city);
-    const [spotLat, spotLng] = tibiaToLeaflet(spot.cx, spot.cy);
-    if (city) {
-      const [cityLat, cityLng] = tibiaToLeaflet(city.cx, city.cy);
-      L.polyline([[cityLat, cityLng], [spotLat, spotLng]], {
-        color: '#d4a537', weight: 3, opacity: 0.9
-      }).addTo(miniMap);
-      const cityIcon = L.divIcon({ className: '', html: '<div class="step-marker step-marker-start">1</div>', iconSize: [22, 22], iconAnchor: [11, 11] });
-      L.marker([cityLat, cityLng], { icon: cityIcon }).bindTooltip(city.name, { direction: 'top', className: 'map-tip', offset: [0, -14] }).addTo(miniMap);
-      const spotIcon = L.divIcon({ className: '', html: '<div class="step-marker step-marker-end">2</div>', iconSize: [22, 22], iconAnchor: [11, 11] });
-      L.marker([spotLat, spotLng], { icon: spotIcon }).bindTooltip(spot.name, { direction: 'top', className: 'map-tip', offset: [0, -14] }).addTo(miniMap);
-      miniMap.fitBounds([[cityLat, cityLng], [spotLat, spotLng]], { padding: [40, 40] });
-    } else {
-      miniMap.setView([spotLat, spotLng], 1);
+    // Fit to points on this floor
+    const pts = [];
+    spot.waypoints.forEach(wp => { if ((wp[3] || 7) === curFloor) pts.push(tibiaToLeaflet(wp[0], wp[1])); });
+    if (pts.length > 1) miniMap.fitBounds(pts, { padding: [40, 40] });
+    else if (pts.length === 1) miniMap.setView(pts[0], 2);
+    else miniMap.setView(tibiaToLeaflet(spot.cx, spot.cy), 0);
+  }
+
+  function flushSeg(pts) {
+    if (pts.length > 1) {
+      routeGroup.addLayer(L.polyline(pts, { color: '#d4a537', weight: 8, opacity: .12 }));
+      routeGroup.addLayer(L.polyline(pts, { color: '#d4a537', weight: 3, opacity: .9, lineCap: 'round', lineJoin: 'round' }));
     }
   }
+
+  const tipOpts = { direction: 'top', className: 'map-tip', offset: [0, -14] };
+  function stepIcon(label, cls) {
+    return L.divIcon({ className: '', html: '<div class="' + cls + '">' + label + '</div>', iconSize: [22, 22], iconAnchor: [11, 11] });
+  }
+
+  drawRoute();
 }
 
 function viewSpotCreatures(names) {
