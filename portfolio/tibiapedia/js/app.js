@@ -1,0 +1,803 @@
+// ================================================================
+// TibiaPedia v3 — Application Logic
+// Dual API: TibiaData (live) + TibiaWiki (rich creature data)
+// ================================================================
+const API = 'https://api.tibiadata.com/v4';
+const WIKI_API = 'https://tibiawiki.dev/api';
+const MAP_URL = f => `https://tibiamaps.github.io/tibia-map-data/floor-${String(f).padStart(2,'0')}-map.png`;
+const MAP_W = 2560, MAP_H = 2048;
+const MAP_X0 = 31744, MAP_X1 = 34560, MAP_Y0 = 30720, MAP_Y1 = 33920;
+const PER_PAGE = 60;
+
+// Caches
+const cache = { creatures: null, creatureDetail: {}, wikiDetail: {}, spells: null, worlds: null, news: null };
+
+// State
+const state = {
+  panel: 'news', bestiary: { list: [], filtered: [], page: 0, search: '', detail: null },
+  hunting: { voc: 'all', levelMin: 0, levelMax: 9999 },
+  equip: { voc: 'knight', bracket: '8-30' },
+  quests: { search: '', level: 0, premium: 'all' },
+  spells: { voc: 'all', type: 'all', search: '' },
+  worlds: { search: '', sort: 'name', asc: true },
+  map: null, mapFloor: 7
+};
+
+// ================================================================
+// INIT
+// ================================================================
+document.addEventListener('DOMContentLoaded', () => {
+  initNav();
+  initGlobalSearch();
+  loadBoosted();
+  showPanel('news');
+});
+
+// ================================================================
+// NAVIGATION
+// ================================================================
+function initNav() {
+  document.querySelectorAll('.nav-item').forEach(el => {
+    el.addEventListener('click', () => showPanel(el.dataset.panel));
+  });
+}
+
+function showPanel(id) {
+  state.panel = id;
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.panel === id));
+  document.querySelectorAll('.panel').forEach(el => el.classList.toggle('active', el.id === 'p-' + id));
+  const loaders = {
+    news: loadNews, bestiary: loadBestiary, hunting: renderHunting,
+    equipment: renderEquipment, quests: renderQuests, spells: loadSpells,
+    map: initMap, character: () => {}, worlds: loadWorlds, calculators: initCalcs
+  };
+  if (loaders[id]) loaders[id]();
+}
+
+// ================================================================
+// GLOBAL SEARCH
+// ================================================================
+function initGlobalSearch() {
+  const input = document.getElementById('globalSearch');
+  if (!input) return;
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const q = input.value.trim().toLowerCase();
+      if (!q) return;
+      // Try creature first
+      if (cache.creatures) {
+        const found = cache.creatures.find(c => c.name.toLowerCase() === q);
+        if (found) { showPanel('bestiary'); setTimeout(() => showCreatureDetail(found.name), 300); return; }
+      }
+      // Try quest
+      const quest = QUESTS.find(qst => qst.name.toLowerCase().includes(q));
+      if (quest) { showPanel('quests'); return; }
+      // Default to bestiary search
+      showPanel('bestiary');
+      state.bestiary.search = q;
+      const si = document.getElementById('bestiarySearch');
+      if (si) si.value = q;
+      filterBestiary();
+    }
+  });
+}
+
+// ================================================================
+// BOOSTED CREATURE & BOSS
+// ================================================================
+async function loadBoosted() {
+  try {
+    const [crRes, bossRes] = await Promise.all([
+      fetch(`${API}/creatures`).then(r => r.json()),
+      fetch(`${API}/boostablebosses`).then(r => r.json())
+    ]);
+    const bc = crRes?.creatures?.boosted;
+    const bb = bossRes?.boostablebosses?.boosted;
+    if (bc) {
+      document.getElementById('boostedCreature').innerHTML =
+        `<img src="${WIKI_IMG(bc.name)}" alt="${bc.name}" onerror="this.src='${TIBIA_IMG(bc.race || bc.name)}'">` +
+        `<div class="boosted-info"><span class="blabel">Boosted</span><span class="bname" title="${bc.name}">${bc.name}</span></div>`;
+    }
+    if (bb) {
+      document.getElementById('boostedBoss').innerHTML =
+        `<img src="${WIKI_IMG(bb.name)}" alt="${bb.name}" onerror="this.src='${TIBIA_IMG(bb.name)}'">` +
+        `<div class="boosted-info"><span class="blabel">Boss</span><span class="bname" title="${bb.name}">${bb.name}</span></div>`;
+    }
+    // Also update news sidebar widgets
+    if (bc) {
+      const nbc = document.getElementById('newsBoostedCreature');
+      if (nbc) nbc.innerHTML = `<img src="${WIKI_IMG(bc.name)}" alt="${bc.name}" class="timg-lg" style="margin:0 auto 6px" onerror="this.src='${TIBIA_IMG(bc.race || bc.name)}'"><div class="bn">${bc.name}</div>`;
+    }
+    if (bb) {
+      const nbb = document.getElementById('newsBoostedBoss');
+      if (nbb) nbb.innerHTML = `<img src="${WIKI_IMG(bb.name)}" alt="${bb.name}" class="timg-lg" style="margin:0 auto 6px" onerror="this.src='${TIBIA_IMG(bb.name)}'"><div class="bn">${bb.name}</div>`;
+    }
+  } catch (e) { console.warn('Boosted load failed:', e); }
+}
+
+// ================================================================
+// NEWS
+// ================================================================
+async function loadNews() {
+  const container = document.getElementById('newsList');
+  if (!container) return;
+  if (cache.news) { renderNews(cache.news); return; }
+  container.innerHTML = '<div class="loading"><span class="spinner"></span> Loading news...</div>';
+  try {
+    const res = await fetch(`${API}/news/latest`).then(r => r.json());
+    cache.news = res?.news || [];
+    renderNews(cache.news);
+  } catch (e) { container.innerHTML = '<div class="empty">Failed to load news. Try refreshing.</div>'; }
+}
+
+function renderNews(items) {
+  const container = document.getElementById('newsList');
+  if (!items.length) { container.innerHTML = '<div class="empty">No news available.</div>'; return; }
+  container.innerHTML = items.slice(0, 15).map(n => `
+    <div class="news-item" data-id="${n.id}" onclick="toggleNews(this, ${n.id})">
+      <div class="news-head">
+        <span class="badge bg-gold">${n.category || 'news'}</span>
+        <span class="news-date">${n.date || ''}</span>
+      </div>
+      <div class="news-title">${esc(n.news || n.title || 'Untitled')}</div>
+      <div class="news-preview">${esc((n.news || n.content || '').substring(0, 120))}...</div>
+      <div class="news-body"></div>
+    </div>`).join('');
+}
+
+async function toggleNews(el, id) {
+  if (el.classList.contains('expanded')) { el.classList.remove('expanded'); return; }
+  const body = el.querySelector('.news-body');
+  if (!body.innerHTML) {
+    body.innerHTML = '<span class="spinner"></span>';
+    try {
+      const res = await fetch(`${API}/news/id/${id}`).then(r => r.json());
+      body.innerHTML = res?.news?.content_html || res?.news?.content || 'No content available.';
+    } catch (e) { body.innerHTML = 'Failed to load full article.'; }
+  }
+  el.classList.add('expanded');
+}
+
+// ================================================================
+// BESTIARY
+// ================================================================
+async function loadBestiary() {
+  if (state.bestiary.detail) return;
+  const grid = document.getElementById('bestiaryGrid');
+  if (!grid) return;
+  if (cache.creatures) { filterBestiary(); return; }
+  grid.innerHTML = '<div class="loading"><span class="spinner"></span> Loading creatures...</div>';
+  try {
+    const res = await fetch(`${API}/creatures`).then(r => r.json());
+    const list = (res?.creatures?.creature_list || []).map(c => ({ name: c.name, race: c.race }));
+    list.sort((a, b) => a.name.localeCompare(b.name));
+    cache.creatures = list;
+    state.bestiary.list = list;
+    state.bestiary.filtered = list;
+    filterBestiary();
+  } catch (e) { grid.innerHTML = '<div class="empty">Failed to load creatures.</div>'; }
+}
+
+function filterBestiary() {
+  const q = state.bestiary.search.toLowerCase();
+  state.bestiary.filtered = state.bestiary.list.filter(c => c.name.toLowerCase().includes(q));
+  state.bestiary.page = 0;
+  renderBestiaryPage();
+}
+
+function renderBestiaryPage() {
+  const { filtered, page } = state.bestiary;
+  const grid = document.getElementById('bestiaryGrid');
+  const start = page * PER_PAGE;
+  const pageItems = filtered.slice(start, start + PER_PAGE);
+  const totalPages = Math.ceil(filtered.length / PER_PAGE);
+
+  grid.innerHTML = pageItems.map(c => `
+    <div class="cc" onclick="showCreatureDetail('${esc(c.name)}')">
+      <img src="${WIKI_IMG(c.name)}" alt="${esc(c.name)}" class="timg" onerror="this.src='${TIBIA_IMG(c.race || c.name)}'">
+      <div class="cn" title="${esc(c.name)}">${esc(c.name)}</div>
+    </div>`).join('');
+
+  document.getElementById('bestiaryCount').textContent = `${filtered.length} creatures`;
+  const pagEl = document.getElementById('bestiaryPag');
+  if (totalPages <= 1) { pagEl.innerHTML = ''; return; }
+  let pag = `<button class="pg" onclick="bestiaryPage(${page - 1})" ${page === 0 ? 'disabled' : ''}>&lt;</button>`;
+  for (let i = 0; i < totalPages; i++) {
+    if (totalPages > 10 && Math.abs(i - page) > 2 && i !== 0 && i !== totalPages - 1) {
+      if (i === 1 && page > 3) pag += '<span class="pg">...</span>';
+      if (i === totalPages - 2 && page < totalPages - 4) pag += '<span class="pg">...</span>';
+      continue;
+    }
+    pag += `<button class="pg ${i === page ? 'active' : ''}" onclick="bestiaryPage(${i})">${i + 1}</button>`;
+  }
+  pag += `<button class="pg" onclick="bestiaryPage(${page + 1})" ${page >= totalPages - 1 ? 'disabled' : ''}>&gt;</button>`;
+  pagEl.innerHTML = pag;
+}
+
+function bestiaryPage(p) {
+  const totalPages = Math.ceil(state.bestiary.filtered.length / PER_PAGE);
+  if (p < 0 || p >= totalPages) return;
+  state.bestiary.page = p;
+  renderBestiaryPage();
+  document.getElementById('bestiaryGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ================================================================
+// CREATURE DETAIL
+// ================================================================
+async function showCreatureDetail(name) {
+  state.bestiary.detail = name;
+  document.getElementById('bestiaryList').style.display = 'none';
+  const cd = document.getElementById('creatureDetail');
+  cd.classList.add('active');
+  cd.innerHTML = '<div class="loading"><span class="spinner"></span> Loading creature data...</div>';
+
+  const [tibiaData, wikiData] = await Promise.all([
+    fetchCreatureData(name),
+    fetchWikiCreature(name)
+  ]);
+
+  const d = tibiaData || {};
+  const w = wikiData || {};
+  const hp = w.hitpoints || d.hitpoints || '?';
+  const xp = w.experiencepoints || d.experience_points || '?';
+  const armor = w.armor || '?';
+  const speed = w.speed || '?';
+  const img = WIKI_IMG(name);
+  const fallback = TIBIA_IMG(d.race || name);
+
+  let html = `
+    <button class="cd-back" onclick="backToBestiary()">&#9664; Back to Bestiary</button>
+    <div class="cd-top">
+      <div class="cd-sprite"><img src="${img}" alt="${esc(name)}" onerror="this.src='${fallback}'"></div>
+      <div class="cd-info">
+        <h3>${esc(name)}</h3>
+        <p class="cd-desc">${esc(w.bestiaryclass || d.description || '')}</p>
+      </div>
+    </div>
+    <div class="cd-stats">
+      <div class="cd-stat"><div class="v">${formatNum(hp)}</div><div class="l">Hit Points</div></div>
+      <div class="cd-stat"><div class="v">${formatNum(xp)}</div><div class="l">Experience</div></div>
+      <div class="cd-stat"><div class="v">${armor}</div><div class="l">Armor</div></div>
+      <div class="cd-stat"><div class="v">${speed}</div><div class="l">Speed</div></div>
+      <div class="cd-stat"><div class="v">${w.isboss === true ? 'Yes' : 'No'}</div><div class="l">Boss</div></div>
+    </div>`;
+
+  // Resistances
+  html += renderResistances(w);
+
+  // Abilities
+  if (w.abilities) {
+    html += `<div class="cd-sec"><h4>Abilities</h4><p style="font-size:13px;color:var(--parch-dim);line-height:1.6">${esc(w.abilities)}</p></div>`;
+  }
+
+  // Loot
+  html += renderLoot(w);
+
+  // Location
+  if (w.location) {
+    html += `<div class="cd-sec"><h4>Location</h4><p style="font-size:13px;color:var(--parch-dim)">${esc(w.location)}</p></div>`;
+  }
+
+  // Behavior
+  let behavior = [];
+  if (d.immune_to?.length) behavior.push(`<strong>Immune:</strong> ${d.immune_to.join(', ')}`);
+  if (d.strong_against?.length) behavior.push(`<strong>Strong vs:</strong> ${d.strong_against.join(', ')}`);
+  if (d.weakness?.length) behavior.push(`<strong>Weak vs:</strong> ${d.weakness.join(', ')}`);
+  if (d.be_convinced !== undefined) behavior.push(`<strong>Convinceable:</strong> ${d.be_convinced ? 'Yes' : 'No'}`);
+  if (d.be_summoned !== undefined) behavior.push(`<strong>Summonable:</strong> ${d.be_summoned ? 'Yes' : 'No'}`);
+  if (behavior.length) {
+    html += `<div class="cd-sec"><h4>Behavior</h4><div style="font-size:12px;color:var(--parch-dim);line-height:1.8">${behavior.join('<br>')}</div></div>`;
+  }
+
+  cd.innerHTML = html;
+}
+
+function backToBestiary() {
+  state.bestiary.detail = null;
+  document.getElementById('bestiaryList').style.display = '';
+  const cd = document.getElementById('creatureDetail');
+  cd.classList.remove('active');
+  cd.innerHTML = '';
+}
+
+function renderResistances(w) {
+  const fields = [
+    { key: 'physicalDmgMod', name: 'Physical', css: 'physical', abbr: 'Phy' },
+    { key: 'fireDmgMod', name: 'Fire', css: 'fire', abbr: 'Fir' },
+    { key: 'iceDmgMod', name: 'Ice', css: 'ice', abbr: 'Ice' },
+    { key: 'energyDmgMod', name: 'Energy', css: 'energy', abbr: 'Ene' },
+    { key: 'earthDmgMod', name: 'Earth', css: 'earth', abbr: 'Ear' },
+    { key: 'holyDmgMod', name: 'Holy', css: 'holy', abbr: 'Hol' },
+    { key: 'deathDmgMod', name: 'Death', css: 'death', abbr: 'Dea' },
+    { key: 'drownDmgMod', name: 'Drown', css: 'drown', abbr: 'Drw' },
+    { key: 'hpDrainDmgMod', name: 'Life Drain', css: 'lifedrain', abbr: 'HP' },
+    { key: 'healMod', name: 'Heal', css: 'manadrain', abbr: 'Hea' }
+  ];
+  const hasRes = fields.some(f => w[f.key] !== undefined && w[f.key] !== null);
+  if (!hasRes) return '';
+
+  let html = '<div class="cd-sec"><h4>Elemental Resistances</h4><div class="res-grid">';
+  fields.forEach(f => {
+    const val = w[f.key];
+    if (val === undefined || val === null) return;
+    const pct = typeof val === 'number' ? val : parseInt(val) || 100;
+    let cls = 'res-neutral';
+    if (pct === 0) cls = 'res-immune';
+    else if (pct < 100) cls = 'res-strong';
+    else if (pct > 100) cls = 'res-weak';
+    const label = pct === 0 ? 'Immune' : pct + '%';
+    html += `<div class="res-item ${cls}"><span class="elem elem-${f.css}">${f.abbr}</span><div class="res-info"><div class="rn">${f.name}</div><div class="rv">${label}</div></div></div>`;
+  });
+  html += '</div></div>';
+  return html;
+}
+
+function renderLoot(w) {
+  const loot = w.loot || w.lootlist;
+  if (!loot || !loot.length) return '';
+
+  const rarityMap = {
+    'always': 'common', 'common': 'common', 'uncommon': 'uncommon',
+    'semi-rare': 'semi-rare', 'semi rare': 'semi-rare', 'rare': 'rare',
+    'very rare': 'very-rare', 'very_rare': 'very-rare'
+  };
+
+  let html = '<div class="cd-sec"><h4>Loot</h4><table class="lt"><thead><tr><th></th><th>Item</th><th>Amount</th><th>Rarity</th></tr></thead><tbody>';
+  loot.forEach(item => {
+    const name = item.itemName || item.name || item.item || 'Unknown';
+    const amount = item.amount || '';
+    const rarity = item.rarity || 'common';
+    const rcls = rarityMap[rarity.toLowerCase()] || 'common';
+    html += `<tr>
+      <td><img src="${WIKI_IMG(name)}" alt="${esc(name)}" class="loot-img" onerror="this.style.display='none'"></td>
+      <td>${esc(name)}</td>
+      <td>${amount}</td>
+      <td><span class="lr lr-${rcls}">${esc(rarity)}</span></td>
+    </tr>`;
+  });
+  html += '</tbody></table></div>';
+  return html;
+}
+
+async function fetchCreatureData(name) {
+  if (cache.creatureDetail[name]) return cache.creatureDetail[name];
+  try {
+    const res = await fetch(`${API}/creature/${encodeURIComponent(name.toLowerCase().replace(/ /g, '+'))}`).then(r => r.json());
+    const d = res?.creature || res?.creatures || {};
+    cache.creatureDetail[name] = d;
+    return d;
+  } catch (e) { return null; }
+}
+
+async function fetchWikiCreature(name) {
+  if (cache.wikiDetail[name]) return cache.wikiDetail[name];
+  try {
+    const res = await fetch(`${WIKI_API}/creatures/${encodeURIComponent(name)}`).then(r => r.json());
+    cache.wikiDetail[name] = res || {};
+    return res;
+  } catch (e) {
+    // Fallback: try with different casing
+    try {
+      const res2 = await fetch(`${WIKI_API}/creatures/${encodeURIComponent(name.toLowerCase())}`).then(r => r.json());
+      cache.wikiDetail[name] = res2 || {};
+      return res2;
+    } catch (e2) { return {}; }
+  }
+}
+
+// ================================================================
+// HUNTING SPOTS
+// ================================================================
+function renderHunting() {
+  const container = document.getElementById('huntingGrid');
+  if (!container) return;
+  const { voc, levelMin, levelMax } = state.hunting;
+  const filtered = HUNTING_SPOTS.filter(s => {
+    if (voc !== 'all' && !s.voc.includes(voc)) return false;
+    if (s.level[0] > levelMax || s.level[1] < levelMin) return false;
+    return true;
+  });
+
+  container.innerHTML = filtered.length ? filtered.map(s => {
+    const stars = (n, max = 5) => Array.from({ length: max }, (_, i) => `<span class="star${i < n ? '' : ' off'}">&#9733;</span>`).join('');
+    const vocIcons = s.voc.map(v => `<span class="badge bg-gold" style="font-size:9px">${v.substring(0, 2).toUpperCase()}</span>`).join(' ');
+    const creatures = s.creatures.map(c => `<span class="sc-chip"><img src="${WIKI_IMG(c)}" alt="${esc(c)}" onerror="this.style.display='none'">${esc(c)}</span>`).join('');
+    return `<div class="card sc">
+      <div class="sh"><span class="sn">${esc(s.name)}</span><span class="sl">${s.level[0]}-${s.level[1]}</span></div>
+      <div class="sm">
+        <span>${vocIcons}</span>
+        <span>XP: ${stars(s.exp)}</span>
+        <span>Loot: ${stars(s.loot)}</span>
+      </div>
+      <div class="screatures">${creatures}</div>
+      ${s.route ? `<div class="s-route">${esc(s.route)}</div>` : ''}
+      ${s.access ? `<div class="s-access"><strong>Access:</strong> ${esc(s.access)}</div>` : ''}
+      ${s.gear ? `<div class="s-access"><strong>Gear:</strong> ${esc(s.gear)}</div>` : ''}
+      ${s.tips ? `<div class="s-access" style="margin-top:4px"><strong>Tips:</strong> ${esc(s.tips)}</div>` : ''}
+      <div style="margin-top:8px;display:flex;gap:6px">
+        ${s.cx ? `<button class="btn-s btn-g" onclick="showOnMap(${s.cx},${s.cy},'${esc(s.name)}')">Show on Map</button>` : ''}
+        <button class="btn-s" onclick="showCreaturesFromSpot(this, [${s.creatures.map(c => `'${esc(c)}'`).join(',')}])">View Creatures</button>
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty">No spots match your filters.</div>';
+}
+
+function showCreaturesFromSpot(btn, creatures) {
+  showPanel('bestiary');
+  setTimeout(() => {
+    if (creatures.length === 1) showCreatureDetail(creatures[0]);
+  }, 400);
+}
+
+// ================================================================
+// EQUIPMENT
+// ================================================================
+function renderEquipment() {
+  const grid = document.getElementById('equipGrid');
+  if (!grid) return;
+  const { voc, bracket } = state.equip;
+  const data = EQUIPMENT[voc]?.[bracket];
+  if (!data) { grid.innerHTML = '<div class="empty">No equipment data for this selection.</div>'; return; }
+
+  const slotOrder = ['helmet', 'armor', 'legs', 'boots', 'weapon', 'shield', 'ring', 'amulet'];
+  grid.innerHTML = slotOrder.map(slot => {
+    const item = data[slot];
+    if (!item) return '';
+    const meta = SLOT_META[slot] || {};
+    return `<div class="card eq-slot">
+      <div class="eq-head">
+        <img src="${WIKI_IMG(item.img || item.name)}" alt="${esc(meta.label)}" class="eq-sicon" onerror="this.style.display='none'">
+        <span class="eq-type">${esc(meta.label || slot)}</span>
+      </div>
+      <div class="eq-item">
+        <img src="${WIKI_IMG(item.img || item.name)}" alt="${esc(item.name)}" class="eq-iimg" onerror="this.style.display='none'">
+        <div>
+          <div class="eq-iname">${esc(item.name)}</div>
+          <div class="eq-stats">${esc(item.stats)}</div>
+        </div>
+      </div>
+      <div class="eq-src">${esc(item.source)}</div>
+    </div>`;
+  }).join('');
+}
+
+// ================================================================
+// QUESTS
+// ================================================================
+function renderQuests() {
+  const container = document.getElementById('questList');
+  if (!container) return;
+  const { search, level, premium } = state.quests;
+  const filtered = QUESTS.filter(q => {
+    if (search && !q.name.toLowerCase().includes(search.toLowerCase())) return false;
+    if (level && q.level > level) return false;
+    if (premium === 'free' && q.premium) return false;
+    if (premium === 'premium' && !q.premium) return false;
+    return true;
+  });
+
+  container.innerHTML = filtered.length ? filtered.map((q, i) => {
+    const badges = [
+      `<span class="badge bg-gold">Lv ${q.level}+</span>`,
+      q.premium ? '<span class="badge bg-blue">Premium</span>' : '<span class="badge bg-green">Free</span>'
+    ].join('');
+    const reqs = q.requirements?.length ? `<div class="qs"><h5>Requirements</h5><ul>${q.requirements.map(r => `<li>${esc(r)}</li>`).join('')}</ul></div>` : '';
+    const steps = q.steps?.length ? `<div class="qs"><h5>Walkthrough</h5><ol>${q.steps.map(s => `<li>${esc(s)}</li>`).join('')}</ol></div>` : '';
+    const rewards = q.rewards?.length ? `<div class="qs"><h5>Rewards</h5><ul>${q.rewards.map(r => `<li>${esc(r)}</li>`).join('')}</ul></div>` : '';
+    const dangers = q.dangers?.length ? `<div class="qs"><h5>Dangers</h5><div style="display:flex;flex-wrap:wrap;gap:4px">${q.dangers.map(d => `<span class="sc-chip"><img src="${WIKI_IMG(d)}" alt="${esc(d)}" style="width:20px;height:20px" onerror="this.style.display='none'">${esc(d)}</span>`).join('')}</div></div>` : '';
+    const tips = q.tips ? `<div class="qs"><h5>Tips</h5><div class="tip">${esc(q.tips)}</div></div>` : '';
+
+    return `<div class="card qc" id="quest-${i}">
+      <div class="qh" onclick="this.parentElement.classList.toggle('open')">
+        <span class="q-arrow">&#9654;</span>
+        <span class="q-title">${esc(q.name)}</span>
+        <div class="q-badges">${badges}</div>
+      </div>
+      <div class="qb">
+        <p style="font-size:13px;color:var(--parch-dim);margin:10px 0;line-height:1.6">${esc(q.desc)}</p>
+        <div style="font-size:11px;color:var(--parch-dim);margin-bottom:8px">
+          <strong>Location:</strong> ${esc(q.location)} ${q.npc !== '—' ? `| <strong>NPC:</strong> ${esc(q.npc)}` : ''}
+        </div>
+        ${reqs}${steps}${rewards}${dangers}${tips}
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty">No quests match your filters.</div>';
+}
+
+// ================================================================
+// SPELLS
+// ================================================================
+async function loadSpells() {
+  const container = document.getElementById('spellsBody');
+  if (!container) return;
+  if (cache.spells) { filterSpells(); return; }
+  container.innerHTML = '<tr><td colspan="8" class="loading"><span class="spinner"></span> Loading spells...</td></tr>';
+  try {
+    const res = await fetch(`${API}/spells`).then(r => r.json());
+    cache.spells = res?.spells?.spells_list || [];
+    filterSpells();
+  } catch (e) { container.innerHTML = '<tr><td colspan="8" class="empty">Failed to load spells.</td></tr>'; }
+}
+
+function filterSpells() {
+  if (!cache.spells) return;
+  const { voc, type, search } = state.spells;
+  const filtered = cache.spells.filter(s => {
+    if (search && !s.name.toLowerCase().includes(search.toLowerCase()) && !(s.spell_id || '').toLowerCase().includes(search.toLowerCase())) return false;
+    if (voc !== 'all') {
+      const vocList = (s.vocations || []).map(v => v.toLowerCase());
+      if (!vocList.some(v => v.includes(voc.toLowerCase()))) return false;
+    }
+    if (type !== 'all' && s.type_spell?.toLowerCase() !== type.toLowerCase()) return false;
+    return true;
+  });
+
+  const body = document.getElementById('spellsBody');
+  body.innerHTML = filtered.length ? filtered.map(s => {
+    const vocs = (s.vocations || []).map(v => {
+      const short = v.replace('Elder ', 'E').replace('Royal ', 'R').substring(0, 2).toUpperCase();
+      return `<span class="badge bg-gold" style="font-size:8px;padding:1px 4px">${short}</span>`;
+    }).join(' ');
+    const formula = s.spell_id || s.formula || '';
+    return `<tr>
+      <td><img src="${WIKI_IMG(s.name)}" style="width:28px;height:28px" onerror="this.style.display='none'" class="sp-img"></td>
+      <td style="font-weight:600;color:var(--gold-light)">${esc(s.name)}</td>
+      <td class="sp-formula">${esc(formula)}</td>
+      <td>${s.level || '?'}</td>
+      <td>${s.mana || '?'}</td>
+      <td>${s.price ? s.price.toLocaleString() + ' gp' : '?'}</td>
+      <td>${vocs}</td>
+      <td><span class="badge ${s.type_spell === 'Instant' ? 'bg-blue' : 'bg-green'}">${esc(s.type_spell || '')}</span></td>
+    </tr>`;
+  }).join('') : '<tr><td colspan="8" class="empty">No spells match.</td></tr>';
+
+  document.getElementById('spellCount').textContent = `${filtered.length} spells`;
+}
+
+// ================================================================
+// MAP
+// ================================================================
+function initMap() {
+  if (state.map) { state.map.invalidateSize(); return; }
+  const mapEl = document.getElementById('tibiaMap');
+  if (!mapEl || typeof L === 'undefined') return;
+
+  const bounds = [[0, 0], [MAP_H, MAP_W]];
+  state.map = L.map('tibiaMap', {
+    crs: L.CRS.Simple,
+    minZoom: -2,
+    maxZoom: 3,
+    maxBounds: bounds,
+    maxBoundsViscosity: 1.0
+  });
+
+  const imgOverlay = L.imageOverlay(MAP_URL(state.mapFloor), bounds);
+  imgOverlay.addTo(state.map);
+  state.map.fitBounds(bounds);
+  state.mapOverlay = imgOverlay;
+
+  // City markers
+  CITIES.forEach(c => {
+    const [lat, lng] = tibiaToLeaflet(c.cx, c.cy);
+    L.marker([lat, lng], {
+      icon: L.divIcon({
+        className: 'map-city-label',
+        html: `<span style="color:#3b82f6;font-size:11px;font-weight:700;text-shadow:0 0 4px #000,0 0 4px #000;white-space:nowrap">${c.name}</span>`,
+        iconSize: [80, 16],
+        iconAnchor: [40, 8]
+      })
+    }).addTo(state.map);
+  });
+
+  // Hunting spot markers
+  HUNTING_SPOTS.forEach(s => {
+    if (!s.cx || !s.cy) return;
+    const [lat, lng] = tibiaToLeaflet(s.cx, s.cy);
+    L.circleMarker([lat, lng], {
+      radius: 5,
+      color: '#d4a537',
+      fillColor: '#d4a537',
+      fillOpacity: 0.8,
+      weight: 1
+    }).bindTooltip(`<b>${s.name}</b><br>Level ${s.level[0]}-${s.level[1]}`, { className: 'map-tip' }).addTo(state.map);
+  });
+
+  // Click for coords
+  state.map.on('click', e => {
+    const cx = Math.round(MAP_X0 + (e.latlng.lng / MAP_W) * (MAP_X1 - MAP_X0));
+    const cy = Math.round(MAP_Y0 + ((MAP_H - e.latlng.lat) / MAP_H) * (MAP_Y1 - MAP_Y0));
+    document.getElementById('mapCoords').textContent = `X: ${cx}, Y: ${cy}, Z: ${state.mapFloor}`;
+  });
+}
+
+function tibiaToLeaflet(cx, cy) {
+  const px = (cx - MAP_X0) / (MAP_X1 - MAP_X0) * MAP_W;
+  const py = (cy - MAP_Y0) / (MAP_Y1 - MAP_Y0) * MAP_H;
+  return [MAP_H - py, px];
+}
+
+function changeFloor(floor) {
+  state.mapFloor = floor;
+  if (state.map && state.mapOverlay) {
+    state.mapOverlay.setUrl(MAP_URL(floor));
+  }
+  document.getElementById('floorLabel').textContent = `Floor ${floor}`;
+}
+
+function showOnMap(cx, cy, name) {
+  showPanel('map');
+  setTimeout(() => {
+    if (!state.map) initMap();
+    const [lat, lng] = tibiaToLeaflet(cx, cy);
+    state.map.setView([lat, lng], 2);
+    L.popup().setLatLng([lat, lng]).setContent(`<b>${name}</b>`).openOn(state.map);
+  }, 300);
+}
+
+// ================================================================
+// CHARACTER LOOKUP
+// ================================================================
+async function lookupCharacter() {
+  const input = document.getElementById('charInput');
+  const result = document.getElementById('charResult');
+  const name = input.value.trim();
+  if (!name) return;
+  result.innerHTML = '<div class="loading"><span class="spinner"></span> Looking up character...</div>';
+  try {
+    const res = await fetch(`${API}/character/${encodeURIComponent(name)}`).then(r => r.json());
+    const ch = res?.character?.character;
+    if (!ch || !ch.name) { result.innerHTML = '<div class="empty">Character not found.</div>'; return; }
+
+    const fields = [
+      ['Name', ch.name], ['Title', ch.title || 'None'], ['Sex', ch.sex],
+      ['Vocation', ch.vocation], ['Level', ch.level], ['World', ch.world],
+      ['Residence', ch.residence], ['Guild', ch.guild?.name || 'None'],
+      ['Last Login', ch.last_login ? new Date(ch.last_login).toLocaleDateString() : '?'],
+      ['Account Status', ch.account_status], ['Achievement Points', ch.achievement_points],
+      ['Comment', ch.comment || '—']
+    ];
+
+    let html = '<div class="card" style="margin-bottom:14px"><div class="ch-grid">';
+    fields.forEach(([l, v]) => html += `<div class="ch-field"><span class="fl">${l}</span><span class="fv">${esc(String(v))}</span></div>`);
+    html += '</div></div>';
+
+    // Deaths
+    const deaths = res?.character?.deaths || [];
+    if (deaths.length) {
+      html += '<div class="card"><h4 style="font-size:13px;color:var(--gold);margin-bottom:8px">Recent Deaths</h4>';
+      deaths.slice(0, 10).forEach(d => {
+        html += `<div class="death-item"><span class="dr">Level ${d.level}</span> — ${esc(d.reason)} <span style="color:var(--parch-dim);font-size:10px">(${new Date(d.time).toLocaleDateString()})</span></div>`;
+      });
+      html += '</div>';
+    }
+
+    // Other characters
+    const others = res?.character?.other_characters || [];
+    if (others.length > 1) {
+      html += '<div class="card" style="margin-top:14px"><h4 style="font-size:13px;color:var(--gold);margin-bottom:8px">Other Characters</h4>';
+      others.forEach(o => {
+        html += `<div style="font-size:12px;padding:3px 0;border-bottom:1px solid var(--border);cursor:pointer;color:var(--parchment)" onclick="document.getElementById('charInput').value='${esc(o.name)}';lookupCharacter()">${esc(o.name)} — ${esc(o.world)} (${esc(o.status)})</div>`;
+      });
+      html += '</div>';
+    }
+
+    result.innerHTML = html;
+  } catch (e) { result.innerHTML = '<div class="empty">Error looking up character. Please try again.</div>'; }
+}
+
+// ================================================================
+// WORLDS
+// ================================================================
+async function loadWorlds() {
+  const body = document.getElementById('worldsBody');
+  if (!body) return;
+  if (cache.worlds) { filterWorlds(); return; }
+  body.innerHTML = '<tr><td colspan="6" class="loading"><span class="spinner"></span> Loading worlds...</td></tr>';
+  try {
+    const res = await fetch(`${API}/worlds`).then(r => r.json());
+    cache.worlds = res?.worlds?.regular_worlds || [];
+    filterWorlds();
+  } catch (e) { body.innerHTML = '<tr><td colspan="6" class="empty">Failed to load world data.</td></tr>'; }
+}
+
+function filterWorlds() {
+  if (!cache.worlds) return;
+  const q = state.worlds.search.toLowerCase();
+  let filtered = cache.worlds.filter(w => !q || w.name.toLowerCase().includes(q));
+  const { sort, asc } = state.worlds;
+  filtered.sort((a, b) => {
+    let va = a[sort], vb = b[sort];
+    if (sort === 'players_online') return asc ? va - vb : vb - va;
+    va = String(va || '').toLowerCase(); vb = String(vb || '').toLowerCase();
+    return asc ? va.localeCompare(vb) : vb.localeCompare(va);
+  });
+
+  const totalOnline = cache.worlds.reduce((sum, w) => sum + (w.players_online || 0), 0);
+  document.getElementById('totalOnline').textContent = totalOnline.toLocaleString();
+  document.getElementById('totalWorlds').textContent = cache.worlds.length;
+
+  const body = document.getElementById('worldsBody');
+  body.innerHTML = filtered.map(w => `<tr>
+    <td style="font-weight:600;color:var(--gold-light)">${esc(w.name)}</td>
+    <td><span class="${w.status === 'online' ? 'online' : 'offline'}">${esc(w.status)}</span></td>
+    <td>${w.players_online}</td>
+    <td>${esc(w.location)}</td>
+    <td>${esc(w.pvp_type)}</td>
+    <td>${w.battleye_protected ? '<span class="badge bg-green">Yes</span>' : '<span class="badge bg-red">No</span>'}</td>
+  </tr>`).join('');
+}
+
+function sortWorlds(col) {
+  if (state.worlds.sort === col) state.worlds.asc = !state.worlds.asc;
+  else { state.worlds.sort = col; state.worlds.asc = true; }
+  filterWorlds();
+}
+
+// ================================================================
+// CALCULATORS
+// ================================================================
+function initCalcs() {
+  // Already rendered in HTML, just attach handlers if needed
+}
+
+function calcExperience() {
+  const curr = parseInt(document.getElementById('calcCurrLevel').value) || 1;
+  const tgt = parseInt(document.getElementById('calcTgtLevel').value) || 2;
+  const xph = parseInt(document.getElementById('calcXpH').value) || 100000;
+  if (tgt <= curr) { document.getElementById('expResult').innerHTML = '<span class="crv">Invalid levels</span>'; return; }
+
+  const xpForLevel = l => Math.round((50 * Math.pow(l - 1, 3) / 3) - 100 * Math.pow(l - 1, 2) + (850 * (l - 1) / 3) - 200);
+  const needed = xpForLevel(tgt) - xpForLevel(curr);
+  const hours = needed / xph;
+
+  document.getElementById('expResult').innerHTML = `
+    <div class="crv">${formatNum(needed)} XP</div>
+    <div class="crl">Experience needed</div>
+    <div class="crv" style="margin-top:6px">${hours.toFixed(1)} hours</div>
+    <div class="crl">At ${formatNum(xph)} XP/hour</div>`;
+}
+
+function calcLootSplit() {
+  const text = document.getElementById('calcLootText').value.trim();
+  const players = parseInt(document.getElementById('calcPlayers').value) || 4;
+  if (!text) return;
+
+  // Try to parse hunt analyzer format
+  const balMatch = text.match(/Balance:\s*([\d,]+)/i) || text.match(/([\d,]+)/);
+  if (!balMatch) { document.getElementById('lootResult').innerHTML = '<span class="crv">Could not parse</span>'; return; }
+  const total = parseInt(balMatch[1].replace(/,/g, ''));
+  const each = Math.floor(total / players);
+  document.getElementById('lootResult').innerHTML = `
+    <div class="crv">${formatNum(total)} gp</div><div class="crl">Total balance</div>
+    <div class="crv" style="margin-top:6px">${formatNum(each)} gp</div><div class="crl">Per player (${players} players)</div>`;
+}
+
+function calcStamina() {
+  const hh = parseInt(document.getElementById('calcStamH').value) || 0;
+  const mm = parseInt(document.getElementById('calcStamM').value) || 0;
+  const current = hh * 60 + mm;
+  const full = 42 * 60;
+  const needed = full - current;
+  if (needed <= 0) { document.getElementById('stamResult').innerHTML = '<span class="crv">Full stamina!</span>'; return; }
+  const regenH = Math.floor(needed * 3 / 60);
+  const regenM = (needed * 3) % 60;
+  document.getElementById('stamResult').innerHTML = `
+    <div class="crv">${Math.floor(needed / 60)}h ${needed % 60}m</div><div class="crl">Stamina needed</div>
+    <div class="crv" style="margin-top:6px">${regenH}h ${regenM}m</div><div class="crl">Offline time to regenerate</div>`;
+}
+
+// ================================================================
+// UTILITIES
+// ================================================================
+function esc(str) {
+  if (!str) return '';
+  const d = document.createElement('div');
+  d.textContent = String(str);
+  return d.innerHTML;
+}
+
+function formatNum(n) {
+  if (n === '?' || n === undefined || n === null) return '?';
+  return Number(n).toLocaleString();
+}

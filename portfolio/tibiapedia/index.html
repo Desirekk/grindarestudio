@@ -1,1279 +1,355 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TibiaPedia | Tibia MMORPG Database &amp; Companion</title>
-<meta name="description" content="TibiaPedia - The ultimate Tibia companion. Browse 900+ creatures, find hunting spots, plan equipment, explore the interactive map, quest guides, spells, character lookup and more.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
---bg-dark:#0d0b0a;--bg-darker:#080706;--bg-card:#1a1614;--bg-card-hover:#231f1b;--bg-input:#141110;--bg-sidebar:#12100e;
---gold:#d4a537;--gold-dark:#8b6914;--gold-light:#f0d68a;--gold-dim:rgba(212,165,55,.1);
---parchment:#e8dcc8;--parchment-muted:#a89a84;--blood:#8b1a1a;
---common-c:#22c55e;--uncommon-c:#3b82f6;--semirare-c:#a855f7;--rare-c:#f59e0b;--veryrare-c:#ef4444;
---border:rgba(212,165,55,.12);--border-hover:rgba(212,165,55,.3);
---radius:6px;--radius-lg:10px;
---sidebar-w:220px;--topbar-h:54px;
-}
-html{scroll-behavior:smooth}
-body{font-family:'Crimson Text',Georgia,serif;background:var(--bg-dark);color:var(--parchment);line-height:1.6;overflow:hidden;height:100vh}
-h1,h2,h3,h4,h5{font-family:'Cinzel',serif;color:var(--gold-light);line-height:1.2}
-a{color:var(--gold);text-decoration:none;transition:color .2s}a:hover{color:var(--gold-light)}
-img{max-width:100%;display:block}
-button{font-family:'Crimson Text',serif;cursor:pointer;border:none;background:none;color:var(--parchment)}
-input,select{font-family:'Crimson Text',serif;background:var(--bg-input);color:var(--parchment);border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;font-size:14px;transition:border-color .2s}
-input:focus,select:focus{outline:none;border-color:var(--gold)}
-table{width:100%;border-collapse:collapse}
-th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--border)}
-th{font-family:'Cinzel',serif;font-size:12px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;background:var(--bg-darker);position:sticky;top:0;z-index:1}
-tr:hover{background:var(--bg-card-hover)}
-::-webkit-scrollbar{width:8px;height:8px}
-::-webkit-scrollbar-track{background:var(--bg-darker)}
-::-webkit-scrollbar-thumb{background:var(--gold-dark);border-radius:4px}
-::-webkit-scrollbar-thumb:hover{background:var(--gold)}
-
-/* ===== LAYOUT ===== */
-.app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;grid-template-rows:var(--topbar-h) 1fr;height:100vh;overflow:hidden}
-
-/* TOPBAR */
-.topbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:var(--bg-sidebar);border-bottom:1px solid var(--border);z-index:50}
-.topbar-left{display:flex;align-items:center;gap:12px}
-.topbar-logo{height:36px;border-radius:6px}
-.topbar-title{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--gold-light)}
-.topbar-title span{color:var(--gold)}
-.topbar-search{flex:1;max-width:400px;margin:0 24px;position:relative}
-.topbar-search input{width:100%;padding-left:32px;font-size:14px}
-.topbar-search::before{content:'⌕';position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--parchment-muted);font-size:16px}
-.topbar-right{display:flex;align-items:center;gap:20px}
-.boosted-widget{display:flex;align-items:center;gap:8px;padding:4px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);font-size:12px}
-.boosted-widget img{width:28px;height:28px;image-rendering:pixelated}
-.boosted-widget .label{color:var(--parchment-muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px}
-.boosted-widget .name{color:var(--gold-light);font-weight:600;font-size:12px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-
-/* SIDEBAR */
-.sidebar{background:var(--bg-sidebar);border-right:1px solid var(--border);overflow-y:auto;padding:8px 0;display:flex;flex-direction:column}
-.sidebar-nav{flex:1}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 18px;color:var(--parchment-muted);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;border-left:3px solid transparent}
-.nav-item:hover{background:var(--gold-dim);color:var(--parchment)}
-.nav-item.active{color:var(--gold);background:var(--gold-dim);border-left-color:var(--gold)}
-.nav-item .icon{width:20px;text-align:center;font-size:16px;flex-shrink:0}
-.nav-divider{height:1px;background:var(--border);margin:8px 18px}
-.sidebar-footer{padding:12px 18px;border-top:1px solid var(--border);font-size:11px;color:var(--parchment-muted);text-align:center;line-height:1.5}
-.sidebar-footer a{color:var(--gold);font-size:11px}
-
-/* CONTENT */
-.content{overflow-y:auto;padding:24px;background:var(--bg-dark)}
-.panel{display:none}
-.panel.active{display:block}
-.panel-header{margin-bottom:24px}
-.panel-header h2{font-size:24px;margin-bottom:4px}
-.panel-header p{color:var(--parchment-muted);font-size:15px}
-.panel-divider{width:50px;height:3px;background:linear-gradient(to right,var(--gold-dark),var(--gold));margin-top:10px;border-radius:2px}
-
-/* ===== SHARED COMPONENTS ===== */
-.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:center}
-.search-input{flex:1;min-width:200px}
-.filter-group{display:flex;gap:4px;flex-wrap:wrap}
-.fbtn{padding:6px 14px;border-radius:16px;font-size:12px;font-weight:600;border:1px solid var(--border);transition:all .15s;font-family:'Cinzel',serif}
-.fbtn.active,.fbtn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
-.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700}
-.badge-gold{background:var(--gold-dim);color:var(--gold)}
-.badge-red{background:rgba(139,26,26,.2);color:#e74c3c}
-.badge-blue{background:rgba(59,130,246,.15);color:#3b82f6}
-.badge-green{background:rgba(34,197,94,.15);color:#22c55e}
-.badge-purple{background:rgba(168,85,247,.15);color:#a855f7}
-.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;transition:all .15s}
-.card:hover{border-color:var(--border-hover)}
-.empty-state{text-align:center;padding:48px;color:var(--parchment-muted);font-style:italic}
-.loading{text-align:center;padding:40px;color:var(--parchment-muted)}
-.spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .6s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.skeleton{background:linear-gradient(90deg,var(--bg-card) 25%,var(--bg-card-hover) 50%,var(--bg-card) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius);height:60px;margin-bottom:8px}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.pagination{display:flex;justify-content:center;gap:4px;margin-top:20px}
-.pg-btn{min-width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius);border:1px solid var(--border);font-size:12px;font-weight:600;transition:all .15s;padding:0 6px}
-.pg-btn.active,.pg-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
-.pg-btn:disabled{opacity:.3;cursor:not-allowed}
-.result-count{text-align:center;margin-top:8px;font-size:12px;color:var(--parchment-muted)}
-
-/* ===== NEWS ===== */
-.news-layout{display:grid;grid-template-columns:1fr 280px;gap:20px}
-.news-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;cursor:pointer;transition:all .15s}
-.news-card:hover{border-color:var(--border-hover)}
-.news-card-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.news-date{font-size:12px;color:var(--parchment-muted)}
-.news-title{font-family:'Cinzel',serif;font-size:16px;color:var(--gold-light)}
-.news-preview{font-size:14px;color:var(--parchment-muted);line-height:1.5;max-height:60px;overflow:hidden}
-.news-card.expanded .news-preview{max-height:none}
-.news-full{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:14px;line-height:1.7;color:var(--parchment)}
-.news-card.expanded .news-full{display:block}
-.news-full img{max-width:100%;border-radius:var(--radius);margin:8px 0}
-.news-sidebar .card{margin-bottom:12px;text-align:center}
-.news-sidebar .card h4{font-size:13px;color:var(--gold);margin-bottom:8px}
-.news-sidebar .card img{width:48px;height:48px;margin:0 auto 6px;image-rendering:pixelated}
-.news-sidebar .card .bname{font-size:14px;color:var(--gold-light);font-weight:600}
-
-/* ===== BESTIARY ===== */
-.creature-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
-.creature-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 8px;text-align:center;cursor:pointer;transition:all .15s}
-.creature-card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.4)}
-.creature-card img{width:64px;height:64px;object-fit:contain;margin:0 auto 6px;image-rendering:pixelated}
-.creature-card .cname{font-family:'Cinzel',serif;font-size:11px;color:var(--parchment);line-height:1.2}
-.creature-detail{display:none}
-.creature-detail.active{display:block}
-.cd-back{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--radius);border:1px solid var(--border);font-size:13px;margin-bottom:16px;cursor:pointer;transition:all .15s}
-.cd-back:hover{border-color:var(--gold);color:var(--gold)}
-.cd-top{display:flex;gap:24px;margin-bottom:20px}
-.cd-sprite{flex-shrink:0;width:120px;height:120px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center}
-.cd-sprite img{width:80px;height:80px;image-rendering:pixelated}
-.cd-info{flex:1}
-.cd-info h3{font-size:22px;margin-bottom:4px}
-.cd-info .cd-desc{font-size:14px;color:var(--parchment-muted);font-style:italic;margin-bottom:12px;line-height:1.5}
-.cd-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px}
-.cd-stat{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:10px;text-align:center}
-.cd-stat .val{font-family:'Cinzel',serif;font-size:18px;color:var(--gold-light)}
-.cd-stat .lbl{font-size:10px;color:var(--parchment-muted);text-transform:uppercase;letter-spacing:.5px}
-.cd-section{margin-bottom:20px}
-.cd-section h4{font-family:'Cinzel',serif;font-size:14px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
-/* Resistances */
-.resist-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.resist-item{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:8px;text-align:center}
-.resist-item .ricon{font-size:20px;margin-bottom:2px}
-.resist-item .rname{font-size:10px;color:var(--parchment-muted);text-transform:uppercase;letter-spacing:.3px}
-.resist-item .rval{font-family:'Cinzel',serif;font-size:14px;font-weight:700;margin-top:2px}
-.resist-immune{border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08)}.resist-immune .rval{color:#ef4444}
-.resist-strong{border-color:rgba(249,115,22,.3);background:rgba(249,115,22,.06)}.resist-strong .rval{color:#f97316}
-.resist-neutral .rval{color:var(--parchment-muted)}
-.resist-weak{border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.06)}.resist-weak .rval{color:#22c55e}
-/* Loot */
-.loot-table{width:100%}
-.loot-table td{padding:6px 10px;font-size:13px}
-.loot-table .loot-rarity{font-size:11px;font-weight:700;text-transform:uppercase}
-.rarity-common{color:var(--common-c)}.rarity-uncommon{color:var(--uncommon-c)}.rarity-semi-rare{color:var(--semirare-c)}.rarity-rare{color:var(--rare-c)}.rarity-very-rare{color:var(--veryrare-c)}
-
-/* ===== HUNTING SPOTS ===== */
-.spot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:14px}
-.spot-card .spot-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
-.spot-card .spot-name{font-family:'Cinzel',serif;font-size:15px;color:var(--gold-light)}
-.spot-card .spot-lvl{font-size:11px;padding:3px 10px;border-radius:10px;background:var(--gold-dim);color:var(--gold);font-weight:600;white-space:nowrap}
-.spot-meta{display:flex;gap:14px;margin-bottom:8px;font-size:12px;color:var(--parchment-muted)}
-.spot-meta span{display:flex;align-items:center;gap:3px}
-.star{color:var(--gold);font-size:10px}.star.empty{opacity:.2}
-.spot-creatures{font-size:12px;color:var(--parchment-muted);margin-bottom:10px}
-.spot-creatures strong{color:var(--parchment)}
-.spot-creatures img{width:24px;height:24px;image-rendering:pixelated;display:inline-block;vertical-align:middle;margin:0 2px}
-.btn-sm{padding:5px 12px;border-radius:var(--radius);font-size:11px;font-weight:600;border:1px solid var(--border);transition:all .15s}
-.btn-sm:hover{border-color:var(--gold);color:var(--gold)}
-.btn-gold{background:var(--gold);color:var(--bg-dark);border-color:var(--gold)}.btn-gold:hover{background:var(--gold-light);color:var(--bg-dark)}
-
-/* ===== EQUIPMENT ===== */
-.eq-controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:center}
-.eq-level-bar{display:flex;gap:4px;flex-wrap:wrap}
-.eq-slots{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.eq-slot .eq-slot-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.eq-slot .eq-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gold-dim);border-radius:6px;font-size:16px}
-.eq-slot .eq-type{font-family:'Cinzel',serif;font-size:13px;color:var(--gold)}
-.eq-slot .eq-name{font-family:'Cinzel',serif;font-size:15px;color:var(--gold-light);margin-bottom:4px}
-.eq-slot .eq-stats{font-size:13px;color:var(--common-c)}
-.eq-slot .eq-src{font-size:11px;color:var(--parchment-muted);margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-style:italic}
-
-/* ===== QUESTS ===== */
-.quest-list{display:flex;flex-direction:column;gap:10px}
-.quest-card{overflow:hidden}
-.quest-head{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;transition:background .15s}
-.quest-head:hover{background:var(--bg-card-hover)}
-.quest-arrow{color:var(--gold);transition:transform .2s;font-size:14px;flex-shrink:0}
-.quest-card.open .quest-arrow{transform:rotate(90deg)}
-.quest-title{font-family:'Cinzel',serif;font-size:14px;color:var(--gold-light);flex:1}
-.quest-badges{display:flex;gap:4px;flex-shrink:0}
-.quest-body{display:none;padding:0 16px 16px;border-top:1px solid var(--border)}
-.quest-card.open .quest-body{display:block}
-.quest-section{margin-top:14px}
-.quest-section h5{font-size:12px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.quest-section p,.quest-section ul,.quest-section ol{font-size:13px;color:var(--parchment-muted);line-height:1.7}
-.quest-section ul{list-style:none;padding:0}.quest-section ul li::before{content:'▸ ';color:var(--gold)}
-.quest-section ol{padding-left:20px}.quest-section ol li{margin-bottom:6px}
-
-/* ===== SPELLS ===== */
-.spells-table-wrap{max-height:calc(100vh - 220px);overflow:auto;border:1px solid var(--border);border-radius:var(--radius-lg)}
-.spells-table{font-size:13px}
-.spells-table td{padding:6px 10px}
-.spell-formula{font-family:monospace;color:var(--gold);font-size:12px}
-
-/* ===== MAP ===== */
-#tibiaMap{width:100%;height:calc(100vh - 180px);border-radius:var(--radius-lg);border:1px solid var(--border);background:var(--bg-card)}
-.map-controls{display:flex;gap:10px;margin-bottom:12px;align-items:center}
-.map-legend{display:flex;gap:16px;margin-top:10px;font-size:12px;color:var(--parchment-muted)}
-.map-legend span{display:flex;align-items:center;gap:4px}
-.ldot{width:10px;height:10px;border-radius:50%;display:inline-block}
-.ldot.gold{background:var(--gold)}.ldot.blue{background:#3b82f6}
-
-/* ===== CHARACTER LOOKUP ===== */
-.char-search-box{display:flex;gap:10px;margin-bottom:20px;max-width:500px}
-.char-search-box input{flex:1}
-.char-search-box button{padding:8px 20px;background:var(--gold);color:var(--bg-dark);border-radius:var(--radius);font-weight:700;font-family:'Cinzel',serif}
-.char-result{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.char-card .char-field{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
-.char-card .char-field .flbl{color:var(--parchment-muted)}
-.char-card .char-field .fval{color:var(--gold-light);font-weight:600}
-.death-list{max-height:300px;overflow-y:auto}
-.death-item{padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--parchment-muted)}
-.death-item .death-reason{color:var(--parchment)}
-
-/* ===== WORLDS ===== */
-.worlds-stats{display:flex;gap:16px;margin-bottom:16px}
-.worlds-stats .wstat{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 20px;text-align:center}
-.worlds-stats .wstat .wval{font-family:'Cinzel',serif;font-size:22px;color:var(--gold-light)}
-.worlds-stats .wstat .wlbl{font-size:11px;color:var(--parchment-muted);text-transform:uppercase}
-.worlds-table-wrap{max-height:calc(100vh - 260px);overflow:auto;border:1px solid var(--border);border-radius:var(--radius-lg)}
-.worlds-table{font-size:13px}
-.worlds-table td{padding:6px 10px}
-.status-online{color:#22c55e}.status-offline{color:#ef4444}
-
-/* ===== CALCULATORS ===== */
-.calc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.calc-card h3{font-size:16px;margin-bottom:14px}
-.calc-card .calc-field{margin-bottom:10px}
-.calc-card label{display:block;font-size:12px;color:var(--parchment-muted);margin-bottom:4px}
-.calc-card input{width:100%}
-.calc-card .calc-result{margin-top:14px;padding:12px;background:var(--bg-darker);border-radius:var(--radius);font-size:14px}
-.calc-card .calc-result .cr-val{font-family:'Cinzel',serif;font-size:20px;color:var(--gold-light)}
-.calc-card .calc-result .cr-lbl{font-size:11px;color:var(--parchment-muted)}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200">
+  <title>TibiaPedia — Tibia Companion Guide</title>
+  <meta name="description" content="TibiaPedia: Comprehensive Tibia MMORPG companion — Bestiary, Hunting Spots, Equipment, Quests, Spells, Interactive Map, Character Lookup, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .map-tip{background:var(--bg-card)!important;border:1px solid var(--border)!important;color:var(--parchment)!important;font-family:'Crimson Text',serif!important;font-size:12px!important;padding:6px 10px!important;border-radius:var(--r)!important;box-shadow:0 4px 12px rgba(0,0,0,.5)!important}
+    .map-tip::before{border-top-color:var(--bg-card)!important}
+    .map-city-label{background:none!important;border:none!important}
+    .leaflet-control-zoom a{background:var(--bg-card)!important;color:var(--gold)!important;border-color:var(--border)!important}
+    .leaflet-popup-content-wrapper{background:var(--bg-card)!important;color:var(--parchment)!important;border:1px solid var(--border)!important;border-radius:var(--r)!important}
+    .leaflet-popup-tip{background:var(--bg-card)!important}
+    .leaflet-popup-close-button{color:var(--gold)!important}
+  </style>
 </head>
 <body>
-<div class="app">
+  <div class="app">
 
-<!-- TOPBAR -->
-<header class="topbar">
-  <div class="topbar-left">
-    <img src="images/ideogram-v3.0_TibiaPedia_medieval_fantasy_logo_ornate_golden_text_on_transparent_dark_backgrou-0.jpg" alt="TibiaPedia" class="topbar-logo">
-    <span class="topbar-title">Tibia<span>Pedia</span></span>
-  </div>
-  <div class="topbar-search">
-    <input type="text" id="globalSearch" placeholder="Search creatures, items, quests...">
-  </div>
-  <div class="topbar-right">
-    <div class="boosted-widget" id="boostedCreatureWidget">
-      <div><div class="label">Boosted Creature</div><div class="name" id="boostedCreatureName">Loading...</div></div>
-      <img id="boostedCreatureImg" src="" alt="">
-    </div>
-    <div class="boosted-widget" id="boostedBossWidget">
-      <div><div class="label">Boosted Boss</div><div class="name" id="boostedBossName">Loading...</div></div>
-      <img id="boostedBossImg" src="" alt="">
-    </div>
-  </div>
-</header>
-
-<!-- SIDEBAR -->
-<aside class="sidebar">
-  <nav class="sidebar-nav">
-    <div class="nav-item active" data-panel="news"><span class="icon">📰</span> News</div>
-    <div class="nav-item" data-panel="bestiary"><span class="icon">🐉</span> Bestiary</div>
-    <div class="nav-item" data-panel="hunting"><span class="icon">⚔️</span> Hunting Spots</div>
-    <div class="nav-item" data-panel="equipment"><span class="icon">🛡️</span> Equipment</div>
-    <div class="nav-item" data-panel="quests"><span class="icon">📜</span> Quests</div>
-    <div class="nav-item" data-panel="spells"><span class="icon">✨</span> Spells</div>
-    <div class="nav-item" data-panel="map"><span class="icon">🗺️</span> Map</div>
-    <div class="nav-divider"></div>
-    <div class="nav-item" data-panel="character"><span class="icon">👤</span> Character</div>
-    <div class="nav-item" data-panel="worlds"><span class="icon">🌐</span> Worlds</div>
-    <div class="nav-item" data-panel="calculators"><span class="icon">🔢</span> Calculators</div>
-  </nav>
-  <div class="sidebar-footer">
-    TibiaPedia is a fan project.<br>
-    Tibia &copy; CipSoft GmbH.<br>
-    Website by <a href="https://grindarestudio.com" target="_blank">Grindare Studio</a>
-  </div>
-</aside>
-
-<!-- CONTENT -->
-<main class="content">
-
-<!-- NEWS -->
-<div class="panel active" id="panel-news">
-  <div class="panel-header"><h2>Latest News</h2><p>Official Tibia news and announcements</p><div class="panel-divider"></div></div>
-  <div class="news-layout">
-    <div id="newsFeed"><div class="loading"><div class="spinner"></div><p style="margin-top:8px">Loading news...</p></div></div>
-    <div class="news-sidebar">
-      <div class="card" id="boostedCreatureCard"><h4>Boosted Creature</h4><div class="loading"><div class="spinner"></div></div></div>
-      <div class="card" id="boostedBossCard"><h4>Boosted Boss</h4><div class="loading"><div class="spinner"></div></div></div>
-      <div class="card" id="onlineCard"><h4>Players Online</h4><div class="loading"><div class="spinner"></div></div></div>
-    </div>
-  </div>
-</div>
-
-<!-- BESTIARY -->
-<div class="panel" id="panel-bestiary">
-  <div class="panel-header"><h2>Bestiary</h2><p>Browse all creatures in the world of Tibia</p><div class="panel-divider"></div></div>
-  <div id="bestiaryList">
-    <div class="filters">
-      <input type="text" class="search-input" id="creatureSearch" placeholder="Search creatures...">
-    </div>
-    <div class="creature-grid" id="creatureGrid"><div class="loading"><div class="spinner"></div><p style="margin-top:8px">Loading creatures...</p></div></div>
-    <div class="pagination" id="creaturePag"></div>
-    <div class="result-count" id="creatureCount"></div>
-  </div>
-  <div class="creature-detail" id="creatureDetail"></div>
-</div>
-
-<!-- HUNTING SPOTS -->
-<div class="panel" id="panel-hunting">
-  <div class="panel-header"><h2>Hunting Spots</h2><p>Find the best hunting grounds for your vocation and level</p><div class="panel-divider"></div></div>
-  <div class="filters">
-    <div class="filter-group" id="huntVocFilter">
-      <button class="fbtn active" data-voc="all">All</button>
-      <button class="fbtn" data-voc="knight">Knight</button>
-      <button class="fbtn" data-voc="paladin">Paladin</button>
-      <button class="fbtn" data-voc="sorcerer">Sorcerer</button>
-      <button class="fbtn" data-voc="druid">Druid</button>
-    </div>
-    <select id="huntLevelFilter" style="padding:6px 10px;font-size:12px;border-radius:16px">
-      <option value="all">All Levels</option>
-      <option value="8-30">8–30</option><option value="30-60">30–60</option>
-      <option value="60-100">60–100</option><option value="100-150">100–150</option>
-      <option value="150-200">150–200</option><option value="200-300">200–300</option>
-      <option value="300-999">300+</option>
-    </select>
-  </div>
-  <div class="spot-grid" id="spotGrid"></div>
-</div>
-
-<!-- EQUIPMENT -->
-<div class="panel" id="panel-equipment">
-  <div class="panel-header"><h2>Equipment Planner</h2><p>Find the best gear for your vocation and level</p><div class="panel-divider"></div></div>
-  <div class="eq-controls">
-    <div class="filter-group" id="eqVocBtns">
-      <button class="fbtn active" data-voc="knight">Knight</button>
-      <button class="fbtn" data-voc="paladin">Paladin</button>
-      <button class="fbtn" data-voc="sorcerer">Sorcerer</button>
-      <button class="fbtn" data-voc="druid">Druid</button>
-    </div>
-    <div class="eq-level-bar" id="eqLevelBtns">
-      <button class="fbtn active" data-lvl="8-30">8–30</button>
-      <button class="fbtn" data-lvl="30-60">30–60</button>
-      <button class="fbtn" data-lvl="60-100">60–100</button>
-      <button class="fbtn" data-lvl="100-150">100–150</button>
-      <button class="fbtn" data-lvl="150-200">150–200</button>
-      <button class="fbtn" data-lvl="200-300">200–300</button>
-      <button class="fbtn" data-lvl="300+">300+</button>
-    </div>
-  </div>
-  <div class="eq-slots" id="eqSlots"></div>
-</div>
-
-<!-- QUESTS -->
-<div class="panel" id="panel-quests">
-  <div class="panel-header"><h2>Quest Guide</h2><p>Complete walkthroughs with step-by-step instructions</p><div class="panel-divider"></div></div>
-  <div class="filters">
-    <input type="text" class="search-input" id="questSearch" placeholder="Search quests...">
-    <select id="questLevelFilter" style="padding:6px 10px;font-size:12px;border-radius:16px">
-      <option value="all">All Levels</option>
-      <option value="0-20">0–20</option><option value="20-50">20–50</option>
-      <option value="50-100">50–100</option><option value="100-200">100–200</option>
-      <option value="200-999">200+</option>
-    </select>
-    <label style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--parchment-muted);cursor:pointer">
-      <input type="checkbox" id="questPremFilter" style="accent-color:var(--gold)"> Premium
-    </label>
-  </div>
-  <div class="quest-list" id="questList"></div>
-</div>
-
-<!-- SPELLS -->
-<div class="panel" id="panel-spells">
-  <div class="panel-header"><h2>Spells</h2><p>All Tibia spells with formulas, costs and requirements</p><div class="panel-divider"></div></div>
-  <div class="filters">
-    <input type="text" class="search-input" id="spellSearch" placeholder="Search spells...">
-    <select id="spellVocFilter" style="padding:6px 10px;font-size:12px;border-radius:16px">
-      <option value="all">All Vocations</option>
-      <option value="Druid">Druid</option><option value="Knight">Knight</option>
-      <option value="Paladin">Paladin</option><option value="Sorcerer">Sorcerer</option>
-    </select>
-    <select id="spellTypeFilter" style="padding:6px 10px;font-size:12px;border-radius:16px">
-      <option value="all">All Types</option>
-      <option value="instant">Instant</option><option value="rune">Rune</option>
-    </select>
-  </div>
-  <div class="spells-table-wrap"><table class="spells-table" id="spellsTable">
-    <thead><tr><th>Name</th><th>Formula</th><th>Lv</th><th>Mana</th><th>Price</th><th>Type</th><th>Group</th><th>Premium</th></tr></thead>
-    <tbody id="spellsBody"><tr><td colspan="8" class="loading"><div class="spinner"></div> Loading spells...</td></tr></tbody>
-  </table></div>
-</div>
-
-<!-- MAP -->
-<div class="panel" id="panel-map">
-  <div class="panel-header"><h2>Interactive Map</h2><p>Explore the world of Tibia</p><div class="panel-divider"></div></div>
-  <div class="map-controls">
-    <label style="font-size:12px;color:var(--parchment-muted)">Floor:</label>
-    <select id="mapFloorSelect" style="padding:4px 8px;font-size:12px;border-radius:var(--radius);width:60px">
-      <option value="00">0</option><option value="01">1</option><option value="02">2</option><option value="03">3</option>
-      <option value="04">4</option><option value="05">5</option><option value="06">6</option><option value="07" selected>7</option>
-      <option value="08">8</option><option value="09">9</option><option value="10">10</option><option value="11">11</option>
-      <option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
-    </select>
-  </div>
-  <div id="tibiaMap"></div>
-  <div class="map-legend">
-    <span><span class="ldot gold"></span> Hunting Spot</span>
-    <span><span class="ldot blue"></span> City</span>
-  </div>
-</div>
-
-<!-- CHARACTER LOOKUP -->
-<div class="panel" id="panel-character">
-  <div class="panel-header"><h2>Character Lookup</h2><p>Search for any Tibia character</p><div class="panel-divider"></div></div>
-  <div class="char-search-box">
-    <input type="text" id="charNameInput" placeholder="Enter character name...">
-    <button onclick="lookupCharacter()">Search</button>
-  </div>
-  <div id="charResult"></div>
-</div>
-
-<!-- WORLDS -->
-<div class="panel" id="panel-worlds">
-  <div class="panel-header"><h2>World Status</h2><p>All Tibia game worlds and their status</p><div class="panel-divider"></div></div>
-  <div class="worlds-stats" id="worldsStats"><div class="loading"><div class="spinner"></div></div></div>
-  <div class="filters"><input type="text" class="search-input" id="worldSearch" placeholder="Search worlds..." style="max-width:300px"></div>
-  <div class="worlds-table-wrap"><table class="worlds-table" id="worldsTable">
-    <thead><tr><th>World</th><th>Status</th><th>Players</th><th>Location</th><th>PvP Type</th><th>BattlEye</th></tr></thead>
-    <tbody id="worldsBody"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody>
-  </table></div>
-</div>
-
-<!-- CALCULATORS -->
-<div class="panel" id="panel-calculators">
-  <div class="panel-header"><h2>Calculators</h2><p>Useful tools for Tibia players</p><div class="panel-divider"></div></div>
-  <div class="calc-grid">
-    <div class="card calc-card">
-      <h3>Experience Calculator</h3>
-      <div class="calc-field"><label>Current Level</label><input type="number" id="calcCurLevel" value="100" min="1" max="9999"></div>
-      <div class="calc-field"><label>Target Level</label><input type="number" id="calcTgtLevel" value="200" min="2" max="9999"></div>
-      <div class="calc-field"><label>XP per hour</label><input type="number" id="calcXpH" value="1000000" min="1"></div>
-      <div class="calc-result" id="expCalcResult"></div>
-    </div>
-    <div class="card calc-card">
-      <h3>Stamina Calculator</h3>
-      <div class="calc-field"><label>Current Stamina (hours:minutes)</label>
-        <div style="display:flex;gap:6px"><input type="number" id="calcStamH" value="30" min="0" max="42" style="width:60px"><span style="color:var(--parchment-muted);line-height:36px">:</span><input type="number" id="calcStamM" value="0" min="0" max="59" style="width:60px"></div>
+    <!-- ===== TOPBAR ===== -->
+    <header class="topbar">
+      <div class="tb-logo">
+        <img src="images/ideogram-v3.0_TibiaPedia_medieval_fantasy_logo_ornate_golden_text_on_transparent_dark_backgrou-0.jpg" alt="TibiaPedia">
+        <span><b>Tibia</b>Pedia</span>
       </div>
-      <div class="calc-result" id="stamCalcResult"></div>
-    </div>
-    <div class="card calc-card">
-      <h3>Loot Split</h3>
-      <div class="calc-field"><label>Total Loot (gold)</label><input type="number" id="calcLootTotal" value="100000" min="0"></div>
-      <div class="calc-field"><label>Number of Players</label><input type="number" id="calcLootPlayers" value="4" min="1" max="20"></div>
-      <div class="calc-field"><label>Supply Cost (total)</label><input type="number" id="calcLootSupply" value="30000" min="0"></div>
-      <div class="calc-result" id="lootCalcResult"></div>
-    </div>
-  </div>
-</div>
-
-</main>
-</div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-// ==================================================================
-// EMBEDDED DATA
-// ==================================================================
-// ==================================================================
-// HUNTING SPOTS DATA (55 spots)
-// ==================================================================
-const HUNTING_SPOTS=[
-{name:"Rotworm Caves (Darashia)",level:[8,25],voc:["knight","paladin","sorcerer","druid"],exp:3,loot:2,creatures:["Rotworm","Carrion Worm"],cx:33220,cy:32430},
-{name:"Tarantula Caves (Port Hope)",level:[15,35],voc:["knight","paladin"],exp:3,loot:3,creatures:["Tarantula"],cx:32600,cy:32740},
-{name:"Cyclopolis (Edron)",level:[25,45],voc:["knight","paladin","sorcerer","druid"],exp:3,loot:3,creatures:["Cyclops","Cyclops Smith","Cyclops Drone"],cx:33290,cy:31710},
-{name:"Amazon Camp (Venore)",level:[15,30],voc:["knight","paladin","sorcerer","druid"],exp:2,loot:3,creatures:["Amazon","Valkyrie","Witch"],cx:32820,cy:32620},
-{name:"Mintwallin",level:[8,20],voc:["knight","paladin","sorcerer","druid"],exp:2,loot:2,creatures:["Minotaur","Minotaur Archer","Minotaur Guard"],cx:32400,cy:32100},
-{name:"Dragon Lair (Darashia)",level:[45,70],voc:["knight","paladin"],exp:4,loot:4,creatures:["Dragon"],cx:33190,cy:32410},
-{name:"Wyrm Mountain (Liberty Bay)",level:[80,120],voc:["knight","paladin","sorcerer","druid"],exp:4,loot:3,creatures:["Wyrm","Elder Wyrm"],cx:32330,cy:32860},
-{name:"Drefia Grim Reapers",level:[120,200],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:4,creatures:["Grim Reaper","Nightmare"],cx:33160,cy:32490},
-{name:"Edron Hero Cave",level:[70,100],voc:["knight","paladin"],exp:4,loot:3,creatures:["Hero","Vile Grandmaster"],cx:33260,cy:31700},
-{name:"Upper Spike (Kazordoon)",level:[50,80],voc:["knight","druid"],exp:3,loot:3,creatures:["Wyvern","Corym Vanguard","Corym Skirmisher"],cx:32580,cy:31900},
-{name:"Krailos Steppe",level:[60,100],voc:["knight","paladin","druid"],exp:4,loot:3,creatures:["Ogre Brute","Ogre Savage","Ogre Shaman"],cx:33540,cy:31610},
-{name:"Werehyaena Caves (Grimvale)",level:[80,130],voc:["knight","paladin","sorcerer","druid"],exp:4,loot:4,creatures:["Werehyaena","Werehyaena Shaman"],cx:33500,cy:31650},
-{name:"Ghastly Dragons (Zao)",level:[130,200],voc:["knight","paladin"],exp:5,loot:4,creatures:["Ghastly Dragon"],cx:33290,cy:31150},
-{name:"Lizard City (Zao)",level:[100,150],voc:["knight","paladin","sorcerer","druid"],exp:4,loot:4,creatures:["Lizard High Guard","Lizard Legionnaire","Lizard Dragon Priest"],cx:33300,cy:31200},
-{name:"Oramond Minos (Rathleton)",level:[180,300],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,creatures:["Minotaur Amazon","Minotaur Hunter","Execowtioner"],cx:33650,cy:31910},
-{name:"Glooth Bandits (Rathleton)",level:[150,250],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,creatures:["Glooth Bandit"],cx:33660,cy:31900},
-{name:"Barkless Elves (Ab'Dendriel)",level:[100,150],voc:["sorcerer","druid"],exp:4,loot:3,creatures:["Barkless Devotee","Barkless Fanatic"],cx:32720,cy:31600},
-{name:"Carnivora Rocks (Port Hope)",level:[50,80],voc:["knight","paladin","druid"],exp:3,loot:3,creatures:["Spitter","Carniphila","Hydra"],cx:32600,cy:32780},
-{name:"Banuta Apes (Port Hope)",level:[60,90],voc:["knight","paladin","druid"],exp:3,loot:3,creatures:["Merlkin","Sibang","Kongra"],cx:32700,cy:32800},
-{name:"Yalahar Cemetery Quarter",level:[60,100],voc:["knight","paladin","sorcerer","druid"],exp:4,loot:3,creatures:["Zombie","Ghoul","Vampire","Demon Skeleton"],cx:32840,cy:31270},
-{name:"Yalahar Alchemist Quarter",level:[80,120],voc:["knight","paladin","sorcerer","druid"],exp:4,loot:3,creatures:["Mutated Human","Mutated Rat","Mercury Blob"],cx:32870,cy:31290},
-{name:"Deeper Banuta (Port Hope)",level:[100,150],voc:["knight","paladin","sorcerer","druid"],exp:4,loot:4,creatures:["Medusa","Serpent Spawn","Hydra"],cx:32710,cy:32810},
-{name:"Hellspawns (Yalahar)",level:[100,160],voc:["knight","paladin"],exp:4,loot:4,creatures:["Hellspawn"],cx:32830,cy:31250},
-{name:"Nightmare Isles (Roshamuul)",level:[150,250],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:4,creatures:["Nightmare","Plaguesmith"],cx:33520,cy:32410},
-{name:"Demon Forge (Goroma)",level:[200,350],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,creatures:["Demon","Fire Devil","Dark Torturer"],cx:32350,cy:32530},
-{name:"Ferumbras Ascension (Edron)",level:[250,400],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,creatures:["Hellflayer","Vexclaw","Grimeleech"],cx:33280,cy:31720},
-{name:"Frost Dragons (Okolnir)",level:[80,130],voc:["knight","paladin"],exp:4,loot:4,creatures:["Frost Dragon","Ice Dragon"],cx:32350,cy:31050},
-{name:"Draken Walls (Zao)",level:[130,200],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:4,creatures:["Draken Spellweaver","Draken Elite"],cx:33340,cy:31230},
-{name:"Warzone 1-3 (Gnomebase)",level:[200,350],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,creatures:["Deathling Scout","Deathling Spellsinger"],cx:32600,cy:31940},
-{name:"Asura Palace (Port Hope)",level:[150,250],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,creatures:["Asura","Dawnfire Asura","Midnight Asura"],cx:32620,cy:32760},
-{name:"Buried Cathedral (Edron)",level:[100,160],voc:["knight","paladin","sorcerer","druid"],exp:4,loot:3,creatures:["Betrayed Wraith","Lost Soul"],cx:33250,cy:31750},
-{name:"Fenrock DLs (Edron)",level:[70,100],voc:["knight","paladin"],exp:4,loot:4,creatures:["Dragon Lord"],cx:33280,cy:31690},
-{name:"Giant Spider Cave (Port Hope)",level:[50,80],voc:["knight","paladin","sorcerer","druid"],exp:3,loot:3,creatures:["Giant Spider"],cx:32640,cy:32750},
-{name:"Ancient Scarab Tomb (Ankrahmun)",level:[50,80],voc:["knight","paladin","druid"],exp:3,loot:4,creatures:["Ancient Scarab","Bonebeast"],cx:33160,cy:32680},
-{name:"Issavi Surface (Kilmaresh)",level:[200,300],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:4,creatures:["Burning Gladiator","Retching Horror"],cx:33920,cy:31430},
-{name:"Spectres (Yalahar)",level:[100,160],voc:["sorcerer","druid"],exp:4,loot:3,creatures:["Spectre","Arachnophobica"],cx:32850,cy:31280},
-{name:"Flimsy Lost Souls (Darashia)",level:[250,400],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,creatures:["Flimsy Lost Soul","Mean Lost Soul"],cx:33200,cy:32450},
-{name:"Pirats (Rascacoon)",level:[200,300],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,creatures:["Pirat Bombardier","Pirat Scoundrel"],cx:33660,cy:32760},
-{name:"Catacombs (Darashia)",level:[30,60],voc:["knight","paladin","sorcerer","druid"],exp:3,loot:3,creatures:["Mummy","Crypt Shambler","Demon Skeleton"],cx:33170,cy:32470},
-{name:"Forbidden Lands (Edron)",level:[60,100],voc:["knight","paladin"],exp:3,loot:3,creatures:["Behemoth","Elder Beholder"],cx:33270,cy:31690},
-{name:"Vampire Crypt (Edron)",level:[40,70],voc:["knight","paladin","sorcerer","druid"],exp:3,loot:3,creatures:["Vampire","Vampire Bride","Bonelord"],cx:33250,cy:31730},
-{name:"Dwarf Mines (Kazordoon)",level:[15,40],voc:["knight","paladin","sorcerer","druid"],exp:2,loot:2,creatures:["Dwarf","Dwarf Soldier","Dwarf Guard"],cx:32590,cy:31900},
-{name:"Sea Serpents (Svargrond)",level:[80,120],voc:["knight","paladin"],exp:4,loot:4,creatures:["Sea Serpent","Young Sea Serpent"],cx:32240,cy:31120},
-{name:"Roshamuul Prison",level:[200,300],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,creatures:["Guzzlemaw","Frazzlemaw","Silencer"],cx:33530,cy:32400},
-{name:"Falcon Bastion (Edron)",level:[250,400],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,creatures:["Falcon Knight","Falcon Paladin"],cx:33330,cy:31700},
-{name:"Cobra Bastion (Issavi)",level:[250,400],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,creatures:["Cobra Assassin","Cobra Scout","Cobra Vizier"],cx:33910,cy:31440},
-{name:"Werecave (Edron)",level:[60,100],voc:["knight","paladin","sorcerer","druid"],exp:4,loot:4,creatures:["Werewolf","Werebear","Werefox"],cx:33270,cy:31740},
-{name:"Muggy Plains (Zao)",level:[100,150],voc:["knight","druid"],exp:4,loot:3,creatures:["Lizard Chosen","Lizard Zaogun"],cx:33310,cy:31190},
-{name:"Grimvale (Full Were)",level:[130,200],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,creatures:["Wereboar","Werebadger","Werefox"],cx:33510,cy:31660},
-{name:"Summer Court (Feyrist)",level:[150,250],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:4,creatures:["Pixie","Faun","Swan Maiden"],cx:33560,cy:32220},
-{name:"Winter Court (Feyrist)",level:[150,250],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:4,creatures:["Boar Man","Dark Faun","Twisted Pooka"],cx:33570,cy:32230},
-{name:"Secret Library",level:[250,400],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,creatures:["Burning Book","Icecold Book"],cx:32760,cy:32750},
-{name:"Soul War (Zarganash)",level:[250,400],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,creatures:["Dread Intruder","Reality Reaver"],cx:33540,cy:32250},
-{name:"Claustrophobic Inferno",level:[250,400],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,creatures:["Hellflayer","Vexclaw","Grimeleech"],cx:33300,cy:31730},
-{name:"Grave Danger (Various)",level:[250,400],voc:["knight","paladin","sorcerer","druid"],exp:5,loot:5,creatures:["Falcon Knight","Grand Master Oberon"],cx:33320,cy:31710}
-];
-
-const CITIES=[
-{name:"Thais",cx:32369,cy:32241},{name:"Carlin",cx:32360,cy:31782},{name:"Venore",cx:32957,cy:32076},
-{name:"Ab'Dendriel",cx:32682,cy:31639},{name:"Kazordoon",cx:32631,cy:31925},{name:"Ankrahmun",cx:33162,cy:32688},
-{name:"Darashia",cx:33224,cy:32432},{name:"Edron",cx:33217,cy:31814},{name:"Port Hope",cx:32623,cy:32753},
-{name:"Liberty Bay",cx:32317,cy:32826},{name:"Svargrond",cx:32267,cy:31131},{name:"Yalahar",cx:32792,cy:31274},
-{name:"Rathleton",cx:33594,cy:31899},{name:"Roshamuul",cx:33513,cy:32363},{name:"Issavi",cx:33921,cy:31428},
-{name:"Feyrist",cx:33558,cy:32224},{name:"Rookgaard",cx:32097,cy:32205},{name:"Dawnport",cx:32070,cy:31932}
-];
-
-// ==================================================================
-// EQUIPMENT DATA
-// ==================================================================
-const SLOT_ICONS={helmet:'🪖',armor:'🛡️',legs:'👖',boots:'👢',shield:'⛨',weapon:'⚔️',ring:'💍',amulet:'📿'};
-const EQUIPMENT={
-knight:{"8-30":{helmet:{name:"Soldier Helmet",stats:"Arm: 5",source:"Dwarf Guards, Orc Leaders"},armor:{name:"Plate Armor",stats:"Arm: 12",source:"Cyclops, Orc Leaders"},legs:{name:"Plate Legs",stats:"Arm: 7",source:"Dragon, Elf Arcanist"},boots:{name:"Leather Boots",stats:"Arm: 1",source:"Various creatures"},shield:{name:"Dwarven Shield",stats:"Def: 26",source:"Dwarf Guard"},weapon:{name:"Bright Sword",stats:"Atk: 36, Def: 30",source:"Orc Leaders"},ring:{name:"Life Ring",stats:"+1 HP/turn",source:"NPC or loot"},amulet:{name:"Protection Amulet",stats:"Physical prot 6%",source:"NPC (100gp)"}},"30-60":{helmet:{name:"Royal Helmet",stats:"Arm: 9",source:"Behemoths, Quests"},armor:{name:"Blue Robe",stats:"Arm: 11, Magic +1",source:"Dragon Lords, Demons"},legs:{name:"Crown Legs",stats:"Arm: 9",source:"Quests, Dragon Lords"},boots:{name:"Boots of Haste",stats:"Speed +20",source:"Dragon Lords, Quests"},shield:{name:"Demon Shield",stats:"Def: 35",source:"Demons, Quests"},weapon:{name:"Relic Sword",stats:"Atk: 39, Def: 24",source:"Inquisition Quest"},ring:{name:"Life Ring",stats:"+1 HP/turn",source:"NPC"},amulet:{name:"Platinum Amulet",stats:"Physical prot 4%",source:"NPC (2000gp)"}},"60-100":{helmet:{name:"Royal Helmet",stats:"Arm: 9",source:"Behemoths"},armor:{name:"Magic Plate Armor",stats:"Arm: 17",source:"Dragon Lords, Behemoths"},legs:{name:"Golden Legs",stats:"Arm: 9",source:"Annihilator Quest"},boots:{name:"Boots of Haste",stats:"Speed +20",source:"Dragon Lords"},shield:{name:"Blessed Shield",stats:"Def: 40",source:"Inquisition Quest"},weapon:{name:"Magic Longsword",stats:"Atk: 56, Def: 37",source:"Behemoths, Hydras"},ring:{name:"Ring of Healing",stats:"+2 HP/turn",source:"NPC"},amulet:{name:"Amulet of Loss",stats:"No death penalty",source:"NPC"}},"100-150":{helmet:{name:"Zaoan Helmet",stats:"Arm: 9, Sword +1",source:"Lizard City Zao"},armor:{name:"Prismatic Armor",stats:"Arm: 16, Phys prot 5%",source:"Market"},legs:{name:"Zaoan Legs",stats:"Arm: 9",source:"Lizard City Zao"},boots:{name:"Guardian Boots",stats:"Arm: 3, Speed +4",source:"Market"},shield:{name:"Ornate Shield",stats:"Def: 38",source:"Market"},weapon:{name:"Shiny Blade",stats:"Atk: 52, Def: 29, Sword +1",source:"Roshamuul"},ring:{name:"Prismatic Ring",stats:"Phys prot 5%",source:"Market"},amulet:{name:"Foxtail Amulet",stats:"+4 Speed",source:"Were creatures"}},"150-200":{helmet:{name:"Cobra Hood",stats:"Arm: 10, ML +1, Sword +2",source:"Cobra Bastion"},armor:{name:"Prismatic Armor",stats:"Arm: 16, Phys prot 5%",source:"Market"},legs:{name:"Ornate Legs",stats:"Arm: 10",source:"Oramond Minos"},boots:{name:"Pair of Dreamwalkers",stats:"Arm: 3, Speed +10",source:"Dream Courts"},shield:{name:"Ornate Shield",stats:"Def: 38",source:"Market"},weapon:{name:"Blade of Destruction",stats:"Atk: 54, Def: 31, Sword +3",source:"Ferumbras Ascension"},ring:{name:"Ring of Blue Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Foxtail Amulet",stats:"+4 Speed",source:"Were creatures"}},"200-300":{helmet:{name:"Falcon Coif",stats:"Arm: 11, Shielding +3",source:"Falcon Bastion"},armor:{name:"Falcon Plate",stats:"Arm: 17, Sword +3",source:"Falcon Bastion"},legs:{name:"Fabulous Legs",stats:"Arm: 10, Speed +12",source:"Secret Library"},boots:{name:"Pair of Dreamwalkers",stats:"Arm: 3, Speed +10",source:"Dream Courts"},shield:{name:"Falcon Shield",stats:"Def: 41, Shielding +3",source:"Falcon Bastion"},weapon:{name:"Falcon Battleaxe",stats:"Atk: 54, Def: 32, Axe +3",source:"Falcon Bastion"},ring:{name:"Ring of Blue Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",stats:"Phys prot 2%, +2 ML",source:"Forgotten Knowledge"}},"300+":{helmet:{name:"Falcon Coif",stats:"Arm: 11, Shielding +3",source:"Falcon Bastion"},armor:{name:"Soulmantle",stats:"Arm: 18, Sword +4",source:"Soul War Quest"},legs:{name:"Soulstrider",stats:"Arm: 11, Speed +15",source:"Soul War Quest"},boots:{name:"Pair of Dreamwalkers",stats:"Arm: 3, Speed +10",source:"Dream Courts"},shield:{name:"Soulbastion",stats:"Def: 42, Shielding +4",source:"Soul War Quest"},weapon:{name:"Soulcutter",stats:"Atk: 55, Def: 33, Sword +4",source:"Soul War Quest"},ring:{name:"Ring of Blue Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",stats:"Phys prot 2%, +2 ML",source:"Forgotten Knowledge"}}},
-paladin:{"8-30":{helmet:{name:"Soldier Helmet",stats:"Arm: 5",source:"Dwarf Guards"},armor:{name:"Scale Armor",stats:"Arm: 9",source:"Various"},legs:{name:"Plate Legs",stats:"Arm: 7",source:"Various"},boots:{name:"Leather Boots",stats:"Arm: 1",source:"Various"},shield:{name:"Dwarven Shield",stats:"Def: 26",source:"Dwarf Guard"},weapon:{name:"Elvish Bow",stats:"Range: 6, Atk +1",source:"Elf Arcanist"},ring:{name:"Life Ring",stats:"+1 HP/turn",source:"NPC"},amulet:{name:"Protection Amulet",stats:"Phys prot 6%",source:"NPC"}},"30-60":{helmet:{name:"Royal Helmet",stats:"Arm: 9",source:"Behemoths"},armor:{name:"Paladin Armor",stats:"Arm: 12, Dist +2",source:"Quest"},legs:{name:"Crown Legs",stats:"Arm: 9",source:"Quest"},boots:{name:"Boots of Haste",stats:"Speed +20",source:"Dragon Lords"},shield:{name:"Demon Shield",stats:"Def: 35",source:"Demons"},weapon:{name:"Arbalest",stats:"Range: 6, Atk: 49",source:"Market"},ring:{name:"Life Ring",stats:"+1 HP/turn",source:"NPC"},amulet:{name:"Platinum Amulet",stats:"Phys prot 4%",source:"NPC"}},"60-100":{helmet:{name:"Royal Helmet",stats:"Arm: 9",source:"Behemoths"},armor:{name:"Paladin Armor",stats:"Arm: 12, Dist +2",source:"Quest"},legs:{name:"Golden Legs",stats:"Arm: 9",source:"Annihilator"},boots:{name:"Boots of Haste",stats:"Speed +20",source:"Dragon Lords"},shield:{name:"Blessed Shield",stats:"Def: 40",source:"Inquisition"},weapon:{name:"Mycological Bow",stats:"Range: 6, Atk: 52",source:"Market"},ring:{name:"Ring of Healing",stats:"+2 HP/turn",source:"NPC"},amulet:{name:"Amulet of Loss",stats:"No death penalty",source:"NPC"}},"100-150":{helmet:{name:"Zaoan Helmet",stats:"Arm: 9, Dist +2",source:"Lizard City"},armor:{name:"Prismatic Armor",stats:"Arm: 16, Phys prot 5%",source:"Market"},legs:{name:"Zaoan Legs",stats:"Arm: 9",source:"Lizard City"},boots:{name:"Guardian Boots",stats:"Arm: 3, Speed +4",source:"Market"},shield:{name:"Ornate Shield",stats:"Def: 38",source:"Market"},weapon:{name:"Rift Bow",stats:"Range: 7, Atk: 54, Dist +2",source:"Roshamuul"},ring:{name:"Prismatic Ring",stats:"Phys prot 5%",source:"Market"},amulet:{name:"Foxtail Amulet",stats:"+4 Speed",source:"Were creatures"}},"150-200":{helmet:{name:"Cobra Hood",stats:"Arm: 10, Dist +2",source:"Cobra Bastion"},armor:{name:"Prismatic Armor",stats:"Arm: 16, Phys prot 5%",source:"Market"},legs:{name:"Ornate Legs",stats:"Arm: 10",source:"Oramond"},boots:{name:"Pair of Dreamwalkers",stats:"Arm: 3, Speed +10",source:"Dream Courts"},shield:{name:"Ornate Shield",stats:"Def: 38",source:"Market"},weapon:{name:"Bow of Destruction",stats:"Range: 7, Atk: 56, Dist +3",source:"Ferumbras Ascension"},ring:{name:"Ring of Blue Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",stats:"Phys prot 2%, +2 ML",source:"Forgotten Knowledge"}},"200-300":{helmet:{name:"Falcon Coif",stats:"Arm: 11, Dist +3",source:"Falcon Bastion"},armor:{name:"Falcon Plate",stats:"Arm: 17, Dist +3",source:"Falcon Bastion"},legs:{name:"Fabulous Legs",stats:"Arm: 10, Speed +12",source:"Secret Library"},boots:{name:"Pair of Dreamwalkers",stats:"Arm: 3, Speed +10",source:"Dream Courts"},shield:{name:"Falcon Shield",stats:"Def: 41",source:"Falcon Bastion"},weapon:{name:"Falcon Bow",stats:"Range: 7, Atk: 57, Dist +4",source:"Falcon Bastion"},ring:{name:"Ring of Blue Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",stats:"Phys prot 2%, +2 ML",source:"Forgotten Knowledge"}},"300+":{helmet:{name:"Falcon Coif",stats:"Arm: 11, Dist +3",source:"Falcon Bastion"},armor:{name:"Soulmantle",stats:"Arm: 18, Dist +4",source:"Soul War"},legs:{name:"Soulstrider",stats:"Arm: 11, Speed +15",source:"Soul War"},boots:{name:"Pair of Dreamwalkers",stats:"Arm: 3, Speed +10",source:"Dream Courts"},shield:{name:"Soulbastion",stats:"Def: 42",source:"Soul War"},weapon:{name:"Soulpiercer",stats:"Range: 7, Atk: 58, Dist +4",source:"Soul War"},ring:{name:"Ring of Blue Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",stats:"Phys prot 2%, +2 ML",source:"Forgotten Knowledge"}}},
-sorcerer:{"8-30":{helmet:{name:"Magician's Hat",stats:"Arm: 2, ML +1",source:"NPC"},armor:{name:"Blue Robe",stats:"Arm: 11, ML +1",source:"Dragon Lords"},legs:{name:"Plate Legs",stats:"Arm: 7",source:"Various"},boots:{name:"Sandals",stats:"Arm: 1",source:"NPC"},shield:{name:"Spellbook of Mind Control",stats:"Def: 18, ML +1",source:"NPC"},weapon:{name:"Wand of Dragonbreath",stats:"Magic: 13 fire",source:"NPC"},ring:{name:"Life Ring",stats:"+1 HP/turn",source:"NPC"},amulet:{name:"Protection Amulet",stats:"Phys prot 6%",source:"NPC"}},"30-60":{helmet:{name:"Magician's Hat",stats:"Arm: 2, ML +1",source:"NPC"},armor:{name:"Blue Robe",stats:"Arm: 11, ML +1",source:"Dragon Lords"},legs:{name:"Crown Legs",stats:"Arm: 9",source:"Quest"},boots:{name:"Boots of Haste",stats:"Speed +20",source:"Dragon Lords"},shield:{name:"Spellbook of Warding",stats:"Def: 19, ML +2",source:"Market"},weapon:{name:"Wand of Inferno",stats:"Magic: 56 fire",source:"NPC"},ring:{name:"Energy Ring",stats:"Mana Shield",source:"NPC"},amulet:{name:"Platinum Amulet",stats:"Phys prot 4%",source:"NPC"}},"60-100":{helmet:{name:"Yalahari Mask",stats:"Arm: 5, ML +2",source:"Yalahar Quest"},armor:{name:"Master Archer's Armor",stats:"Arm: 14, ML +3",source:"Market"},legs:{name:"Golden Legs",stats:"Arm: 9",source:"Annihilator"},boots:{name:"Boots of Haste",stats:"Speed +20",source:"Dragon Lords"},shield:{name:"Spellbook of Dark Mysteries",stats:"Def: 20, ML +3",source:"Market"},weapon:{name:"Wand of Defiance",stats:"Magic: 85 fire",source:"NPC"},ring:{name:"Ring of Healing",stats:"+2 HP/turn",source:"NPC"},amulet:{name:"Amulet of Loss",stats:"No death penalty",source:"NPC"}},"100-150":{helmet:{name:"Yalahari Mask",stats:"Arm: 5, ML +2",source:"Yalahar Quest"},armor:{name:"Gill Coat",stats:"Arm: 15, ML +2",source:"Market"},legs:{name:"Zaoan Legs",stats:"Arm: 9",source:"Lizard City"},boots:{name:"Pair of Soft Boots",stats:"+HP/MP regen",source:"Market"},shield:{name:"Spellbook of Dark Mysteries",stats:"Def: 20, ML +3",source:"Market"},weapon:{name:"Wand of Everblazing",stats:"Magic: 86 fire",source:"Roshamuul"},ring:{name:"Prismatic Ring",stats:"Phys prot 5%",source:"Market"},amulet:{name:"Foxtail Amulet",stats:"+4 Speed",source:"Were creatures"}},"150-200":{helmet:{name:"Cobra Hood",stats:"Arm: 10, ML +2",source:"Cobra Bastion"},armor:{name:"Gill Coat",stats:"Arm: 15, ML +2",source:"Market"},legs:{name:"Ornate Legs",stats:"Arm: 10",source:"Oramond"},boots:{name:"Pair of Dreamwalkers",stats:"Arm: 3, Speed +10",source:"Dream Courts"},shield:{name:"Spellbook of Dark Mysteries",stats:"Def: 20, ML +3",source:"Market"},weapon:{name:"Wand of Destruction",stats:"Magic: 90 fire",source:"Ferumbras"},ring:{name:"Ring of Blue Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",stats:"Phys prot 2%, +2 ML",source:"Forgotten Knowledge"}},"200-300":{helmet:{name:"Falcon Coif",stats:"Arm: 11, ML +3",source:"Falcon Bastion"},armor:{name:"Falcon Plate",stats:"Arm: 17, ML +3",source:"Falcon Bastion"},legs:{name:"Fabulous Legs",stats:"Arm: 10, Speed +12",source:"Secret Library"},boots:{name:"Pair of Dreamwalkers",stats:"Arm: 3, Speed +10",source:"Dream Courts"},shield:{name:"Falcon Escutcheon",stats:"Def: 36, ML +3",source:"Falcon Bastion"},weapon:{name:"Falcon Wand",stats:"Magic: 92 fire, ML +3",source:"Falcon Bastion"},ring:{name:"Ring of Blue Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",stats:"Phys prot 2%, +2 ML",source:"Forgotten Knowledge"}},"300+":{helmet:{name:"Falcon Coif",stats:"Arm: 11, ML +3",source:"Falcon Bastion"},armor:{name:"Soulmantle",stats:"Arm: 18, ML +4",source:"Soul War"},legs:{name:"Soulstrider",stats:"Arm: 11, Speed +15",source:"Soul War"},boots:{name:"Pair of Dreamwalkers",stats:"Arm: 3, Speed +10",source:"Dream Courts"},shield:{name:"Soulbastion",stats:"Def: 42, ML +4",source:"Soul War"},weapon:{name:"Soultainter",stats:"Magic: 94 fire, ML +4",source:"Soul War"},ring:{name:"Ring of Blue Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",stats:"Phys prot 2%, +2 ML",source:"Forgotten Knowledge"}}},
-druid:{"8-30":{helmet:{name:"Magician's Hat",stats:"Arm: 2, ML +1",source:"NPC"},armor:{name:"Blue Robe",stats:"Arm: 11, ML +1",source:"Dragon Lords"},legs:{name:"Plate Legs",stats:"Arm: 7",source:"Various"},boots:{name:"Sandals",stats:"Arm: 1",source:"NPC"},shield:{name:"Spellbook of Mind Control",stats:"Def: 18, ML +1",source:"NPC"},weapon:{name:"Hailstorm Rod",stats:"Magic: 13 ice",source:"NPC"},ring:{name:"Life Ring",stats:"+1 HP/turn",source:"NPC"},amulet:{name:"Protection Amulet",stats:"Phys prot 6%",source:"NPC"}},"30-60":{helmet:{name:"Magician's Hat",stats:"Arm: 2, ML +1",source:"NPC"},armor:{name:"Blue Robe",stats:"Arm: 11, ML +1",source:"Dragon Lords"},legs:{name:"Crown Legs",stats:"Arm: 9",source:"Quest"},boots:{name:"Boots of Haste",stats:"Speed +20",source:"Dragon Lords"},shield:{name:"Spellbook of Warding",stats:"Def: 19, ML +2",source:"Market"},weapon:{name:"Underworld Rod",stats:"Magic: 56 death",source:"NPC"},ring:{name:"Energy Ring",stats:"Mana Shield",source:"NPC"},amulet:{name:"Platinum Amulet",stats:"Phys prot 4%",source:"NPC"}},"60-100":{helmet:{name:"Yalahari Mask",stats:"Arm: 5, ML +2",source:"Yalahar Quest"},armor:{name:"Master Archer's Armor",stats:"Arm: 14, ML +3",source:"Market"},legs:{name:"Golden Legs",stats:"Arm: 9",source:"Annihilator"},boots:{name:"Boots of Haste",stats:"Speed +20",source:"Dragon Lords"},shield:{name:"Spellbook of Dark Mysteries",stats:"Def: 20, ML +3",source:"Market"},weapon:{name:"Deepling Staff",stats:"Magic: 85 ice",source:"NPC"},ring:{name:"Ring of Healing",stats:"+2 HP/turn",source:"NPC"},amulet:{name:"Amulet of Loss",stats:"No death penalty",source:"NPC"}},"100-150":{helmet:{name:"Yalahari Mask",stats:"Arm: 5, ML +2",source:"Yalahar Quest"},armor:{name:"Gill Coat",stats:"Arm: 15, ML +2",source:"Market"},legs:{name:"Zaoan Legs",stats:"Arm: 9",source:"Lizard City"},boots:{name:"Pair of Soft Boots",stats:"+HP/MP regen",source:"Market"},shield:{name:"Spellbook of Dark Mysteries",stats:"Def: 20, ML +3",source:"Market"},weapon:{name:"Rod of Destruction",stats:"Magic: 90 ice",source:"Ferumbras"},ring:{name:"Prismatic Ring",stats:"Phys prot 5%",source:"Market"},amulet:{name:"Foxtail Amulet",stats:"+4 Speed",source:"Were creatures"}},"150-200":{helmet:{name:"Cobra Hood",stats:"Arm: 10, ML +2",source:"Cobra Bastion"},armor:{name:"Gill Coat",stats:"Arm: 15, ML +2",source:"Market"},legs:{name:"Ornate Legs",stats:"Arm: 10",source:"Oramond"},boots:{name:"Pair of Dreamwalkers",stats:"Arm: 3, Speed +10",source:"Dream Courts"},shield:{name:"Spellbook of Dark Mysteries",stats:"Def: 20, ML +3",source:"Market"},weapon:{name:"Rod of Destruction",stats:"Magic: 90 ice",source:"Ferumbras"},ring:{name:"Ring of Blue Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",stats:"Phys prot 2%, +2 ML",source:"Forgotten Knowledge"}},"200-300":{helmet:{name:"Falcon Coif",stats:"Arm: 11, ML +3",source:"Falcon Bastion"},armor:{name:"Falcon Plate",stats:"Arm: 17, ML +3",source:"Falcon Bastion"},legs:{name:"Fabulous Legs",stats:"Arm: 10, Speed +12",source:"Secret Library"},boots:{name:"Pair of Dreamwalkers",stats:"Arm: 3, Speed +10",source:"Dream Courts"},shield:{name:"Falcon Escutcheon",stats:"Def: 36, ML +3",source:"Falcon Bastion"},weapon:{name:"Falcon Rod",stats:"Magic: 92 ice, ML +3",source:"Falcon Bastion"},ring:{name:"Ring of Blue Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",stats:"Phys prot 2%, +2 ML",source:"Forgotten Knowledge"}},"300+":{helmet:{name:"Falcon Coif",stats:"Arm: 11, ML +3",source:"Falcon Bastion"},armor:{name:"Soulmantle",stats:"Arm: 18, ML +4",source:"Soul War"},legs:{name:"Soulstrider",stats:"Arm: 11, Speed +15",source:"Soul War"},boots:{name:"Pair of Dreamwalkers",stats:"Arm: 3, Speed +10",source:"Dream Courts"},shield:{name:"Soulbastion",stats:"Def: 42, ML +4",source:"Soul War"},weapon:{name:"Soultainter",stats:"Magic: 94 ice, ML +4",source:"Soul War"},ring:{name:"Ring of Blue Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",stats:"Phys prot 2%, +2 ML",source:"Forgotten Knowledge"}}}
-};
-
-// ==================================================================
-// QUESTS DATA (with step-by-step walkthroughs)
-// ==================================================================
-const QUESTS=[
-{name:"The Desert Dungeon Quest",level:0,premium:false,location:"Ankrahmun",npc:"—",
-desc:"Explore the crypt systems beneath the desert sands of Ankrahmun. Multiple treasure rooms with decent loot for free account players.",
-requirements:["Rope","Shovel"],
-steps:["Travel to Ankrahmun and go to the desert east of the city.","Find the hole in the sand and use your shovel to dig down.","Navigate through the underground tunnels heading south.","Use your rope to cross the gaps and reach treasure rooms.","Open the chests to collect your rewards."],
-rewards:["Silver Brooch","Green Gem","150 gold"],dangers:["Skeleton","Ghoul","Mummy"],tips:"Bring health potions and be careful of poison fields."},
-{name:"The Rookie Guard Quest",level:1,premium:false,location:"Rookgaard",npc:"Seymour",
-desc:"Help guard the town of Rookgaard and prove yourself worthy of joining the mainland. A classic tutorial quest.",
-requirements:["None"],
-steps:["Talk to Seymour in the Rookgaard Academy.","Go to the wolf cave north of town and kill 3 wolves.","Return to Seymour and report your success.","Collect your reward from the chest near the academy."],
-rewards:["Brass Armor","Brass Helmet","100 exp"],dangers:["Wolves","Bugs"],tips:"This is the basic starter quest - good for learning game mechanics."},
-{name:"The Paradox Tower Quest",level:30,premium:true,location:"Edron",npc:"Spectulus",
-desc:"Climb the mysterious Paradox Tower by answering riddles from the Mad Mage. One of Tibia's most iconic quests with unique puzzle mechanics. Each floor has a different challenge.",
-requirements:["200 gold","Rope","Convince Creature Rune (optional)"],
-steps:["Travel to Edron and find the Paradox Tower northeast of the depot.","Enter the tower and talk to the first NPC on the ground floor.","Answer the riddle correctly: The answer relates to Tibia lore.","Proceed to the second floor and solve the mathematical puzzle.","On the third floor, use a convince creature rune on the specific creature.","Navigate the maze on the fourth floor using the correct path (N, E, S, W, N).","Reach the top floor and claim your reward from the chest.","Talk to the Mad Mage for additional dialogue and lore."],
-rewards:["Wand of Cosmic Energy","3000 exp"],dangers:["None (puzzle-based)"],tips:"Write down the riddle answers. Each floor requires different approach - combat won't help here."},
-{name:"The Djinn War Quest",level:40,premium:true,location:"Ankrahmun / Drefia",npc:"Fa'hradin / Malor",
-desc:"Choose a side in the eternal war between Marid (Blue Djinn) and Efreet (Green Djinn). Completing one side permanently locks you out of the other. Unlocks the best NPC trade prices in the game.",
-requirements:["Blue Piece of Cloth OR Green Piece of Cloth","10,000 gold"],
-steps:["Travel to Ankrahmun and decide which faction to join.","For Blue Djinn: Go to the Blue Djinn Fortress south of Ab'Dendriel. Talk to Fa'hradin.","For Green Djinn: Go to the Green Djinn Tower near Drefia. Talk to Malor.","Complete 3 missions for your chosen faction - each involves retrieving an item.","Mission 1: Retrieve the faction's lost artifact from the opposing side's territory.","Mission 2: Deliver a message to an NPC in a dangerous location.","Mission 3: Kill a specific boss monster and return proof.","After completing all missions, talk to the faction leader to gain permanent NPC access."],
-rewards:["Blue/Green Djinn NPC access","Best trade prices for rare items"],dangers:["Efreet","Marid","Blue Djinn","Green Djinn"],tips:"IMPORTANT: This is a permanent choice! Blue Djinns buy creature products at best prices. Green Djinns buy weapons/armor at best prices. Most players choose Blue Djinn."},
-{name:"Pits of Inferno Quest",level:100,premium:true,location:"Edron / PoI",npc:"Hugo",
-desc:"Navigate through 7 deadly throne rooms, each representing a deadly sin. One of Tibia's hardest and most legendary classic quests. Requires a full team of 4+ players.",
-requirements:["Blessed Wooden Stake","Holy Water","Level 100+","Full team (EK, ED, MS, RP recommended)"],
-steps:["Form a team of at least 4 experienced players.","Enter the PoI entrance through Edron's Hero Cave (go deeper past the heroes).","Navigate through the initial tunnels to reach the 7 throne rooms.","Throne 1 (Greed): Fight through demons and collect the Greed Gem.","Throne 2 (Gluttony): Survive waves of creatures in the pit.","Throne 3 (Lust): Navigate the fire fields and kill the guardians.","Throne 4 (Sloth): Solve the lever puzzle within the time limit.","Throne 5 (Wrath): Fight the strongest creature waves including Juggernauts.","Throne 6 (Envy): Complete the teleport maze.","Throne 7 (Pride): Defeat the final guardians and claim your reward.","Use all 7 gems on the door to access the reward room.","Choose ONE reward from the available items."],
-rewards:["Arbalest","Soft Boots","Backpack of Holding","Stuffed Dragon"],dangers:["Demons","Juggernauts","Hellhounds","Destroyers"],tips:"Bring lots of supplies. The Knight should be 120+ for comfortable blocking. Share damage with exura sio from the Druid."},
-{name:"The Inquisition Quest",level:100,premium:true,location:"Multiple cities",npc:"Henricus",
-desc:"Join the Inquisition to fight evil across Tibia. A massive questline with increasingly difficult bosses. One of the most rewarding quests in the game.",
-requirements:["Level 100+","Completed Demon Oak Quest (for full rewards)","Team of 5+"],
-steps:["Talk to Henricus in Thais temple to begin the Inquisition.","Complete Mission 1: Travel to all 4 Inquisition Bases and report.","Complete Mission 2: Investigate the cult activity in Liberty Bay sewers.","Complete Mission 3: Clear the Nightmare zone in Plains of Havoc.","Complete Mission 4: Enter the Shadow Nexus and defeat shadow creatures.","Complete Mission 5: Boss fight - Defeat Ushuriel (use Energy protection).","Complete Mission 6: Boss fight - Defeat Zugurosh (use Fire protection).","Complete Mission 7: Boss fight - Defeat Madareth (use Earth protection).","Complete Mission 8: Boss fight - Defeat Annihilon (bring full team).","After all bosses, talk to Henricus for your choice of reward."],
-rewards:["Blessed Shield (Def 40)","Emerald Sword","Access to daily boss kills"],dangers:["Ushuriel","Zugurosh","Madareth","Annihilon"],tips:"Each boss requires different elemental protection. Coordinate with your team beforehand. The Blessed Shield is the most popular reward choice for knights."},
-{name:"Wrath of the Emperor Quest",level:100,premium:true,location:"Zao",npc:"Emperor Kruzak",
-desc:"Help the dragon empire by infiltrating enemy lizard lines. Explore the continent of Zao and face fierce dragon-aligned warriors.",
-requirements:["Level 100+","The New Frontier Quest completed","Children of the Revolution completed"],
-steps:["Talk to Emperor Kruzak in Zao's dragon stronghold.","Infiltrate the Lizard Chosen camp and steal intelligence documents.","Navigate through the muggy plains avoiding patrols.","Enter the Dragon Palace and complete 3 internal missions.","Fight through the Draken Walls to reach the inner sanctum.","Defeat the Lizard High Commander in the throne room.","Return to Emperor Kruzak with proof of victory."],
-rewards:["Helmet of the Deep","Zao full access","15,000 exp"],dangers:["Draken Spellweaver","Draken Elite","Lizard Chosen"],tips:"Bring fire protection for Draken Spellweavers. The walls area is one of the best hunting spots unlocked."},
-{name:"In Service of Yalahar Quest",level:80,premium:true,location:"Yalahar",npc:"Palimuth",
-desc:"Explore the quarters of Yalahar and help restore order to this once-great city. Multi-chapter quest with unique boss fights in each quarter.",
-requirements:["Level 80+","Rope","Shovel"],
-steps:["Arrive in Yalahar and talk to Palimuth at the city entrance.","Explore the Trade Quarter and fix the broken machinery.","Clear the Cemetery Quarter of undead creatures and seal the tombs.","Navigate the Alchemist Quarter and neutralize mutated specimens.","Enter the Foreign Quarter and resolve the diplomatic crisis.","Investigate the Sunken Quarter underwater section.","Face the final challenge in the Magician Quarter.","Return to Palimuth for your rewards."],
-rewards:["Yalahari Mask (ML +2)","Yalahari Leg Piece","Full Yalahar access"],dangers:["Mutated creatures","Vampires","Demons"],tips:"Complete each quarter in order. The Yalahari Mask is best-in-slot for mages until level 150+."},
-{name:"The New Frontier Quest",level:80,premium:true,location:"Zao",npc:"Captain Haba",
-desc:"Pioneer into uncharted territory. Establish an outpost and explore the mysterious continent of Zao.",
-requirements:["Level 80+","Team recommended"],
-steps:["Talk to Captain Haba at the Venore docks.","Sail to Zao and establish the first outpost.","Complete 5 exploration missions across Zao.","Map the muggy plains and report creature sightings.","Help build defenses for the outpost.","Final mission: Clear the route to the deeper Zao areas."],
-rewards:["Relic Sword","Zao Outpost access","15,000 exp"],dangers:["Lizard Legionnaire","Bonebeasts","War Golems"],tips:"This quest unlocks access to Zao continent and its hunting spots."},
-{name:"Children of the Revolution Quest",level:80,premium:true,location:"Zao",npc:"Zizzle",
-desc:"Aid the rebel lizards in their fight for freedom against the dragon overlords. A story-driven quest with moral choices.",
-requirements:["Level 80+","The New Frontier completed"],
-steps:["Find Zizzle the rebel leader in the hidden base.","Earn the trust of the rebel faction through 3 missions.","Smuggle supplies past dragon patrols.","Sabotage the dragon war machines.","Final mission: Create a diversion for the rebel attack."],
-rewards:["Zaoan equipment access","Rebel base access"],dangers:["Lizard Dragon Priest","Lizard High Guard"],tips:"Required for Wrath of the Emperor Quest."},
-{name:"Bigfoot's Burden Quest",level:100,premium:true,location:"Kazordoon",npc:"Gnomadness",
-desc:"Help the gnomes defend against threats from below. Unlock Warzones and daily tasks that provide consistent income.",
-requirements:["Level 100+","Team for Warzones"],
-steps:["Travel to Kazordoon and find the gnome base.","Complete the introduction missions (gathering resources).","Unlock Warzone 1, 2, and 3 by completing prerequisite tasks.","Complete daily Warzone clears for points and boss access.","Accumulate enough points to access Gnomish equipment upgrades."],
-rewards:["Warzone access","Daily boss access","Gnomish equipment"],dangers:["Deathlings","Diremaws","Gnomevil"],tips:"Warzones are excellent daily income. Do them every day!"},
-{name:"The Annihilator Quest",level:100,premium:false,location:"Near Venore",npc:"—",
-desc:"The classic 4-player quest. Enter a small room and face 6 Demons at once. Requires perfect teamwork and is one of Tibia's most iconic challenges.",
-requirements:["Exactly 4 players","Level 100+ recommended","Key 3600"],
-steps:["Form a team of exactly 4 players (EK, ED, MS, RP ideal).","Travel to the Annihilator entrance southeast of Venore.","All 4 players must step on tiles simultaneously to open the door.","Fight 6 Demons in a small room - Knight blocks, Druid heals, Sorcerer and Paladin deal damage.","Survive until all Demons are dead.","Each player opens one of 4 reward chests and picks ONE item."],
-rewards:["Demon Armor","Magic Plate Armor","Stonecutter Axe","Golden Legs"],dangers:["6 Demons at once"],tips:"The Knight MUST be able to tank all 6 Demons. Druid should use exura sio constantly. Pre-buff with utamo vita."},
-{name:"Killing in the Name of... Quest",level:0,premium:true,location:"Port Hope",npc:"Grizzly Adams",
-desc:"Grizzly Adams' hunting task system. Hunt specific creatures to earn points and unlock rewards. Repeatable daily content.",
-requirements:["None (varies by task)"],
-steps:["Talk to Grizzly Adams in Port Hope.","Choose a creature task from available options.","Hunt the required number of creatures (usually 300-6000).","Return to Grizzly Adams to turn in the task.","Accumulate points for permanent rewards and boss access."],
-rewards:["Task points","Outfit addons","Boss access"],dangers:["Varies by task"],tips:"Focus on tasks that overlap with your normal hunting routine for efficiency."},
-{name:"Forgotten Knowledge Quest",level:250,premium:true,location:"Multiple locations",npc:"Various",
-desc:"Uncover ancient knowledge scattered across the world. Features challenging bosses that drop best-in-slot equipment.",
-requirements:["Level 250+","Team of 10+","Multiple access quests completed"],
-steps:["Complete prerequisite quests for each boss location.","Boss 1: The Last Lore Keeper - bring ice protection.","Boss 2: Lloyd - energy protection recommended.","Boss 3: The Sandking - earth protection.","Boss 4: Thorn Knight - physical protection.","Each boss drops components for Enchanted Theurgic Amulet.","Combine all components to create the amulet."],
-rewards:["Enchanted Theurgic Amulet (Phys 2%, ML +2)","Gnomish gear upgrades"],dangers:["The Last Lore Keeper","Lloyd","The Sandking"],tips:"The Enchanted Theurgic Amulet is best-in-slot amulet for all vocations at high levels."},
-{name:"Ferumbras' Ascension Quest",level:250,premium:true,location:"Edron",npc:"Mazarius",
-desc:"Stop Ferumbras from ascending to power. Features the hardest bosses in classic Tibia. Drops best weapons until Soul War tier.",
-requirements:["Level 250+","Large team (20+)","Multiple access quests"],
-steps:["Talk to Mazarius in Edron to begin the questline.","Clear the Ferumbras' Ascendant Tower entrance.","Complete 3 mini-boss rooms to unlock the main area.","Fight through Hellflayers, Vexclaws, and Grimeleeches.","Defeat Ferumbras Mortal Shell (the main boss).","Access the reward room and choose your weapon."],
-rewards:["Blade of Destruction","Bow of Destruction","Wand/Rod of Destruction"],dangers:["Hellflayer","Vexclaw","Grimeleech","Ferumbras Mortal Shell"],tips:"The destruction weapons are best-in-slot until Falcon/Soul tier. Bring lots of supplies for the final fight."},
-{name:"Secret Library Quest",level:250,premium:true,location:"Multiple locations",npc:"Spectulus",
-desc:"Explore hidden library dimensions and fight knowledge keepers. One of the best XP hunting areas in the game once unlocked.",
-requirements:["Level 250+","Team for bosses","Various access quests"],
-steps:["Talk to Spectulus in Edron to learn about the Secret Library.","Complete access missions for each library wing.","Clear the Fire Wing: Fight Burning Books and Fire enemies.","Clear the Ice Wing: Fight Icecold Books and Frost enemies.","Clear the Energy Wing: Fight Energized Raging Mages.","Defeat each wing's boss to unlock the central chamber.","Access the final reward room."],
-rewards:["Fabulous Legs (Arm 10, Speed +12)","Library hunting access"],dangers:["Burning Book","Icecold Book","Energized Raging Mage"],tips:"Library is one of the best XP/h spots in the game for 300+ players."},
-{name:"Soul War Quest",level:250,premium:true,location:"Feyrist / Zarganash",npc:"Spectulus",
-desc:"Enter the realm between life and death. The pinnacle of Tibia endgame. Best-in-slot equipment for all vocations.",
-requirements:["Level 250+","Large team (30+)","Many access quests completed"],
-steps:["Complete all prerequisite quests (Forgotten Knowledge, Ferumbras, etc.).","Enter Zarganash through the Feyrist portal.","Navigate through the soul planes fighting powerful enemies.","Complete 5 tainting levels to unlock boss access.","Boss 1: Goshnar's Cruelty - bring all protections.","Boss 2: Goshnar's Hatred - coordinate team positions.","Boss 3: Goshnar's Malice - DPS race, bring power.","Boss 4: Goshnar's Spite - heal through AoE damage.","Boss 5: Goshnar's Megalomania - the final boss, requires perfect teamwork.","Collect soul tokens to exchange for equipment."],
-rewards:["Soulmantle (Arm 18)","Soulstrider (Arm 11, Speed +15)","Soulbastion (Def 42)","Soulcutter/Soulpiercer/Soultainter"],dangers:["Goshnar's Cruelty","Goshnar's Megalomania","Goshnar's Malice"],tips:"This is THE endgame quest. Soul equipment is best-in-slot for all vocations. Requires months of preparation and a dedicated team."},
-{name:"Grave Danger Quest",level:250,premium:true,location:"Multiple locations",npc:"Investigator",
-desc:"Investigate powerful undead lords threatening the land. Unlocks Falcon equipment - the second-best tier in game.",
-requirements:["Level 250+","Team of 15+"],
-steps:["Talk to the Investigator to start the questline.","Investigate 4 locations of undead activity.","Fight through Falcon Knights and Paladins to reach each boss.","Defeat King Zelos and his lieutenants.","Defeat Grand Master Oberon in the final battle.","Collect Falcon equipment from boss drops."],
-rewards:["Falcon equipment access","Falcon Bastion access"],dangers:["Falcon Knight","Falcon Paladin","Grand Master Oberon"],tips:"Falcon equipment is second only to Soul War gear. The bastion is excellent hunting ground."},
-{name:"A Threatened Dream Quest",level:150,premium:true,location:"Feyrist",npc:"Fauns",
-desc:"Enter the dream realm of Feyrist and protect it from corruption. Beautiful areas with strong creatures.",
-requirements:["Level 150+","Team recommended"],
-steps:["Find the Feyrist portal in Carlin or Ab'Dendriel area.","Talk to the Faun guardian to learn about the threat.","Complete 3 purification rituals in different areas.","Fight through corrupted Dream creatures.","Defeat the Dream Court bosses to restore balance."],
-rewards:["Feyrist access","Dream Courts equipment","Pair of Dreamwalkers"],dangers:["Boar Man","Dark Faun","Twisted Pooka"],tips:"Feyrist has some of the best hunting for 150-250 range. Dream equipment is excellent."},
-{name:"Oramond Quest",level:80,premium:true,location:"Rathleton",npc:"Jondrin",
-desc:"Help Rathleton citizens and unlock the best hunting grounds in Oramond. The Minos area is top-tier profit.",
-requirements:["Level 80+ (200+ for Minos)"],
-steps:["Sail to Rathleton and talk to Jondrin.","Complete tasks to earn Oramond reputation.","Unlock access to Oramond hunting grounds.","Reach Mino access through daily tasks (40 task completions).","Optional: Unlock Glooth Bandit area."],
-rewards:["Oramond access","Mino hunting (best profit)","Glooth gear"],dangers:["Glooth creatures","Minotaur Amazons","Execowtioners"],tips:"Oramond Minos is the best profit in the game. Worth grinding the 40 tasks to unlock."},
-{name:"The Ice Islands Quest",level:60,premium:true,location:"Svargrond",npc:"Iskan",
-desc:"Explore the frozen lands and earn access to Svargrond content including Frost Dragons.",
-requirements:["Level 60+"],
-steps:["Travel to Svargrond by ship.","Talk to Iskan about the barbarian threat.","Complete exploration missions across the ice islands.","Defeat barbarian leaders.","Unlock access to Okolnir and Frost Dragons."],
-rewards:["Shaman Outfit","Frost Dragon hunting access"],dangers:["Frost Dragons","Barbarian Bloodwalker","Crystal Spider"],tips:"Frost Dragons are excellent profit and XP for 80-130 range knights and paladins."},
-{name:"The Ape City Quest",level:40,premium:true,location:"Port Hope / Banuta",npc:"Charlotta",
-desc:"Infiltrate the hidden ape city of Banuta in the Tiquandan jungle.",
-requirements:["Level 40+","Banana (buy from NPC)"],
-steps:["Talk to Charlotta in Port Hope about the ape civilization.","Navigate through the jungle to find Banuta entrance.","Use bananas to distract ape guards.","Explore deeper levels of the ape city.","Reach the treasure chamber at the bottom."],
-rewards:["Ape City access","Banana Staff"],dangers:["Merlkin","Sibang","Kongra","Hydra"],tips:"Deeper Banuta (Medusa/Serpent Spawn level) is excellent hunting at 100+."},
-{name:"The Explorer Society Quest",level:25,premium:true,location:"Port Hope / Northport",npc:"Explorer NPCs",
-desc:"Join the Explorer Society and complete missions to advance in rank. Unlocks teleportation shortcuts.",
-requirements:["Level 25+"],
-steps:["Find an Explorer Society NPC in Port Hope or Northport.","Complete the initiation mission.","Advance through ranks by completing exploration missions.","Each rank unlocks new teleportation destinations.","Reach the highest rank for full teleport network access."],
-rewards:["Explorer Society rank","Teleport network access"],dangers:["Minor encounters"],tips:"Very useful for fast travel across Tibia."},
-{name:"Roshamuul Quest",level:200,premium:true,location:"Roshamuul",npc:"A Bloodbeast",
-desc:"Access the demon-infested prison island. Unlocks Guzzlemaw Valley, one of the best high-level hunting grounds.",
-requirements:["Level 200+","Team for first access"],
-steps:["Sail to Roshamuul island.","Navigate through the dangerous terrain.","Complete the access missions to unlock the prison area.","Clear the first level of the prison.","Unlock Guzzlemaw Valley access for daily hunting."],
-rewards:["Roshamuul access","Guzzlemaw Valley access"],dangers:["Guzzlemaw","Frazzlemaw","Silencer"],tips:"Guzzlemaw Valley is top-tier XP for 250+ teams."},
-{name:"Cobra Bastion Quest",level:250,premium:true,location:"Issavi",npc:"Scarlett Etzel",
-desc:"Infiltrate the Cobra Bastion and defeat the Order of the Cobra. Drops excellent mid-endgame equipment.",
-requirements:["Level 250+","Team of 10+","Kilmaresh access"],
-steps:["Travel to Issavi on the Kilmaresh continent.","Talk to Scarlett Etzel about the Cobra threat.","Navigate through the Cobra Bastion's 3 levels.","Defeat Cobra commanders on each level.","Face the final Cobra boss in the inner sanctum."],
-rewards:["Cobra Hood (Arm 10, ML +2)","Cobra equipment"],dangers:["Cobra Assassin","Cobra Scout","Cobra Vizier"],tips:"Cobra Hood is best-in-slot helmet for mages 150-250 range."},
-{name:"Heart of Destruction Quest",level:250,premium:true,location:"Edron",npc:"Gelidrazah",
-desc:"Fight reality-bending anomalies that threaten to tear the world apart.",
-requirements:["Level 250+","Team of 10+"],
-steps:["Find the anomaly entrance near Edron.","Fight through reality-warped zones.","Defeat 4 anomaly bosses: Rupture, Charge, Outburst, Realityquake.","Access the heart of the corruption.","Defeat the final boss."],
-rewards:["Access to anomaly bosses","Special equipment"],dangers:["Rupture","Charge","Outburst","Realityquake"],tips:"Each boss has a unique mechanic. Study them before attempting."},
-{name:"Cults of Tibia Quest",level:200,premium:true,location:"Multiple locations",npc:"Various NPCs",
-desc:"Investigate dangerous cults threatening world balance. Multiple independent storylines.",
-requirements:["Level 200+"],
-steps:["Investigate cult activity in 5 different locations.","Each cult has unique mechanics and a boss fight.","Complete all 5 cult storylines.","Unlock access to cult hunting areas."],
-rewards:["Cult access areas","Equipment","Boss access"],dangers:["Cult creatures","Various bosses"],tips:"Can be completed in any order. Each cult is independent."},
-{name:"Feaster of Souls Quest",level:250,premium:true,location:"Darashia",npc:"A Suffering Soul",
-desc:"Investigate soul-eating entities. Unlocks Lost Souls hunting - excellent XP at 300+.",
-requirements:["Level 250+"],
-steps:["Talk to the Suffering Soul near Darashia.","Complete investigation missions.","Unlock access to Lost Soul spawns.","Defeat the Feaster boss."],
-rewards:["Lost Soul hunting access","Feaster boss access"],dangers:["Flimsy Lost Soul","Mean Lost Soul","Freakish Lost Soul"],tips:"Lost Souls are top-tier XP for 300+ characters."},
-{name:"The Dream Courts Quest",level:200,premium:true,location:"Feyrist",npc:"Court NPCs",
-desc:"Challenge the rulers of dreams for powerful equipment including the coveted Dreamwalkers.",
-requirements:["Level 200+","A Threatened Dream completed","Team of 10+"],
-steps:["Enter the Dream Courts through Feyrist.","Complete trials for Summer and Winter Courts.","Defeat the Dream Court bosses.","Challenge Maxxenius, the ultimate dream boss.","Collect tokens for Dreamwalker boots."],
-rewards:["Pair of Dreamwalkers (Speed +10)","Dream equipment"],dangers:["Court bosses","Maxxenius"],tips:"Dreamwalkers are best-in-slot boots for most vocations at high levels."},
-{name:"Dangerous Depths Quest",level:150,premium:true,location:"Kazordoon",npc:"Gnomes",
-desc:"Descend into the deepest parts beneath Kazordoon. Three challenging warzones with daily boss rewards.",
-requirements:["Level 150+","Bigfoot's Burden completed"],
-steps:["Unlock Warzone 4, 5, and 6 access.","Complete daily warzone clears.","Defeat warzone bosses for equipment."],
-rewards:["Warzone 4-6 access","Gnomish equipment"],dangers:["Gnomish bosses","Diremaws"],tips:"Additional daily income source alongside Warzone 1-3."},
-{name:"Adventurer's Guild Quest",level:0,premium:false,location:"Thais",npc:"Guild NPCs",
-desc:"Join the Adventurer's Guild for daily shrine access and basic rewards.",
-requirements:["None"],
-steps:["Find the Adventurer's Guild in Thais (south).","Talk to the guild leader.","Complete the simple initiation task.","Use daily reward shrines across the world."],
-rewards:["Daily reward shrine access","Guild membership"],dangers:["None"],tips:"Do this ASAP - daily rewards accumulate over time and are very valuable."}
-];
-
-// ==================================================================
-// ELEMENT DEFINITIONS
-// ==================================================================
-const ELEMENTS=[
-{key:'physical',name:'Physical',icon:'🛡️',color:'#a89a84'},
-{key:'fire',name:'Fire',icon:'🔥',color:'#ef4444'},
-{key:'ice',name:'Ice',icon:'❄️',color:'#3b82f6'},
-{key:'energy',name:'Energy',icon:'⚡',color:'#a855f7'},
-{key:'earth',name:'Earth',icon:'🌿',color:'#22c55e'},
-{key:'holy',name:'Holy',icon:'✨',color:'#facc15'},
-{key:'death',name:'Death',icon:'💀',color:'#6b7280'},
-{key:'drown',name:'Drown',icon:'💧',color:'#06b6d4'},
-{key:'hpDrain',name:'Life Drain',icon:'❤️',color:'#991b1b'},
-{key:'heal',name:'Heal',icon:'💚',color:'#16a34a'}
-];
-
-// ==================================================================
-// STATE
-// ==================================================================
-let allCreatures=[], creatureCache={}, wikiCache={}, allSpells=[], allWorlds=[];
-let currentPage=1; const PER_PAGE=50;
-let tibiaMap=null, mapOverlay=null, mapMarkers=[];
-
-// ==================================================================
-// INIT
-// ==================================================================
-document.addEventListener('DOMContentLoaded',()=>{
-  initSidebar();
-  loadBoosted();
-  loadNews();
-  loadCreatures();
-  renderHuntingSpots();
-  renderEquipment();
-  renderQuests();
-  loadSpells();
-  loadWorlds();
-  initCalculators();
-});
-
-// ==================================================================
-// SIDEBAR NAVIGATION
-// ==================================================================
-function initSidebar(){
-  document.querySelectorAll('.nav-item').forEach(item=>{
-    item.addEventListener('click',()=>{
-      document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
-      item.classList.add('active');
-      const panel=item.dataset.panel;
-      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-      document.getElementById('panel-'+panel).classList.add('active');
-      if(panel==='map'&&!tibiaMap)setTimeout(initMap,100);
-    });
-  });
-}
-
-// ==================================================================
-// BOOSTED CREATURE & BOSS
-// ==================================================================
-async function loadBoosted(){
-  try{
-    const [crRes,bossRes]=await Promise.all([
-      fetch('https://api.tibiadata.com/v4/creatures'),
-      fetch('https://api.tibiadata.com/v4/boostablebosses')
-    ]);
-    const crData=await crRes.json(), bossData=await bossRes.json();
-    const bc=crData.creatures?.boosted;
-    if(bc){
-      document.getElementById('boostedCreatureName').textContent=bc.name;
-      document.getElementById('boostedCreatureImg').src=bc.image_url;
-      document.getElementById('boostedCreatureCard').innerHTML=`<h4>Boosted Creature</h4><img src="${bc.image_url}" alt="${bc.name}" style="width:48px;height:48px;margin:0 auto 6px;image-rendering:pixelated"><div class="bname">${bc.name}</div>`;
-    }
-    const bb=bossData.boostable_bosses?.boosted;
-    if(bb){
-      document.getElementById('boostedBossName').textContent=bb.name;
-      document.getElementById('boostedBossImg').src=bb.image_url;
-      document.getElementById('boostedBossCard').innerHTML=`<h4>Boosted Boss</h4><img src="${bb.image_url}" alt="${bb.name}" style="width:48px;height:48px;margin:0 auto 6px;image-rendering:pixelated"><div class="bname">${bb.name}</div>`;
-    }
-  }catch(e){console.error('Boosted load failed',e)}
-}
-
-// ==================================================================
-// NEWS
-// ==================================================================
-async function loadNews(){
-  const feed=document.getElementById('newsFeed');
-  try{
-    const res=await fetch('https://api.tibiadata.com/v4/news/latest');
-    const data=await res.json();
-    const news=data.news||[];
-    feed.innerHTML=news.slice(0,12).map(n=>`
-      <div class="news-card" onclick="toggleNews(this,${n.id})">
-        <div class="news-card-head">
-          <span class="badge badge-${n.category==='community'?'blue':'gold'}">${n.category}</span>
-          <span class="news-date">${n.date}</span>
+      <div class="tb-search">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="globalSearch" placeholder="Search creatures, quests, spells...">
+      </div>
+      <div class="tb-right">
+        <div class="boosted" id="boostedCreature">
+          <div class="boosted-info"><span class="blabel">Boosted</span><span class="bname">Loading...</span></div>
         </div>
-        <div class="news-title">${n.news||n.title||''}</div>
-        <div class="news-preview">Click to read full article...</div>
-        <div class="news-full" id="news-${n.id}"></div>
+        <div class="boosted" id="boostedBoss">
+          <div class="boosted-info"><span class="blabel">Boss</span><span class="bname">Loading...</span></div>
+        </div>
       </div>
-    `).join('');
-  }catch(e){feed.innerHTML='<div class="empty-state">Failed to load news. Please refresh.</div>'}
-}
-async function toggleNews(el,id){
-  el.classList.toggle('expanded');
-  const full=document.getElementById('news-'+id);
-  if(el.classList.contains('expanded')&&!full.innerHTML){
-    full.innerHTML='<div class="loading"><div class="spinner"></div></div>';
-    try{
-      const res=await fetch(`https://api.tibiadata.com/v4/news/id/${id}`);
-      const data=await res.json();
-      full.innerHTML=data.news?.content_html||data.news?.content||'No content available.';
-    }catch(e){full.innerHTML='Failed to load.'}
-  }
-}
+    </header>
 
-// ==================================================================
-// BESTIARY
-// ==================================================================
-async function loadCreatures(){
-  try{
-    const res=await fetch('https://api.tibiadata.com/v4/creatures');
-    const data=await res.json();
-    allCreatures=data.creatures?.creature_list||[];
-    renderCreatures();
-  }catch(e){document.getElementById('creatureGrid').innerHTML='<div class="empty-state">Failed to load. Refresh.</div>'}
-  document.getElementById('creatureSearch').addEventListener('input',()=>{currentPage=1;renderCreatures()});
-}
-function renderCreatures(){
-  const q=document.getElementById('creatureSearch').value.toLowerCase().trim();
-  const filtered=q?allCreatures.filter(c=>c.name.toLowerCase().includes(q)):allCreatures;
-  const totalPages=Math.ceil(filtered.length/PER_PAGE);
-  if(currentPage>totalPages)currentPage=totalPages||1;
-  const start=(currentPage-1)*PER_PAGE;
-  const page=filtered.slice(start,start+PER_PAGE);
-  document.getElementById('creatureGrid').innerHTML=page.map(c=>`
-    <div class="creature-card" onclick="openCreature('${c.race.replace(/'/g,"\\'")}','${c.name.replace(/'/g,"\\'")}')">
-      <img src="${c.image_url}" alt="${c.name}" loading="lazy" onerror="this.style.opacity='.3'">
-      <div class="cname">${c.name}</div>
-    </div>`).join('');
-  document.getElementById('creatureCount').textContent=`${start+1}–${Math.min(start+PER_PAGE,filtered.length)} of ${filtered.length}`;
-  renderPagination(totalPages);
-}
-function renderPagination(total){
-  const p=document.getElementById('creaturePag');
-  if(total<=1){p.innerHTML='';return}
-  let h=`<button class="pg-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
-  let pages=[];
-  if(total<=7){for(let i=1;i<=total;i++)pages.push(i)}
-  else{pages=[1];if(currentPage>3)pages.push('...');for(let i=Math.max(2,currentPage-1);i<=Math.min(total-1,currentPage+1);i++)pages.push(i);if(currentPage<total-2)pages.push('...');pages.push(total)}
-  pages.forEach(pg=>{if(pg==='...')h+='<span style="color:var(--parchment-muted);padding:0 4px">…</span>';else h+=`<button class="pg-btn ${pg===currentPage?'active':''}" onclick="goPage(${pg})">${pg}</button>`});
-  h+=`<button class="pg-btn" onclick="goPage(${currentPage+1})" ${currentPage===total?'disabled':''}>›</button>`;
-  p.innerHTML=h;
-}
-function goPage(p){currentPage=p;renderCreatures()}
-
-// ==================================================================
-// CREATURE DETAIL (Dual API)
-// ==================================================================
-async function openCreature(race,name){
-  document.getElementById('bestiaryList').style.display='none';
-  const det=document.getElementById('creatureDetail');
-  det.classList.add('active');
-  det.innerHTML='<button class="cd-back" onclick="closeCreature()">← Back to Bestiary</button><div class="loading"><div class="spinner"></div><p style="margin-top:8px">Loading '+name+'...</p></div>';
-  // Fetch from both APIs
-  const imgUrl=`https://static.tibia.com/images/library/${encodeURIComponent(race)}.gif`;
-  let tibiadata=creatureCache[race], wikidata=wikiCache[name];
-  const promises=[];
-  if(!tibiadata)promises.push(fetch(`https://api.tibiadata.com/v4/creature/${encodeURIComponent(race)}`).then(r=>r.json()).then(d=>{tibiadata=d.creature;creatureCache[race]=tibiadata}).catch(()=>{}));
-  if(!wikidata)promises.push(fetch(`https://tibiawiki.dev/api/creatures/${encodeURIComponent(name)}`).then(r=>r.json()).then(d=>{wikidata=d;wikiCache[name]=d}).catch(()=>{}));
-  await Promise.all(promises);
-  renderCreatureDetail(det,race,name,imgUrl,tibiadata,wikidata);
-}
-function closeCreature(){
-  document.getElementById('bestiaryList').style.display='';
-  document.getElementById('creatureDetail').classList.remove('active');
-  document.getElementById('creatureDetail').innerHTML='';
-}
-function renderCreatureDetail(el,race,name,imgUrl,td,wiki){
-  const hp=wiki?.hp||td?.hitpoints||'?';
-  const xp=wiki?.exp||td?.experience_points||'?';
-  const armor=wiki?.armor||'?';
-  const speed=wiki?.speed||'?';
-  const mitigation=wiki?.mitigation||'?';
-  const desc=td?.description||wiki?.bestiarytext||'A creature of Tibia.';
-  // Resistances from wiki (percentages)
-  const resistances=[];
-  if(wiki){
-    [{key:'physicalDmgMod',e:'physical'},{key:'fireDmgMod',e:'fire'},{key:'iceDmgMod',e:'ice'},{key:'energyDmgMod',e:'energy'},{key:'earthDmgMod',e:'earth'},{key:'holyDmgMod',e:'holy'},{key:'deathDmgMod',e:'death'},{key:'drownDmgMod',e:'drown'},{key:'hpDrainDmgMod',e:'hpDrain'},{key:'healMod',e:'heal'}].forEach(m=>{
-      const val=wiki[m.key];
-      if(val!==undefined&&val!==null){
-        const pct=parseInt(String(val).replace(/[^0-9]/g,''));
-        if(!isNaN(pct))resistances.push({element:m.e,pct});
-      }
-    });
-  } else if(td){
-    // Fallback to TibiaData categorical
-    (td.immune||[]).forEach(e=>resistances.push({element:e.toLowerCase(),pct:0}));
-    (td.strong||[]).forEach(e=>resistances.push({element:e.toLowerCase(),pct:50}));
-    (td.weakness||[]).forEach(e=>resistances.push({element:e.toLowerCase(),pct:110}));
-  }
-  // Loot from wiki or tibiadata
-  let lootHtml='';
-  if(wiki?.loot&&Array.isArray(wiki.loot)&&wiki.loot.length>0){
-    lootHtml=`<table class="loot-table"><tbody>${wiki.loot.map(l=>`<tr><td>${l.amount||'1'}</td><td>${l.itemName}</td><td class="loot-rarity rarity-${(l.rarity||'common').replace(/ /g,'-')}">${l.rarity||'common'}</td></tr>`).join('')}</tbody></table>`;
-  }else if(td?.loot_list&&td.loot_list.length>0){
-    lootHtml=`<table class="loot-table"><tbody>${td.loot_list.map(l=>`<tr><td>—</td><td>${l}</td><td class="loot-rarity rarity-common">—</td></tr>`).join('')}</tbody></table>`;
-  }
-  // Behavior
-  const behavior=td?.behaviour||wiki?.behaviour||'';
-  const location=wiki?.location||'';
-  const abilities=wiki?.abilities||'';
-  el.innerHTML=`
-    <button class="cd-back" onclick="closeCreature()">← Back to Bestiary</button>
-    <div class="cd-top">
-      <div class="cd-sprite"><img src="${imgUrl}" alt="${name}" onerror="this.style.opacity='.3'"></div>
-      <div class="cd-info">
-        <h3>${name}</h3>
-        <p class="cd-desc">${desc}</p>
+    <!-- ===== SIDEBAR ===== -->
+    <nav class="sidebar">
+      <div class="sidebar-nav">
+        <div class="nav-item active" data-panel="news">
+          <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Tibia_Coins.gif" alt="" class="ni-icon" onerror="this.style.display='none'">
+          <span>News</span>
+        </div>
+        <div class="nav-item" data-panel="bestiary">
+          <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Creature_Products.gif" alt="" class="ni-icon" onerror="this.style.display='none'">
+          <span>Bestiary</span>
+        </div>
+        <div class="nav-item" data-panel="hunting">
+          <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Sword.gif" alt="" class="ni-icon" onerror="this.style.display='none'">
+          <span>Hunting Spots</span>
+        </div>
+        <div class="nav-item" data-panel="equipment">
+          <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Magic_Plate_Armor.gif" alt="" class="ni-icon" onerror="this.style.display='none'">
+          <span>Equipment</span>
+        </div>
+        <div class="nav-item" data-panel="quests">
+          <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Treasure_Chest.gif" alt="" class="ni-icon" onerror="this.style.display='none'">
+          <span>Quest Guide</span>
+        </div>
+        <div class="nav-item" data-panel="spells">
+          <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Spellbook.gif" alt="" class="ni-icon" onerror="this.style.display='none'">
+          <span>Spells</span>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-item" data-panel="map">
+          <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Map_(Item).gif" alt="" class="ni-icon" onerror="this.style.display='none'">
+          <span>World Map</span>
+        </div>
+        <div class="nav-item" data-panel="character">
+          <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Citizen_Male.gif" alt="" class="ni-icon" onerror="this.style.display='none'">
+          <span>Character</span>
+        </div>
+        <div class="nav-item" data-panel="worlds">
+          <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Globe.gif" alt="" class="ni-icon" onerror="this.style.display='none'">
+          <span>Worlds</span>
+        </div>
+        <div class="nav-item" data-panel="calculators">
+          <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Crystal_Coin.gif" alt="" class="ni-icon" onerror="this.style.display='none'">
+          <span>Calculators</span>
+        </div>
       </div>
-    </div>
-    <div class="cd-stats">
-      <div class="cd-stat"><div class="val">${hp}</div><div class="lbl">Hit Points</div></div>
-      <div class="cd-stat"><div class="val">${xp}</div><div class="lbl">Experience</div></div>
-      <div class="cd-stat"><div class="val">${armor}</div><div class="lbl">Armor</div></div>
-      <div class="cd-stat"><div class="val">${speed}</div><div class="lbl">Speed</div></div>
-      <div class="cd-stat"><div class="val">${mitigation}</div><div class="lbl">Mitigation</div></div>
-    </div>
-    ${resistances.length?`<div class="cd-section"><h4>Elemental Resistances</h4><div class="resist-grid">${resistances.map(r=>{
-      const el=ELEMENTS.find(e=>e.key===r.element)||{icon:'?',name:r.element};
-      let cls='resist-neutral';
-      if(r.pct===0)cls='resist-immune';else if(r.pct<100)cls='resist-strong';else if(r.pct>100)cls='resist-weak';
-      return`<div class="resist-item ${cls}"><div class="ricon">${el.icon}</div><div class="rname">${el.name}</div><div class="rval">${r.pct}%</div></div>`;
-    }).join('')}</div></div>`:''}
-    ${behavior?`<div class="cd-section"><h4>Behavior</h4><p style="font-size:14px;color:var(--parchment-muted);line-height:1.7">${behavior}</p></div>`:''}
-    ${abilities?`<div class="cd-section"><h4>Abilities</h4><p style="font-size:14px;color:var(--parchment-muted);line-height:1.7">${abilities}</p></div>`:''}
-    ${location?`<div class="cd-section"><h4>Locations</h4><p style="font-size:14px;color:var(--parchment-muted);line-height:1.7">${location}</p></div>`:''}
-    ${lootHtml?`<div class="cd-section"><h4>Loot</h4>${lootHtml}</div>`:''}
-  `;
-}
+      <div class="sidebar-footer">
+        Portfolio Demo by<br><a href="https://grindarestudio.com" target="_blank">Grindare Studio</a>
+      </div>
+    </nav>
 
-// ==================================================================
-// HUNTING SPOTS
-// ==================================================================
-function renderHuntingSpots(){
-  renderSpots();
-  document.querySelectorAll('#huntVocFilter .fbtn').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('#huntVocFilter .fbtn').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderSpots()})});
-  document.getElementById('huntLevelFilter').addEventListener('change',renderSpots);
-}
-function renderSpots(){
-  const voc=document.querySelector('#huntVocFilter .fbtn.active').dataset.voc;
-  const lvl=document.getElementById('huntLevelFilter').value;
-  let spots=HUNTING_SPOTS;
-  if(voc!=='all')spots=spots.filter(s=>s.voc.includes(voc));
-  if(lvl!=='all'){const[mn,mx]=lvl.split('-').map(Number);spots=spots.filter(s=>s.level[1]>=mn&&s.level[0]<=mx)}
-  const stars=n=>{let h='';for(let i=1;i<=5;i++)h+=`<span class="star${i<=n?'':' empty'}">★</span>`;return h};
-  document.getElementById('spotGrid').innerHTML=spots.length?spots.map(s=>`
-    <div class="card spot-card">
-      <div class="spot-header"><span class="spot-name">${s.name}</span><span class="spot-lvl">Lv ${s.level[0]}–${s.level[1]}</span></div>
-      <div class="spot-meta"><span>⚔️ Exp: ${stars(s.exp)}</span><span>💰 Loot: ${stars(s.loot)}</span></div>
-      <div class="spot-meta"><span>👥 ${s.voc.map(v=>v[0].toUpperCase()+v.slice(1)).join(', ')}</span></div>
-      <div class="spot-creatures"><strong>Creatures:</strong> ${s.creatures.map(c=>`<img src="https://static.tibia.com/images/library/${encodeURIComponent(c.toLowerCase().replace(/\s+/g,''))}.gif" alt="${c}" title="${c}">`).join('')} ${s.creatures.join(', ')}</div>
-      <div><button class="btn-sm btn-gold" onclick="showOnMap(${s.cx},${s.cy},'${s.name.replace(/'/g,"\\'")}')">Show on Map</button></div>
-    </div>`).join(''):'<div class="empty-state">No spots match filters.</div>';
-}
+    <!-- ===== CONTENT ===== -->
+    <main class="content">
 
-// ==================================================================
-// EQUIPMENT
-// ==================================================================
-function renderEquipment(){
-  let curVoc='knight',curLvl='8-30';
-  const render=()=>{
-    const eq=EQUIPMENT[curVoc]?.[curLvl];
-    const el=document.getElementById('eqSlots');
-    if(!eq){el.innerHTML='<div class="empty-state">No data for this combination.</div>';return}
-    el.innerHTML=Object.entries(eq).map(([slot,item])=>`
-      <div class="card eq-slot">
-        <div class="eq-slot-head"><div class="eq-icon">${SLOT_ICONS[slot]||'?'}</div><div class="eq-type">${slot[0].toUpperCase()+slot.slice(1)}</div></div>
-        <div class="eq-name">${item.name}</div>
-        <div class="eq-stats">${item.stats}</div>
-        <div class="eq-src">📍 ${item.source}</div>
-      </div>`).join('');
-  };
-  document.querySelectorAll('#eqVocBtns .fbtn').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('#eqVocBtns .fbtn').forEach(x=>x.classList.remove('active'));b.classList.add('active');curVoc=b.dataset.voc;render()})});
-  document.querySelectorAll('#eqLevelBtns .fbtn').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('#eqLevelBtns .fbtn').forEach(x=>x.classList.remove('active'));b.classList.add('active');curLvl=b.dataset.lvl;render()})});
-  render();
-}
-
-// ==================================================================
-// QUESTS
-// ==================================================================
-function renderQuests(){
-  const render=()=>{
-    const q=document.getElementById('questSearch').value.toLowerCase().trim();
-    const lvl=document.getElementById('questLevelFilter').value;
-    const prem=document.getElementById('questPremFilter').checked;
-    let quests=[...QUESTS];
-    if(q)quests=quests.filter(x=>x.name.toLowerCase().includes(q)||x.location.toLowerCase().includes(q));
-    if(lvl!=='all'){const[mn,mx]=lvl.split('-').map(Number);quests=quests.filter(x=>x.level>=mn&&x.level<=mx)}
-    if(prem)quests=quests.filter(x=>x.premium);
-    quests.sort((a,b)=>a.level-b.level);
-    document.getElementById('questList').innerHTML=quests.length?quests.map(x=>`
-      <div class="card quest-card">
-        <div class="quest-head" onclick="this.parentElement.classList.toggle('open')">
-          <span class="quest-arrow">▸</span>
-          <span class="quest-title">${x.name}</span>
-          <div class="quest-badges">
-            <span class="badge badge-gold">Lv ${x.level}+</span>
-            ${x.premium?'<span class="badge badge-red">⭐ Premium</span>':''}
+      <!-- NEWS -->
+      <section class="panel active" id="p-news">
+        <div class="ph"><h2>Latest News</h2><p>Stay updated with the latest from Tibia</p><div class="ph-line"></div></div>
+        <div class="news-grid">
+          <div id="newsList"></div>
+          <div class="news-side">
+            <div class="card">
+              <h4>Boosted Creature</h4>
+              <div id="newsBoostedCreature" style="font-size:13px;color:var(--parch-dim)">Loading...</div>
+            </div>
+            <div class="card">
+              <h4>Boosted Boss</h4>
+              <div id="newsBoostedBoss" style="font-size:13px;color:var(--parch-dim)">Loading...</div>
+            </div>
           </div>
         </div>
-        <div class="quest-body">
-          <div class="quest-section"><h5>Description</h5><p>${x.desc}</p></div>
-          <div class="quest-section"><h5>Location</h5><p>📍 ${x.location}${x.npc?' — NPC: '+x.npc:''}</p></div>
-          <div class="quest-section"><h5>Requirements</h5><ul>${x.requirements.map(r=>'<li>'+r+'</li>').join('')}</ul></div>
-          <div class="quest-section"><h5>Walkthrough</h5><ol>${x.steps.map(s=>'<li>'+s+'</li>').join('')}</ol></div>
-          <div class="quest-section"><h5>Rewards</h5><ul>${x.rewards.map(r=>'<li>'+r+'</li>').join('')}</ul></div>
-          <div class="quest-section"><h5>Dangers</h5><ul>${x.dangers.map(d=>'<li>'+d+'</li>').join('')}</ul></div>
-          ${x.tips?`<div class="quest-section"><h5>Tips</h5><p>💡 ${x.tips}</p></div>`:''}
+      </section>
+
+      <!-- BESTIARY -->
+      <section class="panel" id="p-bestiary">
+        <div class="ph"><h2>Bestiary</h2><p>Browse all Tibia creatures with stats, resistances and loot</p><div class="ph-line"></div></div>
+        <div id="bestiaryList">
+          <div class="filters">
+            <input type="text" id="bestiarySearch" class="si" placeholder="Search creatures..." oninput="state.bestiary.search=this.value;filterBestiary()">
+          </div>
+          <div class="rcount" id="bestiaryCount">Loading...</div>
+          <div class="cg" id="bestiaryGrid"></div>
+          <div class="pag" id="bestiaryPag"></div>
         </div>
-      </div>`).join(''):'<div class="empty-state">No quests match filters.</div>';
-  };
-  render();
-  document.getElementById('questSearch').addEventListener('input',render);
-  document.getElementById('questLevelFilter').addEventListener('change',render);
-  document.getElementById('questPremFilter').addEventListener('change',render);
-}
+        <div class="cd" id="creatureDetail"></div>
+      </section>
 
-// ==================================================================
-// SPELLS
-// ==================================================================
-async function loadSpells(){
-  try{
-    const res=await fetch('https://api.tibiadata.com/v4/spells');
-    const data=await res.json();
-    allSpells=data.spells?.spells_list||[];
-    renderSpells();
-  }catch(e){document.getElementById('spellsBody').innerHTML='<tr><td colspan="8">Failed to load spells.</td></tr>'}
-  document.getElementById('spellSearch').addEventListener('input',renderSpells);
-  document.getElementById('spellVocFilter').addEventListener('change',renderSpells);
-  document.getElementById('spellTypeFilter').addEventListener('change',renderSpells);
-}
-function renderSpells(){
-  const q=document.getElementById('spellSearch').value.toLowerCase().trim();
-  const voc=document.getElementById('spellVocFilter').value;
-  const type=document.getElementById('spellTypeFilter').value;
-  let spells=allSpells;
-  if(q)spells=spells.filter(s=>s.name.toLowerCase().includes(q)||s.formula.toLowerCase().includes(q));
-  if(voc!=='all')spells=spells.filter(s=>(s.vocation||[]).some(v=>v.toLowerCase().includes(voc.toLowerCase())));
-  if(type!=='all'){
-    if(type==='instant')spells=spells.filter(s=>s.type_instant);
-    else spells=spells.filter(s=>s.type_rune);
-  }
-  document.getElementById('spellsBody').innerHTML=spells.length?spells.map(s=>`
-    <tr>
-      <td style="color:var(--gold-light);font-weight:600">${s.name}</td>
-      <td class="spell-formula">${s.formula||'—'}</td>
-      <td>${s.level||'—'}</td>
-      <td>${s.mana||'—'}</td>
-      <td>${s.price||'—'}</td>
-      <td>${s.type_instant?'Instant':''}${s.type_rune?'Rune':''}</td>
-      <td>${s.group_attack?'Attack':''}${s.group_healing?'Healing':''}${s.group_support?'Support':''}</td>
-      <td>${s.premium_only?'⭐':'—'}</td>
-    </tr>`).join(''):'<tr><td colspan="8" class="empty-state">No spells match.</td></tr>';
-}
+      <!-- HUNTING SPOTS -->
+      <section class="panel" id="p-hunting">
+        <div class="ph"><h2>Hunting Spots</h2><p>Find the best hunting grounds for your level and vocation</p><div class="ph-line"></div></div>
+        <div class="filters">
+          <div class="fg">
+            <button class="fb active" onclick="setHuntVoc(this,'all')">All</button>
+            <button class="fb" onclick="setHuntVoc(this,'knight')">Knight</button>
+            <button class="fb" onclick="setHuntVoc(this,'paladin')">Paladin</button>
+            <button class="fb" onclick="setHuntVoc(this,'sorcerer')">Sorcerer</button>
+            <button class="fb" onclick="setHuntVoc(this,'druid')">Druid</button>
+          </div>
+          <input type="number" placeholder="Min level" style="width:90px" oninput="state.hunting.levelMin=+this.value||0;renderHunting()">
+          <input type="number" placeholder="Max level" style="width:90px" oninput="state.hunting.levelMax=+this.value||9999;renderHunting()">
+        </div>
+        <div class="sg" id="huntingGrid"></div>
+      </section>
 
-// ==================================================================
-// INTERACTIVE MAP (FIXED coordinates)
-// ==================================================================
-function initMap(){
-  if(tibiaMap)return;
-  // Map image: 2048 x 2560 pixels
-  // Tibia coordinates: X ~31744-34560, Y ~30720-33920
-  const MAP_W=2560,MAP_H=2048;
-  const TX_MIN=31744,TX_MAX=34560,TY_MIN=30720,TY_MAX=33920;
-  tibiaMap=L.map('tibiaMap',{crs:L.CRS.Simple,minZoom:-3,maxZoom:1,zoomControl:true,attributionControl:false});
-  const bounds=[[0,0],[MAP_H,MAP_W]];
-  mapOverlay=L.imageOverlay('https://tibiamaps.github.io/tibia-map-data/floor-07-map.png',bounds).addTo(tibiaMap);
-  tibiaMap.fitBounds(bounds);
-  tibiaMap.setMaxBounds([[-200,-200],[MAP_H+200,MAP_W+200]]);
+      <!-- EQUIPMENT -->
+      <section class="panel" id="p-equipment">
+        <div class="ph"><h2>Equipment Planner</h2><p>Best-in-slot gear for every vocation and level range</p><div class="ph-line"></div></div>
+        <div class="eq-ctrl">
+          <div class="fg">
+            <button class="fb active" onclick="setEquipVoc(this,'knight')">Knight</button>
+            <button class="fb" onclick="setEquipVoc(this,'paladin')">Paladin</button>
+            <button class="fb" onclick="setEquipVoc(this,'sorcerer')">Sorcerer</button>
+            <button class="fb" onclick="setEquipVoc(this,'druid')">Druid</button>
+          </div>
+          <select onchange="state.equip.bracket=this.value;renderEquipment()">
+            <option value="8-30">Level 8-30</option>
+            <option value="30-60">Level 30-60</option>
+            <option value="60-100">Level 60-100</option>
+            <option value="100-150">Level 100-150</option>
+            <option value="150-200">Level 150-200</option>
+            <option value="200-300">Level 200-300</option>
+            <option value="300+">Level 300+</option>
+          </select>
+        </div>
+        <div class="eq-grid" id="equipGrid"></div>
+      </section>
 
-  function toLatLng(cx,cy){
-    const px=(cx-TX_MIN)/(TX_MAX-TX_MIN)*MAP_W;
-    const py=(cy-TY_MIN)/(TY_MAX-TY_MIN)*MAP_H;
-    return[MAP_H-py,px]; // lat=inverted Y, lng=X
-  }
-  window._toLatLng=toLatLng;
+      <!-- QUESTS -->
+      <section class="panel" id="p-quests">
+        <div class="ph"><h2>Quest Guide</h2><p>Step-by-step walkthroughs for Tibia's major quests</p><div class="ph-line"></div></div>
+        <div class="filters">
+          <input type="text" class="si" placeholder="Search quests..." oninput="state.quests.search=this.value;renderQuests()">
+          <input type="number" placeholder="Your level" style="width:100px" oninput="state.quests.level=+this.value||0;renderQuests()">
+          <div class="fg">
+            <button class="fb active" onclick="setQuestPrem(this,'all')">All</button>
+            <button class="fb" onclick="setQuestPrem(this,'free')">Free</button>
+            <button class="fb" onclick="setQuestPrem(this,'premium')">Premium</button>
+          </div>
+        </div>
+        <div class="ql" id="questList"></div>
+      </section>
 
-  // City labels
-  CITIES.forEach(c=>{
-    const[lat,lng]=toLatLng(c.cx,c.cy);
-    L.marker([lat,lng],{icon:L.divIcon({className:'',html:`<span style="background:rgba(59,130,246,.85);color:#fff;padding:2px 7px;border-radius:3px;font-size:10px;font-family:Cinzel,serif;font-weight:600;white-space:nowrap">${c.name}</span>`,iconSize:[0,0],iconAnchor:[-4,8]})}).addTo(tibiaMap);
-  });
-  // Hunting spots
-  HUNTING_SPOTS.forEach(s=>{
-    const[lat,lng]=toLatLng(s.cx,s.cy);
-    const m=L.circleMarker([lat,lng],{radius:5,fillColor:'#d4a537',color:'#8b6914',weight:2,fillOpacity:.9}).addTo(tibiaMap);
-    m.bindPopup(`<div style="font-family:Cinzel,serif;min-width:140px"><strong style="color:#d4a537">${s.name}</strong><br><span style="font-family:Crimson Text,serif;font-size:12px">Level ${s.level[0]}–${s.level[1]}<br>${s.creatures.slice(0,3).join(', ')}${s.creatures.length>3?'...':''}</span></div>`);
-    s._marker=m;s._ll=[lat,lng];
-    mapMarkers.push(m);
-  });
+      <!-- SPELLS -->
+      <section class="panel" id="p-spells">
+        <div class="ph"><h2>Spells</h2><p>Complete spell database with vocation filters</p><div class="ph-line"></div></div>
+        <div class="filters">
+          <input type="text" class="si" placeholder="Search spells..." oninput="state.spells.search=this.value;filterSpells()">
+          <div class="fg">
+            <button class="fb active" onclick="setSpellVoc(this,'all')">All</button>
+            <button class="fb" onclick="setSpellVoc(this,'knight')">Knight</button>
+            <button class="fb" onclick="setSpellVoc(this,'paladin')">Paladin</button>
+            <button class="fb" onclick="setSpellVoc(this,'sorcerer')">Sorcerer</button>
+            <button class="fb" onclick="setSpellVoc(this,'druid')">Druid</button>
+          </div>
+          <div class="fg">
+            <button class="fb active" onclick="setSpellType(this,'all')">All Types</button>
+            <button class="fb" onclick="setSpellType(this,'Instant')">Instant</button>
+            <button class="fb" onclick="setSpellType(this,'Rune')">Rune</button>
+          </div>
+        </div>
+        <div class="rcount" id="spellCount">Loading...</div>
+        <div class="sp-wrap">
+          <table class="sp-tbl">
+            <thead><tr><th></th><th>Name</th><th>Formula</th><th>Lv</th><th>Mana</th><th>Price</th><th>Vocation</th><th>Type</th></tr></thead>
+            <tbody id="spellsBody"></tbody>
+          </table>
+        </div>
+      </section>
 
-  // Floor switcher
-  document.getElementById('mapFloorSelect').addEventListener('change',e=>{
-    const floor=e.target.value;
-    const url=`https://tibiamaps.github.io/tibia-map-data/floor-${floor}-map.png`;
-    mapOverlay.setUrl(url);
-  });
-}
-function showOnMap(cx,cy,name){
-  // Switch to map panel
-  document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
-  document.querySelector('.nav-item[data-panel="map"]').classList.add('active');
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('panel-map').classList.add('active');
-  if(!tibiaMap)initMap();
-  setTimeout(()=>{
-    tibiaMap.invalidateSize();
-    const spot=HUNTING_SPOTS.find(s=>s.cx===cx&&s.cy===cy);
-    if(spot&&spot._marker){
-      tibiaMap.setView(spot._ll,0,{animate:true});
-      spot._marker.openPopup();
+      <!-- MAP -->
+      <section class="panel" id="p-map">
+        <div class="ph"><h2>World Map</h2><p>Interactive map of the Tibian continent</p><div class="ph-line"></div></div>
+        <div class="map-ctrl">
+          <label>Floor:</label>
+          <button class="btn-s" onclick="changeFloor(Math.max(0,state.mapFloor-1))">-</button>
+          <span id="floorLabel">Floor 7</span>
+          <button class="btn-s" onclick="changeFloor(Math.min(15,state.mapFloor+1))">+</button>
+          <span id="mapCoords" style="margin-left:16px;color:var(--gold)"></span>
+        </div>
+        <div id="tibiaMap"></div>
+        <div class="map-legend">
+          <span><span class="ld ld-blue"></span> Cities</span>
+          <span><span class="ld ld-gold"></span> Hunting Spots</span>
+        </div>
+      </section>
+
+      <!-- CHARACTER -->
+      <section class="panel" id="p-character">
+        <div class="ph"><h2>Character Lookup</h2><p>Search for any Tibia character</p><div class="ph-line"></div></div>
+        <div class="ch-box">
+          <input type="text" id="charInput" placeholder="Enter character name..." onkeydown="if(event.key==='Enter')lookupCharacter()">
+          <button onclick="lookupCharacter()">Search</button>
+        </div>
+        <div id="charResult"></div>
+      </section>
+
+      <!-- WORLDS -->
+      <section class="panel" id="p-worlds">
+        <div class="ph"><h2>World Status</h2><p>Live server status for all Tibia worlds</p><div class="ph-line"></div></div>
+        <div class="w-stats">
+          <div class="w-stat"><div class="wv" id="totalOnline">--</div><div class="wl">Players Online</div></div>
+          <div class="w-stat"><div class="wv" id="totalWorlds">--</div><div class="wl">Total Worlds</div></div>
+        </div>
+        <div class="filters">
+          <input type="text" class="si" placeholder="Search worlds..." oninput="state.worlds.search=this.value;filterWorlds()">
+        </div>
+        <div class="w-wrap">
+          <table class="w-tbl">
+            <thead><tr>
+              <th style="cursor:pointer" onclick="sortWorlds('name')">Name</th>
+              <th style="cursor:pointer" onclick="sortWorlds('status')">Status</th>
+              <th style="cursor:pointer" onclick="sortWorlds('players_online')">Online</th>
+              <th style="cursor:pointer" onclick="sortWorlds('location')">Location</th>
+              <th style="cursor:pointer" onclick="sortWorlds('pvp_type')">PvP</th>
+              <th>BattlEye</th>
+            </tr></thead>
+            <tbody id="worldsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- CALCULATORS -->
+      <section class="panel" id="p-calculators">
+        <div class="ph"><h2>Calculators</h2><p>Useful tools for your Tibian adventures</p><div class="ph-line"></div></div>
+        <div class="calc-grid">
+
+          <div class="card calc">
+            <h3>Experience Calculator</h3>
+            <div class="cf">
+              <label>Current Level</label>
+              <input type="number" id="calcCurrLevel" value="100" min="1" max="9999" oninput="calcExperience()">
+            </div>
+            <div class="cf">
+              <label>Target Level</label>
+              <input type="number" id="calcTgtLevel" value="200" min="2" max="9999" oninput="calcExperience()">
+            </div>
+            <div class="cf">
+              <label>XP per Hour</label>
+              <input type="number" id="calcXpH" value="1000000" min="1" oninput="calcExperience()">
+            </div>
+            <div class="cr" id="expResult"></div>
+          </div>
+
+          <div class="card calc">
+            <h3>Loot Split</h3>
+            <div class="cf">
+              <label>Hunt Analyzer / Balance Text</label>
+              <textarea id="calcLootText" rows="4" style="width:100%;background:var(--bg-input);color:var(--parchment);border:1px solid var(--border);border-radius:var(--r);padding:7px;font-family:'Crimson Text',serif;font-size:13px;resize:vertical" placeholder="Paste hunt analyzer text or total gold amount..." oninput="calcLootSplit()"></textarea>
+            </div>
+            <div class="cf">
+              <label>Number of Players</label>
+              <input type="number" id="calcPlayers" value="4" min="1" max="20" oninput="calcLootSplit()">
+            </div>
+            <div class="cr" id="lootResult"></div>
+          </div>
+
+          <div class="card calc">
+            <h3>Stamina Calculator</h3>
+            <div class="cf">
+              <label>Current Stamina (Hours)</label>
+              <input type="number" id="calcStamH" value="30" min="0" max="42" oninput="calcStamina()">
+            </div>
+            <div class="cf">
+              <label>Minutes</label>
+              <input type="number" id="calcStamM" value="0" min="0" max="59" oninput="calcStamina()">
+            </div>
+            <div class="cr" id="stamResult"></div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Filter helpers for inline onclick handlers
+    function setHuntVoc(btn, voc) {
+      btn.parentElement.querySelectorAll('.fb').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.hunting.voc = voc;
+      renderHunting();
     }
-  },200);
-}
-
-// ==================================================================
-// CHARACTER LOOKUP
-// ==================================================================
-async function lookupCharacter(){
-  const name=document.getElementById('charNameInput').value.trim();
-  if(!name)return;
-  const el=document.getElementById('charResult');
-  el.innerHTML='<div class="loading"><div class="spinner"></div><p style="margin-top:8px">Searching...</p></div>';
-  try{
-    const res=await fetch(`https://api.tibiadata.com/v4/character/${encodeURIComponent(name)}`);
-    const data=await res.json();
-    const c=data.character?.character;
-    if(!c||!c.name){el.innerHTML='<div class="empty-state">Character not found.</div>';return}
-    const deaths=data.character?.deaths||[];
-    const others=data.character?.other_characters||[];
-    el.innerHTML=`
-      <div class="char-result">
-        <div class="card char-card">
-          <h3 style="margin-bottom:12px;font-size:18px">${c.name}</h3>
-          ${[['Level',c.level],['Vocation',c.vocation],['World',c.world],['Sex',c.sex],['Residence',c.residence],['Guild',c.guild?.name?c.guild.name+' ('+c.guild.rank+')':'—'],['Account Status',c.account_status],['Last Login',c.last_login?new Date(c.last_login).toLocaleDateString():'—']].map(([l,v])=>`<div class="char-field"><span class="flbl">${l}</span><span class="fval">${v||'—'}</span></div>`).join('')}
-        </div>
-        <div>
-          <div class="card" style="margin-bottom:12px">
-            <h4 style="font-size:14px;margin-bottom:8px">Recent Deaths (${deaths.length})</h4>
-            <div class="death-list">${deaths.length?deaths.slice(0,10).map(d=>`<div class="death-item"><div class="death-reason">${d.reason}</div><span>Level ${d.level} — ${new Date(d.time).toLocaleDateString()}</span></div>`).join(''):'<div class="empty-state" style="padding:12px">No recent deaths</div>'}</div>
-          </div>
-          <div class="card">
-            <h4 style="font-size:14px;margin-bottom:8px">Other Characters (${others.length})</h4>
-            ${others.length?others.map(o=>`<div style="padding:4px 0;font-size:12px;border-bottom:1px solid var(--border)"><span style="color:var(--gold-light)">${o.name}</span> <span style="color:var(--parchment-muted)">— ${o.world} ${o.main?'⭐':''}</span></div>`).join(''):'<div class="empty-state" style="padding:12px">No other characters</div>'}
-          </div>
-        </div>
-      </div>`;
-  }catch(e){el.innerHTML='<div class="empty-state">Error looking up character.</div>'}
-}
-document.getElementById('charNameInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')lookupCharacter()});
-
-// ==================================================================
-// WORLDS
-// ==================================================================
-async function loadWorlds(){
-  try{
-    const res=await fetch('https://api.tibiadata.com/v4/worlds');
-    const data=await res.json();
-    allWorlds=data.worlds?.regular_worlds||[];
-    const totalOnline=data.worlds?.players_online||0;
-    document.getElementById('worldsStats').innerHTML=`
-      <div class="wstat"><div class="wval">${totalOnline.toLocaleString()}</div><div class="wlbl">Players Online</div></div>
-      <div class="wstat"><div class="wval">${allWorlds.length}</div><div class="wlbl">Worlds</div></div>
-    `;
-    document.getElementById('onlineCard').innerHTML=`<h4>Players Online</h4><div style="font-family:Cinzel,serif;font-size:22px;color:var(--gold-light)">${totalOnline.toLocaleString()}</div>`;
-    renderWorlds();
-  }catch(e){document.getElementById('worldsBody').innerHTML='<tr><td colspan="6">Failed to load.</td></tr>'}
-  document.getElementById('worldSearch').addEventListener('input',renderWorlds);
-}
-function renderWorlds(){
-  const q=document.getElementById('worldSearch').value.toLowerCase().trim();
-  let worlds=allWorlds;
-  if(q)worlds=worlds.filter(w=>w.name.toLowerCase().includes(q));
-  worlds.sort((a,b)=>b.players_online-a.players_online);
-  document.getElementById('worldsBody').innerHTML=worlds.map(w=>`
-    <tr>
-      <td style="color:var(--gold-light);font-weight:600">${w.name}</td>
-      <td class="${w.status==='online'?'status-online':'status-offline'}">${w.status}</td>
-      <td>${w.players_online}</td>
-      <td>${w.location}</td>
-      <td>${w.pvp_type}</td>
-      <td>${w.battleye_protected?'🟢 Protected':'🔴 No'}</td>
-    </tr>`).join('');
-}
-
-// ==================================================================
-// CALCULATORS
-// ==================================================================
-function initCalculators(){
-  // EXP formula: exp(level) = 50/3 * (level^3 - 6*level^2 + 17*level - 12)
-  const xpForLevel=l=>Math.floor(50/3*(l*l*l-6*l*l+17*l-12));
-  const calcExp=()=>{
-    const cur=parseInt(document.getElementById('calcCurLevel').value)||1;
-    const tgt=parseInt(document.getElementById('calcTgtLevel').value)||2;
-    const xph=parseInt(document.getElementById('calcXpH').value)||1;
-    const needed=xpForLevel(tgt)-xpForLevel(cur);
-    const hours=needed/xph;
-    document.getElementById('expCalcResult').innerHTML=`
-      <div><span class="cr-lbl">XP Needed</span><div class="cr-val">${needed.toLocaleString()}</div></div>
-      <div style="margin-top:8px"><span class="cr-lbl">Time at ${xph.toLocaleString()} XP/h</span><div class="cr-val">${hours<1?(hours*60).toFixed(0)+' min':hours.toFixed(1)+' hours'} (${(hours/24).toFixed(1)} days)</div></div>
-    `;
-  };
-  ['calcCurLevel','calcTgtLevel','calcXpH'].forEach(id=>document.getElementById(id).addEventListener('input',calcExp));
-  calcExp();
-
-  const calcStam=()=>{
-    const h=parseInt(document.getElementById('calcStamH').value)||0;
-    const m=parseInt(document.getElementById('calcStamM').value)||0;
-    const current=h*60+m;
-    const max=42*60;
-    const missing=max-current;
-    const regenMin=missing*3; // 1 stamina minute = 3 real minutes offline
-    const regenH=Math.floor(regenMin/60);
-    const regenM=regenMin%60;
-    const greenLeft=Math.max(0,current-840); // 14h green = 840 min
-    document.getElementById('stamCalcResult').innerHTML=`
-      <div><span class="cr-lbl">Current</span><div class="cr-val">${h}h ${m}m / 42h 00m</div></div>
-      <div style="margin-top:8px"><span class="cr-lbl">Time to Full</span><div class="cr-val">${regenH}h ${regenM}m offline</div></div>
-      <div style="margin-top:8px"><span class="cr-lbl">Green Stamina Left</span><div class="cr-val">${Math.floor(greenLeft/60)}h ${greenLeft%60}m</div></div>
-    `;
-  };
-  ['calcStamH','calcStamM'].forEach(id=>document.getElementById(id).addEventListener('input',calcStam));
-  calcStam();
-
-  const calcLoot=()=>{
-    const total=parseInt(document.getElementById('calcLootTotal').value)||0;
-    const players=parseInt(document.getElementById('calcLootPlayers').value)||1;
-    const supply=parseInt(document.getElementById('calcLootSupply').value)||0;
-    const profit=total-supply;
-    const perPlayer=Math.floor(profit/players);
-    document.getElementById('lootCalcResult').innerHTML=`
-      <div><span class="cr-lbl">Total Profit</span><div class="cr-val">${profit.toLocaleString()} gold</div></div>
-      <div style="margin-top:8px"><span class="cr-lbl">Per Player (${players})</span><div class="cr-val" style="color:${perPlayer>=0?'var(--common-c)':'var(--veryrare-c)'}">${perPlayer.toLocaleString()} gold</div></div>
-    `;
-  };
-  ['calcLootTotal','calcLootPlayers','calcLootSupply'].forEach(id=>document.getElementById(id).addEventListener('input',calcLoot));
-  calcLoot();
-}
-</script>
-</body>
-</html>
+    function setEquipVoc(btn, voc) {
+      btn.parentElement.querySelectorAll('.fb').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.equip.voc = voc;
+      renderEquipment();
+    }
+    function setQuestPrem(btn, val) {
+      btn.parentElement.querySelectorAll('.fb').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.quests.premium = val;
+      renderQuests();
+    }
+    function setSpellVoc(btn, voc) {
+      btn.parentElement.querySelectorAll('.fb').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.spells.voc = voc;
+      filterSpells();
+    }
+    function setSpellType(btn, type) {
+      btn.parentElement.querySelectorAll('.fb').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.spells.type = type;
+      filterSpells();
+    }
+  </script>
 </body>
 </html>
