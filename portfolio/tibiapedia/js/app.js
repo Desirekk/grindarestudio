@@ -1533,7 +1533,7 @@ function editorClear() {
   editorRenderList();
 
   // Clear form
-  const fields = ['edName', 'edLvlMin', 'edLvlMax', 'edAccess', 'edRoute', 'edAuthor'];
+  const fields = ['edName', 'edLvlMin', 'edLvlMax', 'edAccess', 'edRoute', 'edAuthor', 'edCreatures', 'edImbuements', 'edSupplies', 'edEquipment', 'edDrops', 'edTips', 'edExpH', 'edProfitH'];
   fields.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   const citySelect = document.getElementById('edCity');
   if (citySelect) citySelect.value = '';
@@ -1655,13 +1655,56 @@ function editorLoadSpot(idx) {
   const spot = HUNTING_SPOTS[idx];
   editor.fixSpotIdx = idx;
 
-  // Fill form
+  // Fill form — basic info
   document.getElementById('edName').value = spot.name;
   document.getElementById('edCity').value = spot.city;
   document.getElementById('edLvlMin').value = spot.level[0];
   document.getElementById('edLvlMax').value = spot.level[1];
   document.getElementById('edAccess').value = spot.access || '';
   document.getElementById('edRoute').value = spot.route || '';
+  document.getElementById('edExpH').value = spot.expH || '';
+  document.getElementById('edProfitH').value = spot.profitH || '';
+  document.getElementById('edTips').value = spot.tips || '';
+
+  // Pre-fill creatures
+  if (spot.creatures && spot.creatures.length) {
+    document.getElementById('edCreatures').value = spot.creatures.map(c => {
+      const name = typeof c === 'string' ? c : c.name;
+      const hp = c.hp || '?';
+      const xp = c.xp || '?';
+      return `${name}, ${hp}, ${xp}`;
+    }).join('\n');
+  }
+
+  // Pre-fill imbuements
+  if (spot.imbuements && spot.imbuements.length) {
+    document.getElementById('edImbuements').value = spot.imbuements.join(', ');
+  }
+
+  // Pre-fill supplies
+  if (spot.supplies) {
+    const lines = [];
+    Object.entries(spot.supplies).forEach(([voc, items]) => {
+      if (items && items.length) lines.push(voc.toUpperCase().substring(0,2) + ': ' + items.join(', '));
+    });
+    document.getElementById('edSupplies').value = lines.join('\n');
+  }
+
+  // Pre-fill drops
+  if (spot.drops && spot.drops.length) {
+    document.getElementById('edDrops').value = spot.drops.join(', ');
+  }
+
+  // Pre-fill author from localStorage if available
+  const savedBuild = localStorage.getItem('tv_build');
+  if (savedBuild) {
+    try {
+      const b = JSON.parse(savedBuild);
+      if (b.name && !document.getElementById('edAuthor').value) {
+        document.getElementById('edAuthor').value = b.name;
+      }
+    } catch(e) {}
+  }
 
   // Vocations
   document.querySelectorAll('.ed-vocs input').forEach(cb => {
@@ -1709,7 +1752,7 @@ function editorPreview() {
 }
 
 function editorSubmit() {
-  // Validate
+  // Collect all fields
   const name = document.getElementById('edName').value.trim();
   const city = document.getElementById('edCity').value;
   const lvlMin = parseInt(document.getElementById('edLvlMin').value) || 0;
@@ -1717,13 +1760,30 @@ function editorSubmit() {
   const access = document.getElementById('edAccess').value.trim();
   const route = document.getElementById('edRoute').value.trim();
   const author = document.getElementById('edAuthor').value.trim();
+  const creatures = document.getElementById('edCreatures').value.trim();
+  const imbuements = document.getElementById('edImbuements').value.trim();
+  const supplies = document.getElementById('edSupplies').value.trim();
+  const equipment = document.getElementById('edEquipment').value.trim();
+  const drops = document.getElementById('edDrops').value.trim();
+  const tips = document.getElementById('edTips').value.trim();
+  const expH = document.getElementById('edExpH').value.trim();
+  const profitH = document.getElementById('edProfitH').value.trim();
   const vocs = [];
   document.querySelectorAll('.ed-vocs input:checked').forEach(cb => vocs.push(cb.value));
 
+  // Validation
+  if (!author) { editorSetStatus('Character name is required for Tibia Coins rewards.', 'error'); return; }
   if (!name) { editorSetStatus('Please enter a spot name.', 'error'); return; }
   if (!city) { editorSetStatus('Please select a city.', 'error'); return; }
-  if (editor.waypoints.length < 2) { editorSetStatus('Add at least 2 waypoints.', 'error'); return; }
-  if (!route) { editorSetStatus('Please add a route description.', 'error'); return; }
+
+  // For "fix" mode, waypoints are optional (user might just be fixing creatures/gear)
+  const isFullSubmission = editor.waypoints.length >= 2 && route;
+  const isEditSubmission = creatures || imbuements || supplies || equipment || drops || tips;
+
+  if (!isFullSubmission && !isEditSubmission) {
+    editorSetStatus('Add waypoints + route description for a full guide, or fill in creature/gear/supply details for a spot edit.', 'error');
+    return;
+  }
 
   // Rate limiting
   const lastSubmit = localStorage.getItem('tp_last_submit');
@@ -1740,17 +1800,22 @@ function editorSubmit() {
     return arr;
   });
 
-  const submissionType = editor.mode === 'fix' ? 'Route Fix' : 'New Spot';
+  // Determine submission type and reward tier
+  const isNewFull = editor.mode === 'new' && isFullSubmission;
+  const submissionType = isNewFull ? 'New Full Guide' : 'Spot Edit';
+  const rewardTier = isNewFull ? 'Route Creator (250 TC/week)' : 'Spot Editor (50 TC/week)';
+
   const spotData = {
     type: submissionType,
-    name,
-    city,
+    rewardTier,
+    name, city,
     level: [lvlMin, lvlMax],
     voc: vocs,
-    access,
-    route,
+    access, route,
     waypoints: waypointsData,
-    author: author || 'Anonymous',
+    creatures, imbuements, supplies, equipment, drops, tips,
+    expH, profitH,
+    author,
     timestamp: new Date().toISOString()
   };
 
@@ -1758,58 +1823,76 @@ function editorSubmit() {
     spotData.fixingSpot = HUNTING_SPOTS[editor.fixSpotIdx].name;
   }
 
-  // Build Discord embed
+  // Build Discord embeds — visual for admin review
   const floorsUsed = [...new Set(editor.waypoints.map(wp => wp.floor))].sort();
   const floorLabels = floorsUsed.map(f => {
     const df = 7 - f;
     return df === 0 ? 'Ground' : df > 0 ? '+' + df : String(df);
   });
 
-  const embed = {
-    title: submissionType === 'Route Fix' ? 'Route Fix Submission' : 'New Hunting Spot Submission',
-    color: 0xd4a537,
-    fields: [
-      { name: 'Type', value: submissionType, inline: true },
-      { name: 'Spot', value: name, inline: true },
-      { name: 'Submitter', value: author || 'Anonymous', inline: true },
-      { name: 'City', value: city, inline: true },
-      { name: 'Level', value: `${lvlMin}-${lvlMax}`, inline: true },
-      { name: 'Vocations', value: vocs.map(v => v.substring(0, 2).toUpperCase()).join(', '), inline: true },
-      { name: 'Waypoints', value: `${editor.waypoints.length} steps, floors: ${floorLabels.join(', ')}` },
-      { name: 'Route', value: route.substring(0, 1000) },
-      { name: 'Access', value: access || 'None specified' }
-    ],
+  // Main info embed
+  const embedFields = [
+    { name: 'Type', value: isNewFull ? '🆕 New Full Guide' : '✏️ Spot Edit', inline: true },
+    { name: 'Reward Tier', value: rewardTier, inline: true },
+    { name: 'Spot', value: name, inline: true },
+    { name: 'City', value: city, inline: true },
+    { name: 'Level', value: lvlMin && lvlMax ? `${lvlMin}-${lvlMax}` : 'Not specified', inline: true },
+    { name: 'Vocations', value: vocs.length ? vocs.map(v => v.substring(0, 2).toUpperCase()).join(', ') : 'All', inline: true }
+  ];
+
+  if (editor.waypoints.length > 0) {
+    embedFields.push({ name: '🗺️ Waypoints', value: `${editor.waypoints.length} steps, floors: ${floorLabels.join(', ')}` });
+  }
+  if (route) embedFields.push({ name: '📍 Route', value: route.substring(0, 500) });
+  if (access) embedFields.push({ name: '🔑 Access', value: access.substring(0, 300) });
+  if (creatures) embedFields.push({ name: '👹 Creatures', value: creatures.substring(0, 500) });
+  if (imbuements) embedFields.push({ name: '🔮 Imbuements', value: imbuements.substring(0, 300) });
+  if (equipment) embedFields.push({ name: '🛡️ Equipment', value: equipment.substring(0, 500) });
+  if (supplies) embedFields.push({ name: '🧪 Supplies', value: supplies.substring(0, 500) });
+  if (drops) embedFields.push({ name: '💰 Drops', value: drops.substring(0, 300) });
+  if (tips) embedFields.push({ name: '💡 Tips', value: tips.substring(0, 300) });
+  if (expH) embedFields.push({ name: '⚡ EXP/h', value: expH, inline: true });
+  if (profitH) embedFields.push({ name: '💵 Profit/h', value: profitH, inline: true });
+
+  const mainEmbed = {
+    title: isNewFull ? '🆕 New Hunting Guide Submission' : '✏️ Spot Edit Submission',
+    color: isNewFull ? 0x22c55e : 0x3b82f6,
+    fields: embedFields,
+    footer: { text: `Submitted by ${author} • TC rewards: ${rewardTier}` },
     timestamp: new Date().toISOString()
   };
 
   const jsonBlob = JSON.stringify(spotData, null, 2);
 
-  // Try Discord webhook
+  // Try Discord webhook — send visual embed + JSON in separate message
   if (DISCORD_WEBHOOK && DISCORD_WEBHOOK !== 'YOUR_WEBHOOK_URL_HERE') {
-    const payload = {
-      embeds: [embed],
-      content: '```json\n' + jsonBlob + '\n```'
-    };
-
+    // First message: visual embed for admin
     fetch(DISCORD_WEBHOOK, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ embeds: [mainEmbed] })
+    })
+    .then(res => {
+      if (!res.ok) throw new Error('Webhook returned ' + res.status);
+      // Second message: JSON data for copy-paste into data.js
+      return fetch(DISCORD_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: '**Data for data.js:**\n```json\n' + jsonBlob.substring(0, 1900) + '\n```' })
+      });
     })
     .then(res => {
       if (res.ok) {
         localStorage.setItem('tp_last_submit', String(Date.now()));
-        editorSetStatus('Route submitted successfully! Thank you for contributing. Your submission will be reviewed.', 'success');
+        editorSetStatus('Submitted! Thank you ' + author + '! Your submission is being reviewed. ' + rewardTier, 'success');
       } else {
-        throw new Error('Webhook returned ' + res.status);
+        throw new Error('Second webhook failed');
       }
     })
     .catch(() => {
-      // Fallback: copy to clipboard
       editorCopyFallback(jsonBlob);
     });
   } else {
-    // No webhook configured — clipboard fallback
     editorCopyFallback(jsonBlob);
   }
 }

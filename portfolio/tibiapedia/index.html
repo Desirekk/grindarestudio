@@ -86,6 +86,12 @@
           <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Crystal_Coin.gif" alt="" class="ni-icon" onerror="this.style.display='none'">
           <span>Calculators</span>
         </div>
+        <div class="nav-divider"></div>
+        <a href="https://discord.gg/dknTHjkYCg" target="_blank" class="nav-item nav-discord" style="text-decoration:none">
+          <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a69f118df70ad7828d4_icon_clyde_blurple_RGB.svg" alt="" class="ni-icon" onerror="this.textContent='💬'">
+          <span>Join Discord</span>
+          <span style="font-size:9px;background:var(--gold);color:var(--bg);padding:1px 6px;border-radius:8px;font-weight:700;margin-left:auto">NEW</span>
+        </a>
       </div>
       <div class="sidebar-footer">
         Portfolio Demo by<br><a href="https://grindarestudio.com" target="_blank">Grindare Studio</a>
@@ -177,15 +183,15 @@
           <div class="cta-content">
             <div class="cta-headline">Help Build the Best Route Database!</div>
             <div class="cta-body">
-              Create or fix hunting spot routes and get rewarded:
+              Create or fix hunting spot guides and get rewarded:
               <ul>
-                <li><b>Route Verified</b> — special Discord role for approved routes</li>
-                <li><b>250 Tibia Coins</b> — monthly giveaway for top contributors</li>
+                <li><b>Route Creator</b> — submit full hunting guides, win <b>250 TC/week</b></li>
+                <li><b>Spot Editor</b> — fix creatures, gear, imbuements, win <b>50 TC/week</b></li>
               </ul>
             </div>
             <div class="cta-buttons">
               <button class="btn-s btn-g" onclick="switchHuntTab('editor',document.querySelector('.hunt-tab:last-child'))">Open Route Editor</button>
-              <a href="https://discord.gg/tibiavault" target="_blank" class="btn-s" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px">Join Discord</a>
+              <a href="https://discord.gg/dknTHjkYCg" target="_blank" class="btn-s" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px">Join Discord</a>
             </div>
           </div>
         </div>
@@ -294,9 +300,51 @@
                 <label>Route Description</label>
                 <textarea id="edRoute" rows="3" placeholder="e.g. Start at Ankrahmun depot, head south through desert..."></textarea>
               </div>
+
+              <h4 style="margin-top:14px">Creatures & Details</h4>
               <div class="ed-field">
-                <label>Your Character Name (for credit)</label>
-                <input type="text" id="edAuthor" placeholder="e.g. Bubble Knight">
+                <label>Creatures (one per line: Name, HP, XP)</label>
+                <textarea id="edCreatures" rows="4" placeholder="e.g.&#10;Werebear, 2400, 2550&#10;Werefox, 1350, 1650&#10;Wereboar, 2100, 2000"></textarea>
+              </div>
+              <div class="ed-field">
+                <label>Imbuements (recommended)</label>
+                <textarea id="edImbuements" rows="2" placeholder="e.g. T3 Vampirism (axe), T3 Void (helmet), T2 Fire Strike"></textarea>
+              </div>
+              <div class="ed-field">
+                <label>Supplies per Vocation (one line per voc)</label>
+                <textarea id="edSupplies" rows="4" placeholder="e.g.&#10;EK: 200 supreme health, 100 spirit potions&#10;ED: 300 great mana, 50 avalanche runes&#10;RP: 200 great spirit, 100 diamond arrows"></textarea>
+              </div>
+              <div class="ed-field">
+                <label>Best Equipment (per vocation/level)</label>
+                <textarea id="edEquipment" rows="4" placeholder="e.g.&#10;EK 300+: Falcon Plate, Soulbastion, Gnome Helmet, Pair of Soulwalkers&#10;ED 250+: Gill Gugel, Dawnfire Sherwani, Dream Shroud"></textarea>
+              </div>
+              <div class="ed-field">
+                <label>Valuable Drops</label>
+                <textarea id="edDrops" rows="2" placeholder="e.g. Werewolf Fur, Dreaded Cleaver, Fur Armor, Werewolf Amulet"></textarea>
+              </div>
+              <div class="ed-field">
+                <label>Hunting Tips</label>
+                <textarea id="edTips" rows="2" placeholder="e.g. Pull 3-4 at a time, avoid running into Wereboar packs..."></textarea>
+              </div>
+              <div class="ed-field">
+                <label>EXP/h (estimated)</label>
+                <input type="text" id="edExpH" placeholder="e.g. 2.5kk/h or 2,500,000">
+              </div>
+              <div class="ed-field">
+                <label>Profit/h (estimated)</label>
+                <input type="text" id="edProfitH" placeholder="e.g. 150k/h or -50k/h (waste)">
+              </div>
+
+              <h4 style="margin-top:14px">Your Info</h4>
+              <div class="ed-field">
+                <label>Your Tibia Character Name <span style="color:var(--fire)">*required</span></label>
+                <input type="text" id="edAuthor" placeholder="e.g. Bubble Knight" required>
+                <div style="font-size:10px;color:var(--parch-dim);margin-top:3px">Tibia Coins rewards are sent to this character. Must be exact in-game name.</div>
+              </div>
+              <div class="ed-reward-info" style="padding:10px 12px;background:rgba(212,165,55,.06);border:1px solid rgba(212,165,55,.15);border-radius:var(--r);font-size:11px;color:var(--parch-dim);line-height:1.6;margin-bottom:10px">
+                <b style="color:var(--gold)">Rewards:</b><br>
+                ★ <b>New full spot</b> = Route Creator role + 250 TC weekly giveaway<br>
+                ★ <b>Edit existing spot</b> = Spot Editor role + 50 TC weekly giveaway
               </div>
               <div class="ed-actions">
                 <button class="btn-s" onclick="editorPreview()">Preview Route</button>

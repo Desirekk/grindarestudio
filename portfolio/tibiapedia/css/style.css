@@ -55,6 +55,10 @@ tr:hover td{background:rgba(212,165,55,.03)}
 .nav-item .ni-icon{width:20px;height:20px;flex-shrink:0;opacity:.7;image-rendering:auto}
 .nav-item.active .ni-icon{opacity:1}
 .nav-divider{height:1px;background:var(--border);margin:6px 14px}
+.nav-discord{background:rgba(88,101,242,.06)!important;border-left-color:rgba(88,101,242,.4)!important}
+.nav-discord:hover{background:rgba(88,101,242,.12)!important;color:#7289da!important}
+.nav-discord .ni-icon{filter:brightness(0) invert(1);opacity:.5}
+.nav-discord:hover .ni-icon{opacity:.9}
 .sidebar-footer{padding:10px 14px;border-top:1px solid var(--border);font-size:10px;color:var(--parch-dim);text-align:center;line-height:1.5}
 .sidebar-footer a{color:var(--gold);font-size:10px}
 
