@@ -979,9 +979,7 @@ function initMap() {
   state.map.on('click', e => {
     const cx = Math.round(MAP_X0 + (e.latlng.lng / MAP_W) * (MAP_X1 - MAP_X0));
     const cy = Math.round(MAP_Y0 + ((MAP_H - e.latlng.lat) / MAP_H) * (MAP_Y1 - MAP_Y0));
-    const df = 7 - state.mapFloor;
-    const floorStr = df === 0 ? '0' : df > 0 ? '+' + df : String(df);
-    document.getElementById('mapCoords').textContent = `X: ${cx}, Y: ${cy}, Floor: ${floorStr}`;
+    document.getElementById('mapCoords').textContent = `X: ${cx}, Y: ${cy}, Z: ${state.mapFloor}`;
   });
 }
 
@@ -1002,8 +1000,8 @@ function changeFloor(floor) {
     else state.map.removeLayer(state.mapMarkers);
   }
   const df = 7 - floor;
-  const label = df === 0 ? 'Ground' : df > 0 ? '+' + df : String(df);
-  document.getElementById('floorLabel').textContent = label;
+  const name = df === 0 ? 'Ground' : df > 0 ? '+' + df : String(df);
+  document.getElementById('floorLabel').textContent = `${name} (${floor})`;
 }
 
 function showOnMap(cx, cy, name) {
