@@ -743,7 +743,7 @@ function renderHunting() {
         <div class="hunt-card-stat"><span class="hcs-val">${s.expH || '?'}</span><span class="hcs-label">EXP/h</span></div>
         <div class="hunt-card-stat"><span class="hcs-val">${s.profitH || '?'}</span><span class="hcs-label">Profit/h</span></div>
       </div>
-      <div class="hunt-card-creatures">${s.creatures.slice(0,5).map(c=>{const cn=typeof c==='string'?c:c.name;return`<span class="hcc-icon" title="${esc(cn)}" style="background-image:url('${WIKI_IMG(cn)}')"></span>`}).join('')}${s.creatures.length > 5 ? `<span class="hcc-more">+${s.creatures.length-5}</span>` : ''}</div>
+      <div class="hunt-card-creatures">${s.creatures.slice(0,5).map(c=>{const cn=typeof c==='string'?c:c.name;return`<img src="${WIKI_IMG(cn)}" alt="${esc(cn)}" title="${esc(cn)}" width="40" height="40" style="display:block;width:40px;height:40px;object-fit:fill;image-rendering:pixelated;border-radius:4px;background:#1a1510;border:1px solid rgba(212,165,55,.15)" onerror="this.style.display='none'">`}).join('')}${s.creatures.length > 5 ? `<span class="hcc-more">+${s.creatures.length-5}</span>` : ''}</div>
       <div class="hunt-card-rating">${starsHtml}</div>
     </div>`;
   }).join('') + '</div>' : '<div class="empty">No spots match your filters.</div>';
