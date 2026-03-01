@@ -61,7 +61,7 @@ const VOCATION_GEAR = {
     {min:60,max:99,items:["Royal Helmet","Magic Plate Armor","Golden Legs","Boots of Haste","Shiny Blade","Shield of Honour"]},
     {min:100,max:149,items:["Zaoan Helmet","Prismatic Armor","Zaoan Legs","Guardian Boots","Shiny Blade","Prismatic Shield"]},
     {min:150,max:199,items:["Cobra Hood","Prismatic Armor","Ornate Legs","Pair of Dreamwalkers","Blade of Destruction","Gnome Shield"]},
-    {min:200,max:299,items:["Falcon Coif","Falcon Plate","Fabulous Legs","Pair of Dreamwalkers","Falcon Battleaxe","Falcon Escutcheon"]},
+    {min:200,max:299,items:["Falcon Coif","Falcon Plate","Fabulous Legs","Pair of Dreamwalkers","Falcon Longsword","Falcon Escutcheon"]},
     {min:300,max:999,items:["Soulbastion","Soulmantle","Soulstrider","Pair of Dreamwalkers","Soulcutter","Soul Shield"]}
   ],
   paladin:[
@@ -74,7 +74,7 @@ const VOCATION_GEAR = {
   ],
   sorcerer:[
     {min:8,max:59,items:["Magician's Hat","Blue Robe","Plate Legs","Leather Boots","Wand of Dragonbreath","Spellbook"]},
-    {min:60,max:99,items:["Yalahari Mask","Blue Robe","Golden Legs","Boots of Haste","Hailstorm Rod","Spellbook of Mind Stone"]},
+    {min:60,max:99,items:["Yalahari Mask","Blue Robe","Golden Legs","Boots of Haste","Wand of Defiance","Spellbook of Mind Stone"]},
     {min:100,max:149,items:["Zaoan Helmet","Gill Coat","Zaoan Legs","Guardian Boots","Wand of Defiance","Spellbook of Dark Mysteries"]},
     {min:150,max:199,items:["Cobra Hood","Prismatic Armor","Ornate Legs","Pair of Dreamwalkers","Wand of Destruction","Spellbook of Dark Mysteries"]},
     {min:200,max:299,items:["Falcon Coif","Falcon Plate","Fabulous Legs","Pair of Dreamwalkers","Falcon Wand","Falcon Escutcheon"]},
@@ -89,24 +89,24 @@ const VOCATION_GEAR = {
     {min:300,max:999,items:["Soulmantle","Soulstrider","Pair of Dreamwalkers","Soultainter"]}
   ],
   monk:[
-    {min:8,max:59,items:["Soldier Helmet","Scale Armor","Crown Legs","Leather Boots","Pair of Soft Kitty Paws","Demon Shield"]},
-    {min:60,max:99,items:["Royal Helmet","Noble Armor","Golden Legs","Boots of Haste","Pair of Soft Kitty Paws","Shield of Honour"]},
-    {min:100,max:149,items:["Zaoan Helmet","Prismatic Armor","Zaoan Legs","Guardian Boots","Pair of Soft Kitty Paws","Prismatic Shield"]},
-    {min:150,max:199,items:["Cobra Hood","Prismatic Armor","Ornate Legs","Pair of Dreamwalkers","Pair of Soft Kitty Paws","Gnome Shield"]},
-    {min:200,max:299,items:["Falcon Coif","Falcon Plate","Fabulous Legs","Pair of Dreamwalkers","Pair of Soft Kitty Paws","Falcon Escutcheon"]},
-    {min:300,max:999,items:["Soulbastion","Soulmantle","Soulstrider","Pair of Dreamwalkers","Pair of Soft Kitty Paws","Soul Shield"]}
+    {min:8,max:59,items:["Soldier Helmet","Scale Armor","Crown Legs","Leather Boots","Pair of Iron Fists","Demon Shield"]},
+    {min:60,max:99,items:["Royal Helmet","Noble Armor","Golden Legs","Boots of Haste","Sai","Shield of Honour"]},
+    {min:100,max:149,items:["Zaoan Helmet","Prismatic Armor","Zaoan Legs","Guardian Boots","Drachaku","Prismatic Shield"]},
+    {min:150,max:199,items:["Cobra Hood","Prismatic Armor","Ornate Legs","Pair of Dreamwalkers","Bambus Jo","Gnome Shield"]},
+    {min:200,max:299,items:["Falcon Coif","Falcon Plate","Fabulous Legs","Pair of Dreamwalkers","Cobra Bo","Falcon Escutcheon"]},
+    {min:300,max:999,items:["Soulbastion","Soulmantle","Soulstrider","Pair of Dreamwalkers","Falcon Sai","Soul Shield"]}
   ]
 };
 
 // Element protection items — suggested when creatures deal that element
 const ELEMENT_PROT = {
-  fire:{ring:"Dwarven Ring",amulet:"Magma Amulet",desc:"Fire Protection"},
-  ice:{ring:"Glacier Amulet",amulet:"Glacier Amulet",desc:"Ice Protection"},
-  energy:{ring:"Energy Ring",amulet:"Lightning Pendant",desc:"Energy Protection"},
-  earth:{ring:"Terra Amulet",amulet:"Terra Amulet",desc:"Earth Protection"},
-  death:{ring:"Ring of Souls",amulet:"Foxtail Amulet",desc:"Death Protection"},
-  holy:{ring:"Might Ring",amulet:"Platinum Amulet",desc:"Holy Protection"},
-  physical:{ring:"Prismatic Ring",amulet:"Enchanted Theurgic Amulet",desc:"Physical Protection"}
+  fire:{amulet:"Magma Amulet",desc:"Fire Protection"},
+  ice:{amulet:"Glacier Amulet",desc:"Ice Protection"},
+  energy:{amulet:"Prismatic Necklace",desc:"Energy Protection"},
+  earth:{amulet:"Terra Amulet",desc:"Earth Protection"},
+  death:{amulet:"Koshei's Ancient Amulet",desc:"Death Protection"},
+  holy:{amulet:"Prismatic Necklace",desc:"Holy Protection"},
+  physical:{amulet:"Prismatic Necklace",desc:"Physical Protection"}
 };
 
 // Cities for map
@@ -771,6 +771,462 @@ const HUNTING_SPOTS = [
     "300-400":"Falcon full set, Dreamwalkers",
     "400+"   :"Soul equipment (from this very spawn)"
   }
+},
+// ===== LOW LEVEL SPOTS (8-60) =====
+{
+  name:"Mintwallin Minotaurs",
+  city:"Thais",level:[15,40],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"20k-80k",profitH:"5k-20k",
+  prot:["physical"],
+  cx:32405,cy:32085,
+  route:"From Thais depot head north through the city. Follow the path west past the troll cave. Enter the underground hole — Mintwallin is a massive underground minotaur city.",
+  waypoints:[[32369,32241],[32380,32200],[32390,32150],[32400,32100],[32405,32085]],
+  access:"None — free access. Bring a rope and shovel.",
+  premium:false,
+  creatures:[
+    {name:"Minotaur",hp:100,xp:50,charm:"wound",charmPts:5},
+    {name:"Minotaur Guard",hp:185,xp:160,charm:"wound",charmPts:5},
+    {name:"Minotaur Archer",hp:100,xp:65,charm:"wound",charmPts:5},
+    {name:"Minotaur Mage",hp:155,xp:150,charm:"wound",charmPts:5}
+  ],
+  imbuements:[],
+  supplies:{
+    knight:["50 Health Potion","10 Mana Potion"],
+    paladin:["30 Health Potion","50 Spear"],
+    sorcerer:["50 Mana Potion"],
+    druid:["50 Mana Potion"]
+  },
+  trinket:null,
+  drops:["Minotaur Leather","Plate Armor","Battle Shield","Brass Helmet","Minotaur Horn"],
+  tips:"Classic beginner dungeon. Minotaur Guards and Mages hit hard for their level — don't pull big groups. Good money from Minotaur Leather and equipment drops. Bring a rope to exit!",
+  gear:{"15-30":"Studded Helmet, Scale Armor, Plate Legs, Leather Boots","30-40":"Soldier Helmet, Noble Armor, Crown Legs, Leather Boots"}
+},
+{
+  name:"Amazon Camp — Venore",
+  city:"Venore",level:[20,50],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"30k-100k",profitH:"10k-30k",
+  prot:["physical"],
+  cx:32960,cy:32140,
+  route:"From Venore depot head south through the swamps. Cross the wooden bridges and continue south-east to the Amazon camp on the hill.",
+  waypoints:[[32957,32076],[32958,32100],[32959,32120],[32960,32140]],
+  access:"None — free access.",
+  premium:false,
+  creatures:[
+    {name:"Amazon",hp:110,xp:60,charm:"freeze",charmPts:5},
+    {name:"Valkyrie",hp:190,xp:85,charm:"freeze",charmPts:5},
+    {name:"Witch",hp:300,xp:120,charm:"freeze",charmPts:10}
+  ],
+  imbuements:[],
+  supplies:{
+    knight:["50 Health Potion","10 Mana Potion"],
+    paladin:["30 Health Potion","100 Spear"],
+    sorcerer:["60 Mana Potion"],
+    druid:["60 Mana Potion"]
+  },
+  trinket:null,
+  drops:["Amazon Armor","Amazon Helmet","Amazon Shield","Skull","Protective Charm"],
+  tips:"Amazon Armor and Helmet sell well to NPCs. Witches can summon creatures — kill them first. Valkyries combo hard in groups. All weak to Ice — Freeze charm if available.",
+  gear:{"20-35":"Steel Helmet, Plate Armor, Plate Legs, Leather Boots","35-50":"Soldier Helmet, Noble Armor, Crown Legs, Boots of Haste"}
+},
+{
+  name:"Cyclops Camp — Edron",
+  city:"Edron",level:[25,55],voc:["knight","paladin"],
+  team:"solo",expH:"40k-120k",profitH:"15k-40k",
+  prot:["physical"],
+  cx:33250,cy:31850,
+  route:"From Edron depot go south-east past the castle walls. The cyclops camp is on the surface near the mountain east of town.",
+  waypoints:[[33217,31814],[33230,31825],[33240,31840],[33250,31850]],
+  access:"None — free access.",
+  premium:false,
+  creatures:[
+    {name:"Cyclops",hp:260,xp:150,charm:"wound",charmPts:5},
+    {name:"Cyclops Smith",hp:435,xp:255,charm:"wound",charmPts:10},
+    {name:"Cyclops Drone",hp:325,xp:200,charm:"wound",charmPts:5}
+  ],
+  imbuements:["1x Vampirism"],
+  supplies:{
+    knight:["50 Health Potion","20 Mana Potion"],
+    paladin:["50 Health Potion","100 Royal Spear"]
+  },
+  trinket:null,
+  drops:["Cyclops Toe","Battle Shield","Plate Armor","Club Ring","Cyclops Trophy"],
+  tips:"Excellent solo knight spot. Cyclops Toe is valuable for Vampirism imbuements. Smith hits hardest — be careful. Wound charm works well. Good physical armor needed.",
+  gear:{"25-40":"Steel Helmet, Plate Armor, Plate Legs, Leather Boots","40-55":"Soldier Helmet, Noble Armor, Crown Legs, Boots of Haste"}
+},
+{
+  name:"Larvas & Scarabs — Ankrahmun",
+  city:"Ankrahmun",level:[30,60],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"50k-150k",profitH:"15k-50k",
+  prot:["earth","physical"],
+  cx:33190,cy:32660,
+  route:"From Ankrahmun depot head south-west to the desert tombs. Larvas are on the upper floors, Ancient Scarabs deeper down.",
+  waypoints:[[33162,32688],[33170,32680],[33180,32670],[33190,32660]],
+  access:"None — free access (premium island).",
+  premium:true,
+  creatures:[
+    {name:"Larva",hp:70,xp:44,charm:"freeze",charmPts:5},
+    {name:"Scarab",hp:320,xp:120,charm:"freeze",charmPts:5},
+    {name:"Ancient Scarab",hp:1000,xp:720,charm:"freeze",charmPts:15}
+  ],
+  imbuements:["1x Vampirism"],
+  supplies:{
+    knight:["80 Health Potion","30 Mana Potion"],
+    paladin:["60 Health Potion","100 Royal Spear"],
+    sorcerer:["100 Mana Potion","20 Sudden Death Rune"],
+    druid:["100 Mana Potion"]
+  },
+  trinket:"Terra Amulet",
+  drops:["Scarab Coin","Ancient Amulet","Scarab Shield","Scarab Amulet","Piece of Scarab Shell"],
+  tips:"Ancient Scarabs hit hard and PARALYZE — Terra Amulet for earth protection is essential! Scarab Coins sell well. Piece of Scarab Shell used for imbuements. All weak to Ice — Freeze charm.",
+  gear:{"30-45":"Soldier Helmet, Noble Armor, Crown Legs, Leather Boots","45-60":"Royal Helmet, Magic Plate Armor, Golden Legs, Boots of Haste"}
+},
+{
+  name:"Orc Fortress — Edron",
+  city:"Edron",level:[30,60],voc:["knight","paladin"],
+  team:"solo",expH:"40k-100k",profitH:"10k-30k",
+  prot:["physical"],
+  cx:33240,cy:31870,
+  route:"From Edron depot go south past the castle walls. Continue south-east to the orcish fortification. Enter through the wooden gate.",
+  waypoints:[[33217,31814],[33225,31835],[33230,31850],[33240,31870]],
+  access:"None — free access.",
+  premium:false,
+  creatures:[
+    {name:"Orc Leader",hp:450,xp:270,charm:"wound",charmPts:10},
+    {name:"Orc Berserker",hp:210,xp:195,charm:"wound",charmPts:5},
+    {name:"Orc Warlord",hp:950,xp:670,charm:"wound",charmPts:15}
+  ],
+  imbuements:["1x Vampirism"],
+  supplies:{
+    knight:["60 Health Potion","20 Mana Potion"],
+    paladin:["50 Health Potion","100 Royal Spear"]
+  },
+  trinket:null,
+  drops:["Orc Tooth","Plate Armor","Dark Helmet","Amazon Armor","Warrior Helmet"],
+  tips:"Orc Warlords are very strong — never pull groups of them! Orc Tooth needed for Strike imbuement. Good spot to learn blocking for knights.",
+  gear:{"30-45":"Soldier Helmet, Noble Armor, Crown Legs, Leather Boots","45-60":"Royal Helmet, Magic Plate Armor, Golden Legs, Boots of Haste"}
+},
+// ===== MID LEVEL SPOTS (50-120) =====
+{
+  name:"Giant Spider Cave — Port Hope",
+  city:"Port Hope",level:[50,80],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"80k-200k",profitH:"20k-60k",
+  prot:["earth"],
+  cx:32660,cy:32780,
+  route:"From Port Hope depot head east into the jungle. Cross the bridge over the river. Enter the cave south-east of the jungle village.",
+  waypoints:[[32623,32753],[32640,32760],[32650,32770],[32660,32780]],
+  access:"None — free access.",
+  premium:true,
+  creatures:[
+    {name:"Giant Spider",hp:1300,xp:900,charm:"enflame",charmPts:15},
+    {name:"Crystal Spider",hp:1250,xp:900,charm:"enflame",charmPts:15}
+  ],
+  imbuements:["1x Vampirism","1x Void"],
+  supplies:{
+    knight:["100 Strong Health Potion","30 Mana Potion"],
+    paladin:["80 Health Potion","150 Royal Star"],
+    sorcerer:["200 Mana Potion"],
+    druid:["200 Mana Potion"]
+  },
+  trinket:"Terra Amulet",
+  drops:["Spider Silk","Knight Armor","Plate Armor","Steel Helmet","Time Ring"],
+  tips:"Giant Spiders PARALYZE — Terra Amulet is mandatory! Spider Silk is valuable. They're weak to Fire — use Enflame charm. Watch for surprise spawns around corners.",
+  gear:{"50-65":"Soldier Helmet, Noble Armor, Crown Legs, Boots of Haste","65-80":"Royal Helmet, Magic Plate Armor, Golden Legs, Boots of Haste"}
+},
+{
+  name:"Werehyaenas — Darashia",
+  city:"Darashia",level:[60,100],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"200k-500k",profitH:"80k-200k",
+  prot:["death","physical"],
+  cx:33250,cy:32450,
+  route:"From Darashia depot head east through the desert. Enter the underground cave system beneath the sand hills.",
+  waypoints:[[33224,32432],[33235,32440],[33245,32445],[33250,32450]],
+  access:"Short access quest.",
+  premium:true,
+  creatures:[
+    {name:"Werehyaena",hp:2200,xp:1800,charm:"zap",charmPts:25},
+    {name:"Werehyaena Shaman",hp:2700,xp:2100,charm:"zap",charmPts:25}
+  ],
+  imbuements:["2x Vampirism","2x Void"],
+  supplies:{
+    knight:["150 Strong Health Potion","40 Strong Mana Potion"],
+    paladin:["150 Great Spirit Potion","200 Crystalline Arrow"],
+    sorcerer:["300 Strong Mana Potion","30 Sudden Death Rune"],
+    druid:["300 Strong Mana Potion","20 Wild Growth Rune"]
+  },
+  trinket:"Foxtail Amulet",
+  drops:["Werehyaena Talisman","Werehyaena Trophy","Moonstone","Moonlight Crystals"],
+  tips:"Weak to Energy — Zap charm on both. Death protection helps (Foxtail Amulet). Shamans heal others — target them first. Good loot from Moon items. Only during full moon!",
+  gear:{"60-80":"Royal Helmet, Magic Plate Armor, Golden Legs, Boots of Haste","80-100":"Zaoan Helmet, Prismatic Armor, Zaoan Legs, Guardian Boots"}
+},
+{
+  name:"Mutated Humans — Yalahar",
+  city:"Yalahar",level:[60,100],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"150k-400k",profitH:"50k-150k",
+  prot:["energy","earth"],
+  cx:32810,cy:31285,
+  route:"From Yalahar depot go to the Alchemist Quarter. Navigate through the mutated areas in the northern quarter of the city.",
+  waypoints:[[32792,31274],[32800,31278],[32805,31282],[32810,31285]],
+  access:"In Service of Yalahar Quest required.",
+  premium:true,
+  creatures:[
+    {name:"Mutated Human",hp:3500,xp:2450,charm:"freeze",charmPts:25},
+    {name:"Mutated Rat",hp:550,xp:450,charm:"freeze",charmPts:10},
+    {name:"Mutated Tiger",hp:1100,xp:750,charm:"freeze",charmPts:15}
+  ],
+  imbuements:["2x Vampirism","2x Void"],
+  supplies:{
+    knight:["150 Strong Health Potion","50 Strong Mana Potion"],
+    paladin:["150 Great Spirit Potion","200 Royal Star"],
+    sorcerer:["300 Strong Mana Potion"],
+    druid:["300 Strong Mana Potion"]
+  },
+  trinket:null,
+  drops:["Mutated Flesh","Strange Talisman","Berserk Potion","Fist on a Stick"],
+  tips:"Very popular for 80-100 range — great XP/h! Deal energy and earth damage. All weak to Ice — Freeze charm. Be careful of large pulls — they combo hard. Mutated Humans hit the hardest.",
+  gear:{"60-80":"Royal Helmet, Magic Plate Armor, Golden Legs, Boots of Haste","80-100":"Zaoan Helmet, Prismatic Armor, Zaoan Legs, Guardian Boots"}
+},
+{
+  name:"Wyrms — Drefia",
+  city:"Darashia",level:[70,120],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"200k-500k",profitH:"50k-150k",
+  prot:["energy","fire"],
+  cx:33250,cy:32380,
+  route:"From Darashia depot head north-east through the desert. Cross the sand bridge to the Drefia underground crypt entrance.",
+  waypoints:[[33224,32432],[33230,32420],[33240,32400],[33250,32380]],
+  access:"Access through Drefia underground crypt.",
+  premium:true,
+  creatures:[
+    {name:"Wyrm",hp:1825,xp:1550,charm:"freeze",charmPts:15},
+    {name:"Elder Wyrm",hp:2700,xp:2700,charm:"freeze",charmPts:25}
+  ],
+  imbuements:["2x Vampirism","2x Void"],
+  supplies:{
+    knight:["150 Strong Health Potion","50 Strong Mana Potion"],
+    paladin:["150 Great Spirit Potion","200 Crystalline Arrow"],
+    sorcerer:["300 Strong Mana Potion","30 Sudden Death Rune"],
+    druid:["300 Strong Mana Potion","20 Wild Growth Rune"]
+  },
+  trinket:null,
+  drops:["Wyrm Scale","Dragon Scale Mail","Shiny Blade","Focus Cape","Dragonbone Staff"],
+  tips:"Wyrms deal energy and fire damage — rotate protection. Elder Wyrms hit VERY hard — careful when pulling multiples. Both weak to Ice — Freeze charm ideal. Great XP for solo 90-120.",
+  gear:{"70-90":"Royal Helmet, Magic Plate Armor, Golden Legs, Boots of Haste","90-120":"Zaoan Helmet, Prismatic Armor, Zaoan Legs, Guardian Boots"}
+},
+// ===== MID-HIGH LEVEL SPOTS (100-200) =====
+{
+  name:"Upper Spike — Kazordoon",
+  city:"Kazordoon",level:[100,160],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"500k-1kk",profitH:"100k-300k",
+  prot:["earth","physical"],
+  cx:32640,cy:31940,
+  route:"From Kazordoon depot head to the mine entrance in the mountain. Take the elevator down to the Spike. Navigate to the upper levels.",
+  waypoints:[[32631,31925],[32635,31930],[32638,31935],[32640,31940]],
+  access:"Gnomish access quest required.",
+  premium:true,
+  creatures:[
+    {name:"Crystalcrusher",hp:3500,xp:2700,charm:"freeze",charmPts:25},
+    {name:"Deepworm",hp:2600,xp:2100,charm:"enflame",charmPts:25},
+    {name:"Diremaw",hp:3000,xp:2500,charm:"freeze",charmPts:25}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Strike"],
+  supplies:{
+    knight:["200 Strong Health Potion","60 Strong Mana Potion"],
+    paladin:["200 Great Spirit Potion","200 Crystalline Arrow"],
+    sorcerer:["400 Strong Mana Potion","40 Sudden Death Rune"],
+    druid:["400 Strong Mana Potion","20 Wild Growth Rune"]
+  },
+  trinket:"Terra Amulet",
+  drops:["Crystal Bone","Crystalline Armor","Gnome Sword","Spike Sword","Red Gem"],
+  tips:"Earth protection important — Diremaws deal earth damage. Crystalcrushers hit hard physically. Good XP for 120-160 range. Freeze charm works on most creatures here.",
+  gear:{"100-130":"Zaoan Helmet, Prismatic Armor, Zaoan Legs, Guardian Boots","130-160":"Cobra Hood, Prismatic Armor, Ornate Legs, Dreamwalkers"}
+},
+{
+  name:"Banuta — Port Hope",
+  city:"Port Hope",level:[100,160],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"600k-1.2kk",profitH:"100k-300k",
+  prot:["earth","physical"],
+  cx:32700,cy:32800,
+  route:"From Port Hope depot head south into the deep jungle. Cross the river and navigate to the ape city entrance at Banuta.",
+  waypoints:[[32623,32753],[32650,32770],[32680,32790],[32700,32800]],
+  access:"Ape City Quest for full access. Partial access without quest.",
+  premium:true,
+  creatures:[
+    {name:"Medusa",hp:4500,xp:4050,charm:"freeze",charmPts:25},
+    {name:"Serpent Spawn",hp:3000,xp:3050,charm:"freeze",charmPts:25},
+    {name:"Hydra",hp:2350,xp:2100,charm:"freeze",charmPts:15}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Strike"],
+  supplies:{
+    knight:["200 Strong Health Potion","80 Strong Mana Potion"],
+    paladin:["200 Great Spirit Potion","200 Crystalline Arrow"],
+    sorcerer:["400 Strong Mana Potion","50 Sudden Death Rune"],
+    druid:["400 Strong Mana Potion","20 Wild Growth Rune"]
+  },
+  trinket:"Terra Amulet",
+  drops:["Medusa Shield","Strand of Medusa Hair","Sacred Tree Amulet","Serpent Spawn Scale","Hydra Head"],
+  tips:"Strand of Medusa Hair = valuable for Epiphany imbuement! Medusas PARALYZE — Terra Amulet essential. All weak to Ice — Freeze charm. Don't get cornered — they combo hard.",
+  gear:{"100-130":"Zaoan Helmet, Prismatic Armor, Zaoan Legs, Guardian Boots","130-160":"Cobra Hood, Prismatic Armor, Ornate Legs, Dreamwalkers"}
+},
+{
+  name:"Nightmare Isles — Roshamuul",
+  city:"Roshamuul",level:[130,200],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"1kk-2kk",profitH:"100k-300k",
+  prot:["death","physical"],
+  cx:33540,cy:32350,
+  route:"From Roshamuul dock navigate north-east. Cross the dangerous surface (beware of Guzzlemaws!). Enter the Nightmare Isles area.",
+  waypoints:[[33513,32363],[33520,32358],[33530,32355],[33540,32350]],
+  access:"Roshamuul Quest required.",
+  premium:true,
+  creatures:[
+    {name:"Nightmare",hp:2700,xp:2150,charm:"wound",charmPts:25},
+    {name:"Nightmare Scion",hp:1400,xp:1350,charm:"wound",charmPts:15},
+    {name:"Plaguesmith",hp:5000,xp:4000,charm:"wound",charmPts:25}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Bash/Chop/Slash"],
+  supplies:{
+    knight:["250 Strong Health Potion","80 Strong Mana Potion","20 Ultimate Health Potion"],
+    paladin:["200 Great Spirit Potion","300 Crystalline Arrow"],
+    sorcerer:["500 Strong Mana Potion","50 Sudden Death Rune"],
+    druid:["500 Strong Mana Potion","30 Wild Growth Rune"]
+  },
+  trinket:"Foxtail Amulet",
+  drops:["Nightmare Blade","Skeleton Decoration","Plaguesmith Trophy","Cluster of Solace"],
+  tips:"Death protection essential — Foxtail Amulet mandatory. Plaguemiths hit extremely hard physically. Wound charm recommended (neutral to elements). Great solo knight spot for 150+.",
+  gear:{"130-150":"Zaoan Helmet, Prismatic Armor, Zaoan Legs, Guardian Boots","150-200":"Cobra Hood, Prismatic Armor, Ornate Legs, Dreamwalkers"}
+},
+// ===== HIGH LEVEL SPOTS (150-300+) =====
+{
+  name:"Carnivoras — Port Hope",
+  city:"Port Hope",level:[150,250],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"1.5kk-3kk",profitH:"200k-600k",
+  prot:["physical","earth"],
+  cx:32640,cy:32770,
+  route:"From Port Hope depot head south-east into the jungle. Navigate to the Carnivora's Rocks area through the mountain pass.",
+  waypoints:[[32623,32753],[32630,32760],[32636,32766],[32640,32770]],
+  access:"Short access quest from Port Hope.",
+  premium:true,
+  creatures:[
+    {name:"Carnivostrich",hp:5500,xp:4200,charm:"freeze",charmPts:50},
+    {name:"Sabretooth",hp:4700,xp:3900,charm:"freeze",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Strike"],
+  supplies:{
+    knight:["300 Strong Health Potion","100 Strong Mana Potion","20 Ultimate Health Potion"],
+    paladin:["250 Great Spirit Potion","300 Crystalline Arrow"],
+    sorcerer:["500 Strong Mana Potion","50 Sudden Death Rune"],
+    druid:["500 Strong Mana Potion","30 Wild Growth Rune"]
+  },
+  trinket:null,
+  drops:["Sabretooth Fur","Carnivostrich Feather","Green Gem","Blue Gem"],
+  tips:"Very popular solo spot for 180-250. Physical protection important. Both weak to Ice — Freeze charm. Sabretooths can combo hard — keep distance as mage.",
+  gear:{"150-200":"Cobra Hood, Prismatic Armor, Ornate Legs, Dreamwalkers","200-250":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers"}
+},
+{
+  name:"Crazed Winter Elves — Feyrist",
+  city:"Feyrist",level:[200,300],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"3kk-6kk",profitH:"300k-800k",
+  prot:["ice","holy"],
+  cx:33565,cy:32215,
+  route:"Access through fairy portals to Feyrist. Navigate to the Crazed Winter area in the northern part of the island.",
+  waypoints:[[33558,32224],[33562,32220],[33565,32215]],
+  access:"A Threatened Dream Quest + separate access for Crazed area.",
+  premium:true,
+  creatures:[
+    {name:"Crazed Winter Rearguard",hp:6200,xp:5000,charm:"enflame",charmPts:50},
+    {name:"Crazed Winter Vanguard",hp:7500,xp:6200,charm:"enflame",charmPts:50},
+    {name:"Arachnophobica",hp:5500,xp:4800,charm:"wound",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Strike"],
+  supplies:{
+    knight:["400 Ultimate Health Potion","200 Strong Mana Potion"],
+    paladin:["350 Great Spirit Potion","400 Spectral Bolt"],
+    sorcerer:["600 Strong Mana Potion","80 Sudden Death Rune"],
+    druid:["600 Strong Mana Potion","40 Wild Growth Rune"]
+  },
+  trinket:"Glacier Amulet",
+  drops:["Dream Matter","Crazed Winter Rearguard Trophy","Winter Blade"],
+  tips:"Winter Elves deal heavy ice and holy damage — Glacier Amulet essential. Fire-based attacks deal bonus damage — Enflame charm. Very fast respawn. Popular solo mage spot for 250+.",
+  gear:{"200-250":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers","250-300":"Soulmantle, Soulstrider, Dreamwalkers"}
+},
+{
+  name:"Issavi Sewers — Kilmaresh",
+  city:"Issavi",level:[200,300],voc:["knight","paladin","sorcerer","druid"],
+  team:"solo",expH:"2kk-4kk",profitH:"200k-500k",
+  prot:["earth","death"],
+  cx:33930,cy:31420,
+  route:"From Issavi depot head to the sewers entrance in the eastern part of the city. Navigate through the underground tunnels.",
+  waypoints:[[33921,31428],[33925,31425],[33928,31422],[33930,31420]],
+  access:"Kilmaresh Quest for Issavi access.",
+  premium:true,
+  creatures:[
+    {name:"Usurper Archer",hp:7000,xp:5200,charm:"wound",charmPts:50},
+    {name:"Usurper Knight",hp:8500,xp:6000,charm:"wound",charmPts:50},
+    {name:"Usurper Warlock",hp:6500,xp:5500,charm:"wound",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Bash/Chop/Slash"],
+  supplies:{
+    knight:["400 Ultimate Health Potion","200 Strong Mana Potion"],
+    paladin:["350 Great Spirit Potion","400 Spectral Bolt"],
+    sorcerer:["600 Strong Mana Potion","80 Sudden Death Rune"],
+    druid:["600 Strong Mana Potion","40 Wild Growth Rune"]
+  },
+  trinket:"Foxtail Amulet",
+  drops:["Green Gem","Blue Gem","Gold Ingot","Usurper Commander's Helmet"],
+  tips:"Great solo spot for 250+. Wound charm on all (neutral elements). Death and earth protection recommended. Warlocks heal others — focus them first. Profitable and fast respawn.",
+  gear:{"200-250":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers","250-300":"Soulmantle, Soulstrider, Dreamwalkers"}
+},
+{
+  name:"Buried Cathedral",
+  city:"Edron",level:[250,350],voc:["knight","paladin","sorcerer","druid"],
+  team:"team",expH:"6kk-12kk",profitH:"300k-800k",
+  prot:["death","physical"],
+  cx:33200,cy:31860,
+  route:"Access through underground tunnels from Edron. Navigate through the ancient cemetery and dark passages below the city.",
+  waypoints:[[33217,31814],[33210,31830],[33205,31845],[33200,31860]],
+  access:"Grave Danger Quest required.",
+  premium:true,
+  creatures:[
+    {name:"Retching Horror",hp:9000,xp:7500,charm:"wound",charmPts:50},
+    {name:"Meandering Mushroom",hp:7800,xp:6500,charm:"enflame",charmPts:50},
+    {name:"Branchy Crawler",hp:8200,xp:6800,charm:"enflame",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Bash/Chop/Slash"],
+  supplies:{
+    knight:["600 Ultimate Health Potion","300 Strong Mana Potion"],
+    paladin:["500 Great Spirit Potion","600 Spectral Bolt"],
+    sorcerer:["800 Strong Mana Potion","100 Sudden Death Rune"],
+    druid:["800 Strong Mana Potion","50 Wild Growth Rune"]
+  },
+  trinket:"Foxtail Amulet",
+  drops:["Pair of Nightmare Boots","Fabulous Legs","Enchanted Theurgic Amulet","Brain Head"],
+  tips:"Part of the Grave Danger quest area. Heavy death damage — Foxtail Amulet mandatory. Retching Horrors are the most dangerous and combo very hard. Great XP for 280+ teams.",
+  gear:{"250-300":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers","300-350":"Soulmantle, Soulstrider, Soulbastion, Dreamwalkers"}
+},
+{
+  name:"Claustrophobic Inferno",
+  city:"Thais",level:[250,400],voc:["knight","paladin","sorcerer","druid"],
+  team:"team",expH:"7kk-15kk",profitH:"200k-600k",
+  prot:["fire","physical"],
+  cx:32350,cy:32300,
+  route:"Access through Pits of Inferno area south of Thais. Requires navigating through dangerous demon-filled corridors deep underground.",
+  waypoints:[[32369,32241],[32365,32260],[32360,32280],[32350,32300]],
+  access:"Pits of Inferno Quest required + additional access.",
+  premium:true,
+  creatures:[
+    {name:"Hellfire Fighter",hp:8800,xp:7500,charm:"freeze",charmPts:50},
+    {name:"Magma Crawler",hp:7200,xp:6200,charm:"freeze",charmPts:50},
+    {name:"Demon",hp:8200,xp:6000,charm:"freeze",charmPts:50}
+  ],
+  imbuements:["2x Vampirism","2x Void","1x Bash/Chop/Slash"],
+  supplies:{
+    knight:["600 Ultimate Health Potion","300 Strong Mana Potion","100 Ultimate Spirit Potion"],
+    paladin:["500 Great Spirit Potion","600 Spectral Bolt"],
+    sorcerer:["1000 Strong Mana Potion","150 Sudden Death Rune"],
+    druid:["1000 Strong Mana Potion","50 Wild Growth Rune"]
+  },
+  trinket:"Magma Amulet",
+  drops:["Magma Boots","Demon Trophy","Fire Axe","Golden Armor","Magic Plate Armor"],
+  tips:"Extreme fire damage everywhere — Magma Amulet absolutely essential. All creatures weak to Ice — Freeze charm on everything. Very fast respawn. One of the best XP spots for 300+ teams.",
+  gear:{"250-300":"Falcon Coif, Falcon Plate, Fabulous Legs, Dreamwalkers","300+"   :"Soulmantle, Soulstrider, Soulbastion, Dreamwalkers"}
 }
 ];
 
@@ -784,7 +1240,7 @@ knight:{
 "60-100":{helmet:{name:"Royal Helmet",img:"Royal_Helmet",stats:"Arm: 9",source:"Behemoths"},armor:{name:"Magic Plate Armor",img:"Magic_Plate_Armor",stats:"Arm: 17",source:"Dragon Lords, Behemoths"},legs:{name:"Golden Legs",img:"Golden_Legs",stats:"Arm: 9",source:"Annihilator Quest"},boots:{name:"Boots of Haste",img:"Boots_of_Haste",stats:"Speed +20",source:"Dragon Lords"},shield:{name:"Blessed Shield",img:"Blessed_Shield",stats:"Def: 40",source:"Inquisition Quest"},weapon:{name:"Magic Longsword",img:"Magic_Longsword",stats:"Atk: 56, Def: 37",source:"Behemoths, Hydras"},ring:{name:"Ring of Healing",img:"Ring_of_Healing",stats:"+2 HP/turn",source:"NPC"},amulet:{name:"Amulet of Loss",img:"Amulet_of_Loss",stats:"No death penalty",source:"NPC"}},
 "100-150":{helmet:{name:"Zaoan Helmet",img:"Zaoan_Helmet",stats:"Arm: 9, Sword +1",source:"Lizard City Zao"},armor:{name:"Prismatic Armor",img:"Prismatic_Armor",stats:"Arm: 16, Phys prot 5%",source:"Market"},legs:{name:"Zaoan Legs",img:"Zaoan_Legs",stats:"Arm: 9",source:"Lizard City Zao"},boots:{name:"Guardian Boots",img:"Guardian_Boots",stats:"Arm: 3, Speed +4",source:"Market"},shield:{name:"Ornate Shield",img:"Ornate_Shield",stats:"Def: 38",source:"Market"},weapon:{name:"Shiny Blade",img:"Shiny_Blade",stats:"Atk: 52, Sword +1",source:"Roshamuul"},ring:{name:"Prismatic Ring",img:"Prismatic_Ring",stats:"Phys prot 5%",source:"Market"},amulet:{name:"Foxtail Amulet",img:"Foxtail_Amulet",stats:"+4 Speed",source:"Were creatures"}},
 "150-200":{helmet:{name:"Cobra Hood",img:"Cobra_Hood",stats:"Arm: 10, ML +1, Sword +2",source:"Cobra Bastion"},armor:{name:"Prismatic Armor",img:"Prismatic_Armor",stats:"Arm: 16, Phys prot 5%",source:"Market"},legs:{name:"Ornate Legs",img:"Ornate_Legs",stats:"Arm: 10",source:"Oramond Minos"},boots:{name:"Pair of Dreamwalkers",img:"Pair_of_Dreamwalkers",stats:"Arm: 3, Speed +10",source:"Dream Courts"},shield:{name:"Ornate Shield",img:"Ornate_Shield",stats:"Def: 38",source:"Market"},weapon:{name:"Blade of Destruction",img:"Blade_of_Destruction",stats:"Atk: 54, Sword +3",source:"Ferumbras Ascension"},ring:{name:"Ring of Blue Plasma",img:"Ring_of_Blue_Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Foxtail Amulet",img:"Foxtail_Amulet",stats:"+4 Speed",source:"Were creatures"}},
-"200-300":{helmet:{name:"Falcon Coif",img:"Falcon_Coif",stats:"Arm: 11, Shielding +3",source:"Falcon Bastion"},armor:{name:"Falcon Plate",img:"Falcon_Plate",stats:"Arm: 17, Sword +3",source:"Falcon Bastion"},legs:{name:"Fabulous Legs",img:"Fabulous_Legs",stats:"Arm: 10, Speed +12",source:"Secret Library"},boots:{name:"Pair of Dreamwalkers",img:"Pair_of_Dreamwalkers",stats:"Arm: 3, Speed +10",source:"Dream Courts"},shield:{name:"Falcon Shield",img:"Falcon_Shield",stats:"Def: 41, Shielding +3",source:"Falcon Bastion"},weapon:{name:"Falcon Battleaxe",img:"Falcon_Battleaxe",stats:"Atk: 54, Axe +3",source:"Falcon Bastion"},ring:{name:"Ring of Blue Plasma",img:"Ring_of_Blue_Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",img:"Enchanted_Theurgic_Amulet",stats:"Phys 2%, ML +2",source:"Forgotten Knowledge"}},
+"200-300":{helmet:{name:"Falcon Coif",img:"Falcon_Coif",stats:"Arm: 11, Shielding +3",source:"Falcon Bastion"},armor:{name:"Falcon Plate",img:"Falcon_Plate",stats:"Arm: 17, Sword +3",source:"Falcon Bastion"},legs:{name:"Fabulous Legs",img:"Fabulous_Legs",stats:"Arm: 10, Speed +12",source:"Secret Library"},boots:{name:"Pair of Dreamwalkers",img:"Pair_of_Dreamwalkers",stats:"Arm: 3, Speed +10",source:"Dream Courts"},shield:{name:"Falcon Shield",img:"Falcon_Shield",stats:"Def: 41, Shielding +3",source:"Falcon Bastion"},weapon:{name:"Falcon Longsword",img:"Falcon_Longsword",stats:"Atk: 56, Sword +4",source:"Falcon Bastion"},ring:{name:"Ring of Blue Plasma",img:"Ring_of_Blue_Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",img:"Enchanted_Theurgic_Amulet",stats:"Phys 2%, ML +2",source:"Forgotten Knowledge"}},
 "300+":{helmet:{name:"Falcon Coif",img:"Falcon_Coif",stats:"Arm: 11, Shielding +3",source:"Falcon Bastion"},armor:{name:"Soulmantle",img:"Soulmantle",stats:"Arm: 18, Sword +4",source:"Soul War Quest"},legs:{name:"Soulstrider",img:"Soulstrider",stats:"Arm: 11, Speed +15",source:"Soul War Quest"},boots:{name:"Pair of Dreamwalkers",img:"Pair_of_Dreamwalkers",stats:"Arm: 3, Speed +10",source:"Dream Courts"},shield:{name:"Soulbastion",img:"Soulbastion",stats:"Def: 42, Shielding +4",source:"Soul War Quest"},weapon:{name:"Soulcutter",img:"Soulcutter",stats:"Atk: 55, Sword +4",source:"Soul War Quest"},ring:{name:"Ring of Blue Plasma",img:"Ring_of_Blue_Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",img:"Enchanted_Theurgic_Amulet",stats:"Phys 2%, ML +2",source:"Forgotten Knowledge"}}
 },
 paladin:{
@@ -799,16 +1255,16 @@ paladin:{
 sorcerer:{
 "8-30":{helmet:{name:"Magician's Hat",img:"Magician's_Hat",stats:"Arm: 2, ML +1",source:"NPC"},armor:{name:"Blue Robe",img:"Blue_Robe",stats:"Arm: 11, ML +1",source:"Dragon Lords"},legs:{name:"Plate Legs",img:"Plate_Legs",stats:"Arm: 7",source:"Various"},boots:{name:"Sandals",img:"Sandals",stats:"Arm: 1",source:"NPC"},shield:{name:"Spellbook of Mind Control",img:"Spellbook_of_Mind_Control",stats:"ML +1",source:"NPC"},weapon:{name:"Wand of Dragonbreath",img:"Wand_of_Dragonbreath",stats:"Fire: 13",source:"NPC"},ring:{name:"Life Ring",img:"Life_Ring",stats:"+1 HP/turn",source:"NPC"},amulet:{name:"Protection Amulet",img:"Protection_Amulet",stats:"Phys prot 6%",source:"NPC"}},
 "30-60":{helmet:{name:"Magician's Hat",img:"Magician's_Hat",stats:"Arm: 2, ML +1",source:"NPC"},armor:{name:"Blue Robe",img:"Blue_Robe",stats:"Arm: 11, ML +1",source:"Dragon Lords"},legs:{name:"Crown Legs",img:"Crown_Legs",stats:"Arm: 9",source:"Quest"},boots:{name:"Boots of Haste",img:"Boots_of_Haste",stats:"Speed +20",source:"Dragon Lords"},shield:{name:"Spellbook of Warding",img:"Spellbook_of_Warding",stats:"ML +2",source:"Market"},weapon:{name:"Wand of Inferno",img:"Wand_of_Inferno",stats:"Fire: 56",source:"NPC"},ring:{name:"Energy Ring",img:"Energy_Ring",stats:"Mana Shield",source:"NPC"},amulet:{name:"Platinum Amulet",img:"Platinum_Amulet",stats:"Phys prot 4%",source:"NPC"}},
-"60-100":{helmet:{name:"Yalahari Mask",img:"Yalahari_Mask",stats:"Arm: 5, ML +2",source:"Yalahar Quest"},armor:{name:"Master Archer's Armor",img:"Master_Archer's_Armor",stats:"Arm: 14, ML +3",source:"Market"},legs:{name:"Golden Legs",img:"Golden_Legs",stats:"Arm: 9",source:"Annihilator"},boots:{name:"Boots of Haste",img:"Boots_of_Haste",stats:"Speed +20",source:"Dragon Lords"},shield:{name:"Spellbook of Dark Mysteries",img:"Spellbook_of_Dark_Mysteries",stats:"ML +3",source:"Market"},weapon:{name:"Wand of Defiance",img:"Wand_of_Defiance",stats:"Fire: 85",source:"NPC"},ring:{name:"Ring of Healing",img:"Ring_of_Healing",stats:"+2 HP/turn",source:"NPC"},amulet:{name:"Amulet of Loss",img:"Amulet_of_Loss",stats:"No death penalty",source:"NPC"}},
+"60-100":{helmet:{name:"Yalahari Mask",img:"Yalahari_Mask",stats:"Arm: 5, ML +2",source:"Yalahar Quest"},armor:{name:"Blue Robe",img:"Blue_Robe",stats:"Arm: 11, ML +1",source:"Dragon Lords, Market"},legs:{name:"Golden Legs",img:"Golden_Legs",stats:"Arm: 9",source:"Annihilator"},boots:{name:"Boots of Haste",img:"Boots_of_Haste",stats:"Speed +20",source:"Dragon Lords"},shield:{name:"Spellbook of Dark Mysteries",img:"Spellbook_of_Dark_Mysteries",stats:"ML +3",source:"Market"},weapon:{name:"Wand of Defiance",img:"Wand_of_Defiance",stats:"Energy: 85",source:"NPC"},ring:{name:"Ring of Healing",img:"Ring_of_Healing",stats:"+2 HP/turn",source:"NPC"},amulet:{name:"Amulet of Loss",img:"Amulet_of_Loss",stats:"No death penalty",source:"NPC"}},
 "100-150":{helmet:{name:"Yalahari Mask",img:"Yalahari_Mask",stats:"Arm: 5, ML +2",source:"Yalahar Quest"},armor:{name:"Gill Coat",img:"Gill_Coat",stats:"Arm: 15, ML +2",source:"Market"},legs:{name:"Zaoan Legs",img:"Zaoan_Legs",stats:"Arm: 9",source:"Lizard City"},boots:{name:"Pair of Soft Boots",img:"Pair_of_Soft_Boots",stats:"+HP/MP regen",source:"Market"},shield:{name:"Spellbook of Dark Mysteries",img:"Spellbook_of_Dark_Mysteries",stats:"ML +3",source:"Market"},weapon:{name:"Wand of Everblazing",img:"Wand_of_Everblazing",stats:"Fire: 86",source:"Roshamuul"},ring:{name:"Prismatic Ring",img:"Prismatic_Ring",stats:"Phys prot 5%",source:"Market"},amulet:{name:"Foxtail Amulet",img:"Foxtail_Amulet",stats:"+4 Speed",source:"Were creatures"}},
 "150-200":{helmet:{name:"Cobra Hood",img:"Cobra_Hood",stats:"Arm: 10, ML +2",source:"Cobra Bastion"},armor:{name:"Gill Coat",img:"Gill_Coat",stats:"Arm: 15, ML +2",source:"Market"},legs:{name:"Ornate Legs",img:"Ornate_Legs",stats:"Arm: 10",source:"Oramond"},boots:{name:"Pair of Dreamwalkers",img:"Pair_of_Dreamwalkers",stats:"Speed +10",source:"Dream Courts"},shield:{name:"Spellbook of Dark Mysteries",img:"Spellbook_of_Dark_Mysteries",stats:"ML +3",source:"Market"},weapon:{name:"Wand of Destruction",img:"Wand_of_Destruction",stats:"Fire: 90",source:"Ferumbras"},ring:{name:"Ring of Blue Plasma",img:"Ring_of_Blue_Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",img:"Enchanted_Theurgic_Amulet",stats:"Phys 2%, ML +2",source:"Forgotten Knowledge"}},
 "200-300":{helmet:{name:"Falcon Coif",img:"Falcon_Coif",stats:"Arm: 11, ML +3",source:"Falcon Bastion"},armor:{name:"Falcon Plate",img:"Falcon_Plate",stats:"Arm: 17, ML +3",source:"Falcon Bastion"},legs:{name:"Fabulous Legs",img:"Fabulous_Legs",stats:"Arm: 10, Speed +12",source:"Secret Library"},boots:{name:"Pair of Dreamwalkers",img:"Pair_of_Dreamwalkers",stats:"Speed +10",source:"Dream Courts"},shield:{name:"Falcon Escutcheon",img:"Falcon_Escutcheon",stats:"ML +3",source:"Falcon Bastion"},weapon:{name:"Falcon Wand",img:"Falcon_Wand",stats:"Fire: 92, ML +3",source:"Falcon Bastion"},ring:{name:"Ring of Blue Plasma",img:"Ring_of_Blue_Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",img:"Enchanted_Theurgic_Amulet",stats:"Phys 2%, ML +2",source:"Forgotten Knowledge"}},
 "300+":{helmet:{name:"Falcon Coif",img:"Falcon_Coif",stats:"Arm: 11, ML +3",source:"Falcon Bastion"},armor:{name:"Soulmantle",img:"Soulmantle",stats:"Arm: 18, ML +4",source:"Soul War"},legs:{name:"Soulstrider",img:"Soulstrider",stats:"Arm: 11, Speed +15",source:"Soul War"},boots:{name:"Pair of Dreamwalkers",img:"Pair_of_Dreamwalkers",stats:"Speed +10",source:"Dream Courts"},shield:{name:"Soulbastion",img:"Soulbastion",stats:"ML +4",source:"Soul War"},weapon:{name:"Soultainter",img:"Soultainter",stats:"Fire: 94, ML +4",source:"Soul War"},ring:{name:"Ring of Blue Plasma",img:"Ring_of_Blue_Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",img:"Enchanted_Theurgic_Amulet",stats:"Phys 2%, ML +2",source:"Forgotten Knowledge"}}
 },
 druid:{
-"8-30":{helmet:{name:"Magician's Hat",img:"Magician's_Hat",stats:"Arm: 2, ML +1",source:"NPC"},armor:{name:"Blue Robe",img:"Blue_Robe",stats:"Arm: 11, ML +1",source:"Dragon Lords"},legs:{name:"Plate Legs",img:"Plate_Legs",stats:"Arm: 7",source:"Various"},boots:{name:"Sandals",img:"Sandals",stats:"Arm: 1",source:"NPC"},shield:{name:"Spellbook of Mind Control",img:"Spellbook_of_Mind_Control",stats:"ML +1",source:"NPC"},weapon:{name:"Hailstorm Rod",img:"Hailstorm_Rod",stats:"Ice: 13",source:"NPC"},ring:{name:"Life Ring",img:"Life_Ring",stats:"+1 HP/turn",source:"NPC"},amulet:{name:"Protection Amulet",img:"Protection_Amulet",stats:"Phys prot 6%",source:"NPC"}},
+"8-30":{helmet:{name:"Magician's Hat",img:"Magician's_Hat",stats:"Arm: 2, ML +1",source:"NPC"},armor:{name:"Blue Robe",img:"Blue_Robe",stats:"Arm: 11, ML +1",source:"Dragon Lords"},legs:{name:"Plate Legs",img:"Plate_Legs",stats:"Arm: 7",source:"Various"},boots:{name:"Sandals",img:"Sandals",stats:"Arm: 1",source:"NPC"},shield:{name:"Spellbook of Mind Control",img:"Spellbook_of_Mind_Control",stats:"ML +1",source:"NPC"},weapon:{name:"Snakebite Rod",img:"Snakebite_Rod",stats:"Earth: 13",source:"NPC"},ring:{name:"Life Ring",img:"Life_Ring",stats:"+1 HP/turn",source:"NPC"},amulet:{name:"Protection Amulet",img:"Protection_Amulet",stats:"Phys prot 6%",source:"NPC"}},
 "30-60":{helmet:{name:"Magician's Hat",img:"Magician's_Hat",stats:"Arm: 2, ML +1",source:"NPC"},armor:{name:"Blue Robe",img:"Blue_Robe",stats:"Arm: 11, ML +1",source:"Dragon Lords"},legs:{name:"Crown Legs",img:"Crown_Legs",stats:"Arm: 9",source:"Quest"},boots:{name:"Boots of Haste",img:"Boots_of_Haste",stats:"Speed +20",source:"Dragon Lords"},shield:{name:"Spellbook of Warding",img:"Spellbook_of_Warding",stats:"ML +2",source:"Market"},weapon:{name:"Underworld Rod",img:"Underworld_Rod",stats:"Death: 56",source:"NPC"},ring:{name:"Energy Ring",img:"Energy_Ring",stats:"Mana Shield",source:"NPC"},amulet:{name:"Platinum Amulet",img:"Platinum_Amulet",stats:"Phys prot 4%",source:"NPC"}},
-"60-100":{helmet:{name:"Yalahari Mask",img:"Yalahari_Mask",stats:"Arm: 5, ML +2",source:"Yalahar Quest"},armor:{name:"Master Archer's Armor",img:"Master_Archer's_Armor",stats:"Arm: 14, ML +3",source:"Market"},legs:{name:"Golden Legs",img:"Golden_Legs",stats:"Arm: 9",source:"Annihilator"},boots:{name:"Boots of Haste",img:"Boots_of_Haste",stats:"Speed +20",source:"Dragon Lords"},shield:{name:"Spellbook of Dark Mysteries",img:"Spellbook_of_Dark_Mysteries",stats:"ML +3",source:"Market"},weapon:{name:"Deepling Staff",img:"Deepling_Staff",stats:"Ice: 85",source:"NPC"},ring:{name:"Ring of Healing",img:"Ring_of_Healing",stats:"+2 HP/turn",source:"NPC"},amulet:{name:"Amulet of Loss",img:"Amulet_of_Loss",stats:"No death penalty",source:"NPC"}},
+"60-100":{helmet:{name:"Yalahari Mask",img:"Yalahari_Mask",stats:"Arm: 5, ML +2",source:"Yalahar Quest"},armor:{name:"Blue Robe",img:"Blue_Robe",stats:"Arm: 11, ML +1",source:"Dragon Lords, Market"},legs:{name:"Golden Legs",img:"Golden_Legs",stats:"Arm: 9",source:"Annihilator"},boots:{name:"Boots of Haste",img:"Boots_of_Haste",stats:"Speed +20",source:"Dragon Lords"},shield:{name:"Spellbook of Dark Mysteries",img:"Spellbook_of_Dark_Mysteries",stats:"ML +3",source:"Market"},weapon:{name:"Springsprout Rod",img:"Springsprout_Rod",stats:"Earth: 56",source:"NPC"},ring:{name:"Ring of Healing",img:"Ring_of_Healing",stats:"+2 HP/turn",source:"NPC"},amulet:{name:"Amulet of Loss",img:"Amulet_of_Loss",stats:"No death penalty",source:"NPC"}},
 "100-150":{helmet:{name:"Yalahari Mask",img:"Yalahari_Mask",stats:"Arm: 5, ML +2",source:"Yalahar Quest"},armor:{name:"Gill Coat",img:"Gill_Coat",stats:"Arm: 15, ML +2",source:"Market"},legs:{name:"Zaoan Legs",img:"Zaoan_Legs",stats:"Arm: 9",source:"Lizard City"},boots:{name:"Pair of Soft Boots",img:"Pair_of_Soft_Boots",stats:"+HP/MP regen",source:"Market"},shield:{name:"Spellbook of Dark Mysteries",img:"Spellbook_of_Dark_Mysteries",stats:"ML +3",source:"Market"},weapon:{name:"Rod of Destruction",img:"Rod_of_Destruction",stats:"Ice: 90",source:"Ferumbras"},ring:{name:"Prismatic Ring",img:"Prismatic_Ring",stats:"Phys prot 5%",source:"Market"},amulet:{name:"Foxtail Amulet",img:"Foxtail_Amulet",stats:"+4 Speed",source:"Were creatures"}},
 "150-200":{helmet:{name:"Cobra Hood",img:"Cobra_Hood",stats:"Arm: 10, ML +2",source:"Cobra Bastion"},armor:{name:"Gill Coat",img:"Gill_Coat",stats:"Arm: 15, ML +2",source:"Market"},legs:{name:"Ornate Legs",img:"Ornate_Legs",stats:"Arm: 10",source:"Oramond"},boots:{name:"Pair of Dreamwalkers",img:"Pair_of_Dreamwalkers",stats:"Speed +10",source:"Dream Courts"},shield:{name:"Spellbook of Dark Mysteries",img:"Spellbook_of_Dark_Mysteries",stats:"ML +3",source:"Market"},weapon:{name:"Rod of Destruction",img:"Rod_of_Destruction",stats:"Ice: 90",source:"Ferumbras"},ring:{name:"Ring of Blue Plasma",img:"Ring_of_Blue_Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",img:"Enchanted_Theurgic_Amulet",stats:"Phys 2%, ML +2",source:"Forgotten Knowledge"}},
 "200-300":{helmet:{name:"Falcon Coif",img:"Falcon_Coif",stats:"Arm: 11, ML +3",source:"Falcon Bastion"},armor:{name:"Falcon Plate",img:"Falcon_Plate",stats:"Arm: 17, ML +3",source:"Falcon Bastion"},legs:{name:"Fabulous Legs",img:"Fabulous_Legs",stats:"Arm: 10, Speed +12",source:"Secret Library"},boots:{name:"Pair of Dreamwalkers",img:"Pair_of_Dreamwalkers",stats:"Speed +10",source:"Dream Courts"},shield:{name:"Falcon Escutcheon",img:"Falcon_Escutcheon",stats:"ML +3",source:"Falcon Bastion"},weapon:{name:"Falcon Rod",img:"Falcon_Rod",stats:"Ice: 92, ML +3",source:"Falcon Bastion"},ring:{name:"Ring of Blue Plasma",img:"Ring_of_Blue_Plasma",stats:"+2 ML",source:"Gnomprona"},amulet:{name:"Enchanted Theurgic Amulet",img:"Enchanted_Theurgic_Amulet",stats:"Phys 2%, ML +2",source:"Forgotten Knowledge"}},

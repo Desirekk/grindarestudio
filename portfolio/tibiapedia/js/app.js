@@ -409,6 +409,25 @@ function getGearForVocLevel(voc, level) {
   return tiers.find(t => level >= t.min && level <= t.max) || tiers[tiers.length - 1];
 }
 
+// Rating system — localStorage-based
+function getSpotRating(name) {
+  return parseInt(localStorage.getItem('tp_rate_' + name.replace(/\W/g, '_'))) || 0;
+}
+function setSpotRating(name, rating) {
+  localStorage.setItem('tp_rate_' + name.replace(/\W/g, '_'), rating);
+  renderHunting();
+}
+function renderStars(name) {
+  const current = getSpotRating(name);
+  const jsName = name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  let html = '<div class="spot-rating">';
+  for (let i = 1; i <= 10; i++) {
+    html += `<span class="rate-star ${i <= current ? 'filled' : ''}" onclick="event.stopPropagation();setSpotRating('${jsName}',${i})" title="${i}/10">★</span>`;
+  }
+  html += `<span class="rate-label">${current ? current + '/10' : 'Rate'}</span></div>`;
+  return html;
+}
+
 function renderHunting() {
   const container = document.getElementById('huntingGrid');
   if (!container) return;
@@ -509,11 +528,15 @@ function renderHunting() {
       }
     }
 
+    const mainCreature = s.creatures[0] ? (typeof s.creatures[0]==='string'?s.creatures[0]:s.creatures[0].name) : '';
+
     return `<div class="hunt-card" id="hunt-${idx}">
+      ${mainCreature ? `<img class="hunt-bg" src="${WIKI_IMG(mainCreature)}" alt="" onerror="this.style.display='none'">` : ''}
       <div class="hunt-head" onclick="this.parentElement.classList.toggle('open')">
         <span class="hunt-arrow">&#9654;</span>
         <span class="hunt-title">${esc(s.name)}</span>
         <span class="hunt-header-creatures">${s.creatures.slice(0,5).map(c=>{const cn=typeof c==='string'?c:c.name;return`<img src="${WIKI_IMG(cn)}" alt="${esc(cn)}" title="${esc(cn)}" onerror="this.style.display='none'">`}).join('')}</span>
+        ${renderStars(s.name)}
         <div class="hunt-badges">
           <div class="hunt-vocs">${vocBadges}</div>
           <span class="hunt-lvl">${s.level[0]}-${s.level[1]}</span>
