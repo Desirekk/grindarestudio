@@ -251,7 +251,7 @@ tr:hover td{background:rgba(212,165,55,.03)}
 .hunt-card-stat .hcs-label{font-size:9px;color:var(--parch-dim);text-transform:uppercase;letter-spacing:.4px}
 /* Card creatures row */
 .hunt-card-creatures{display:flex;gap:6px;padding:8px 14px 4px;align-items:center;flex-wrap:wrap}
-.hunt-card-creatures img{width:40px;height:40px;image-rendering:auto;border-radius:var(--r);background:var(--bg-input);border:1px solid var(--border);padding:2px;object-fit:contain;filter:drop-shadow(0 1px 4px rgba(0,0,0,.4))}
+.hunt-card-creatures img{width:40px;height:40px;image-rendering:pixelated;border-radius:var(--r);background:var(--bg-input);border:1px solid var(--border);padding:2px;object-fit:cover;filter:drop-shadow(0 1px 4px rgba(0,0,0,.4))}
 .hunt-card-creatures .hcc-more{font-size:10px;color:var(--parch-dim);margin-left:2px}
 /* Card rating */
 .hunt-card-rating{padding:4px 14px 12px}
@@ -323,7 +323,7 @@ tr:hover td{background:rgba(212,165,55,.03)}
 .hc-card{background:var(--bg-darker);border:1px solid var(--border);border-radius:var(--rl);padding:16px;display:flex;gap:16px;align-items:flex-start;transition:all .15s}
 .hc-card:hover{border-color:var(--border-h);box-shadow:0 4px 16px rgba(0,0,0,.3)}
 .hc-sprite{width:96px;height:96px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:radial-gradient(circle,rgba(212,165,55,.06) 0%,var(--bg-card) 70%);border:2px solid var(--border);border-radius:var(--rl);position:relative}
-.hc-sprite img{max-width:80px;max-height:80px;image-rendering:auto;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
+.hc-sprite img{width:72px;height:72px;image-rendering:pixelated;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
 .hc-info{flex:1;min-width:0}
 .hc-name{font-family:'Cinzel',serif;font-size:16px;color:var(--gold-light);margin-bottom:6px;font-weight:600}
 .hc-stats{display:flex;gap:12px;font-size:13px;color:var(--parch-dim);margin-bottom:10px;flex-wrap:wrap}
