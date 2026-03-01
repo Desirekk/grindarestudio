@@ -134,7 +134,8 @@ const HUNTING_SPOTS = [
   prot:["physical","death"],
   cx:33304,cy:31720,
   route:"From Edron take the boat NE to Stonehome island. The ferryman Cornell takes you to Grimvale. Enter the cave during full moon.",
-  waypoints:[[33210,31814,"Start at Edron depot"],[33230,31810,"Head east on main road"],[33250,31800,"Cross bridge over river"],[33270,31790,"Continue east past Academy"],[33290,31775,"Take NE path towards coast"],[33304,31720,"Take boat to Grimvale island"],[33310,31710,"Walk to cave entrance"],[33310,31710,"Underground: Grimvale tunnels",8],[33308,31705,"Follow tunnel south",8],[33305,31698,"Turn at junction",8],[33304,31690,"Continue through cave",8],[33302,31680,"Pass werebear area",8],[33300,31670,"Main hunting room",8]],
+  verified:true,
+  waypoints:[[33173,31818,"Start at Edron depot"],[33196,31846,"Head south-east"],[33243,31825,"Follow road east"],[33249,31786,"Turn north towards coast"],[33281,31743,"Continue NE along shore"],[33305,31721,"Speak with NPC (Hi - Passage - Yes)"],[33342,31693,"Walk to Grimvale cave"],[33353,31671,"Go down into cave"],[33353,31671,"Underground: Grimvale",8]],
   access:"Grimvale Quest (short access). Only during full moon phase!",
   premium:true,
   creatures:[
