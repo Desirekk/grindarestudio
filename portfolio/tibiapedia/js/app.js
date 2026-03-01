@@ -406,6 +406,17 @@ function initHuntingPanel() {
       if (lvlInput) lvlInput.value = state.hunting.myLevel;
       const nameInput = document.getElementById('myCharName');
       if (nameInput && b.name) nameInput.value = b.name;
+      if (b.name) {
+        const savedCh = { name: b.name, world: b.world, vocation: b.voc, level: b.level, guild: { name: b.guild }, achievement_points: b.achiev, last_login: b.lastLogin, account_status: b.acctStatus, residence: b.residence, sex: b.sex };
+        const savedAcct = { created: b.acctCreated, loyalty_title: b.loyalty };
+        updateBuildCharInfo(savedCh, savedAcct, null);
+        // Re-fetch world data in background for live player count
+        if (b.world) {
+          fetch(`${API}/world/${encodeURIComponent(b.world)}`).then(r=>r.json()).then(j=>{
+            if(j?.world) updateBuildCharInfo(savedCh, savedAcct, j.world);
+          }).catch(()=>{});
+        }
+      }
     } catch(e) {}
   }
 
@@ -506,7 +517,16 @@ async function lookupMyBuild() {
       b.classList.toggle('active', v === voc);
     });
 
-    localStorage.setItem('tv_build', JSON.stringify({ name: ch.name, level, voc }));
+    const acct = data?.character?.account_information;
+    localStorage.setItem('tv_build', JSON.stringify({ name: ch.name, level, voc, world: ch.world, guild: ch.guild?.name, achiev: ch.achievement_points, lastLogin: ch.last_login, acctCreated: acct?.created, loyalty: acct?.loyalty_title, acctStatus: ch.account_status, residence: ch.residence, sex: ch.sex }));
+    // Fetch world data in background
+    let worldData = null;
+    try {
+      const wRes = await fetch(`${API}/world/${encodeURIComponent(ch.world)}`);
+      const wJson = await wRes.json();
+      worldData = wJson?.world;
+    } catch(e) {}
+    updateBuildCharInfo(ch, acct, worldData);
     nameInput.style.borderColor = '#22c55e';
     setTimeout(() => nameInput.style.borderColor = '', 1500);
     renderHunting();
@@ -517,6 +537,80 @@ async function lookupMyBuild() {
     btn.textContent = origText;
     btn.disabled = false;
   }
+}
+
+function getVocItemUrl(voc) {
+  const items = {
+    knight: 'Magic_Plate_Armor.gif',
+    paladin: 'Royal_Crossbow.gif',
+    sorcerer: 'Wand_of_Inferno.gif',
+    druid: 'Hailstorm_Rod.gif',
+    monk: null
+  };
+  const vocKey = (voc || 'knight').toLowerCase().replace('elite ','').replace('royal ','').replace('master ','').replace('elder ','');
+  const file = items[vocKey];
+  if (!file) return 'https://tibiopedia.pl/images/static/items/traditional_sai.gif';
+  return `https://tibia.fandom.com/wiki/Special:Redirect/file/${file}`;
+}
+
+function updateBuildCharInfo(ch, acct, worldData) {
+  const el = document.getElementById('biChar');
+  if (!el) return;
+  // Show the info panel
+  const panel = document.getElementById('buildInfo');
+  if (panel) panel.classList.add('visible');
+  const login = ch.last_login ? new Date(ch.last_login).toLocaleDateString() : '?';
+  const created = acct?.created ? new Date(acct.created).toLocaleDateString() : '?';
+  const loyalty = acct?.loyalty_title || '—';
+  const status = ch.account_status || '?';
+  const itemUrl = getVocItemUrl(ch.vocation);
+  let html = `<div class="bi-char-header">
+    <img class="bi-voc-icon" src="${itemUrl}" alt="" onerror="this.style.display='none'">
+    <div class="bi-char-name-block">
+      <div class="bi-fv" style="font-size:15px;color:var(--gold-light)">${esc(ch.name)}</div>
+      <div style="font-size:11px;color:var(--parch-dim)">Level ${ch.level} ${esc(ch.vocation)} — ${esc(ch.world)}</div>
+      <div style="font-size:10px;color:var(--parch-dim)">${esc(status)} · ${esc(loyalty)}</div>
+    </div>
+  </div>
+  <div class="bi-char-grid">
+    <div class="bi-char-field"><span class="bi-fl">Guild</span><span class="bi-fv">${esc(ch.guild?.name || 'None')}</span></div>
+    <div class="bi-char-field"><span class="bi-fl">Residence</span><span class="bi-fv">${esc(ch.residence || '?')}</span></div>
+    <div class="bi-char-field"><span class="bi-fl">Achiev. Points</span><span class="bi-fv">${ch.achievement_points || 0}</span></div>
+    <div class="bi-char-field"><span class="bi-fl">Registered</span><span class="bi-fv">${created}</span></div>
+    <div class="bi-char-field"><span class="bi-fl">Last Login</span><span class="bi-fv">${login}</span></div>
+    <div class="bi-char-field"><span class="bi-fl">Sex</span><span class="bi-fv">${esc(ch.sex || '?')}</span></div>
+  </div>`;
+  if (worldData) {
+    const w = worldData;
+    html += `<div class="bi-divider"></div>
+    <div class="bi-section-label">World: ${esc(ch.world)}</div>
+    <div class="bi-char-grid">
+      <div class="bi-char-field"><span class="bi-fl">Players Online</span><span class="bi-fv bi-online">${w.players_online}</span></div>
+      <div class="bi-char-field"><span class="bi-fl">PvP Type</span><span class="bi-fv">${esc(w.pvp_type)}</span></div>
+      <div class="bi-char-field"><span class="bi-fl">Server Location</span><span class="bi-fv">${esc(w.location)}</span></div>
+      <div class="bi-char-field"><span class="bi-fl">BattlEye</span><span class="bi-fv">${w.battleye_protected ? 'Yes' : 'No'}</span></div>
+      <div class="bi-char-field"><span class="bi-fl">Transfer</span><span class="bi-fv">${esc(w.transfer_type)}</span></div>
+      <div class="bi-char-field"><span class="bi-fl">Online Record</span><span class="bi-fv">${w.record_players}</span></div>
+    </div>`;
+  }
+  el.innerHTML = html;
+}
+
+function updateBuildStats() {
+  const { myVoc, myLevel, huntMode } = state.hunting;
+  const modeSpots = HUNTING_SPOTS.filter(s => getHuntModeRange(s, huntMode));
+  const total = modeSpots.length;
+  const forLevel = modeSpots.filter(s => {
+    const r = getHuntModeRange(s, huntMode);
+    return r && myLevel >= r[0] - 20 && myLevel <= r[1] + 50;
+  }).length;
+  const verified = modeSpots.filter(s => s.verified).length;
+  const vocMatch = modeSpots.filter(s => s.voc.includes(myVoc)).length;
+  const el = id => document.getElementById(id);
+  if (el('biTotal')) el('biTotal').textContent = total;
+  if (el('biForYou')) el('biForYou').textContent = forLevel;
+  if (el('biVerified')) el('biVerified').textContent = verified;
+  if (el('biVocMatch')) el('biVocMatch').textContent = vocMatch;
 }
 
 // ================================================================
@@ -589,27 +683,23 @@ function renderHunting() {
       if (!matchVoc) return false;
     }
     // Use mode-specific range for level filtering
-    if (modeRange[0] > levelMax || modeRange[1] < levelMin) return false;
-    if (myLevel > 0 && (myLevel < modeRange[0] - 20 || myLevel > modeRange[1] + 50)) return false;
+    const lvl = modeRange;
+    if (lvl[0] > levelMax || lvl[1] < levelMin) return false;
+    if (myLevel > 0 && (myLevel < lvl[0] - 20 || myLevel > lvl[1] + 50)) return false;
     return true;
   });
 
   _filteredSpots = filtered;
   document.getElementById('huntCount').textContent = `${filtered.length} spots`;
+  updateBuildStats();
 
   container.innerHTML = filtered.length ? '<div class="hunt-grid">' + filtered.map((s, idx) => {
     const vocBadges = s.voc.map(v => `<span class="hunt-voc">${v.substring(0,2).toUpperCase()}</span>`).join('');
     const mainCreature = s.creatures[0] ? (typeof s.creatures[0]==='string'?s.creatures[0]:s.creatures[0].name) : '';
     const rating = getSpotRating(s.name);
-
-    // Mode-specific level range
+    const jsName = s.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
     const modeRange = getHuntModeRange(s, huntMode);
-    const lvlLabel = modeRange ? `${modeRange[0]}-${modeRange[1]}` : `${s.level[0]}-${s.level[1]}`;
-
-    // Hunt mode badges for all modes this spot supports
-    const modeBadges = ['solo','duo','team'].filter(m => getHuntModeRange(s, m)).map(m =>
-      `<span class="hunt-mode-badge hunt-mode-${m}">${m}</span>`
-    ).join('');
+    const modeBadges = ['solo','duo','team'].filter(m => s.huntModes?.[m]).map(m => `<span class="hunt-mode-badge hunt-mode-${m}">${m}</span>`).join('');
 
     // Stars (non-interactive on card, just display)
     let starsHtml = '<div class="spot-rating">';
@@ -626,7 +716,7 @@ function renderHunting() {
       </div>
       <div class="hunt-card-meta">
         <div class="hunt-vocs">${vocBadges}</div>
-        <span class="hunt-lvl">${lvlLabel}</span>
+        <span class="hunt-lvl">${modeRange ? modeRange[0]+'-'+modeRange[1] : s.level[0]+'-'+s.level[1]}</span>
         ${modeBadges}
         ${s.verified ? '<span class="hunt-verified verified">✓ Verified</span>' : '<span class="hunt-verified unverified">⚠ Unverified</span>'}
       </div>
@@ -725,12 +815,11 @@ function openHuntModal(idx) {
   const mainCreature = s.creatures[0] ? (typeof s.creatures[0]==='string'?s.creatures[0]:s.creatures[0].name) : '';
   const vocBadges = s.voc.map(v => `<span class="hunt-voc">${v.substring(0,2).toUpperCase()}</span>`).join('');
 
-  // Hunt mode badges with level ranges for modal
-  const modalModeBadges = ['solo','duo','team'].map(m => {
+  // Build hunt mode badges with level ranges for modal
+  const modalModeBadges = ['solo','duo','team'].filter(m => s.huntModes?.[m]).map(m => {
     const r = getHuntModeRange(s, m);
-    if (!r) return '';
-    return `<span class="hunt-mode-badge hunt-mode-${m}">${m} ${r[0]}-${r[1]}</span>`;
-  }).filter(Boolean).join('');
+    return `<span class="hunt-mode-badge hunt-mode-${m}">${m} ${r ? r[0]+'-'+r[1] : ''}</span>`;
+  }).join('');
 
   let html = `
     <div class="hunt-modal-hero">
@@ -1682,17 +1771,6 @@ function editorClear() {
   const citySelect = document.getElementById('edCity');
   if (citySelect) citySelect.value = '';
   document.querySelectorAll('.ed-vocs input').forEach(cb => cb.checked = true);
-  // Reset hunt mode fields
-  ['solo','duo','team'].forEach(m => {
-    const cap = m.charAt(0).toUpperCase() + m.slice(1);
-    const cb = document.getElementById('edHm' + cap);
-    if (cb) cb.checked = m === 'solo';
-    const sameCb = document.getElementById('edHm' + cap + 'Same');
-    if (sameCb) sameCb.checked = true;
-    const rangeEl = document.getElementById('edHm' + cap + 'Range');
-    if (rangeEl) rangeEl.style.display = 'none';
-    ['Min','Max'].forEach(s => { const el = document.getElementById('edHm' + cap + s); if (el) el.value = ''; });
-  });
 
   editorSetStatus('');
 }
@@ -1866,29 +1944,6 @@ function editorLoadSpot(idx) {
     cb.checked = spot.voc.includes(cb.value);
   });
 
-  // Hunt modes
-  ['solo','duo','team'].forEach(m => {
-    const cap = m.charAt(0).toUpperCase() + m.slice(1);
-    const cb = document.getElementById('edHm' + cap);
-    const sameCb = document.getElementById('edHm' + cap + 'Same');
-    const rangeEl = document.getElementById('edHm' + cap + 'Range');
-    const minEl = document.getElementById('edHm' + cap + 'Min');
-    const maxEl = document.getElementById('edHm' + cap + 'Max');
-    const val = spot.huntModes?.[m];
-    if (cb) cb.checked = !!val;
-    if (val && val !== true && Array.isArray(val)) {
-      if (sameCb) sameCb.checked = false;
-      if (rangeEl) rangeEl.style.display = 'flex';
-      if (minEl) minEl.value = val[0];
-      if (maxEl) maxEl.value = val[1];
-    } else {
-      if (sameCb) sameCb.checked = true;
-      if (rangeEl) rangeEl.style.display = 'none';
-      if (minEl) minEl.value = '';
-      if (maxEl) maxEl.value = '';
-    }
-  });
-
   // Load existing waypoints
   if (spot.waypoints && spot.waypoints.length > 0) {
     spot.waypoints.forEach(wp => {
@@ -1951,18 +2006,16 @@ function editorSubmit() {
 
   // Collect hunt modes
   const huntModes = {};
-  ['solo','duo','team'].forEach(m => {
-    const cap = m.charAt(0).toUpperCase() + m.slice(1);
-    const cb = document.getElementById('edHm' + cap);
-    if (cb && cb.checked) {
-      const sameCb = document.getElementById('edHm' + cap + 'Same');
-      if (sameCb && sameCb.checked) {
-        huntModes[m] = true;
-      } else {
-        const min = parseInt(document.getElementById('edHm' + cap + 'Min')?.value) || 0;
-        const max = parseInt(document.getElementById('edHm' + cap + 'Max')?.value) || 0;
-        huntModes[m] = min && max ? [min, max] : true;
-      }
+  document.querySelectorAll('.ed-hunt-modes .ed-hm').forEach(lbl => {
+    const cb = lbl.querySelector('input[type="checkbox"][value]');
+    if (!cb || !cb.checked) return;
+    const mode = cb.value;
+    const sameAsSpot = lbl.querySelector('.ed-hm-same input')?.checked;
+    if (sameAsSpot) { huntModes[mode] = true; }
+    else {
+      const min = parseInt(lbl.querySelector('.ed-hm-min')?.value) || 0;
+      const max = parseInt(lbl.querySelector('.ed-hm-max')?.value) || 0;
+      huntModes[mode] = (min && max) ? [min, max] : true;
     }
   });
 
@@ -2006,10 +2059,10 @@ function editorSubmit() {
     name, city,
     level: [lvlMin, lvlMax],
     voc: vocs,
-    huntModes,
     access, route,
     waypoints: waypointsData,
     creatures, imbuements, supplies, equipment, drops, tips,
+    huntModes,
     expH, profitH,
     author,
     timestamp: new Date().toISOString()
@@ -2205,11 +2258,16 @@ function switchHuntTab(tab, btn, mode) {
   if (btn) btn.classList.add('active');
   const tabEl = document.getElementById('htab-' + tab);
   if (tabEl) tabEl.classList.add('active');
-  if (tab === 'browse' && mode) {
-    state.hunting.huntMode = mode;
-    renderHunting();
-  }
+  if (mode) { state.hunting.huntMode = mode; renderHunting(); }
   if (tab === 'editor') initEditor();
+}
+
+// Toggle hunt mode range inputs in editor
+function toggleHMRange(cb) {
+  const rangeSpan = cb.closest('.ed-hm-range');
+  if (!rangeSpan) return;
+  const inputs = rangeSpan.querySelectorAll('.ed-hm-min, .ed-hm-max');
+  inputs.forEach(inp => { inp.disabled = cb.checked; if (cb.checked) inp.value = ''; });
 }
 
 // Open editor pre-filled with a spot (called from hunt cards)

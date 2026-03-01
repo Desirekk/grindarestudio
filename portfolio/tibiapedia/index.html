@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <link rel="stylesheet" href="css/style.css?v=18">
   <style>
     .map-tip{background:var(--bg-card)!important;border:1px solid var(--border)!important;color:var(--parchment)!important;font-family:'Crimson Text',serif!important;font-size:12px!important;padding:6px 10px!important;border-radius:var(--r)!important;box-shadow:0 4px 12px rgba(0,0,0,.5)!important}
     .map-tip::before{border-top-color:var(--bg-card)!important}
@@ -174,22 +174,17 @@
           </div>
         </div>
 
-        <!-- Big Community CTA Banner -->
-        <div class="hunt-cta-big" id="huntCta">
-          <button class="cta-close" onclick="this.parentElement.style.display='none';localStorage.setItem('tv_cta_closed','1')" title="Close">&times;</button>
-          <div class="cta-coins">
-            <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Tibia_Coins.gif" alt="Tibia Coins" onerror="this.style.display='none'">
-          </div>
-          <div class="cta-content">
-            <div class="cta-headline">Help Build the Best Route Database!</div>
-            <div class="cta-body">
-              Submit new guides to enter the <b>250 TC weekly draw</b> · Fix spots to enter the <b>50 TC weekly draw</b>
-            </div>
-            <div class="cta-buttons">
-              <button class="btn-s btn-g" onclick="switchHuntTab('editor',document.querySelector('.hunt-tab-create'))">Open Route Editor</button>
-              <a href="https://discord.gg/dknTHjkYCg" target="_blank" class="btn-s" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px">Join Discord</a>
+        <!-- CTA Banner -->
+        <div class="hunt-cta" id="huntCta">
+          <div class="cta-inner">
+            <img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Tibia_Coins.gif" alt="" class="cta-icon" onerror="this.style.display='none'">
+            <div class="cta-text"><b>Help Build the Best Route Database!</b> Submit new guides to enter the <b>250 TC weekly draw</b> · Fix spots to enter the <b>50 TC weekly draw</b></div>
+            <div class="cta-actions">
+              <button class="btn-s btn-g" onclick="switchHuntTab('editor',document.querySelector('.hunt-tab-create'))">Route Editor</button>
+              <a href="https://discord.gg/dknTHjkYCg" target="_blank" class="btn-s">Discord</a>
             </div>
           </div>
+          <button class="cta-close" onclick="this.parentElement.style.display='none';localStorage.setItem('tv_cta_closed','1')">&times;</button>
         </div>
 
         <!-- Sub-tabs -->
@@ -201,25 +196,32 @@
         </div>
         <!-- TAB: Browse Spots -->
         <div class="hunt-tab-content active" id="htab-browse">
+        <!-- My Build Bar (horizontal) -->
         <div class="my-build">
-          <div class="build-top">
-            <div class="build-label"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Citizen_Male.gif" onerror="this.style.display='none'" style="width:28px;height:28px"> My Build</div>
-            <div class="build-char">
-              <input type="text" id="myCharName" placeholder="Character name..." autocomplete="off" onkeydown="if(event.key==='Enter')lookupMyBuild()">
-              <button class="btn-g" onclick="lookupMyBuild()">Lookup</button>
-            </div>
-            <div class="build-level">
-              <label>Lv</label>
-              <input type="number" id="myLevel" value="150" min="8" max="999" oninput="state.hunting.myLevel=+this.value||150;renderHunting()">
-            </div>
+          <div class="build-label"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Citizen_Male.gif" onerror="this.style.display='none'" style="width:24px;height:24px"> My Build</div>
+          <div class="build-char">
+            <input type="text" id="myCharName" placeholder="Character name..." autocomplete="off" onkeydown="if(event.key==='Enter')lookupMyBuild()">
+            <button class="btn-g" onclick="lookupMyBuild()">Lookup</button>
           </div>
+          <div class="build-level"><label>Lv</label><input type="number" id="myLevel" value="150" min="8" max="999" oninput="state.hunting.myLevel=+this.value||150;renderHunting()"></div>
+          <div class="build-sep"></div>
           <div class="build-vocs">
-            <button class="bv active" onclick="setMyVoc(this,'knight')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Knight_Male.gif" onerror="this.style.display='none'"><span>Knight</span></button>
-            <button class="bv" onclick="setMyVoc(this,'paladin')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Hunter_Male.gif" onerror="this.style.display='none'"><span>Paladin</span></button>
-            <button class="bv" onclick="setMyVoc(this,'sorcerer')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Mage_Male.gif" onerror="this.style.display='none'"><span>Sorcerer</span></button>
-            <button class="bv" onclick="setMyVoc(this,'druid')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Summoner_Male.gif" onerror="this.style.display='none'"><span>Druid</span></button>
-            <button class="bv" onclick="setMyVoc(this,'monk')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Monk_Male.gif" onerror="this.style.display='none'"><span>Monk</span></button>
+            <button class="bv active" onclick="setMyVoc(this,'knight')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Magic_Plate_Armor.gif" onerror="this.textContent='EK'"><span>EK</span></button>
+            <button class="bv" onclick="setMyVoc(this,'paladin')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Royal_Crossbow.gif" onerror="this.textContent='RP'"><span>RP</span></button>
+            <button class="bv" onclick="setMyVoc(this,'sorcerer')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Wand_of_Inferno.gif" onerror="this.textContent='MS'"><span>MS</span></button>
+            <button class="bv" onclick="setMyVoc(this,'druid')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Hailstorm_Rod.gif" onerror="this.textContent='ED'"><span>ED</span></button>
+            <button class="bv" onclick="setMyVoc(this,'monk')"><img src="https://tibiopedia.pl/images/static/items/traditional_sai.gif" onerror="this.textContent='MO'"><span>MO</span></button>
           </div>
+        </div>
+        <!-- Character Info Panel -->
+        <div class="build-info" id="buildInfo">
+          <div class="bi-stats-row" id="biStats">
+            <div class="bi-stat"><span class="bi-num" id="biTotal">—</span><span class="bi-lbl">Total Spots</span></div>
+            <div class="bi-stat bi-stat-hl"><span class="bi-num" id="biForYou">—</span><span class="bi-lbl">For Your Level</span></div>
+            <div class="bi-stat"><span class="bi-num" id="biVerified">—</span><span class="bi-lbl">Verified Routes</span></div>
+            <div class="bi-stat bi-stat-hl"><span class="bi-num" id="biVocMatch">—</span><span class="bi-lbl">For Your Vocation</span></div>
+          </div>
+          <div class="bi-char" id="biChar"></div>
         </div>
         <div class="filters">
           <div class="fg">
@@ -299,33 +301,15 @@
               <div class="ed-field">
                 <label>Hunt Modes</label>
                 <div class="ed-hunt-modes">
-                  <div class="ed-hm-row">
-                    <label class="ed-hm-check"><input type="checkbox" id="edHmSolo" value="solo" checked> Solo</label>
-                    <label class="ed-hm-range-toggle"><input type="checkbox" id="edHmSoloSame" checked> Same as spot range</label>
-                    <div class="ed-hm-range" id="edHmSoloRange" style="display:none">
-                      <input type="number" id="edHmSoloMin" placeholder="Min" min="1" max="9999" style="width:70px">
-                      <span>–</span>
-                      <input type="number" id="edHmSoloMax" placeholder="Max" min="1" max="9999" style="width:70px">
-                    </div>
-                  </div>
-                  <div class="ed-hm-row">
-                    <label class="ed-hm-check"><input type="checkbox" id="edHmDuo" value="duo"> Duo</label>
-                    <label class="ed-hm-range-toggle"><input type="checkbox" id="edHmDuoSame" checked> Same as spot range</label>
-                    <div class="ed-hm-range" id="edHmDuoRange" style="display:none">
-                      <input type="number" id="edHmDuoMin" placeholder="Min" min="1" max="9999" style="width:70px">
-                      <span>–</span>
-                      <input type="number" id="edHmDuoMax" placeholder="Max" min="1" max="9999" style="width:70px">
-                    </div>
-                  </div>
-                  <div class="ed-hm-row">
-                    <label class="ed-hm-check"><input type="checkbox" id="edHmTeam" value="team"> Team</label>
-                    <label class="ed-hm-range-toggle"><input type="checkbox" id="edHmTeamSame" checked> Same as spot range</label>
-                    <div class="ed-hm-range" id="edHmTeamRange" style="display:none">
-                      <input type="number" id="edHmTeamMin" placeholder="Min" min="1" max="9999" style="width:70px">
-                      <span>–</span>
-                      <input type="number" id="edHmTeamMax" placeholder="Max" min="1" max="9999" style="width:70px">
-                    </div>
-                  </div>
+                  <label class="ed-hm"><input type="checkbox" value="solo" checked> Solo
+                    <span class="ed-hm-range"><input type="number" placeholder="Min" class="ed-hm-min"> – <input type="number" placeholder="Max" class="ed-hm-max"> <label class="ed-hm-same"><input type="checkbox" checked onchange="toggleHMRange(this)"> Same as spot</label></span>
+                  </label>
+                  <label class="ed-hm"><input type="checkbox" value="duo"> Duo
+                    <span class="ed-hm-range"><input type="number" placeholder="Min" class="ed-hm-min"> – <input type="number" placeholder="Max" class="ed-hm-max"> <label class="ed-hm-same"><input type="checkbox" checked onchange="toggleHMRange(this)"> Same as spot</label></span>
+                  </label>
+                  <label class="ed-hm"><input type="checkbox" value="team"> Team
+                    <span class="ed-hm-range"><input type="number" placeholder="Min" class="ed-hm-min"> – <input type="number" placeholder="Max" class="ed-hm-max"> <label class="ed-hm-same"><input type="checkbox" checked onchange="toggleHMRange(this)"> Same as spot</label></span>
+                  </label>
                 </div>
               </div>
               <div class="ed-field">
@@ -573,17 +557,9 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/data.js?v=6"></script>
-  <script src="js/app.js?v=6"></script>
+  <script src="js/data.js?v=18"></script>
+  <script src="js/app.js?v=18"></script>
   <script>
-    // Hunt mode range toggles
-    document.querySelectorAll('.ed-hm-range-toggle input').forEach(cb => {
-      cb.addEventListener('change', function() {
-        const mode = this.id.replace('edHm','').replace('Same','').toLowerCase();
-        const rangeEl = document.getElementById('edHm' + mode.charAt(0).toUpperCase() + mode.slice(1) + 'Range');
-        if (rangeEl) rangeEl.style.display = this.checked ? 'none' : 'flex';
-      });
-    });
     // Filter helpers for inline onclick handlers
     function setHuntVoc(btn, voc) {
       btn.parentElement.querySelectorAll('.fb').forEach(b => b.classList.remove('active'));
