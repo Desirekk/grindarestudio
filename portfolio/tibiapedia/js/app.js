@@ -412,10 +412,15 @@ function getGearForVocLevel(voc, level) {
 function renderHunting() {
   const container = document.getElementById('huntingGrid');
   if (!container) return;
-  const { voc, levelMin, levelMax } = state.hunting;
+  const { voc, levelMin, levelMax, myLevel } = state.hunting;
   const filtered = HUNTING_SPOTS.filter(s => {
-    if (voc !== 'all' && !s.voc.includes(voc)) return false;
+    if (voc !== 'all') {
+      let matchVoc = s.voc.includes(voc);
+      if (!matchVoc && voc === 'monk') matchVoc = s.voc.includes('knight');
+      if (!matchVoc) return false;
+    }
     if (s.level[0] > levelMax || s.level[1] < levelMin) return false;
+    if (myLevel > 0 && (myLevel < s.level[0] - 20 || myLevel > s.level[1] + 50)) return false;
     return true;
   });
 
@@ -467,7 +472,7 @@ function renderHunting() {
     let suppliesHtml = '';
     if (s.supplies) {
       const vocIcons = {knight:'Knight',paladin:'Paladin',sorcerer:'Sorcerer',druid:'Druid'};
-      const mySupplies = s.supplies[myVoc];
+      const mySupplies = s.supplies[myVoc] || (myVoc === 'monk' ? s.supplies.knight : null);
       if (mySupplies) {
         const vocImg = vocIcons[myVoc] ? `<img src="${WIKI_IMG(vocIcons[myVoc])}" onerror="this.style.display='none'">` : '';
         const itemsHtml = mySupplies.map(i => {
@@ -508,6 +513,7 @@ function renderHunting() {
       <div class="hunt-head" onclick="this.parentElement.classList.toggle('open')">
         <span class="hunt-arrow">&#9654;</span>
         <span class="hunt-title">${esc(s.name)}</span>
+        <span class="hunt-header-creatures">${s.creatures.slice(0,5).map(c=>{const cn=typeof c==='string'?c:c.name;return`<img src="${WIKI_IMG(cn)}" alt="${esc(cn)}" title="${esc(cn)}" onerror="this.style.display='none'">`}).join('')}</span>
         <div class="hunt-badges">
           <div class="hunt-vocs">${vocBadges}</div>
           <span class="hunt-lvl">${s.level[0]}-${s.level[1]}</span>

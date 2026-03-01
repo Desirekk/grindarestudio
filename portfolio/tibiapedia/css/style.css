@@ -171,8 +171,8 @@ tr:hover td{background:rgba(212,165,55,.03)}
 .my-build{display:flex;align-items:center;gap:16px;padding:12px 16px;background:linear-gradient(135deg,rgba(212,165,55,.06) 0%,rgba(212,165,55,.02) 100%);border:1px solid var(--border-h);border-radius:var(--rl);margin-bottom:14px}
 .build-label{display:flex;align-items:center;gap:8px;font-family:'Cinzel',serif;font-size:14px;color:var(--gold);font-weight:700;flex-shrink:0}
 .build-vocs{display:flex;gap:4px}
-.bv{display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:var(--r);font-size:12px;font-weight:700;border:1px solid var(--border);transition:all .12s;font-family:'Cinzel',serif;color:var(--parch-dim)}
-.bv img{width:22px;height:22px;image-rendering:auto}
+.bv{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 10px;border-radius:var(--r);font-size:10px;font-weight:700;border:1px solid var(--border);transition:all .12s;font-family:'Cinzel',serif;color:var(--parch-dim);min-width:56px}
+.bv img{width:36px;height:36px;image-rendering:auto}
 .bv:hover{border-color:var(--border-h);color:var(--parchment)}
 .bv.active{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);box-shadow:0 0 10px rgba(212,165,55,.15)}
 .build-level{display:flex;align-items:center;gap:6px;margin-left:auto}
@@ -188,6 +188,8 @@ tr:hover td{background:rgba(212,165,55,.03)}
 .hunt-arrow{color:var(--gold);transition:transform .2s;font-size:12px;flex-shrink:0}
 .hunt-card.open .hunt-arrow{transform:rotate(90deg)}
 .hunt-title{font-family:'Cinzel',serif;font-size:17px;color:var(--gold-light);flex:1}
+.hunt-header-creatures{display:flex;gap:2px;align-items:center;flex-shrink:0;margin-left:4px}
+.hunt-header-creatures img{width:26px;height:26px;image-rendering:auto;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
 .hunt-badges{display:flex;gap:6px;align-items:center;flex-shrink:0}
 .hunt-lvl{font-size:12px;padding:4px 12px;border-radius:10px;background:var(--gold-dim);color:var(--gold);font-weight:700;font-family:'Cinzel',serif}
 .hunt-team{font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);color:var(--parch-dim);font-weight:600;text-transform:uppercase}

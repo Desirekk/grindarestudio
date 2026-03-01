@@ -133,10 +133,11 @@
         <div class="my-build">
           <div class="build-label"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Citizen_Male.gif" onerror="this.style.display='none'" style="width:28px;height:28px"> My Build</div>
           <div class="build-vocs">
-            <button class="bv active" onclick="setMyVoc(this,'knight')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Knight.gif" onerror="this.style.display='none'"> Knight</button>
-            <button class="bv" onclick="setMyVoc(this,'paladin')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Paladin.gif" onerror="this.style.display='none'"> Paladin</button>
-            <button class="bv" onclick="setMyVoc(this,'sorcerer')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Sorcerer.gif" onerror="this.style.display='none'"> Sorcerer</button>
-            <button class="bv" onclick="setMyVoc(this,'druid')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Druid.gif" onerror="this.style.display='none'"> Druid</button>
+            <button class="bv active" onclick="setMyVoc(this,'knight')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Knight_Male.gif" onerror="this.style.display='none'"><span>Knight</span></button>
+            <button class="bv" onclick="setMyVoc(this,'paladin')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Hunter_Male.gif" onerror="this.style.display='none'"><span>Paladin</span></button>
+            <button class="bv" onclick="setMyVoc(this,'sorcerer')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Mage_Male.gif" onerror="this.style.display='none'"><span>Sorcerer</span></button>
+            <button class="bv" onclick="setMyVoc(this,'druid')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Summoner_Male.gif" onerror="this.style.display='none'"><span>Druid</span></button>
+            <button class="bv" onclick="setMyVoc(this,'monk')"><img src="https://tibia.fandom.com/wiki/Special:Redirect/file/Outfit_Monk_Male.gif" onerror="this.style.display='none'"><span>Monk</span></button>
           </div>
           <div class="build-level">
             <label>Level</label>
@@ -150,6 +151,7 @@
             <button class="fb" onclick="setHuntVoc(this,'paladin')">RP</button>
             <button class="fb" onclick="setHuntVoc(this,'sorcerer')">MS</button>
             <button class="fb" onclick="setHuntVoc(this,'druid')">ED</button>
+            <button class="fb" onclick="setHuntVoc(this,'monk')">MO</button>
           </div>
           <input type="number" placeholder="Min level" style="width:90px" oninput="state.hunting.levelMin=+this.value||0;renderHunting()">
           <input type="number" placeholder="Max level" style="width:90px" oninput="state.hunting.levelMax=+this.value||9999;renderHunting()">

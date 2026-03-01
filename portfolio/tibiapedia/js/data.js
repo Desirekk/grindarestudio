@@ -8,6 +8,10 @@ const CHARM_IMG = key => {
   const map = {wound:'Wound',freeze:'Freeze',zap:'Zap',enflame:'Enflame',curse:'Curse_(Charm)',divine_wrath:'Divine_Wrath',poison:'Poison',dodge:'Dodge',parry:'Parry',low_blow:'Low_Blow',cripple:'Cripple',gut:'Gut',adrenaline_burst:'Adrenaline_Burst',numb:'Numb',cleanse:'Cleanse',bless:'Bless',wound_or_zap:'Wound'};
   return `https://tibia.fandom.com/wiki/Special:Redirect/file/${map[key] || 'Wound'}.png`;
 };
+const VOC_OUTFIT = key => {
+  const map = {knight:'Outfit_Knight_Male',paladin:'Outfit_Hunter_Male',sorcerer:'Outfit_Mage_Male',druid:'Outfit_Summoner_Male',monk:'Outfit_Monk_Male'};
+  return `https://tibia.fandom.com/wiki/Special:Redirect/file/${map[key] || map.knight}.gif`;
+};
 
 // Element definitions
 const ELEMENTS = [
@@ -83,6 +87,14 @@ const VOCATION_GEAR = {
     {min:150,max:199,items:["Cobra Hood","Prismatic Armor","Ornate Legs","Pair of Dreamwalkers","Rod of Destruction","Spellbook of Dark Mysteries"]},
     {min:200,max:299,items:["Falcon Coif","Falcon Plate","Fabulous Legs","Pair of Dreamwalkers","Falcon Rod","Falcon Escutcheon"]},
     {min:300,max:999,items:["Soulmantle","Soulstrider","Pair of Dreamwalkers","Soultainter"]}
+  ],
+  monk:[
+    {min:8,max:59,items:["Soldier Helmet","Scale Armor","Crown Legs","Leather Boots","Pair of Soft Kitty Paws","Demon Shield"]},
+    {min:60,max:99,items:["Royal Helmet","Noble Armor","Golden Legs","Boots of Haste","Pair of Soft Kitty Paws","Shield of Honour"]},
+    {min:100,max:149,items:["Zaoan Helmet","Prismatic Armor","Zaoan Legs","Guardian Boots","Pair of Soft Kitty Paws","Prismatic Shield"]},
+    {min:150,max:199,items:["Cobra Hood","Prismatic Armor","Ornate Legs","Pair of Dreamwalkers","Pair of Soft Kitty Paws","Gnome Shield"]},
+    {min:200,max:299,items:["Falcon Coif","Falcon Plate","Fabulous Legs","Pair of Dreamwalkers","Pair of Soft Kitty Paws","Falcon Escutcheon"]},
+    {min:300,max:999,items:["Soulbastion","Soulmantle","Soulstrider","Pair of Dreamwalkers","Pair of Soft Kitty Paws","Soul Shield"]}
   ]
 };
 
